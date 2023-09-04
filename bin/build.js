@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const handlebars = require('handlebars');
 
 
@@ -18,7 +19,7 @@ function parseSfc(string) {
     const html = string.match(/^<template>([\s\S]*)^<\/template>/m)[1].trim();
     const style = string.match(/^<style>([\s\S]*)^<\/style>/m)[1].trim();
     const script = string.match(/^<script>([\s\S]*)^<\/script>/m)[1].trim();
-    const extendedScript = script + " module"; // Run variable 'module' to get output if defined
+    const extendedScript = script; // Run script to get output if defined
     const module = eval(extendedScript);
     return ({html, style, script, module});
 }
@@ -47,12 +48,38 @@ function compileSfc(input, output, data) {
     console.log(`Compiled SFC '${input}' to '${output}'. `);
 }
 
+function compileSfcDir(input, output, data, subpath = []) {
+    const files = fs.readdirSync(input);
+    for (const file of files) {
+        const filePath = path.join(input, file);
+        const outputName = path.basename(file, path.extname(file)) + ".html";
+        const outputPath = path.join(output, ...subpath);
+        const outputFile = path.join(outputPath, outputName);
+        const stats = fs.statSync(filePath);
+        if (stats.isDirectory()) {
+            compileSfcDir(filePath, output, data, [...subpath, file])
+            continue;
+        }
+        if (path.extname(filePath) !== ".hbs")
+            continue;
+        ensureDirExists(outputPath);
+        compileSfc(filePath, outputFile, data);
+    }
+    //compile('pages/index.hbs', 'dist/template.html', 'layouts/default.hbs', data);
+    //renderSfc('pages/index.hbs', data);
+}
 
-const data = {
+function ensureDirExists(directoryPath) {
+    const directories = directoryPath.split(path.sep);
+    let currentPath = '';
+    for (const dir of directories) {
+      currentPath = path.join(currentPath, dir);
+        if (fs.existsSync(currentPath)) continue;
+          fs.mkdirSync(currentPath);
+    }
+  }
+
+compileSfcDir("pages", "dist", {
     title: 'Handlebars Example',
     name: 'John Doe',
-};
-//compile('pages/index.hbs', 'dist/template.html', 'layouts/default.hbs', data);
-compileSfc('pages/index.hbs', 'dist/template.html', data);
-
-//renderSfc('pages/index.hbs', data);
+});
