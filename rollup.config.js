@@ -14,7 +14,7 @@ export default {
       ],
     }),
     sass({
-      insert: true,
+      output: true,
     }),
   ],
 };
