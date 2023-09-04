@@ -1,0 +1,21 @@
+{
+  "name": "krank-portfolio",
+  "version": "0.0.1",
+  "description": "Portfolio of drawn art and other stuff by Krank.",
+  "main": "index.js",
+  "scripts": {
+    "build": "node bin/build.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "krank",
+    "art",
+    "anthro",
+    "handlebars"
+  ],
+  "author": "Krank <kranko.art@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "handlebars": "^4.7.8"
+  }
+}
