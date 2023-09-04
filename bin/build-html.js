@@ -1,7 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const handlebars = require('handlebars');
-
+import fs from 'fs';
+import path from 'path';
+import handlebars from 'handlebars';
 
 function renderSfc(input, data) {
     // SFC = Single File Component; hbs file with top level <template>, <style> and <script> tag.
