@@ -1,0 +1,21 @@
+<template>
+  <header class="page-header">
+    <span class="page-header-title">Krank</span>
+    <ul>
+      {{#each links}}
+      <li><a class="page-header-link {{this.active}}" href="{{this.link}}">{{this.title}}</a></li>
+      {{/each}}
+    </ul>
+  </header>
+</template>
+
+<style></style>
+
+<script>
+  const module = {
+    props: {
+
+    }
+  }
+
+</script>
