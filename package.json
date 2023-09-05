@@ -18,6 +18,7 @@
   "license": "ISC",
   "devDependencies": {
     "handlebars": "^4.7.8",
+    "jsdom": "^22.1.0",
     "rollup": "^3.28.1",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-sass": "^1.12.20"
