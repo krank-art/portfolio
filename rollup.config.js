@@ -11,6 +11,7 @@ export default {
     copy({
       targets: [
         { src: 'static/favicon/*', dest: 'dist' },
+        { src: 'static/art/*', dest: 'dist/media' },
       ],
     }),
     sass({
