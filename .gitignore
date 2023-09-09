@@ -1,2 +1,5 @@
 node_modules/
 dist/
+
+# important files, but would make repository waaay too big
+static/art/
