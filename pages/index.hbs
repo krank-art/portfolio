@@ -1,7 +1,9 @@
 <template>
   <main class="container">
-    <p>furry art</p>
-    <h1>Krank</h1>
+    <header class="page-header">
+      <h1 class="page-header-title">Krank</h1>
+      <p class="page-header-subtitle">furry&hairsp;art</p>
+    </header>
     <ul class="media-gallery">
       {{#each media}}
       <li>
@@ -14,12 +16,48 @@
       </li>
       {{/each}}
     </ul>
+    <footer class="page-footer">
+      Each character depicted belongs to their respective owner.<br>
+      Krank &copy; 2023
+    </footer>
   </main>
 </template>
 
 <style>
   html {
-    color: red;
+    color: white;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .page-header-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .page-header-subtitle {
+    font-size: 2rem;
+    font-weight: lighter;
+    opacity: 0.6;
+    margin: 0 0 0 0.25em;
+    line-height: 1;
+  }
+
+  .page-footer {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 0.9rem; 
+    text-align: center;
+    border-top: 0.1rem solid rgba(255,255,255,0.3);
   }
 
   .media-gallery {
@@ -36,11 +74,16 @@
   }
 
   .media-thumbnail {
-    width: 9rem;
-    height: 9rem;
+    width: 8rem;
+    height: 8rem;
   }
 
   @media (min-width: 960px) {
+    .page-header-title,
+    .page-header-subtitle {
+      font-size: 3rem;
+    }
+
     .media-gallery>* {
       margin: 1rem;
     }
