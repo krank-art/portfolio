@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import handlebars from 'handlebars';
+import media from '../data/media.json' assert { type: "json" };
 
 function renderSfc(input, data) {
   // SFC = Single File Component; hbs file with top level <template>, <style> and <script> tag.
@@ -9,7 +10,8 @@ function renderSfc(input, data) {
   const moduleIsObject = typeof module === 'object' && module !== null;
   const layout = moduleIsObject ? module.layout ?? 'default' : 'default';
   const extendedData = moduleIsObject ? {...data, ...module.data} : { ...data};
-  const layoutData = { content: html, style: style, ...extendedData};
+  const renderedHtml = renderHtml(html, extendedData);
+  const layoutData = { content: renderedHtml, style: style, ...extendedData};
   //console.log({html, style, script, layout, extendedData});
   return renderTemplate(`layouts/${layout}.hbs`, layoutData);
 }
@@ -21,6 +23,11 @@ function parseSfc(string) {
   const extendedScript = script; // Run script to get output if defined
   const module = eval(extendedScript);
   return ({html, style, script, module});
+}
+
+function renderHtml(template, data) {
+  const compiledTemplate = handlebars.compile(template);
+  return compiledTemplate(data);
 }
 
 function renderTemplate(input, data) {
@@ -81,4 +88,5 @@ function ensureDirExists(directoryPath) {
 compileSfcDir("pages", "dist", {
   title: 'Handlebars Example',
   name: 'John Doe',
+  media: media,
 });
