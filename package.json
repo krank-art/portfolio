@@ -1,6 +1,6 @@
 {
   "name": "krank-portfolio",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Portfolio of drawn art and other stuff by Krank.",
   "main": "index.js",
   "type": "module",
