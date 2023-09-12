@@ -17,7 +17,13 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
   const title = rawName.trim();
   const mediaName = toKebabCase(title);
   const mediaDate = rawDate.replaceAll('.', '-');
-  const metadata = await sharp(filePath).metadata();
+  const imageTypeIsSupported = [".png", ".jpg", ".jpeg"].includes(extension);
+  if (!imageTypeIsSupported)
+    console.log(`${Color.Cyan}  The file type '${Color.Reset + extension + Color.Cyan}' `
+      + `is only partially supported (${filePath}).${Color.Reset}`);
+  const metadata = imageTypeIsSupported ? await sharp(filePath).metadata() : { width: null, height: null };
+  const aspectRatio = imageTypeIsSupported ? (metadata.width / metadata.height) : null;
+  const vibrantColors = imageTypeIsSupported ? await getVibrantColorsInImage(filePath) : null;
   return Promise.resolve({
     path: mediaName,
     date: mediaDate,
@@ -26,8 +32,8 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
     fileSize: fileSize,
     width: metadata.width,
     height: metadata.height,
-    aspectRatio: metadata.width / metadata.height,
-    vibrantColors: await getVibrantColorsInImage(filePath),
+    aspectRatio: aspectRatio,
+    vibrantColors: vibrantColors,
     // The following props are intended to be extended manually.
     title: title,
     description: [title], // supposed to be Markdown
@@ -38,7 +44,7 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
 
 async function readMediaItem(filePath) {
   const stats = await fs.promises.stat(filePath);
-  if (stats.isDirectory()) 
+  if (stats.isDirectory())
     return Promise.reject(`Received directory but must be file '${filePath}'. `);
   const fileName = path.basename(filePath);
   const extension = path.extname(filePath);
