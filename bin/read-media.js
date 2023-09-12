@@ -2,9 +2,30 @@ import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 import { getVibrantColorsInImage } from '../lib/image.js';
-import { toKebabCase } from '../lib/string.js';
+import { replaceUmlauts, toKebabCase } from '../lib/string.js';
 import { writeObjectToFile } from '../lib/filesystem.js';
 import { Color } from '../lib/terminal.js';
+
+class UniquePathing {
+  constructor() {
+    this.paths = new Set();
+  }
+
+  getUniquePath(path) {
+    if (!this.paths.has(path)) {
+      this.paths.add(path);
+      return path;
+    }
+    let currentPath = path;
+    let index = 2;
+    while (this.paths.has(currentPath)) {
+      currentPath = path + "-" + index;
+      index++;
+    }
+    this.paths.add(currentPath);
+    return currentPath;
+  }
+}
 
 async function processMediaFile({ filePath, fileType, fileName, extension, fileSize }) {
   if (fileType !== 'file') return;
@@ -15,8 +36,11 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
   const match = fullNameRegex.exec(fileName) ?? simpleNameRegex.exec(fileName);
   const [, rawName, rawDate, fileExtension] = match;
   const title = rawName.trim();
-  const mediaName = toKebabCase(title);
+  const mediaName = replaceUmlauts(toKebabCase(title));
   const mediaDate = rawDate.replaceAll('.', '-');
+  const fileNamePublic = mediaDate.length > 0 
+    ? (mediaName + "_" + mediaDate + extension) 
+    : mediaName + extension;
   const imageTypeIsSupported = [".png", ".jpg", ".jpeg"].includes(extension);
   if (!imageTypeIsSupported)
     console.log(`${Color.Cyan}  The file type '${Color.Reset + extension + Color.Cyan}' `
@@ -27,7 +51,8 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
   return Promise.resolve({
     path: mediaName,
     date: mediaDate,
-    fileName: fileName,
+    fileNamePublic: fileNamePublic,
+    fileNameInternal: fileName,
     fileType: fileExtension,
     fileSize: fileSize,
     width: metadata.width,
@@ -55,10 +80,17 @@ async function readMediaItem(filePath) {
 
 async function readMediaInDir(dirPath) {
   const media = [];
+  const pathing = new UniquePathing();
   const files = await fs.promises.readdir(dirPath);
   for (const file of files) {
     const filePath = path.resolve(dirPath, file);
     const mediaItem = await readMediaItem(filePath).then(processMediaFile);
+    // Guarantee uniqueness of paths
+    const uniquePath = pathing.getUniquePath(mediaItem.path);
+    const uniqueFileName = mediaItem.fileNameInternal.replace(mediaItem.path, uniquePath);
+    mediaItem.fileNameInternal = uniqueFileName;
+    mediaItem.path = uniquePath;
+    // Add to media list
     media.push(mediaItem);
   }
   return media;
