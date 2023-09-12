@@ -1,47 +1,8 @@
 import fs from 'fs';
-
 import path from 'path';
 import { getVibrantColorsInImage } from '../lib/image.js';
-
-function toKebabCase(inputString) {
-  return inputString
-    .replace(/\s+-+\s+/g, '-')           // replaces " - "
-    .replace(/([a-z])([A-Z])/g, '$1-$2') // replaces camelCase
-    .replace(/\s+/g, '-')                // replaces spaces
-    .toLowerCase();
-}
-
-function readDirSync(dirPath, onFile = () => { }) {
-  const fileNames = fs.readdirSync(dirPath);
-  for (const fileName of fileNames) {
-    const filePath = path.join(dirPath, fileName);
-    const extension = path.extname(filePath);
-    const stats = fs.statSync(filePath);
-    const fileType = stats.isDirectory() ? 'dir' : 'file';
-    onFile({ filePath, fileType, fileName, extension });
-  }
-}
-
-async function readDir(dirPath, onFile = async () => { }) {
-  const files = await fs.promises.readdir(dirPath);
-  for (const file of files) {
-    const filePath = path.join(dirPath, file);
-    const extension = path.extname(filePath);
-    const stats = fs.statSync(filePath);
-    const fileType = stats.isDirectory() ? 'dir' : 'file';
-    onFile({ filePath, fileType, fileName: file, extension });
-  }
-}
-
-function writeObjectToFile(path, object) {
-  // depending on object size, it would be better to stream this
-  const content = JSON.stringify(object);
-  fs.writeFileSync(path, content, { encoding: 'utf-8' });
-}
-
-async function getAsyncValue() {
-  return Promise.resolve(42);
-}
+import { toKebabCase } from '../lib/string.js';
+import { writeObjectToFile } from '../lib/filesystem.js';
 
 async function readMediaItem(filePath) {
   const stats = await fs.promises.stat(filePath);
@@ -69,7 +30,6 @@ async function readMediaInDir(dirPath) {
         const [, rawName, rawDate, fileExtension] = match;
         const mediaName = toKebabCase(rawName.trim());
         const mediaDate = rawDate.replaceAll('.', '-');
-        const value = await getAsyncValue();
         return Promise.resolve({
           path: mediaName,
           date: mediaDate,
@@ -79,8 +39,8 @@ async function readMediaInDir(dirPath) {
           //fileSize: 0,
           //widthInPx: 0,
           //heightInPx: 0,
-          aspectRatio: value,
-          //vibrantColors: await getVibrantColorsInImage(filePath),
+          aspectRatio: 0,
+          vibrantColors: await getVibrantColorsInImage(filePath),
           title: rawName.trim(),
           description: "",
           tags: [],
