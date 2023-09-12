@@ -4,16 +4,18 @@ import sharp from 'sharp';
 import { getVibrantColorsInImage } from '../lib/image.js';
 import { toKebabCase } from '../lib/string.js';
 import { writeObjectToFile } from '../lib/filesystem.js';
+import { Color } from '../lib/terminal.js';
 
 async function processMediaFile({ filePath, fileType, fileName, extension, fileSize }) {
-  console.log(filePath);
   if (fileType !== 'file') return;
+  console.log(`${Color.Gray}Processing file '${Color.Reset + fileName + Color.Gray}' (${filePath}).${Color.Reset}`);
   // For file names like 'Bear Conductor 2021-05-09 Release.png'.
   const fullNameRegex = /(.+)(\d{4}[-.]\d{2}[-.]\d{2}).*\.(.*)/g;
   const simpleNameRegex = /(.+)()\.(.*)/g;
   const match = fullNameRegex.exec(fileName) ?? simpleNameRegex.exec(fileName);
   const [, rawName, rawDate, fileExtension] = match;
-  const mediaName = toKebabCase(rawName.trim());
+  const title = rawName.trim();
+  const mediaName = toKebabCase(title);
   const mediaDate = rawDate.replaceAll('.', '-');
   const metadata = await sharp(filePath).metadata();
   return Promise.resolve({
@@ -26,9 +28,10 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
     height: metadata.height,
     aspectRatio: metadata.width / metadata.height,
     vibrantColors: await getVibrantColorsInImage(filePath),
-    title: rawName.trim(),
-    description: "",
-    tags: [],
+    // The following props are intended to be extended manually.
+    title: title,
+    description: [title], // supposed to be Markdown
+    tags: title.split(" ").map(tag => tag.toLowerCase()),
     palette: [],
   });
 }
