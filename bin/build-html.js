@@ -1,22 +1,40 @@
 import fs from 'fs';
 import path from 'path';
 import handlebars from 'handlebars';
-import media from '../data/media.json' assert { type: "json" };
-import { ensureDirExists } from '../lib/filesystem';
-
-
+import mediaArt from '../data/media.json' assert { type: "json" };
+import { ensureDirExists } from '../lib/filesystem.js';
 
 function renderSfc(input, data) {
   // SFC = Single File Component; hbs file with top level <template>, <style> and <script> tag.
+  const output = {};
+
+  // Step 1 -- Parse template, style and script from file
   const sfcSource = fs.readFileSync(input, 'utf8');
   const {html, style, script, module} = parseSfc(sfcSource);
   const moduleIsObject = typeof module === 'object' && module !== null;
   const layout = moduleIsObject ? module.layout ?? 'default' : 'default';
   const extendedData = moduleIsObject ? {...data, ...module.data} : { ...data};
-  const renderedHtml = renderHtml(html, extendedData);
-  const layoutData = { content: renderedHtml, style: style, ...extendedData};
-  //console.log({html, style, script, layout, extendedData});
-  return renderTemplate(`layouts/${layout}.hbs`, layoutData);
+
+  // Step 2 -- Prefill output render based on 1-to-1 or 1-to-many SFC type
+  if (module && module.type && module.type === "dynamic") {
+    const { model: modelName } = module;
+    const payload = extendedData[modelName]; // has to be an array of objects, which have an path prop
+    if (!payload) console.error(`No data model '${modelName}' could be found. `);
+    for (const item of payload)
+      output[item.path] = null;
+  } else {
+    output["/"] = null;
+  }
+
+  // Step 3 -- Render template for each path
+  for (const path in output) {
+    const renderedHtml = renderHtml(html, extendedData);
+    const layoutData = { content: renderedHtml, style: style, ...extendedData};
+    //console.log({html, style, script, layout, extendedData});
+    const renderedTemplate = renderTemplate(`layouts/${layout}.hbs`, layoutData);
+    output[path] = renderedTemplate;
+  }
+  return output;
 }
 
 function parseSfc(string) {
@@ -52,8 +70,14 @@ function compile(input, output, layout, data) {
 
 function compileSfc(input, output, data) {
   const renderedHtml = renderSfc(input, data);
-  fs.writeFileSync(output, renderedHtml);
-  console.log(`Compiled SFC '${input}' to '${output}'. `);
+  for (const pagePath in renderedHtml) {
+    const html = renderedHtml[pagePath];
+    const inputFileName = path.basename(input, path.extname(input));
+    const outputFileName = pagePath === "/" ? inputFileName : pagePath;
+    const outputFile = path.resolve(output, outputFileName + ".html");
+    fs.writeFileSync(outputFile, html);
+    console.log(`Compiled SFC '${input}' to '${outputFile}'. `);
+  }
 }
 
 function compileSfcDir(input, output, data, subpath = []) {
@@ -71,7 +95,7 @@ function compileSfcDir(input, output, data, subpath = []) {
     if (path.extname(filePath) !== ".hbs")
       continue;
     ensureDirExists(outputPath);
-    compileSfc(filePath, outputFile, data);
+    compileSfc(filePath, outputPath, data);
   }
   //compile('pages/index.hbs', 'dist/template.html', 'layouts/default.hbs', data);
   //renderSfc('pages/index.hbs', data);
@@ -80,5 +104,5 @@ function compileSfcDir(input, output, data, subpath = []) {
 compileSfcDir("pages", "dist", {
   title: 'Handlebars Example',
   name: 'John Doe',
-  media: media,
+  mediaArt: mediaArt,
 });
