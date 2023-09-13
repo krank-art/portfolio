@@ -2,6 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import handlebars from 'handlebars';
 import media from '../data/media.json' assert { type: "json" };
+import { ensureDirExists } from '../lib/filesystem';
+
+
 
 function renderSfc(input, data) {
   // SFC = Single File Component; hbs file with top level <template>, <style> and <script> tag.
@@ -32,8 +35,7 @@ function renderHtml(template, data) {
 
 function renderTemplate(input, data) {
   const templateSource = fs.readFileSync(input, 'utf8');
-  const template = handlebars.compile(templateSource);
-  return template(data);
+  return renderHtml(templateSource, data);
 }
 
 function renderTemplateWithLayout(input, layout, data) {
@@ -74,16 +76,6 @@ function compileSfcDir(input, output, data, subpath = []) {
   //compile('pages/index.hbs', 'dist/template.html', 'layouts/default.hbs', data);
   //renderSfc('pages/index.hbs', data);
 }
-
-function ensureDirExists(directoryPath) {
-  const directories = directoryPath.split(path.sep);
-  let currentPath = '';
-  for (const dir of directories) {
-    currentPath = path.join(currentPath, dir);
-    if (fs.existsSync(currentPath)) continue;
-      fs.mkdirSync(currentPath);
-  }
-  }
 
 compileSfcDir("pages", "dist", {
   title: 'Handlebars Example',
