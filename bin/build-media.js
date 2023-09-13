@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
-import { ensureDirExists } from '../lib/filesystem.js';
+import { copyIfNewer, ensureDirExists } from '../lib/filesystem.js';
 
 async function createThumbnail(imagePath, outputPath, sizeInPixel) {
   // https://sharp.pixelplumbing.com/api-resize
@@ -38,4 +38,6 @@ async function createThumbnailsForImages(input, output) {
   }
 }
 
+copyIfNewer(path.resolve("static/art"), path.resolve("dist/media"));
+console.log("Creating thumbnails...");
 await createThumbnailsForImages(path.resolve("static/art"), path.resolve("dist/media/thumbnail"));
