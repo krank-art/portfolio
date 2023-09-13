@@ -1,8 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
+import { ensureDirExists } from '../lib/filesystem.js';
 
-function createThumbnail(imagePath, outputPath, sizeInPixel) {
+async function createThumbnail(imagePath, outputPath, sizeInPixel) {
   // https://sharp.pixelplumbing.com/api-resize
   sharp(imagePath)
     .resize({ 
@@ -21,19 +22,9 @@ function createThumbnail(imagePath, outputPath, sizeInPixel) {
     });
 }
 
-
-function ensureDirExists(directoryPath) {
-  const directories = directoryPath.split(path.sep);
-  let currentPath = '';
-  for (const dir of directories) {
-    currentPath = path.join(currentPath, dir);
-    if (fs.existsSync(currentPath)) continue;
-    fs.mkdirSync(currentPath);
-  }
-}
-
-function createThumbnailsForImages(input, output) {
+async function createThumbnailsForImages(input, output) {
   const files = fs.readdirSync(input);
+  ensureDirExists(output + path.sep);
   for (const file of files) {
     const filePath = path.join(input, file);
     const stats = fs.statSync(filePath);
@@ -43,9 +34,8 @@ function createThumbnailsForImages(input, output) {
       continue;
     const fileName = path.basename(file);
     const outputFile = path.join(output, fileName);
-    ensureDirExists(output); // TODO: Fix that folder 'thumbnail' is not created
-    createThumbnail(filePath, outputFile, 240);
+    await createThumbnail(filePath, outputFile, 240);
   }
 }
 
-createThumbnailsForImages(path.resolve("static/art"), path.resolve("dist/media/thumbnail"));
+await createThumbnailsForImages(path.resolve("static/art"), path.resolve("dist/media/thumbnail"));
