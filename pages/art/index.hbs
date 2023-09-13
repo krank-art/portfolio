@@ -1,0 +1,21 @@
+<template>
+  <main class="container">
+    {{ mediaTitle }}
+    <img class="gallery-image" src="media/{{this.fileName}}" alt="{{this.title}}">
+  </main>
+</template>
+
+<style>
+</style>
+
+<script>
+  const module = {
+    layout: "default",
+    type: "dynamic",
+    model: "mediaArt",
+    data: {
+      title: "Krank",
+    }
+  };
+  module
+</script>
