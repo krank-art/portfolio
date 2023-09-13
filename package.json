@@ -7,7 +7,7 @@
   "scripts": {
     "build-html": "node bin/build-html.js",
     "build-assets": "node bin/build-assets.js",
-    "thumb": "node bin/build-media.js",
+    "build-media": "node bin/build-media.js",
     "media-read": "node bin/read-media.js static/art",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
