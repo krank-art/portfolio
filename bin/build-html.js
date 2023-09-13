@@ -3,8 +3,9 @@ import path from 'path';
 import handlebars from 'handlebars';
 import mediaArt from '../data/media.json' assert { type: "json" };
 import { ensureDirExists } from '../lib/filesystem.js';
+import config from '../config/config.dev.js';
 
-function renderSfc(input, data) {
+function renderSfc(input, data, depth = 0) {
   // SFC = Single File Component; hbs file with top level <template>, <style> and <script> tag.
   const output = {};
 
@@ -14,6 +15,7 @@ function renderSfc(input, data) {
   const moduleIsObject = typeof module === 'object' && module !== null;
   const layout = moduleIsObject ? module.layout ?? 'default' : 'default';
   const extendedData = moduleIsObject ? { ...data, ...module.data } : { ...data };
+  extendedData.path.relative = "../".repeat(depth);
 
   // Step 2 -- Prefill output render based on 1-to-1 or 1-to-many SFC type
   const isDynamicSfc = module && module.type && module.type === "dynamic";
@@ -72,8 +74,8 @@ function compile(input, output, layout, data) {
   console.log(`Compiled '${input}' to '${output}'. `);
 }
 
-function compileSfc(input, output, data) {
-  const renderedHtml = renderSfc(input, data);
+function compileSfc(input, output, data, depth = 0) {
+  const renderedHtml = renderSfc(input, data, depth);
   for (const pagePath in renderedHtml) {
     const html = renderedHtml[pagePath];
     const inputFileName = path.basename(input, path.extname(input));
@@ -99,13 +101,14 @@ function compileSfcDir(input, output, data, subpath = []) {
     if (path.extname(filePath) !== ".hbs")
       continue;
     ensureDirExists(outputPath);
-    compileSfc(filePath, outputPath, data);
+    compileSfc(filePath, outputPath, data, subpath.length);
   }
   //compile('pages/index.hbs', 'dist/template.html', 'layouts/default.hbs', data);
   //renderSfc('pages/index.hbs', data);
 }
 
 compileSfcDir("pages", "dist", {
+  ...config,
   title: 'Handlebars Example',
   name: 'John Doe',
   mediaArt: mediaArt,
