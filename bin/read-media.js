@@ -49,6 +49,7 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
   const aspectRatio = imageTypeIsSupported ? (metadata.width / metadata.height) : null;
   const vibrantColors = imageTypeIsSupported ? await getVibrantColorsInImage(filePath) : null;
   return Promise.resolve({
+    active: imageTypeIsSupported,
     path: mediaName,
     date: mediaDate,
     fileNamePublic: fileNamePublic,
@@ -63,6 +64,7 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
     title: title,
     description: [title], // supposed to be Markdown
     tags: title.split(" ").map(tag => tag.toLowerCase()),
+    imageAlt: title,
     palette: [],
   });
 }
