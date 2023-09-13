@@ -10,27 +10,31 @@ function renderSfc(input, data) {
 
   // Step 1 -- Parse template, style and script from file
   const sfcSource = fs.readFileSync(input, 'utf8');
-  const {html, style, script, module} = parseSfc(sfcSource);
+  const { html, style, script, module } = parseSfc(sfcSource);
   const moduleIsObject = typeof module === 'object' && module !== null;
   const layout = moduleIsObject ? module.layout ?? 'default' : 'default';
-  const extendedData = moduleIsObject ? {...data, ...module.data} : { ...data};
+  const extendedData = moduleIsObject ? { ...data, ...module.data } : { ...data };
 
   // Step 2 -- Prefill output render based on 1-to-1 or 1-to-many SFC type
-  if (module && module.type && module.type === "dynamic") {
+  const isDynamicSfc = module && module.type && module.type === "dynamic";
+  const modelDataByPath = new Map();
+  if (isDynamicSfc) {
     const { model: modelName } = module;
     const payload = extendedData[modelName]; // has to be an array of objects, which have an path prop
     if (!payload) console.error(`No data model '${modelName}' could be found. `);
-    for (const item of payload)
+    for (const item of payload) {
       output[item.path] = null;
+      modelDataByPath.set(item.path, item);
+    }
   } else {
     output["/"] = null;
   }
 
   // Step 3 -- Render template for each path
   for (const path in output) {
-    const renderedHtml = renderHtml(html, extendedData);
-    const layoutData = { content: renderedHtml, style: style, ...extendedData};
-    //console.log({html, style, script, layout, extendedData});
+    const pathData = isDynamicSfc ? { ...extendedData, ...{ modelItem: modelDataByPath.get(path) } } : { ...extendedData };
+    const renderedHtml = renderHtml(html, pathData);
+    const layoutData = { content: renderedHtml, style: style, ...pathData };
     const renderedTemplate = renderTemplate(`layouts/${layout}.hbs`, layoutData);
     output[path] = renderedTemplate;
   }
@@ -43,7 +47,7 @@ function parseSfc(string) {
   const script = string.match(/^<script>([\s\S]*)^<\/script>/m)[1].trim();
   const extendedScript = script; // Run script to get output if defined
   const module = eval(extendedScript);
-  return ({html, style, script, module});
+  return ({ html, style, script, module });
 }
 
 function renderHtml(template, data) {
