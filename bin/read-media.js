@@ -27,7 +27,7 @@ class UniquePathing {
   }
 }
 
-async function processMediaFile({ filePath, fileType, fileName, extension, fileSize }) {
+async function processMediaFile({ filePath, fileType, fileName, extension, fileSize, fileModified }) {
   if (fileType !== 'file') return;
   console.log(`${Color.Gray}Processing file '${Color.Reset + fileName + Color.Gray}' (${filePath}).${Color.Reset}`);
   // For file names like 'Bear Conductor 2021-05-09 Release.png'.
@@ -38,8 +38,8 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
   const title = rawName.trim();
   const mediaName = replaceUmlauts(toKebabCase(title));
   const mediaDate = rawDate.replaceAll('.', '-');
-  const fileNamePublic = mediaDate.length > 0 
-    ? (mediaName + "_" + mediaDate + extension) 
+  const fileNamePublic = mediaDate.length > 0
+    ? (mediaName + "_" + mediaDate + extension)
     : mediaName + extension;
   const imageTypeIsSupported = [".png", ".jpg", ".jpeg"].includes(extension);
   if (!imageTypeIsSupported)
@@ -56,6 +56,7 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
     fileNameInternal: fileName,
     fileType: fileExtension,
     fileSize: fileSize,
+    fileModified: fileModified,
     width: metadata.width,
     height: metadata.height,
     aspectRatio: aspectRatio,
@@ -77,15 +78,27 @@ async function readMediaItem(filePath) {
   const extension = path.extname(filePath);
   const fileType = stats.isDirectory() ? 'dir' : 'file';
   const fileSize = stats.size;
-  return Promise.resolve({ filePath, fileType, fileName, extension, fileSize });
+  return Promise.resolve({ filePath, fileType, fileName, extension, fileSize, fileModified: stats.mtime });
 }
 
-async function readMediaInDir(dirPath) {
+async function readMediaInDir(dirPath, fileInfoByName = undefined) {
   const media = [];
   const pathing = new UniquePathing();
   const files = await fs.promises.readdir(dirPath);
   for (const file of files) {
     const filePath = path.resolve(dirPath, file);
+    if (fileInfoByName && fileInfoByName.has(file)) {
+      // Optimization to skip unchanged files
+      const targetStats = fs.statSync(filePath);
+      const { size: targetSize, mtime: targetModified } = targetStats;
+      const fileInfo = fileInfoByName.get(file);
+      const { size: sourceSize, modified: sourceModified } = fileInfo;
+      const sameSize = targetSize === sourceSize;
+      //const targetModifiedFloored = Math.floor(targetModified); // returns weird fractional millis
+      //const sameModified = sourceModified === targetModifiedFloored;
+      const sameModified = sourceModified === targetModified.getTime();
+      if (sameSize && sameModified) continue;
+    }
     const mediaItem = await readMediaItem(filePath).then(processMediaFile);
     // Guarantee uniqueness of paths
     const uniquePath = pathing.getUniquePath(mediaItem.path);
@@ -98,28 +111,37 @@ async function readMediaInDir(dirPath) {
   return media;
 }
 
+function mergeMediaItems(oldMediaItem, newMediaItem, preservedProps) {
+  const mergedMediaItem = {};
+  for (const prop in newMediaItem) {
+    const isPreservedProp = preservedProps.includes(prop);
+    mergedMediaItem[prop] = isPreservedProp ? oldMediaItem[prop] : newMediaItem[prop];
+  }
+  return mergedMediaItem;
+}
+
 function mergeMedia(oldMedia, newMedia, preservedProps) {
   const oldMediaItemsByPath = new Map();
   oldMedia.forEach(mediaItem => oldMediaItemsByPath.set(mediaItem.path, mediaItem));
-  const mergedMedia = [];
-  for (const mediaItem of newMedia) {
-    const { path } = mediaItem;
-    const oldMediaItem = oldMediaItemsByPath.get(path);
-    if (!oldMediaItem) {
-      mergedMedia.push(mediaItem);
+  const newMediaItemsByPath = new Map();
+  newMedia.forEach(mediaItem => newMediaItemsByPath.set(mediaItem.path, mediaItem));
+  const mergedMediaByPath = new Map();
+  for (const [path, oldMediaItem] of oldMediaItemsByPath)
+    mergedMediaByPath.set(path, oldMediaItem);
+  for (const [path, newMediaItem] of newMediaItemsByPath) {
+    if (!mergedMediaByPath.has(path)) {
+      mergedMediaByPath.set(path, newMediaItem);
       continue;
     }
-    const mergedMediaItem = {};
-    for (const prop in mediaItem) {
-      const isPreservedProp = preservedProps.includes(prop);
-      mergedMediaItem[prop] = isPreservedProp ? oldMediaItem[prop] : mediaItem[prop];
-    }
-    mergedMedia.push(mergedMediaItem);
+    const oldMediaItem = oldMediaItemsByPath.get(path);
+    const mergedMediaItem = mergeMediaItems(oldMediaItem, newMediaItem, preservedProps);
+    mergedMediaByPath.set(path, mergedMediaItem);
   }
-  return mergedMedia;
+  return Array.from(mergedMediaByPath.values());
 }
 
-async function readMedia(dirPath, outputFileName) {
+async function readMedia(dirPath, outputFileName, skipUnchanged = false) {
+  // Step 1 -- Check parameters and setup source + target
   if (!dirPath) {
     console.error(`No directory for media files specified. Aborting. `);
     return;
@@ -131,18 +153,31 @@ async function readMedia(dirPath, outputFileName) {
   const filePath = path.resolve(dirPath);
   const targetFile = path.resolve(process.cwd(), "data", outputFileName + '.json');
   const mediaSorter = (a, b) => b.path < a.path;
-  const media = await readMediaInDir(filePath);
+
+  // Step 2 -- Read in all files if no media
   if (!fs.existsSync(targetFile)) {
+    const media = await readMediaInDir(filePath);
     console.log(Color.Green + `Creating media file '${targetFile}'. ` + Color.Reset);
     writeObjectToFile(targetFile, media.sort(mediaSorter));
     return;
   }
+
+  // Step 3 -- Read in all files and merge with manual edits if media already exists
   const oldMedia = parseJsonFile(targetFile);
-  const manualProps = [ "description", "imageAlt", "palette", "tags", "title" ];
-  const mergedMedia = mergeMedia(oldMedia, media, manualProps);
+  const oldMediaInfoByName = new Map();
+  if (skipUnchanged) {
+    for (const oldMediaItem of oldMedia)
+      oldMediaInfoByName.set(oldMediaItem.fileNameInternal, {
+        size: oldMediaItem.fileSize,
+        modified: new Date(oldMediaItem.fileModified).getTime(),
+      });
+  }
+  const rereadMedia = await readMediaInDir(filePath, oldMediaInfoByName);
+  const manualProps = ["description", "imageAlt", "palette", "tags", "title"];
+  const mergedMedia = mergeMedia(oldMedia, rereadMedia, manualProps);
   console.log(Color.Blue + `Updating media file '${targetFile}'. ` + Color.Reset);
   writeObjectToFile(targetFile, mergedMedia.sort(mediaSorter));
 }
 
-const [, , rawPath, fileName] = process.argv;
-readMedia(rawPath, fileName);
+const [, , rawPath, fileName, rawSkipUnchanged] = process.argv;
+readMedia(rawPath, fileName, rawSkipUnchanged === "true");
