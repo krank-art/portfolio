@@ -36,7 +36,7 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
   const match = fullNameRegex.exec(fileName) ?? simpleNameRegex.exec(fileName);
   const [, rawName, rawDate, fileExtension] = match;
   const title = rawName.trim();
-  const mediaName = replaceUmlauts(toKebabCase(title));
+  const mediaName = replaceUmlauts(toKebabCase(title)).replace(/^_*(.+?)_*$/g, '$1');
   const mediaDate = rawDate.replaceAll('.', '-');
   const fileNamePublic = mediaDate.length > 0
     ? (mediaName + "_" + mediaDate + extension)
@@ -160,7 +160,7 @@ async function readMedia(dirPath, outputFileName, skipUnchanged = false) {
   if (!fs.existsSync(targetFile)) {
     const media = await readMediaInDir(filePath);
     console.log(Color.Green + `Creating media file '${targetFile}'. ` + Color.Reset);
-    writeObjectToFile(targetFile, media.sort(mediaSorter));
+    writeObjectToFile(targetFile, media.sort(mediaSorter), true);
     return;
   }
 
@@ -184,7 +184,7 @@ async function readMedia(dirPath, outputFileName, skipUnchanged = false) {
   const manualProps = ["description", "imageAlt", "palette", "tags", "title"];
   const mergedMedia = mergeMedia(oldMedia, rereadMedia, manualProps);
   console.log(Color.Blue + `Updating media file '${targetFile}'. ` + Color.Reset);
-  writeObjectToFile(targetFile, mergedMedia.sort(mediaSorter));
+  writeObjectToFile(targetFile, mergedMedia.sort(mediaSorter), true);
 }
 
 const [, , rawPath, fileName, rawSkipUnchanged] = process.argv;
