@@ -104,8 +104,8 @@ async function readMediaInDir(dirPath, fileInfoByName = undefined) {
     const mediaItem = await readMediaItem(filePath).then(processMediaFile);
     // Guarantee uniqueness of paths
     const uniquePath = pathing.getUniquePath(mediaItem.path);
-    const uniqueFileName = mediaItem.fileNameInternal.replace(mediaItem.path, uniquePath);
-    mediaItem.fileNameInternal = uniqueFileName;
+    const uniqueFileName = mediaItem.fileNamePublic.replace(mediaItem.path, uniquePath);
+    mediaItem.fileNamePublic = uniqueFileName;
     mediaItem.path = uniquePath;
     // Add to media list
     media.push(mediaItem);
