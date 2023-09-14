@@ -99,6 +99,8 @@ async function readMediaInDir(dirPath, fileInfoByName = undefined) {
       const sameModified = sourceModified === targetModified.getTime();
       if (sameSize && sameModified) continue;
     }
+    if (file === "firefox_2020-03-17_23-56-08.png")
+      1+1 // TODO: For some reason, the optimization does not work with this particular file. Gets read every time.
     const mediaItem = await readMediaItem(filePath).then(processMediaFile);
     // Guarantee uniqueness of paths
     const uniquePath = pathing.getUniquePath(mediaItem.path);
@@ -162,7 +164,7 @@ async function readMedia(dirPath, outputFileName, skipUnchanged = false) {
     return;
   }
 
-  // Step 3 -- Read in all files and merge with manual edits if media already exists
+  // Step 3 -- Read in changed or new files and exit if nothing new
   const oldMedia = parseJsonFile(targetFile);
   const oldMediaInfoByName = new Map();
   if (skipUnchanged) {
@@ -173,6 +175,12 @@ async function readMedia(dirPath, outputFileName, skipUnchanged = false) {
       });
   }
   const rereadMedia = await readMediaInDir(filePath, oldMediaInfoByName);
+  if (rereadMedia.length === 0) {
+    console.log(Color.Gray + `No new media found. Unchanged '${targetFile}'. ` + Color.Reset);
+    return;
+  }
+
+  // Step 4 - Merge with manual edits if media already exists
   const manualProps = ["description", "imageAlt", "palette", "tags", "title"];
   const mergedMedia = mergeMedia(oldMedia, rereadMedia, manualProps);
   console.log(Color.Blue + `Updating media file '${targetFile}'. ` + Color.Reset);
