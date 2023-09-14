@@ -3,7 +3,7 @@ import path from 'path';
 import sharp from 'sharp';
 import { getVibrantColorsInImage } from '../lib/image.js';
 import { replaceUmlauts, toKebabCase } from '../lib/string.js';
-import { writeObjectToFile } from '../lib/filesystem.js';
+import { parseJsonFile, writeObjectToFile } from '../lib/filesystem.js';
 import { Color } from '../lib/terminal.js';
 
 class UniquePathing {
@@ -98,7 +98,28 @@ async function readMediaInDir(dirPath) {
   return media;
 }
 
-async function readMedia(dirPath) {
+function mergeMedia(oldMedia, newMedia, preservedProps) {
+  const oldMediaItemsByPath = new Map();
+  oldMedia.forEach(mediaItem => oldMediaItemsByPath.set(mediaItem.path, mediaItem));
+  const mergedMedia = [];
+  for (const mediaItem of newMedia) {
+    const { path } = mediaItem;
+    const oldMediaItem = oldMediaItemsByPath.get(path);
+    if (!oldMediaItem) {
+      mergedMedia.push(mediaItem);
+      continue;
+    }
+    const mergedMediaItem = {};
+    for (const prop in mediaItem) {
+      const isPreservedProp = preservedProps.includes(prop);
+      mergedMediaItem[prop] = isPreservedProp ? oldMediaItem[prop] : mediaItem[prop];
+    }
+    mergedMedia.push(mergedMediaItem);
+  }
+  return mergedMedia;
+}
+
+async function readMedia(dirPath, outputFileName) {
   if (!dirPath) {
     console.error(`No directory for media files specified. Aborting. `);
     return;
@@ -108,10 +129,20 @@ async function readMedia(dirPath) {
     return;
   }
   const filePath = path.resolve(dirPath);
+  const targetFile = path.resolve(process.cwd(), "data", outputFileName + '.json');
+  const mediaSorter = (a, b) => b.path < a.path;
   const media = await readMediaInDir(filePath);
-  const targetFile = path.resolve(process.cwd(), 'media.json');
-  writeObjectToFile(targetFile, media);
+  if (!fs.existsSync(targetFile)) {
+    console.log(Color.Green + `Creating media file '${targetFile}'. ` + Color.Reset);
+    writeObjectToFile(targetFile, media.sort(mediaSorter));
+    return;
+  }
+  const oldMedia = parseJsonFile(targetFile);
+  const manualProps = [ "description", "imageAlt", "palette", "tags", "title" ];
+  const mergedMedia = mergeMedia(oldMedia, media, manualProps);
+  console.log(Color.Blue + `Updating media file '${targetFile}'. ` + Color.Reset);
+  writeObjectToFile(targetFile, mergedMedia.sort(mediaSorter));
 }
 
-const [, , rawPath] = process.argv;
-readMedia(rawPath);
+const [, , rawPath, fileName] = process.argv;
+readMedia(rawPath, fileName);
