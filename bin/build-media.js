@@ -2,9 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 import { copyAndRenameFilesIfNewer, ensureDirExists, parseJsonFile } from '../lib/filesystem.js';
-import { fileURLToPath } from 'url';
 import { Color } from '../lib/terminal.js';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function createThumbnail(imagePath, outputPath, sizeInPixel) {
   // https://sharp.pixelplumbing.com/api-resize
@@ -62,18 +60,13 @@ function copyMediaIntoDir(inputDir, outputDir, media) {
   copyAndRenameFilesIfNewer(targetsBySources);
 }
 
-const mediaPaths = {
-  mediaInput: path.resolve("static/art"),
-  mediaOutput: path.resolve("dist/media"),
-  thumbnailsInput: path.resolve("dist/media"),
-  thumbnailsOutput: path.resolve("dist/media/thumbnail"),
-};
+export default async function buildMedia({dataInput, mediaInput, mediaOutput, thumbnailsInput, thumbnailsOutput}) {
+  console.log("Copying and renaming images...");
+  const mediaArt = parseJsonFile(dataInput);
+  ensureDirExists(mediaOutput + path.sep);
+  copyMediaIntoDir(mediaInput, mediaOutput, mediaArt);
 
-console.log("Copying and renaming images...");
-const mediaArt = parseJsonFile(path.join(__dirname, '../data/media-art.json'));
-ensureDirExists(mediaPaths.mediaOutput + path.sep);
-copyMediaIntoDir(mediaPaths.mediaInput, mediaPaths.mediaOutput, mediaArt);
-
-console.log("Creating thumbnails...");
-ensureDirExists(mediaPaths.thumbnailsOutput + path.sep);
-await createThumbnailsForImages(mediaPaths.thumbnailsInput, mediaPaths.thumbnailsOutput);
+  console.log("Creating thumbnails...");
+  ensureDirExists(thumbnailsOutput + path.sep);
+  await createThumbnailsForImages(thumbnailsInput, thumbnailsOutput);
+}
