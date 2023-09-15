@@ -1,14 +1,17 @@
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
-import { copyIfNewer, ensureDirExists } from '../lib/filesystem.js';
+import { copyAndRenameFilesIfNewer, ensureDirExists, parseJsonFile } from '../lib/filesystem.js';
+import { fileURLToPath } from 'url';
+import { Color } from '../lib/terminal.js';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function createThumbnail(imagePath, outputPath, sizeInPixel) {
   // https://sharp.pixelplumbing.com/api-resize
   sharp(imagePath)
-    .resize({ 
-      width: sizeInPixel, 
-      height: sizeInPixel, 
+    .resize({
+      width: sizeInPixel,
+      height: sizeInPixel,
       fit: 'contain',
       background: { r: 0, g: 0, b: 0, alpha: 0 },
     })
@@ -37,7 +40,40 @@ async function createThumbnailsForImages(input, output) {
     await createThumbnail(filePath, outputFile, 240);
   }
 }
+function getTargetsBySourcesFromMedia(inputDir, outputDir, media) {
+  const targetsBySources = new Map();
+  const sourcesByTargets = new Map();
+  for (const mediaItem of media) {
+    const { fileNamePublic, fileNameInternal } = mediaItem;
+    const input = path.resolve(inputDir, fileNameInternal);
+    const output = path.resolve(outputDir, fileNamePublic);
+    if (targetsBySources.has(input))
+      console.warn(Color.Red + `File name '${input}' appears twice as SOURCE.` + Color.Reset);
+    if (sourcesByTargets.has(output))
+      console.warn(Color.Red + `File name '${output}' appears twice as TARGET.` + Color.Reset);
+    targetsBySources.set(input, output);
+    sourcesByTargets.set(output, input);
+  }
+  return targetsBySources;
+}
 
-copyIfNewer(path.resolve("static/art"), path.resolve("dist/media"));
+function copyMediaIntoDir(inputDir, outputDir, media) {
+  const targetsBySources = getTargetsBySourcesFromMedia(inputDir, outputDir, media);
+  copyAndRenameFilesIfNewer(targetsBySources);
+}
+
+const mediaPaths = {
+  mediaInput: path.resolve("static/art"),
+  mediaOutput: path.resolve("dist/media"),
+  thumbnailsInput: path.resolve("dist/media"),
+  thumbnailsOutput: path.resolve("dist/media/thumbnail"),
+};
+
+console.log("Copying and renaming images...");
+const mediaArt = parseJsonFile(path.join(__dirname, '../data/media-art.json'));
+ensureDirExists(mediaPaths.mediaOutput + path.sep);
+copyMediaIntoDir(mediaPaths.mediaInput, mediaPaths.mediaOutput, mediaArt);
+
 console.log("Creating thumbnails...");
-await createThumbnailsForImages(path.resolve("static/art"), path.resolve("dist/media/thumbnail"));
+ensureDirExists(mediaPaths.thumbnailsOutput + path.sep);
+await createThumbnailsForImages(mediaPaths.thumbnailsInput, mediaPaths.thumbnailsOutput);
