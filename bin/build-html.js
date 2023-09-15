@@ -1,9 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import handlebars from 'handlebars';
-import mediaArt from '../data/media.json' assert { type: "json" };
-import { ensureDirExists } from '../lib/filesystem.js';
+import { ensureDirExists, parseJsonFile } from '../lib/filesystem.js';
 import config from '../config/config.dev.js';
+import { fileURLToPath } from 'url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const mediaArt = parseJsonFile(path.join(__dirname, '../data/media-art.json'));
 
 function renderSfc(input, data, depth = 0) {
   // SFC = Single File Component; hbs file with top level <template>, <style> and <script> tag.
