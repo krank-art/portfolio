@@ -100,7 +100,7 @@ function compileSfcDir(input, output, data, subpath = []) {
     }
     if (path.extname(filePath) !== ".hbs")
       continue;
-    ensureDirExists(outputPath);
+    ensureDirExists(outputPath + path.sep);
     compileSfc(filePath, outputPath, data, subpath.length);
   }
   //compile('pages/index.hbs', 'dist/template.html', 'layouts/default.hbs', data);
