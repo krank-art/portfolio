@@ -100,7 +100,7 @@ async function readMediaInDir(dirPath, fileInfoByName = undefined) {
       if (sameSize && sameModified) continue;
     }
     if (file === "firefox_2020-03-17_23-56-08.png")
-      1+1 // TODO: For some reason, the optimization does not work with this particular file. Gets read every time.
+      1 + 1 // TODO: For some reason, the optimization does not work with this particular file. Gets read every time.
     const mediaItem = await readMediaItem(filePath).then(processMediaFile);
     // Guarantee uniqueness of paths
     const uniquePath = pathing.getUniquePath(mediaItem.path);
@@ -142,7 +142,7 @@ function mergeMedia(oldMedia, newMedia, preservedProps) {
   return Array.from(mergedMediaByPath.values());
 }
 
-async function readMedia(dirPath, outputFileName, skipUnchanged = false) {
+export default async function readMedia({ dirPath, outputFileName, skipUnchanged = false }) {
   // Step 1 -- Check parameters and setup source + target
   if (!dirPath) {
     console.error(`No directory for media files specified. Aborting. `);
@@ -186,6 +186,3 @@ async function readMedia(dirPath, outputFileName, skipUnchanged = false) {
   console.log(Color.Blue + `Updating media file '${targetFile}'. ` + Color.Reset);
   writeObjectToFile(targetFile, mergedMedia.sort(mediaSorter), true);
 }
-
-const [, , rawPath, fileName, rawSkipUnchanged] = process.argv;
-readMedia(rawPath, fileName, rawSkipUnchanged === "true");

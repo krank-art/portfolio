@@ -2,6 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import buildMedia from './build-media.js';
 import { deleteDirRecursive } from '../lib/filesystem.js';
+import readMedia from './read-media.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export async function handleCommand(command, ...args) {
@@ -16,6 +17,13 @@ export async function handleCommand(command, ...args) {
         mediaOutput: path.resolve("dist/media"),
         thumbnailsInput: path.resolve("dist/media"),
         thumbnailsOutput: path.resolve("dist/media/thumbnail"),
+      });
+      break;
+    case "import:art":
+      await readMedia({
+        dirPath: path.resolve("static/art"),
+        outputFileName: "media-art",
+        skipUnchanged: true,
       });
       break;
     default:
