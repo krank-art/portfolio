@@ -1,25 +1,21 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import buildMedia from './build-media.js';
+import { deleteDirRecursive } from '../lib/filesystem.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const mediaPaths = {
-  dataInput: path.resolve('data/media-art.json'),
-  mediaInput: path.resolve("static/art"),
-  mediaOutput: path.resolve("dist/media"),
-  thumbnailsInput: path.resolve("dist/media"),
-  thumbnailsOutput: path.resolve("dist/media/thumbnail"),
-};
 
 export async function handleCommand(command, ...args) {
   switch (command) {
-    case "media:build":
+    case "clean":
+      deleteDirRecursive(path.resolve('dist'));
+      break;
+    case "build:art":
       await buildMedia({
-        dataInput: mediaPaths.dataInput,
-        mediaInput: mediaPaths.mediaInput,
-        mediaOutput: mediaPaths.mediaOutput,
-        thumbnailsInput: mediaPaths.thumbnailsInput,
-        thumbnailsOutput: mediaPaths.thumbnailsOutput,
+        dataInput: path.resolve('data/media-art.json'),
+        mediaInput: path.resolve("static/art"),
+        mediaOutput: path.resolve("dist/media"),
+        thumbnailsInput: path.resolve("dist/media"),
+        thumbnailsOutput: path.resolve("dist/media/thumbnail"),
       });
       break;
     default:
