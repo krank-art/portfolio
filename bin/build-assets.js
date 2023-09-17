@@ -7,7 +7,9 @@ async function build() {
   console.log('Rollup completed successfully.');
 }
 
-build().catch((error) => {
-  console.error('Rollup encountered an error:', error);
-  process.exit(1);
-});
+export default async function buildAssets() {
+  await build().catch((error) => {
+    console.error('Rollup encountered an error:', error);
+    process.exit(1);
+  });
+}

@@ -4,6 +4,7 @@ import buildMedia from './build-media.js';
 import { deleteDirRecursive, parseJsonFile } from '../lib/filesystem.js';
 import readMedia from './read-media.js';
 import buildHtml from './build-html.js';
+import buildAssets from './build-assets.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export async function handleCommand(command, ...args) {
@@ -30,6 +31,9 @@ export async function handleCommand(command, ...args) {
           mediaArt: parseJsonFile(path.resolve('data/media-art.json')),
         },
       });
+      break;
+    case "build:assets":
+      await buildAssets();
       break;
     case "import:art":
       await readMedia({
