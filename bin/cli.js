@@ -9,6 +9,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export async function handleCommand(command, ...args) {
   switch (command) {
+    case "build":
+      await handleCommand("build:assets");
+      await handleCommand("build:html");
+      await handleCommand("build:art");
+      break;
     case "clean":
       deleteDirRecursive(path.resolve('dist'));
       break;
