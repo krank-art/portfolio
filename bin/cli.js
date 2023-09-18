@@ -1,11 +1,18 @@
 import path from 'path';
-import { fileURLToPath } from 'url';
 import buildMedia from './build-media.js';
 import { deleteDirRecursive, parseJsonFile } from '../lib/filesystem.js';
 import readMedia from './read-media.js';
 import buildHtml from './build-html.js';
 import buildAssets from './build-assets.js';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+export const pathing = Object.freeze({
+  dist: path.resolve('dist'),
+  pages: path.resolve("pages"),
+  artData: path.resolve('data/media-art.json'),
+  artImport: path.resolve("static/art"),
+  artProcessed: path.resolve("dist/media"),
+  artThumbnails: path.resolve("dist/media/thumbnail"),
+});
 
 export async function handleCommand(command, ...args) {
   switch (command) {
@@ -15,25 +22,25 @@ export async function handleCommand(command, ...args) {
       await handleCommand("build:art");
       break;
     case "clean":
-      deleteDirRecursive(path.resolve('dist'));
+      deleteDirRecursive(pathing.dist);
       break;
     case "build:art":
       await buildMedia({
-        dataInput: path.resolve('data/media-art.json'),
-        mediaInput: path.resolve("static/art"),
-        mediaOutput: path.resolve("dist/media"),
-        thumbnailsInput: path.resolve("dist/media"),
-        thumbnailsOutput: path.resolve("dist/media/thumbnail"),
+        dataInput: pathing.artData,
+        mediaInput: pathing.artImport,
+        mediaOutput: pathing.artProcessed,
+        thumbnailsInput: pathing.artProcessed,
+        thumbnailsOutput: pathing.artThumbnails,
       });
       break;
     case "build:html":
       buildHtml({
-        inputDir: path.resolve("pages"),
-        outputDir: path.resolve("dist"),
+        inputDir: pathing.pages,
+        outputDir: pathing.dist,
         data: {
           title: 'Handlebars Example',
           name: 'John Doe',
-          mediaArt: parseJsonFile(path.resolve('data/media-art.json')),
+          mediaArt: parseJsonFile(pathing.artData),
         },
       });
       break;
@@ -42,7 +49,7 @@ export async function handleCommand(command, ...args) {
       break;
     case "import:art":
       await readMedia({
-        dirPath: path.resolve("static/art"),
+        dirPath: pathing.artImport,
         outputFileName: "media-art",
         skipUnchanged: true,
       });
@@ -53,4 +60,4 @@ export async function handleCommand(command, ...args) {
 }
 
 const [, , command, ...args] = process.argv;
-await handleCommand(command, args);
+if (command) await handleCommand(command, args);
