@@ -10,7 +10,8 @@ import { Color } from '../lib/terminal.js';
 export const pathing = Object.freeze({
   dist: path.resolve('dist'),
   pages: path.resolve("pages"),
-  assetsEntry: path.resolve("lib/main.js"),
+  style: path.resolve("style"),
+  script: path.resolve("lib"),
   artData: path.resolve('data/media-art.json'),
   artImport: path.resolve("static/art"),
   artProcessed: path.resolve("dist/media"),
@@ -95,7 +96,10 @@ export async function handleCommand(command, ...args) {
     case "watch:assets":
       console.log("Press Ctrl + C to abort watcher. ");
       new FileWatcher({
-        target: pathing.assetsEntry,
+        target: [
+          pathing.script,
+          pathing.style,
+        ],
         recursive: true,
         onChange: async (eventType, fileName) => {
           console.log(Color.Red + `'${eventType}' on file '${fileName}'. Rebuilding Assets. `
