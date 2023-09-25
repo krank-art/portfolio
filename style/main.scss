@@ -4,9 +4,75 @@ html {
   color: white;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
+$gallery-bar-height: 3rem;
+$gallery-sidebar-width: 25rem;
+
 .container {
   padding: 1rem;
   margin-left: auto;
   margin-right: auto;
   max-width: 90vw;
+}
+
+.gallery-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.gallery-container {
+  position: relative;
+  padding: 0;
+  margin: 0;
+}
+
+.gallery-main {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+
+  &.shrunk {
+    width: calc(100vw - #{$gallery-sidebar-width});
+  }
+}
+
+.gallery-info {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: $gallery-sidebar-width;
+}
+
+.gallery-mainbar {
+  position: absolute;
+  height: $gallery-bar-height;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 2rem;
+  box-sizing: border-box;
+}
+
+.gallery-viewbox {
+  position: absolute;
+  height: calc(100% - #{$gallery-bar-height});
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-title {
+  font-size: 1.25rem;
+  margin: 0;
 }

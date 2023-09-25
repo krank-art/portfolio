@@ -1,8 +1,30 @@
 <template>
-  <main class="container">
-    <h1>{{ modelItem.title }}</h1>
-    <img class="gallery-image" src="../media/{{modelItem.fileNamePublic}}" alt="{{modelItem.title}}">
-  </main>
+  <div class="gallery-container">
+    <main class="gallery-main shrunk" style="background-color: {{ modelItem.vibrantColors.darkMuted }}">
+      <div class="gallery-mainbar">
+        <a href="../" title="Back to homepage">
+        &lAarr;
+        </a>
+        <h1 class="gallery-title">{{ modelItem.title }}</h1>
+        <a href="#toggle-sidebar" title="Toggle Sidebar">
+          Toggle
+        </a>
+      </div>
+      <div class="gallery-viewbox">
+        <img class="gallery-image" src="../media/{{modelItem.fileNamePublic}}" alt="{{modelItem.title}}">
+      </div>
+    </main>
+    <aside class="gallery-info">
+        <h2>title {{ modelItem.title }}</h2>
+        <h3>subtitle {{ modelItem.title }}</h2>
+        <hr>
+        <p>date {{ modelItem.date }}</p>
+        <p>tags {{ modelItem.tags }}</p>
+        <hr>
+        <p>Description</p>
+        <p>Description2</p>
+    </aside>
+  </div>
 </template>
 
 <style>
