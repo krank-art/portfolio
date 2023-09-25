@@ -6,4 +6,5 @@ const testWatcher = new FileWatcher({
   onChange: (eventType, fileName) => {
     console.log(eventType, `File ${fileName} has changed.`);
   },
+  recursive: true,
 });
