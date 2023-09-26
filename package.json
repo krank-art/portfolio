@@ -20,6 +20,7 @@
   "devDependencies": {
     "handlebars": "^4.7.8",
     "jsdom": "^22.1.0",
+    "marked": "^9.0.3",
     "node-vibrant": "^3.2.1-alpha.1",
     "rollup": "^3.28.1",
     "rollup-plugin-copy": "^3.5.0",
