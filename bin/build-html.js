@@ -23,9 +23,19 @@ function renderSfc(input, data, depth = 0) {
     const { model: modelName } = module;
     const payload = extendedData[modelName]; // has to be an array of objects, which have an path prop
     if (!payload) console.error(`No data model '${modelName}' could be found. `);
-    for (const item of payload) {
+    for (let i = 0; i < payload.length; i++) {
+      const item = payload[i];
+      const previousItem = payload[i - 1] ?? null;
+      const nextItem = payload[i + 1] ?? null;
       output[item.path] = null;
-      modelDataByPath.set(item.path, item);
+      const modelData = {
+        ...item,
+        meta: {
+          previous: previousItem,
+          next: nextItem,
+        },
+      };
+      modelDataByPath.set(item.path, modelData);
     }
   } else {
     output["/"] = null;
@@ -33,7 +43,9 @@ function renderSfc(input, data, depth = 0) {
 
   // Step 3 -- Render template for each path
   for (const path in output) {
-    const pathData = isDynamicSfc ? { ...extendedData, ...{ modelItem: modelDataByPath.get(path) } } : { ...extendedData };
+    const pathData = isDynamicSfc
+      ? { ...extendedData, ...{ modelItem: modelDataByPath.get(path) } }
+      : { ...extendedData };
     const renderedHtml = renderHtml(html, pathData);
     const layoutData = { content: renderedHtml, style: style, ...pathData };
     const renderedTemplate = renderTemplate(`layouts/${layout}.hbs`, layoutData);
@@ -106,7 +118,7 @@ function compileSfcDir(input, output, data, subpath = []) {
   //renderSfc('pages/index.hbs', data);
 }
 
-export default function buildHtml({inputDir, outputDir, data}) {
+export default function buildHtml({ inputDir, outputDir, data }) {
   compileSfcDir(inputDir, outputDir, {
     ...config,
     ...data,
