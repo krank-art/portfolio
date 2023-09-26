@@ -1,8 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import handlebars from 'handlebars';
+import { marked } from 'marked';
 import { ensureDirExists } from '../lib/filesystem.js';
 import config from '../config/config.dev.js';
+import { interpolateString } from '../lib/string.js';
 
 function renderSfc(input, data, depth = 0) {
   // SFC = Single File Component; hbs file with top level <template>, <style> and <script> tag.
@@ -42,16 +44,31 @@ function renderSfc(input, data, depth = 0) {
   }
 
   // Step 3 -- Render template for each path
+  const myHandlebars = getHandlebars();
   for (const path in output) {
     const pathData = isDynamicSfc
       ? { ...extendedData, ...{ modelItem: modelDataByPath.get(path) } }
       : { ...extendedData };
-    const renderedHtml = renderHtml(html, pathData);
+    const renderedHtml = renderHtml(html, pathData, myHandlebars);
     const layoutData = { content: renderedHtml, style: style, ...pathData };
-    const renderedTemplate = renderTemplate(`layouts/${layout}.hbs`, layoutData);
+    const renderedTemplate = renderTemplate(`layouts/${layout}.hbs`, layoutData, myHandlebars);
     output[path] = renderedTemplate;
   }
   return output;
+}
+
+function getHandlebars() {
+  const myHandlebars = handlebars.create();
+  myHandlebars.registerHelper('obj', function(string, options) {
+    return JSON.parse(string);
+  });
+  myHandlebars.registerHelper('markdown', function(string, args, options) {
+    // Ok, not quite sure how hashes work in handlebars, but this is good enough for now.
+    const interpolatedString = interpolateString(string, args.hash.args);
+    const html = marked(interpolatedString);
+    return new myHandlebars.SafeString(html);
+  });
+  return myHandlebars;
 }
 
 function parseSfc(string) {
@@ -63,24 +80,24 @@ function parseSfc(string) {
   return ({ html, style, script, module });
 }
 
-function renderHtml(template, data) {
+function renderHtml(template, data, handlebars) {
   const compiledTemplate = handlebars.compile(template);
   return compiledTemplate(data);
 }
 
-function renderTemplate(input, data) {
+function renderTemplate(input, data, handlebars) {
   const templateSource = fs.readFileSync(input, 'utf8');
-  return renderHtml(templateSource, data);
+  return renderHtml(templateSource, data, handlebars);
 }
 
-function renderTemplateWithLayout(input, layout, data) {
-  const content = renderTemplate(input, data);
+function renderTemplateWithLayout(input, layout, data, handlebars) {
+  const content = renderTemplate(input, data, handlebars);
   const payload = { ...data, content };
-  return renderTemplate(layout, payload);
+  return renderTemplate(layout, payload, handlebars);
 }
 
-function compile(input, output, layout, data) {
-  const renderedHtml = renderTemplateWithLayout(input, layout, data);
+function compile(input, output, layout, data, handlebars) {
+  const renderedHtml = renderTemplateWithLayout(input, layout, data, handlebars);
   fs.writeFileSync(output, renderedHtml);
   console.log(`Compiled '${input}' to '${output}'. `);
 }
