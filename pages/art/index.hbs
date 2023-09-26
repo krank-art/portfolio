@@ -2,21 +2,30 @@
   <div class="gallery-container">
     <main class="gallery-main shrunk" style="background-color: {{ modelItem.vibrantColors.darkMuted }}">
       <div class="gallery-mainbar">
-        <a href="../" title="Back to homepage">
-        &lAarr;
+        <a class="gallery-button" href="../" title="Back to homepage">
+          &lAarr;
         </a>
-        <h1 class="gallery-title">{{ modelItem.title }}</h1>
-        <a href="#toggle-sidebar" title="Toggle Sidebar">
+        <div class="gallery-label">
+          <h1 class="gallery-label-main">{{ modelItem.title }}</h1>
+          <span class="gallery-label-note">{{ modelItem.date }}</span>
+        </div>
+        <a class="gallery-button" href="#toggle-sidebar" title="Toggle Sidebar">
           Toggle
         </a>
       </div>
       <div class="gallery-viewbox">
+        {{#if modelItem.meta.previous}}
+        <a class="gallery-previous" href="./{{ modelItem.meta.previous.path }}">&larr;</a>
+        {{/if}}
         <img class="gallery-image" src="../media/{{modelItem.fileNamePublic}}" alt="{{modelItem.title}}">
+        {{#if modelItem.meta.next}}
+        <a class="gallery-next" href="./{{ modelItem.meta.next.path }}">&rarr;</a>
+        {{/if}}
       </div>
     </main>
     <aside class="gallery-info">
-        <h2>title {{ modelItem.title }}</h2>
-        <h3>subtitle {{ modelItem.title }}</h2>
+      <h2>title {{ modelItem.title }}</h2>
+      <h3>subtitle {{ modelItem.title }}</h2>
         <hr>
         <p>date {{ modelItem.date }}</p>
         <p>tags {{ modelItem.tags }}</p>
