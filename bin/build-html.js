@@ -62,7 +62,12 @@ function getHandlebars() {
   myHandlebars.registerHelper('obj', function(string, options) {
     return JSON.parse(string);
   });
+  myHandlebars.registerHelper('join', function(array, sep, options) {
+    const separator = sep ? sep.hash.sep : '';
+    return array.join(separator);
+  });
   myHandlebars.registerHelper('markdown', function(string, args, options) {
+    // Example: `{{{markdown 'this **awesome** text is #{nice}' args=(obj '{"nice": "good"}') }}}`
     // Ok, not quite sure how hashes work in handlebars, but this is good enough for now.
     const interpolatedString = interpolateString(string, args.hash.args);
     const html = marked(interpolatedString);

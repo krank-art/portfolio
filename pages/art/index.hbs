@@ -29,8 +29,7 @@
       <p>date {{ modelItem.date }}</p>
       <p>tags {{ modelItem.tags }}</p>
       <hr>
-      <p>{{{markdown 'this **awesome** text is #{nice}' args=(obj '{"nice": "good"}') }}}</p>
-      <p>Description2</p>
+      {{{markdown (join modelItem.description) }}}
     </aside>
   </div>
 </template>
