@@ -2,16 +2,32 @@
   <div class="gallery-container">
     <main class="gallery-main shrunk" style="background-color: {{ modelItem.vibrantColors.darkMuted }}">
       <div class="gallery-mainbar">
-        <a class="gallery-button" href="../" title="Back to homepage">
-          &lAarr;
-        </a>
-        <div class="gallery-label">
-          <h1 class="gallery-label-main">{{ modelItem.title }}</h1>
-          <span class="gallery-label-note">{{ modelItem.date }}</span>
+        <div class="gallery-mainbar-status">
+          <a class="gallery-button" href="../" title="Back to homepage">
+            &lAarr;
+          </a>
+          <div class="gallery-label">
+            <h1 class="gallery-label-main">{{ modelItem.title }}</h1>
+            <span class="gallery-label-note">{{ modelItem.date }}</span>
+          </div>
+          <a class="gallery-button" href="#toggle-sidebar" title="Toggle Sidebar">
+            To
+          </a>
         </div>
-        <a class="gallery-button" href="#toggle-sidebar" title="Toggle Sidebar">
-          Toggle
+        <div class="gallery-mainbar-nav">
+        {{#if modelItem.meta.previous}}
+        <a class="gallery-mainbar-previous" href="./{{ modelItem.meta.previous.path }}">
+        <span class="gallery-mainbar-nav-element">&larr;</span>
+        <span class="gallery-mainbar-nav-element">Previous: {{ modelItem.meta.previous.title }}</span>
         </a>
+        {{/if}}
+        {{#if modelItem.meta.next}}
+        <a class="gallery-mainbar-next" href="./{{ modelItem.meta.next.path }}">
+        <span class="gallery-mainbar-nav-element">Next: {{ modelItem.meta.next.title }}</span>
+        <span class="gallery-mainbar-nav-element">&rarr;</span>
+        </a>
+        {{/if}}
+        </div>
       </div>
       <div class="gallery-viewbox">
         {{#if modelItem.meta.previous}}
