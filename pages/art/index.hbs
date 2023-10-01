@@ -1,6 +1,6 @@
 <template>
-  <div class="gallery-container">
-    <main class="gallery-main shrunk" style="background-color: {{ modelItem.vibrantColors.darkMuted }}">
+  <div id="gallery-container">
+    <main class="gallery-main" style="background-color: {{ modelItem.vibrantColors.darkMuted }}">
       <div class="gallery-mainbar">
         <div class="gallery-mainbar-status">
           <a class="gallery-button square" href="../" title="Back to homepage" aria-label="Back to homepage">
@@ -10,9 +10,9 @@
             <h1 class="gallery-label-main">{{ modelItem.title }}</h1>
             <span class="gallery-label-note">{{ modelItem.date }}</span>
           </div>
-          <a class="gallery-button square" href="#toggle-sidebar" title="Toggle Sidebar">
+          <button id="gallery-toggle" class="gallery-button square" title="Toggle Sidebar" disabled>
             <span class="gallery-button-icon-content">To</span>
-          </a>
+          </button>
         </div>
         <div class="gallery-mainbar-nav">
           {{#if modelItem.meta.previous}}

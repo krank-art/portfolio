@@ -11,7 +11,7 @@ $gallery-sidebar-width: 25rem;
   object-fit: contain;
 }
 
-.gallery-container {
+#gallery-container {
   position: relative;
   padding: 0;
   margin: 0;
@@ -24,6 +24,7 @@ $gallery-sidebar-width: 25rem;
 }
 
 .gallery-info {
+  display: none;
   top: 0;
   right: 0;
   bottom: 0;
@@ -69,7 +70,7 @@ $gallery-sidebar-width: 25rem;
 
 .gallery-viewbox {
   position: relative;
-  height: calc(50vh - #{$gallery-bar-height-mobile * 0.5});
+  height: calc(100vh - #{$gallery-bar-height-mobile});
   display: flex;
   align-items: center;
   justify-content: center;
@@ -228,6 +229,15 @@ $gallery-sidebar-width: 25rem;
   }
 }
 
+#gallery-container.info-expanded {
+  .gallery-viewbox {
+    height: calc(50vh - #{$gallery-bar-height-mobile * 0.5});
+  }
+
+  .gallery-info {
+    display: block;
+  }
+}
 
 @media (min-width: 960px) {
 
