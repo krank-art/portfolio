@@ -3,15 +3,15 @@
     <main class="gallery-main shrunk" style="background-color: {{ modelItem.vibrantColors.darkMuted }}">
       <div class="gallery-mainbar">
         <div class="gallery-mainbar-status">
-          <a class="gallery-button" href="../" title="Back to homepage">
-            &lAarr;
+          <a class="gallery-button square" href="../" title="Back to homepage" aria-label="Back to homepage">
+            <span class="gallery-button-icon-content">&times;</span>
           </a>
           <div class="gallery-label">
             <h1 class="gallery-label-main">{{ modelItem.title }}</h1>
             <span class="gallery-label-note">{{ modelItem.date }}</span>
           </div>
-          <a class="gallery-button" href="#toggle-sidebar" title="Toggle Sidebar">
-            To
+          <a class="gallery-button square" href="#toggle-sidebar" title="Toggle Sidebar">
+            <span class="gallery-button-icon-content">To</span>
           </a>
         </div>
         <div class="gallery-mainbar-nav">

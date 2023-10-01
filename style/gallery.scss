@@ -1,7 +1,8 @@
+@use "sass:math";
 @use "./text.scss";
 
 $gallery-bar-height: 3rem;
-$gallery-bar-height-mobile: 8rem;
+$gallery-bar-height-mobile: 9rem;
 $gallery-sidebar-width: 25rem;
 
 .gallery-image {
@@ -27,6 +28,7 @@ $gallery-sidebar-width: 25rem;
   right: 0;
   bottom: 0;
   width: auto;
+  height: calc(50vh - #{$gallery-bar-height-mobile * 0.5});
   padding: 1rem;
   box-sizing: border-box;
 
@@ -45,7 +47,7 @@ $gallery-sidebar-width: 25rem;
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 0.25rem 1rem;
+  padding: 0.7rem 1rem;
   box-sizing: border-box;
   background-color: #555;
   box-shadow: 0 -1.5rem 3rem rgba(0, 0, 0, 0.35);
@@ -54,6 +56,7 @@ $gallery-sidebar-width: 25rem;
 .gallery-mainbar-status {
   display: flex;
   align-items: center;
+  margin-bottom: 0.5rem;
 
   &>*:not(:last-child) {
     margin-right: 1rem;
@@ -66,7 +69,7 @@ $gallery-sidebar-width: 25rem;
 
 .gallery-viewbox {
   position: relative;
-  height: 70vh;
+  height: calc(50vh - #{$gallery-bar-height-mobile * 0.5});
   display: flex;
   align-items: center;
   justify-content: center;
@@ -126,27 +129,29 @@ $gallery-sidebar-width: 25rem;
 }
 
 .gallery-button {
-  font-size: 1.5rem;
+  font-size: 1rem;
   color: white;
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background-color: rgba(0, 0, 0, 0.3);
   padding: 0.5em 1em;
   border-radius: 0.5em;
-}
-
-.gallery-mainbar {
-  position: fixed;
-  height: $gallery-bar-height-mobile;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 0.25rem 1rem;
   box-sizing: border-box;
-  background-color: #555;
-  box-shadow: 0 -1.5rem 3rem rgba(0, 0, 0, 0.35);
+
+  &.square {
+    width: 3.5em;
+    height: 3.5em;
+  }
 }
 
+.gallery-button-icon-content {
+  font-size: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .gallery-mainbar-nav {
   display: flex;
