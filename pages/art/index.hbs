@@ -33,11 +33,11 @@
       </div>
       <div class="gallery-viewbox">
         {{#if modelItem.meta.previous}}
-        <a class="gallery-previous" href="./{{ modelItem.meta.previous.path }}">&larr;</a>
+        <a id="gallery-previous" class="gallery-previous" href="./{{ modelItem.meta.previous.path }}">&larr;</a>
         {{/if}}
         <img class="gallery-image" src="../media/{{modelItem.fileNamePublic}}" alt="{{modelItem.title}}">
         {{#if modelItem.meta.next}}
-        <a class="gallery-next" href="./{{ modelItem.meta.next.path }}">&rarr;</a>
+        <a id="gallery-next" class="gallery-next" href="./{{ modelItem.meta.next.path }}">&rarr;</a>
         {{/if}}
       </div>
     </main>
