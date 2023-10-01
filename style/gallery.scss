@@ -1,3 +1,5 @@
+@use "./text.scss";
+
 $gallery-bar-height: 3rem;
 $gallery-bar-height-mobile: 8rem;
 $gallery-sidebar-width: 25rem;
@@ -132,6 +134,82 @@ $gallery-sidebar-width: 25rem;
   padding: 0.5em 1em;
   border-radius: 0.5em;
 }
+
+.gallery-mainbar {
+  position: fixed;
+  height: $gallery-bar-height-mobile;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.25rem 1rem;
+  box-sizing: border-box;
+  background-color: #555;
+  box-shadow: 0 -1.5rem 3rem rgba(0, 0, 0, 0.35);
+}
+
+
+.gallery-mainbar-nav {
+  display: flex;
+  flex-flow: row nowrap;
+  $gap: 1rem;
+  margin-left: $gap * -0.5;
+  margin-right: $gap * -0.5;
+
+  &>* {
+    margin-left: $gap * 0.5;
+    margin-right: $gap * 0.5;
+    flex: 1 1 0%;
+  }
+}
+
+.gallery-mainbar-nav-button {
+  height: 3.5em;
+  color: white;
+  text-decoration: none;
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 0.5em;
+  padding: 0.5em 1em;
+  box-sizing: border-box;
+}
+
+.gallery-mainbar-nav-icon {
+  font-size: 1.5rem;
+  align-items: center;
+}
+
+.gallery-mainbar-nav-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+  max-height: 2.4em;
+  @include text.ellipsis(2);
+}
+
+.gallery-mainbar-previous {
+  .gallery-mainbar-nav-icon {
+    margin-left: -0.25rem;
+    margin-right: 0.5rem;
+  }
+}
+
+.gallery-mainbar-next {
+  justify-content: flex-end;
+
+  .gallery-mainbar-nav-icon {
+    margin-left: auto;
+    margin-left: 0.5rem;
+    margin-right: -0.25rem;
+  }
+
+  .gallery-mainbar-nav-label {
+    text-align: right;
+  }
+}
+
 
 @media (min-width: 960px) {
 
