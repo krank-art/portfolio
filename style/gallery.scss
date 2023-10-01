@@ -151,8 +151,13 @@ $gallery-sidebar-width: 25rem;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.3);
   padding: 0.5em 1em;
+  border: none;
   border-radius: 0.5em;
   box-sizing: border-box;
+
+  &[disabled] {
+    opacity: 0.4;
+  }
 
   &.square {
     width: 3.5em;
