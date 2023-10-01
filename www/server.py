@@ -3,6 +3,9 @@ import os
 from http.server import HTTPServer
 from http.server import SimpleHTTPRequestHandler
 
+# IP has to be '0.0.0.0', so we can also reach it with over devices in the same LAN network.
+IP = '0.0.0.0' 
+PORT = 8000 
 DIRECTORY = ".." + os.sep + "dist"
 
 web_dir_raw = os.path.join(os.path.dirname(__file__), DIRECTORY)
@@ -20,5 +23,6 @@ class MyHandler(SimpleHTTPRequestHandler):
         super().do_GET()
 
 if __name__ == '__main__':
-    httpd = HTTPServer(('127.0.0.1', 8000), MyHandler)
+    print(f'Serving HTTP on {IP}:{PORT} ...')
+    httpd = HTTPServer((IP, PORT), MyHandler)
     httpd.serve_forever()
