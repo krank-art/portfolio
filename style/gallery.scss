@@ -161,6 +161,11 @@ $gallery-nav-width: 20%;
     opacity: 0.4;
   }
 
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: default;
+  }
+
   &.square {
     width: 3.5em;
     height: 3.5em;
@@ -199,6 +204,11 @@ $gallery-nav-width: 20%;
   border-radius: 0.5em;
   padding: 0.5em 1em;
   box-sizing: border-box;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: default;
+  }
 }
 
 .gallery-mainbar-nav-icon {
@@ -303,9 +313,9 @@ $gallery-nav-width: 20%;
 
   .gallery-mainbar-previous {
     left: 5rem;
-  }  
-  
+  }
+
   .gallery-mainbar-next {
     right: 5rem;
-  }  
+  }
 }
