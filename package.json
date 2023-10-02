@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "cli": "node bin/cli.js",
+    "cli": "node --experimental-vm-modules bin/cli.js",
     "serve-python": "python www/server.py",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

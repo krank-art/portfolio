@@ -38,7 +38,7 @@ export async function handleCommand(command, ...args) {
       });
       break;
     case "build:html":
-      buildHtml({
+      await buildHtml({
         inputDir: pathing.pages,
         outputDir: pathing.dist,
         data: {
