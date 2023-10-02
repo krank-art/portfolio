@@ -4,7 +4,7 @@
 $gallery-bar-height: 5rem;
 $gallery-bar-height-mobile: 9rem;
 $gallery-sidebar-width: 25rem;
-$gallery-nav-width: 15rem;
+$gallery-nav-width: 20%;
 
 .gallery-image {
   max-width: 100%;
@@ -248,8 +248,8 @@ $gallery-nav-width: 15rem;
 
 @media (min-width: 960px) {
   .gallery-label {
-    padding-left: $gallery-nav-width + 2rem;
-    padding-right: $gallery-nav-width + 2rem;
+    padding-left: calc(#{$gallery-nav-width} + 2rem);
+    padding-right: calc(#{$gallery-nav-width} + 2rem);
   }
 
   .gallery-label-main,
