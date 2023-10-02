@@ -10,6 +10,7 @@ import { Color } from '../lib/terminal.js';
 export const pathing = Object.freeze({
   dist: path.resolve('dist'),
   pages: path.resolve("pages"),
+  layouts: path.resolve("layouts"),
   style: path.resolve("style"),
   script: path.resolve("lib"),
   artData: path.resolve('data/media-art.json'),
@@ -83,6 +84,7 @@ export async function handleCommand(command, ...args) {
       new FileWatcher({
         target: [
           pathing.pages,
+          pathing.layouts,
           pathing.artData,
         ],
         recursive: true,
