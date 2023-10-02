@@ -1,9 +1,10 @@
 @use "sass:math";
 @use "./text.scss";
 
-$gallery-bar-height: 3rem;
+$gallery-bar-height: 5rem;
 $gallery-bar-height-mobile: 9rem;
 $gallery-sidebar-width: 25rem;
+$gallery-nav-width: 15rem;
 
 .gallery-image {
   max-width: 100%;
@@ -246,6 +247,10 @@ $gallery-sidebar-width: 25rem;
 }
 
 @media (min-width: 960px) {
+  .gallery-label {
+    padding-left: $gallery-nav-width + 2rem;
+    padding-right: $gallery-nav-width + 2rem;
+  }
 
   .gallery-label-main,
   .gallery-label-note {
@@ -263,12 +268,16 @@ $gallery-sidebar-width: 25rem;
     top: 0;
     background-color: unset;
     height: $gallery-bar-height;
+    box-shadow: 0 2.5rem 5rem rgba(0, 0, 0, 0.15);
   }
 
   .gallery-main {
     height: 100%;
+  }
 
-    &.shrunk {
+  #gallery-container.info-expanded {
+    .gallery-main {
+      height: 100%;
       width: calc(100vw - #{$gallery-sidebar-width});
     }
   }
@@ -285,4 +294,18 @@ $gallery-sidebar-width: 25rem;
     position: absolute;
     width: $gallery-sidebar-width;
   }
+
+  .gallery-mainbar-nav-button {
+    position: absolute;
+    top: 0.7rem;
+    width: $gallery-nav-width;
+  }
+
+  .gallery-mainbar-previous {
+    left: 5rem;
+  }  
+  
+  .gallery-mainbar-next {
+    right: 5rem;
+  }  
 }
