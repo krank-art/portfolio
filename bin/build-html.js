@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { ensureDirExists } from '../lib/filesystem.js';
 import config from '../config/config.dev.js';
-import { TemplateRenderer } from '../lib/template-renderer.js';
+import TemplateEngine from '../lib/template-engine.js';
 
 function compileSfcDir(input, output, data, subpath = []) {
   const files = fs.readdirSync(input);
@@ -19,7 +19,7 @@ function compileSfcDir(input, output, data, subpath = []) {
     if (path.extname(filePath) !== ".hbs")
       continue;
     ensureDirExists(outputPath + path.sep);
-    TemplateRenderer.compileSfc(filePath, outputPath, data, subpath.length);
+    TemplateEngine.compileSfc(filePath, outputPath, data, subpath.length);
   }
   //compile('pages/index.hbs', 'dist/template.html', 'layouts/default.hbs', data);
   //renderSfc('pages/index.hbs', data);
