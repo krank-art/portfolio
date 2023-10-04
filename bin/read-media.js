@@ -46,7 +46,7 @@ function getAspectRatio(width, height) {
   return {
     aspectRatio: simplifiedWidth + ":" + simplifiedHeight,
     orientation: getOrientation(width, height),
-    ratioFactor: simplifiedWidth / simplifiedHeight,
+    ratioFactor: width / height,
   }
 }
 
