@@ -5,6 +5,7 @@ import { getVibrantColorsInImage } from '../lib/image.js';
 import { replaceUmlauts, toKebabCase } from '../lib/string.js';
 import { parseJsonFile, writeObjectToFile } from '../lib/filesystem.js';
 import { Color } from '../lib/terminal.js';
+import { simplifyFraction } from '../lib/maths.js';
 
 class UniquePathing {
   constructor() {
@@ -27,6 +28,28 @@ class UniquePathing {
   }
 }
 
+const Orientation = Object.freeze({
+  Landscape: 'landscape',
+  Portrait: 'portrait',
+  Square: 'square',
+});
+
+function getOrientation(width, height) {
+  if (width === height) return Orientation.Square;
+  if (width > height) return Orientation.Landscape;
+  return Orientation.Portrait;
+}
+
+function getAspectRatio(width, height) {
+  // We sort the array, because it would be weird to denote aspect ratios in '9:16', etc.
+  const [simplifiedWidth, simplifiedHeight] = simplifyFraction(width, height).sort((a, b) => b - a);
+  return {
+    aspectRatio: simplifiedWidth + ":" + simplifiedHeight,
+    orientation: getOrientation(width, height),
+    ratioFactor: simplifiedWidth / simplifiedHeight,
+  }
+}
+
 async function processMediaFile({ filePath, fileType, fileName, extension, fileSize, fileModified }) {
   if (fileType !== 'file') return;
   console.log(`${Color.Gray}Processing file '${Color.Reset + fileName + Color.Gray}' (${filePath}).${Color.Reset}`);
@@ -46,7 +69,7 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
     console.log(`${Color.Cyan}  The file type '${Color.Reset + extension + Color.Cyan}' `
       + `is only partially supported (${filePath}).${Color.Reset}`);
   const metadata = imageTypeIsSupported ? await sharp(filePath).metadata() : { width: null, height: null };
-  const aspectRatio = imageTypeIsSupported ? (metadata.width / metadata.height) : null;
+  const aspectRatioInfo = imageTypeIsSupported ? getAspectRatio(metadata.width, metadata.height) : null;
   const vibrantColors = imageTypeIsSupported ? await getVibrantColorsInImage(filePath) : null;
   return Promise.resolve({
     active: imageTypeIsSupported,
@@ -59,7 +82,9 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
     fileModified: fileModified,
     width: metadata.width,
     height: metadata.height,
-    aspectRatio: aspectRatio,
+    aspectRatio: aspectRatioInfo?.aspectRatio ?? null,
+    orientation: aspectRatioInfo?.orientation ?? null,
+    ratioFactor: aspectRatioInfo?.ratioFactor ?? null,
     vibrantColors: vibrantColors,
     // The following props are intended to be extended manually.
     title: title,
