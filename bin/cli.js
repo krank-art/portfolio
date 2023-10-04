@@ -53,10 +53,11 @@ export async function handleCommand(command, ...args) {
       await buildAssets();
       break;
     case "import:art":
+      const skipUnchanged = args[0] && args[0] === "force";
       await readMedia({
         dirPath: pathing.artImport,
         outputFileName: "media-art",
-        skipUnchanged: true,
+        skipUnchanged: skipUnchanged,
       });
       break;
     case "watch":
