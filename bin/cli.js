@@ -6,6 +6,7 @@ import buildHtml from './build-html.js';
 import buildAssets from './build-assets.js';
 import FileWatcher from '../lib/filewatcher.js';
 import { Color } from '../lib/terminal.js';
+import { inspectMedia } from './inspect-media.js';
 
 export const pathing = Object.freeze({
   dist: path.resolve('dist'),
@@ -110,6 +111,10 @@ export async function handleCommand(command, ...args) {
           await handleCommand("build:assets");
         },
       });
+      break;
+    case "inspect:art":
+      const lines = inspectMedia(parseJsonFile(pathing.artData));
+      console.log(lines.join("\n"));
       break;
     default:
       console.log(`Unknown command '${command}'`);
