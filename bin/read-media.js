@@ -59,7 +59,9 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
   const match = fullNameRegex.exec(fileName) ?? simpleNameRegex.exec(fileName);
   const [, rawName, rawDate, fileExtension] = match;
   const title = rawName.trim();
-  const mediaName = replaceUmlauts(toKebabCase(title)).replace(/^_*(.+?)_*$/g, '$1');
+  const mediaName = replaceUmlauts(toKebabCase(title))
+    .replace(/^_*(.+?)_*$/g, '$1')
+    .replace(/[',.]/g, '');
   const mediaDate = rawDate.replaceAll('.', '-');
   const fileNamePublic = mediaDate.length > 0
     ? (mediaName + "_" + mediaDate + extension)
