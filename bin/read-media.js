@@ -50,6 +50,11 @@ function getAspectRatio(width, height) {
   }
 }
 
+function normalizeTime(time, resolution = 1000) {
+  const normalizedTime = Math.floor(time / resolution) * resolution;
+  return new Date(normalizedTime);
+}
+
 async function processMediaFile({ filePath, fileType, fileName, extension, fileSize, fileModified }) {
   if (fileType !== 'file') return;
   console.log(`${Color.Gray}Processing file '${Color.Reset + fileName + Color.Gray}' (${filePath}).${Color.Reset}`);
@@ -81,7 +86,9 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
     fileNameInternal: fileName,
     fileType: fileExtension,
     fileSize: fileSize,
-    fileModified: fileModified,
+    // For some reason, the time code is not exactly the same when the files get copied via OneDrive.
+    // So we ignore all the milliseconds and only save full seconds.
+    fileModified: normalizeTime(fileModified),
     width: metadata.width,
     height: metadata.height,
     aspectRatio: aspectRatioInfo?.aspectRatio ?? null,
@@ -123,7 +130,7 @@ async function readMediaInDir(dirPath, fileInfoByName = undefined) {
       const sameSize = targetSize === sourceSize;
       //const targetModifiedFloored = Math.floor(targetModified); // returns weird fractional millis
       //const sameModified = sourceModified === targetModifiedFloored;
-      const sameModified = sourceModified === targetModified.getTime();
+      const sameModified = sourceModified === normalizeTime(targetModified).getTime();
       if (sameSize && sameModified) continue;
     }
     if (file === "firefox_2020-03-17_23-56-08.png")
