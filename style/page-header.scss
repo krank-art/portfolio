@@ -1,0 +1,29 @@
+.page-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.page-header-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+  line-height: 1;
+}
+
+.page-header-subtitle {
+  font-size: 2rem;
+  font-weight: lighter;
+  opacity: 0.6;
+  margin: 0 0 0 0.25em;
+  line-height: 1;
+}
+
+@media (min-width: 960px) {
+  .page-header-title,
+  .page-header-subtitle {
+    font-size: 3rem;
+  }
+}
