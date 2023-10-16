@@ -18,6 +18,18 @@
             "runtimeArgs": [
                 "--experimental-vm-modules"
             ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Run TemplateLoader",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\lib\\template-loader.js",
+            "runtimeArgs": [
+                "--experimental-vm-modules"
+            ],
         }
     ]
 }
