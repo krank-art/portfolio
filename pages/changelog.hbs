@@ -1,0 +1,55 @@
+<template>
+  <main class="container">
+    <header class="page-header">
+      <h1 class="page-header-title">Krank</h1>
+      <p class="page-header-subtitle">furry&hairsp;art</p>
+    </header>
+    {{{markdown changelog }}}
+    <footer class="page-footer">
+      Each character depicted belongs to their respective owner.<br>
+      Krank &copy; 2023
+    </footer>
+  </main>
+</template>
+
+<style>
+</style>
+
+<script>
+  export default {
+    layout: "default",
+    data: {
+      title: "Krank",
+      changelog: `
+## v1.1.0
+
+??th October 2023
+
+* Add template for individual art pages.
+* Add quick navigation options:
+  * Press \`J\` to go to previous artwork. 
+  * Press \`L\` to go to next artwork.
+  * Press \`K\` to show/hide artwork description.
+  * Swipe left or right to move previous/next artwork.
+* Add meta data for social media previews.
+* Add basic routing so \`.html\` in links is optional.
+* Add [changelog](./changelog).
+* Add more artwork (current work from 2023 and old work from 2020 and 2021).
+* Clean up some of current artwork (contrast, artwork dimensions, artworking naming).
+* Rework site generation engine to handle art pages.
+* Rework site engine to have extensive CLI and reactivity to changes.
+* Publish source code for art gallery: https://github.com/krank-art/portfolio.
+
+
+## v1.0.0
+
+10th September 2023
+
+* Initial Release.
+* Compiling current art into importable art files.
+* Creating the static site generation engine.
+* Registering domain and renting webserver.
+      `,
+    }
+  };
+</script>
