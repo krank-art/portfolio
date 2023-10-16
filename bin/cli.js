@@ -8,10 +8,11 @@ import FileWatcher from '../lib/filewatcher.js';
 import { Color } from '../lib/terminal.js';
 import { inspectMediaTable } from './inspect-media.js';
 
-export const pathing = Object.freeze({
+const pathing = Object.freeze({
   dist: path.resolve('dist'),
   pages: path.resolve("pages"),
   layouts: path.resolve("layouts"),
+  components: path.resolve("components"),
   style: path.resolve("style"),
   script: path.resolve("lib"),
   artData: path.resolve('data/media-art.json'),
@@ -43,6 +44,7 @@ export async function handleCommand(command, ...args) {
       await buildHtml({
         inputDir: pathing.pages,
         outputDir: pathing.dist,
+        partialsDir: pathing.components,
         data: {
           title: 'Handlebars Example',
           name: 'John Doe',
