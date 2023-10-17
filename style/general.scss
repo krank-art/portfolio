@@ -5,6 +5,19 @@ html {
   min-height: 100%;
 }
 
+a {
+  color: #32CFFF;
+
+  &:active,
+  &:active:visited {
+    color: #19FFFF;
+  }
+
+  &:visited {
+    color: #19A7FF;
+  }
+}
+
 body {
   margin: 0;
   padding: 0;
