@@ -1,9 +1,12 @@
 .page-header {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.page-header-content {
   display: flex;
   align-items: baseline;
   justify-content: center;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
 }
 
 .page-header-title {
@@ -19,6 +22,26 @@
   opacity: 0.6;
   margin: 0 0 0 0.25em;
   line-height: 1;
+}
+
+.page-header-nav {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.header-nav-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  & > * {
+    display: inline-block;
+  }
+
+  & > *:not(:last-child) {
+    margin-right: 1rem;
+  }
 }
 
 @media (min-width: 960px) {
