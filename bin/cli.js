@@ -50,8 +50,10 @@ export async function handleCommand(command, ...args) {
           name: 'John Doe',
           mediaArt: parseJsonFile(pathing.artData),
           headerLinks: [
-            { link: "/", title: "Index"},
+            { link: "/", title: "Home"},
+            { link: "art", title: "Art"},
             { link: "changelog", title: "Changelog"},
+            { link: "about", title: "About"},
           ],
         },
       });
