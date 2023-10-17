@@ -1,0 +1,54 @@
+<template>
+  <main class="container">
+    {{> page-header}}
+
+    <ul class="media-list">
+      {{#each mediaArt}}
+      <li>
+        <div class="media-list-item">
+          <a class="media-list-link" href="{{path.relative}}art/{{this.path}}">
+            <div class="media-list-item-figure">
+              <img class="media-list-item-image" src="media/thumbnail/{{this.fileNamePublic}}" alt=""
+                style="background-color: {{ this.vibrantColors.darkMuted }}">
+            </div>
+            <div class="media-list-item-title">{{this.title}}</div>
+            <div class="media-list-item-aside">
+              <span class="media-list-item-extra">
+                <span class="sr-only">Date</span>
+                {{fallback this.date "unknown"}}
+              </span>
+              <span class="media-list-item-extra">
+                <span class="sr-only">Dimensions</span>
+                {{this.width}} &times; {{this.height}}
+              </span>
+              <span class="media-list-item-extra">
+                <span class="sr-only">File size</span>
+                {{filesize this.fileSize}}
+              </span>
+              <span class="media-list-item-extra">
+                <span class="sr-only">Tags</span>
+                {{#each this.tags}}
+                <span class="art-tag">{{this}}</span>
+                {{/each}}
+              </span>
+            </div>
+          </a>
+        </div>
+      </li>
+      {{/each}}
+    </ul>
+    {{> page-footer}}
+  </main>
+</template>
+
+<style>
+</style>
+
+<script>
+  export default {
+    layout: "default",
+    data: {
+      title: "Krank",
+    }
+  };
+</script>
