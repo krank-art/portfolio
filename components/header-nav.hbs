@@ -1,0 +1,17 @@
+<template>
+  <ul class="header-nav-list">
+    {{#each links}}
+    <li><a class="header-nav-link {{this.active}}" href="{{path.relative}}{{this.link}}">{{this.title}}</a></li>
+    {{/each}}
+  </ul>
+</template>
+
+<style>
+
+</style>
+
+<script>
+export default {
+  banana: "blues",
+}
+</script>

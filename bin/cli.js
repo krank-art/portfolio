@@ -49,6 +49,10 @@ export async function handleCommand(command, ...args) {
           title: 'Handlebars Example',
           name: 'John Doe',
           mediaArt: parseJsonFile(pathing.artData),
+          headerLinks: [
+            { link: "/", title: "Index"},
+            { link: "changelog", title: "Changelog"},
+          ],
         },
       });
       break;
