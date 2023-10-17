@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   list-style-type: none;
-  column-count: 4;
+  column-count: 1;
   column-gap: 2rem;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .media-list-item-aside {
-  display: flex;
+  display: none;
   flex-flow: row nowrap;
   align-items: baseline;
   color: #888888;
@@ -70,5 +70,29 @@
     &::after {
       content: "/";
     }
+  }
+}
+
+@media (min-width: 720px) {
+  .media-list {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 960px) {
+  .media-list-item-aside {
+    display: flex;
+  }
+}
+
+@media (min-width: 1440px) {
+  .media-list {
+    column-count: 3;
+  }
+}
+
+@media (min-width: 2160px) {
+  .media-list {
+    column-count: 4;
   }
 }
