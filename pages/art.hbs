@@ -9,7 +9,7 @@
           <a class="media-list-link" href="{{path.relative}}art/{{this.path}}">
             <div class="media-list-item-figure">
               <img class="media-list-item-image" src="media/thumbnail/{{this.fileNamePublic}}" alt=""
-                style="background-color: {{ this.vibrantColors.darkMuted }}">
+                style="background-color: {{ this.vibrantColors.darkMuted }}" loading="lazy">
             </div>
             <div class="media-list-item-title">{{this.title}}</div>
             <div class="media-list-item-aside">
@@ -24,12 +24,6 @@
               <span class="media-list-item-extra">
                 <span class="sr-only">File size</span>
                 {{filesize this.fileSize}}
-              </span>
-              <span class="media-list-item-extra">
-                <span class="sr-only">Tags</span>
-                {{#each this.tags}}
-                <span class="art-tag">{{this}}</span>
-                {{/each}}
               </span>
             </div>
           </a>
