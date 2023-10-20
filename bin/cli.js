@@ -11,6 +11,7 @@ import { inspectMediaTable } from './inspect-media.js';
 const pathing = Object.freeze({
   dist: path.resolve('dist'),
   pages: path.resolve("pages"),
+  pagesCache: path.resolve(".cache/pages.json"),
   layouts: path.resolve("layouts"),
   components: path.resolve("components"),
   style: path.resolve("style"),
@@ -45,6 +46,7 @@ export async function handleCommand(command, ...args) {
         inputDir: pathing.pages,
         outputDir: pathing.dist,
         partialsDir: pathing.components,
+        cacheFile: pathing.pagesCache,
         data: {
           title: 'Handlebars Example',
           name: 'John Doe',
