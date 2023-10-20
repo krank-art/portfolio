@@ -47,6 +47,7 @@ export async function handleCommand(command, ...args) {
         outputDir: pathing.dist,
         partialsDir: pathing.components,
         cacheFile: pathing.pagesCache,
+        useCache: true,
         data: {
           title: 'Handlebars Example',
           name: 'John Doe',
