@@ -1,5 +1,6 @@
 node_modules/
 dist/
+.cache/
 
 # important files, but would make repository waaay too big
 static/art/
