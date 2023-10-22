@@ -19,7 +19,6 @@ const pathing = Object.freeze({
   artData: path.resolve('data/media-art.json'),
   artImport: path.resolve("static/art"),
   artProcessed: path.resolve("dist/media"),
-  artThumbnails: path.resolve("dist/media/thumbnail"),
 });
 
 export async function handleCommand(command, ...args) {
@@ -37,8 +36,13 @@ export async function handleCommand(command, ...args) {
         dataInput: pathing.artData,
         mediaInput: pathing.artImport,
         mediaOutput: pathing.artProcessed,
-        thumbnailsInput: pathing.artProcessed,
-        thumbnailsOutput: pathing.artThumbnails,
+        resizeSet: [
+          { name: "120p", size: 120},
+          { name: "240p", size: 240},
+          { name: "480p", size: 480},
+          { name: "960p", size: 960},
+          { name: "1440p", size: 1440},
+        ],
       });
       break;
     case "build:html":
