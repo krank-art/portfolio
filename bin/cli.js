@@ -18,7 +18,7 @@ const pathing = Object.freeze({
   script: path.resolve("lib"),
   artData: path.resolve('data/media-art.json'),
   artImport: path.resolve("static/art"),
-  artProcessed: path.resolve("dist/media"),
+  artProcessed: path.resolve("dist/media/art"),
 });
 
 export async function handleCommand(command, ...args) {

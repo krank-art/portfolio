@@ -36,7 +36,7 @@
         {{#if modelItem.meta.previous}}
         <a id="gallery-previous" class="gallery-previous" href="./{{ modelItem.meta.previous.path }}">&larr;</a>
         {{/if}}
-        <img class="gallery-image" src="../media/{{modelItem.fileNamePublic}}" alt="{{modelItem.title}}">
+        <img class="gallery-image" src="../media/art/{{modelItem.fileNamePublic}}" alt="{{modelItem.title}}">
         {{#if modelItem.meta.next}}
         <a id="gallery-next" class="gallery-next" href="./{{ modelItem.meta.next.path }}">&rarr;</a>
         {{/if}}
@@ -71,7 +71,7 @@
     model: "mediaArt",
     data: {
       title: modelItem.title + " \u2013 Krank",
-      metaImage: modelItem.fileNamePublic,
+      metaImage: "art/960p/" + modelItem.fileNamePublic,
       metaTitle: modelItem.title,
       metaAlt: modelItem.imageAlt,
       metaColor: modelItem?.vibrantColors?.darkMuted
