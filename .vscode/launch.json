@@ -22,6 +22,21 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Run art build",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\bin\\cli.js",
+            "args": [
+                "build:art"
+            ],
+            "runtimeArgs": [
+                "--experimental-vm-modules"
+            ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Run TemplateLoader",
             "skipFiles": [
                 "<node_internals>/**"
