@@ -6,11 +6,15 @@ import { Color } from '../lib/terminal.js';
 
 async function createThumbnail(imagePath, outputPath, sizeInPixel) {
   // https://sharp.pixelplumbing.com/api-resize
+  const { width, height } = await sharp(imagePath).metadata();
+  // When we provide both width and height, the output image will have both sizes.
+  // So instead we'll determine the biggest dimension (width OR height) and scale it depending on that.
+  const resizedWidth = width >= height ? sizeInPixel : null;
+  const resizedHeight = width < height ? sizeInPixel : null;
   sharp(imagePath)
     .resize({
-      width: sizeInPixel,
-      height: sizeInPixel,
-      fit: 'contain',
+      width: resizedWidth,
+      height: resizedHeight,
       background: { r: 0, g: 0, b: 0, alpha: 0 },
     })
     .toFile(outputPath, (err, info) => {
