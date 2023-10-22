@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
-import { copyAndRenameFilesIfNewer, ensureDirExists, parseJsonFile } from '../lib/filesystem.js';
+import { copyAndRenameFilesIfNewer, copyFileIfNewer, ensureDirExists, parseJsonFile } from '../lib/filesystem.js';
 import { Color } from '../lib/terminal.js';
 
 async function createThumbnail(imagePath, outputPath, sizeInPixel) {
@@ -61,7 +61,8 @@ function getTargetsBySourcesFromMedia(inputDir, outputDir, media) {
 
 function copyMediaIntoDir(inputDir, outputDir, media) {
   const targetsBySources = getTargetsBySourcesFromMedia(inputDir, outputDir, media);
-  copyAndRenameFilesIfNewer(targetsBySources);
+  for (const [sourcePath, targetPath] of targetsBySources)
+    copyFileIfNewer(sourcePath, targetPath, false);
 }
 
 export default async function buildMedia({dataInput, mediaInput, mediaOutput, thumbnailsInput, thumbnailsOutput}) {
