@@ -65,6 +65,15 @@
 </style>
 
 <script>
+  // TODO: Add dependency resolving to virtual machine
+  function simplifyBytes(bytes) {
+    if (bytes === 0) return '0 Byte';
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    const simplifiedSize = Math.round((bytes / Math.pow(1024, i)) * 100) / 100;
+    return `${simplifiedSize} ${sizes[i]}`;
+  }
+
   export default {
     layout: "default",
     type: "dynamic",
@@ -72,7 +81,8 @@
     data: {
       title: modelItem.title + " \u2013 Krank",
       metaImage: "art/960p/" + modelItem.fileNamePublic,
-      metaTitle: modelItem.title,
+      metaTitle: modelItem.title + " \u2013 Krank Art",
+      metaSubtitle: `View this ${modelItem?.width} \u00d7 ${modelItem?.height}, ${simplifyBytes(modelItem?.fileSize)} image. `,
       metaAlt: modelItem.imageAlt,
       metaColor: modelItem?.vibrantColors?.darkMuted
     }
