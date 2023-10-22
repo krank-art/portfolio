@@ -9,8 +9,9 @@ async function resizeImage(imagePath, outputPath, sizeInPixel) {
   const { width, height } = await sharp(imagePath).metadata();
   // When we provide both width and height, the output image will have both sizes.
   // So instead we'll determine the biggest dimension (width OR height) and scale it depending on that.
-  const resizedWidth = width >= height ? sizeInPixel : null;
-  const resizedHeight = width < height ? sizeInPixel : null;
+  // Also we do NOT upscale an image if it is are smaller than the specified resize dimension.
+  const resizedWidth = width >= height ? Math.min(sizeInPixel, width) : null;
+  const resizedHeight = width < height ? Math.min(sizeInPixel, height) : null;
   sharp(imagePath)
     .resize({
       width: resizedWidth,
