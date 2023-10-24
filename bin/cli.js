@@ -21,6 +21,14 @@ const pathing = Object.freeze({
   artProcessed: path.resolve("dist/media/art"),
 });
 
+const resizeSet = [
+  { name: "120p", size: 120},
+  { name: "240p", size: 240},
+  { name: "480p", size: 480},
+  { name: "960p", size: 960},
+  { name: "1440p", size: 1440},
+];
+
 export async function handleCommand(command, ...args) {
   switch (command) {
     case "build":
@@ -36,13 +44,7 @@ export async function handleCommand(command, ...args) {
         dataInput: pathing.artData,
         mediaInput: pathing.artImport,
         mediaOutput: pathing.artProcessed,
-        resizeSet: [
-          { name: "120p", size: 120},
-          { name: "240p", size: 240},
-          { name: "480p", size: 480},
-          { name: "960p", size: 960},
-          { name: "1440p", size: 1440},
-        ],
+        resizeSet: resizeSet,
       });
       break;
     case "build:html":
@@ -62,6 +64,7 @@ export async function handleCommand(command, ...args) {
             { link: "changelog", title: "Changelog"},
             { link: "about", title: "About"},
           ],
+          resizeSet: resizeSet,
         },
       });
       break;

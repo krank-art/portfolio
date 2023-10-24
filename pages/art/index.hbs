@@ -36,7 +36,8 @@
         {{#if modelItem.meta.previous}}
         <a id="gallery-previous" class="gallery-previous" href="./{{ modelItem.meta.previous.path }}">&larr;</a>
         {{/if}}
-        <img class="gallery-image" src="../media/art/{{modelItem.fileNamePublic}}" alt="{{modelItem.title}}">
+        <img class="gallery-image" src="../media/art/{{modelItem.fileNamePublic}}" srcset="{{join sourceSet ', '}}"
+          sizes="100vw" alt="{{modelItem.title}}">
         {{#if modelItem.meta.next}}
         <a id="gallery-next" class="gallery-next" href="./{{ modelItem.meta.next.path }}">&rarr;</a>
         {{/if}}
@@ -74,11 +75,42 @@
     return `${simplifiedSize} ${sizes[i]}`;
   }
 
+  function getSizes(array) {
+    const sizes = [];
+    for (let i = 0; i < array.length; i++) {
+      const item = array[i];
+      if (i === array.length - 1) {
+        sizes.push(`(min-width: ${item}) 100vw`);
+        continue;
+      }
+      const nextItem = array[i + 1];
+      sizes.push(`((min-width: ${item}) and (max-width: ${nextItem - 1})) 100vw`)
+    }
+    return sizes;
+  }
+
+  function getSizes2(array) {
+    const sizes = [];
+    for (let i = 0; i < array.length; i++) {
+      const item = array[i];
+      if (i === array.length - 1) {
+        sizes.push(`${item}px`);
+        continue;
+      }
+      sizes.push(`(max-width: ${item})) ${item - 40}px`)
+    }
+    return sizes;
+  }
+
+  const sourceSet = resizeSet.map(entry => `../media/art/${entry.name}/${modelItem.fileNamePublic} ${entry.size}w`);
+  sourceSet.push(`../media/art/${modelItem.fileNamePublic} 1920w`);
+
   export default {
     layout: "default",
     type: "dynamic",
     model: "mediaArt",
     data: {
+      sourceSet: sourceSet,
       title: modelItem.title + " \u2013 Krank",
       metaImage: "art/960p/" + modelItem.fileNamePublic,
       metaTitle: modelItem.title + " \u2013 Krank Art",
