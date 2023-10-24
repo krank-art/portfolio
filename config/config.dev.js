@@ -4,4 +4,7 @@ export default {
   },
   siteName: "krank.love",
   siteTwitter: "@krankomat96",
+  siteThumbnail: "art/960p/bear-tired_2022-10-25.png",
+  siteThumbnailAlt: "Krank draws furry art, among other things. ",
+  siteColor: "#3c543c",
 }
