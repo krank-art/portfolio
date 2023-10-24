@@ -2,6 +2,7 @@
   <main class="container">
     {{> page-header}}
     <div class="container-text">
+      <h1 class="sr-only">Changelog</h1>
       {{{markdown changelog }}}
       {{> page-footer}}
     </div>
@@ -15,7 +16,12 @@
   export default {
     layout: "default",
     data: {
-      title: "Krank",
+      title: "Changelog \u2013 Krank",
+      metaImage: siteThumbnail,
+      metaTitle: "Changelog \u2013 Krank Art",
+      metaSubtitle: "Version history of the online portfolio. ",
+      metaAlt: siteThumbnailAlt,
+      metaColor: siteColor,
       changelog: `
 ## v1.1.0
 

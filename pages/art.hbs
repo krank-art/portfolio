@@ -1,7 +1,7 @@
 <template>
   <main class="container">
     {{> page-header}}
-
+    <h1 class="sr-only">Art overview</h1>
     <ul class="media-list">
       {{#each mediaArt}}
       <li>
@@ -42,7 +42,12 @@
   export default {
     layout: "default",
     data: {
-      title: "Krank",
+      title: "Art Overview \u2013 Krank",
+      metaImage: siteThumbnail,
+      metaTitle: "Art \u2013 Krank Art",
+      metaSubtitle: "Overview for all art pieces. ",
+      metaAlt: siteThumbnailAlt,
+      metaColor: siteColor,
     }
   };
 </script>
