@@ -78,14 +78,33 @@ Run `npm run serve-python` to start a `localhost:8000` webserver at `dist/` (mak
 
 ## Deployment
 
-1. Run `npm run cli clean` so no residual files are left.
-2. Change `config/config.dev.js`, so `path.base` reflects the URL of the deployed server.
-3. Run `npm run cli build` to build all files.
-4. Connect to your webserver via FTP and copy all files from `dist/` there.
-5. This project uses URLs without the `.html` extension, so we have to set up routing properly on the target web server.
-6. Copy the appropriate files from `www/` onto the webserver. Currently these languages are supported:
+1. Update version of project:
+   1. Go to [pages/changelog.hbs] and write down the changes for the current version.
+   2. Update the version in `package.json` and run `npm install`.
+   3. Create a commit `Update to version vX.X.X` with the updated package files `package.json` and `package-lock.json`.
+   4. Create an annotated tag with `git tag -a vX.X.X -m "my version X.X.X"`.
+   5. Push the annotated tag to the repository with `git push --follow-tags`.
+2. Run `npm run cli clean` so no residual files are left.
+3. Change `config/config.dev.js`, so `path.base` reflects the URL of the deployed server.  
+   > **Note:** These changes should not be committed to the repository, because they will break certain features of the development environment.
+4. Run `npm run cli build` to build all files.
+5. Connect to your webserver via FTP and copy all files from `dist/` there.
+6. This project uses URLs without the `.html` extension, so we have to set up routing properly on the target web server.
+7. Copy the appropriate files from `www/` onto the webserver. Currently these languages are supported:
    * PHP: Copy `www/.htaccess` to the webserver.
    * Python: Copy `server.py` to the webserver.
+8. Revert the changes in `config/config.dev.js`.
+
+
+
+## Ideas
+
+* Add 404 page.
+* Add art filtering via tags.
+* Add title, description, etc. to each art piece.
+* Add missing art pieces from 2019-2023.
+* Add category for gifts and prepare files.
+* Add comment feature with MiiVerse-like comment drawing.
 
 
 ## See also
