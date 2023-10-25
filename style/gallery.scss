@@ -113,6 +113,17 @@ $gallery-nav-width: 20%;
   opacity: 0.75;
 }
 
+.gallery-button,
+.gallery-mainbar-nav-button,
+.gallery-next,
+.gallery-previous {
+  &:visited,
+  &:active,
+  &:visited:active {
+    color: inherit;
+  }
+}
+
 .gallery-next,
 .gallery-previous {
   position: absolute;
