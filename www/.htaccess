@@ -1,0 +1,12 @@
+RewriteEngine on
+
+# Force HTTPS and remove WWW
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [OR,NC]
+RewriteCond %{HTTPS} off  
+RewriteRule ^(.*)$ https://%{SERVER_NAME}/$1 [R=302,L]
+
+# Display views https://example.com/about instead of https://example.com/about.html
+RewriteRule ^(.*)$ $1.html [L]
+
+# Display error page (TODO)
+#ErrorDocument 404 /404.php
