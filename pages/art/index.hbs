@@ -75,33 +75,6 @@
     return `${simplifiedSize} ${sizes[i]}`;
   }
 
-  function getSizes(array) {
-    const sizes = [];
-    for (let i = 0; i < array.length; i++) {
-      const item = array[i];
-      if (i === array.length - 1) {
-        sizes.push(`(min-width: ${item}) 100vw`);
-        continue;
-      }
-      const nextItem = array[i + 1];
-      sizes.push(`((min-width: ${item}) and (max-width: ${nextItem - 1})) 100vw`)
-    }
-    return sizes;
-  }
-
-  function getSizes2(array) {
-    const sizes = [];
-    for (let i = 0; i < array.length; i++) {
-      const item = array[i];
-      if (i === array.length - 1) {
-        sizes.push(`${item}px`);
-        continue;
-      }
-      sizes.push(`(max-width: ${item})) ${item - 40}px`)
-    }
-    return sizes;
-  }
-
   const sourceSet = resizeSet.map(entry => `../media/art/${entry.name}/${modelItem.fileNamePublic} ${entry.size}w`);
   sourceSet.push(`../media/art/${modelItem.fileNamePublic} 1920w`);
 
