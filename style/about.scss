@@ -1,0 +1,74 @@
+.about-banner {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+
+  &>*:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+}
+
+.about-image {
+  width: 15rem;
+  height: 15rem;
+  object-fit: contain;
+  border-radius: 10rem;
+  // We want to center alt text if image breaks.
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center
+}
+
+.about-prop-list {
+  font-size: 1.25rem;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+  font-style: italic;
+  color: #cccccc;
+
+  &>* {
+    text-align: center;
+  }
+}
+
+.fag-term {
+  margin-top: 1em;
+  margin-bottom: 0.25em;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.fag-def {
+  margin-left: 1.5em;
+  line-height: 1.5;
+
+  &>*:first-child {
+    margin-top: 0;
+  }
+
+  &>*:last-child {
+    margin-bottom: 0;
+  }
+}
+
+
+@media (min-width: 960px) {
+  .about-banner {
+    flex-direction: row;
+
+    &>*:not(:last-child) {
+      margin-bottom: unset;
+      margin-right: 1rem;
+    }
+  }
+
+  .about-prop-list>* {
+    text-align: left;
+  }
+}
