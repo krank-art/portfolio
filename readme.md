@@ -1,3 +1,99 @@
-favicon: https://favicon.io/favicon-converter/
+# Krank Portfolio
 
-See explanation for Source sets in `<img>` on https://stackoverflow.com/a/35143131/8177138-how-to-use-srcset-and-sizes-for-responsive-images
+This is a static side generator used to create the furry art portfolio by [@Krankomat96](https://twitter.com/Krankomat96).
+
+
+## Installation
+
+1. Make sure to have [NodeJS](https://nodejs.org/) installed.
+2. Clone or download this repository.
+3. Run `npm install`.
+4. Copy your art files into `static/art/`.
+5. Run `npm run cli import:art`.
+6. Run `npm run cli build`.
+7. Run `npm run serve-python` (make sure you have Python 3+ installed).
+
+
+## CLI Usage
+
+Basic usage: `npm run cli <command> <args?>`. 
+
+`<args?>` is an optional list of arguments with variable length.  
+`<command>` is one of the following commands:  
+
+* `clean`
+  * Removes all files from `dist/` and `.cache/` (including the folders themselves).
+* `import:art`
+  * Reads all files from `static/art/` and updates `data/media-art.json` accordingly.
+  * If there is no `media-art.json` file, it gets created.
+  * **Important:** Normal properties get overwritten, while **manual** properties are kept once created:
+    * `title`: Displayed title of the art piece.
+    * `description`: Description of the art piece, that gets displayed in the expandable sidebar.
+    * `imageAlt`: Alt text for the art piece image.
+    * `tags`: Tags used to filter and search art pieces.
+    * `palette`: A list of colors that have been used when painting certain art pieces. 
+      Should not be confused with `vibrantColors`, which get programmatically extracted from the images when importing.
+* `inspect:art`
+  * Logs a compact list of all art pieces.
+  * This is used to compare what files have changed.
+  * The output should be saved to `docs/history/` every time any of the art files changes.
+* `build`
+  * Runs `build:assets`, `build:html`, and `build:art` in sequence.
+* `build:assets`
+  * Builds the styles from `style/` to `dist/bundle.css`.
+  * Builds the scripts from `lib/main.js` to `dist/bundle.js`.
+  * Copies the favicon files from `static/favicon/` to `dist/`.
+* `build:html`
+  * Builds the HTML files from `pages/` to `dist/`.
+  * Optimization:
+    * Depending on the project size, hundreds of HTML files are generated on each minor edit.
+    * To minimize the number of file written to disk, HTML files are only saved if the content has changed  or if the file doesn't exist yet.
+    * For that we use the `.cache/pages.json` file.
+    * Remember deleting the cache, if things do not compile as expected.
+* `build:art`
+  * Copies the art files from `static/art/` to `dist/media/art` with the public file name specified for each art piece in `data/media-art.json`.
+  * Creates downsized versions for each art piece at `dist/media/art/<size>p` with max dimensions: `120`, `240`, `480`, `960`, `1440`.
+  * Optimization:
+    * Reading, processing, copying and generating files  are quite expensive operations.
+    * For this reason, art files only get processed if their file size has changed OR if the "file modified" value has changed.
+    * In the past, "file modified" values behaved inconsistently across different devices, so we only look at seconds as smallest time value.
+* `watch`
+  * Runs `watch:assets`, `watch:html`, and `watch:art` and keeps them running in parallel.
+  * Press `Ctrl + C` to abort all file watchers.
+* `watch:assets`
+  * Runs `build:assets` every time files are changed at `lib/` or `style/`.
+  * Press `Ctrl + C` to abort the file watcher.
+* `watch:html`
+  * Runs `build:html` every time files are changed at `pages/`, `layouts/`, `components/` or `data/media-art.json`.
+  * Press `Ctrl + C` to abort the file watcher.
+* `watch:art`
+  * Runs `build:art` every time files are changed at `static/art/` or `data/media-art.json`.
+  * Press `Ctrl + C` to abort the file watcher.
+
+
+## Development
+
+Run `npm run serve-python` to start a `localhost:8000` webserver at `dist/` (make sure you have Python 3+ installed).
+
+
+## Deployment
+
+1. Run `npm run cli clean` so no residual files are left.
+2. Change `config/config.dev.js`, so `path.base` reflects the URL of the deployed server.
+3. Run `npm run cli build` to build all files.
+4. Connect to your webserver via FTP and copy all files from `dist/` there.
+5. This project uses URLs without the `.html` extension, so we have to set up routing properly on the target web server.
+6. Copy the appropriate files from `www/` onto the webserver. Currently these languages are supported:
+   * PHP: Copy `www/.htaccess` to the webserver.
+   * Python: Copy `server.py` to the webserver.
+
+
+## See also
+
+* Favicons generated with https://favicon.io/favicon-converter/.
+* How `srcset` and `sizes` in `<img>` works: https://stackoverflow.com/a/35143131/8177138-how-to-use-srcset-and-sizes-for-responsive-images.
+
+
+## Credis
+
+Krank (c) 2023
