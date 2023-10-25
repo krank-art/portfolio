@@ -105,6 +105,7 @@ export async function handleCommand(command, ...args) {
         target: [
           pathing.pages,
           pathing.layouts,
+          pathing.components,
           pathing.artData,
         ],
         recursive: true,
