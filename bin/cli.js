@@ -11,6 +11,7 @@ import { inspectMediaTable } from './inspect-media.js';
 const pathing = Object.freeze({
   dist: path.resolve('dist'),
   pages: path.resolve("pages"),
+  cache: path.resolve(".cache"),
   pagesCache: path.resolve(".cache/pages.json"),
   layouts: path.resolve("layouts"),
   components: path.resolve("components"),
@@ -37,6 +38,8 @@ export async function handleCommand(command, ...args) {
       await handleCommand("build:art");
       break;
     case "clean":
+      // TODO fix error if directories do not exist
+      deleteDirRecursive(pathing.cache);
       deleteDirRecursive(pathing.dist);
       break;
     case "build:art":
