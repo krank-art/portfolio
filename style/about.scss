@@ -11,6 +11,10 @@
   }
 }
 
+.about-description {
+  text-align: center;
+}
+
 .about-image {
   width: 15rem;
   height: 15rem;
@@ -64,8 +68,12 @@
 
     &>*:not(:last-child) {
       margin-bottom: unset;
-      margin-right: 1rem;
+      margin-right: 2rem;
     }
+  }
+
+  .about-description {
+    text-align: left;
   }
 
   .about-prop-list>* {

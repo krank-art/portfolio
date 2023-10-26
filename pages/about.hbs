@@ -4,13 +4,17 @@
     <div class="container-text">
       <h1 class="sr-only">About</h1>
       <div class="about-banner">
-        <img class="about-image" style="background-color: {{siteColor}}" src="./media/{{siteThumbnail}}"
-          alt="{{siteThumbnailAlt}}">
-        <ul class="about-prop-list">
-          <li>Dumb bear with big heart.</li>
-          <li>Perpetual tryhard.</li>
-          <li>Furry artist.</li>
-        </ul>
+        <div class="about-figure">
+          <img class="about-image" style="background-color: {{siteColor}}" src="./media/{{siteThumbnail}}"
+            alt="{{siteThumbnailAlt}}">
+        </div>
+        <div class="about-description">
+          <ul class="about-prop-list">
+            <li>Dumb bear with big heart.</li>
+            <li>Perpetual tryhard.</li>
+            <li>Furry artist.</li>
+          </ul>
+        </div>
       </div>
       <dl>
         {{#each faq }}
