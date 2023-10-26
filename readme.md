@@ -118,10 +118,8 @@ To run Python on Windows 10 & 11, follow these steps:
 8. Revert the changes in `config/config.dev.js`.
 
 
-
 ## Ideas
 
-* Add 404 page.
 * Add art filtering via tags.
 * Add title, description, etc. to each art piece.
 * Add missing art pieces from 2019-2023.
@@ -133,6 +131,12 @@ To run Python on Windows 10 & 11, follow these steps:
 
 * Favicons generated with https://favicon.io/favicon-converter/.
 * How `srcset` and `sizes` in `<img>` works: https://stackoverflow.com/a/35143131/8177138-how-to-use-srcset-and-sizes-for-responsive-images.
+
+
+## Acknowledgements
+
+Thanks to [chridd](https://chridd.nfshost.com/) for helping me with the `.htaccess` file by dropping `DirectorySlash Off`.  
+Thanks to [fluffy](https://beesbuzz.biz/) for recommending WSL to run the Python dev server.  
 
 
 ## Credis
