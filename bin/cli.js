@@ -38,7 +38,6 @@ export async function handleCommand(command, ...args) {
       await handleCommand("build:art");
       break;
     case "clean":
-      // TODO fix error if directories do not exist
       deleteDirRecursive(pathing.cache);
       deleteDirRecursive(pathing.dist);
       break;
