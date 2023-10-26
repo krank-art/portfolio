@@ -4,5 +4,5 @@ DirectorySlash Off
 # Display views https://example.com/about instead of https://example.com/about.html
 RewriteRule ^(?!.*\.\w{2,5}$)(.+) $1.html [L]
 
-# Display error page (TODO)
-#ErrorDocument 404 /404.php
+# Display error page
+ErrorDocument 404 /404.html
