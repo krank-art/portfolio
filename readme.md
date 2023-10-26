@@ -75,6 +75,28 @@ Basic usage: `npm run cli <command> <args?>`.
 
 Run `npm run serve-python` to start a `localhost:8000` webserver at `dist/` (make sure you have Python 3+ installed).
 
+On Windows, its a good idea to run the dev servers on WSL (Windows Subsystem for Linux). 
+I ran into problems where the Python server could not be shutdown properly and restarting was very buggy.
+To run Python on Windows 10 & 11, follow these steps:
+
+1. Keep in mind that your pc/setup might not support WSL, please research if setup does not work.
+2. Open start menu and search for `Windows Features`.
+3. Run `Turn Windows features on or off`.
+4. Activate the options `Virtual Machine Platform` and `Windows Subsystem for Linux`.
+5. Reboot Windows.
+6. Open a Powershell terminal with admin rights.
+7. Run `wsl --list` to list installed Linux distributions.
+8. Run `wsl --list --online` to list all distributions that can be installed.
+9. Pick your favorite, e.g. `wsl install -d "Ubuntu 22.04 LTS"`.
+10. Open Windows Search and open a `Ubuntu` (or other distro) shell.
+11. Run `cd /mnt/c` to go to the mounted Windows drive.
+12. Run `cd your/path/to/project` till you are in the web dev folder.
+13. Run `sudo apt update` to update all packages.
+14. Run `sudo apt install nodejs` to install NodeJS.
+15. Run `node -v` to check the NodeJS version (just to be safe).
+16. Run `npm run serve-python` to start the Python web dev server.
+17. Press `Ctrl + C` to abort running the dev server.
+
 
 ## Deployment
 
