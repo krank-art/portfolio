@@ -9,7 +9,7 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
   await templating.load();
   const entryCache = new FileCache();
   if (useCache) entryCache.loadSafely(cacheFile);
-  const outputCache = await templating.compileSfcDir({
+  const outputCache = await templating.compileDir({
     input: inputDir,
     output: outputDir,
     buildCache: useCache ? entryCache : null,
