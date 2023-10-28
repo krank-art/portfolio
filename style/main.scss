@@ -1,4 +1,5 @@
 // Order is important
+@use './variables.scss';
 @use './general.scss';
 @use './text.scss';
 
@@ -9,3 +10,4 @@
 @use './media-list.scss';
 @use './page-header.scss';
 @use './page-footer.scss';
+@use './simple-tag.scss';

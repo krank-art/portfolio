@@ -46,8 +46,10 @@
     <aside class="gallery-info">
       <h2>{{ modelItem.title }}</h2>
       <hr>
-      <p>date {{ modelItem.date }}</p>
-      <p>tags {{ modelItem.tags }}</p>
+      <h3 class="sr-only">Date</h3>
+      <p>{{ modelItem.date }}</p>
+      <h3 class="sr-only">Tags</h3>
+      <p>{{#each modelItem.tags}}{{> simple-tag label=this }}{{/each}}</p>
       <hr>
       {{{markdown (join modelItem.description) }}}
     </aside>
