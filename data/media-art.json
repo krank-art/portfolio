@@ -23,10 +23,21 @@
     },
     "title": "Alligator",
     "description": [
-      "Alligator"
+      "A very smarmy alligator. He seems nice... I guess. "
     ],
     "tags": [
-      "alligator"
+      "digitalArt",
+      "alligator",
+      "anthro",
+      "anondraw",
+      "chubby",
+      "evil",
+      "flatColors",
+      "grayscale",
+      "lineart",
+      "portrait",
+      "smiling",
+      "teeth"
     ],
     "imageAlt": "Alligator",
     "palette": []
@@ -55,14 +66,29 @@
     },
     "title": "Alpaca Cute Pink",
     "description": [
-      "Alpaca Cute Pink"
+      "Look at this dude. Look at his fur. It's pink! ",
+      "The manliest color of them all... so it's the manliest alpaca of them all (: "
     ],
     "tags": [
+      "digitalArt",
       "alpaca",
+      "anthro",
+      "fluffy",
+      "portrait",
+      "colored",
+      "flatColors",
       "cute",
-      "pink"
+      "pink",
+      "white",
+      "teal",
+      "happy",
+      "smiling",
+      "sideView"
     ],
-    "imageAlt": "Alpaca Cute Pink",
+    "imageAlt": [
+      "A portrait of an alpaca looking to the left. Look at the fur. It's pink! ",
+      "The most masculine of all colors... so it's the most masculine of all alpacas. "
+    ],
     "palette": []
   },
   {
@@ -1628,13 +1654,24 @@
     },
     "title": "Bear Misha",
     "description": [
-      "Bear Misha"
+      "Happy bear sitting on the ground and looking to the left."
     ],
     "tags": [
+      "digitalArt",
       "bear",
-      "misha"
+      "feral",
+      "lineart",
+      "grayscale",
+      "cute",
+      "anondraw",
+      "friendly",
+      "sitting",
+      "fullbody",
+      "gift"
     ],
-    "imageAlt": "Bear Misha",
+    "imageAlt": [
+      "Happy bear sitting on the ground and looking to the left."
+    ],
     "palette": []
   },
   {
@@ -7275,7 +7312,16 @@
       "Fox Judy"
     ],
     "tags": [
+      "lineart",
+      "flatColors",
+      "grayscale",
+      "digitalArt",
+      "feral",
       "fox",
+      "sitting",
+      "friendly",
+      "happy",
+      "gift",
       "judy"
     ],
     "imageAlt": "Fox Judy",
@@ -9440,12 +9486,17 @@
     },
     "title": "Klippen von Dover",
     "description": [
-      "Klippen von Dover"
+      "Study of the cliffs of Dover in England. ",
+      "This piece was very fun to make because of the brush work. "
     ],
     "tags": [
-      "klippen",
-      "von",
-      "dover"
+      "landmark",
+      "background",
+      "digitalArt",
+      "painting",
+      "landscape",
+      "colored",
+      "anondraw"
     ],
     "imageAlt": "Klippen von Dover",
     "palette": []
