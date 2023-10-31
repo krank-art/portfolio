@@ -1,0 +1,147 @@
+.blog-text {
+  line-height: 1.5;
+
+  p {
+    line-height: 1.6;
+  }
+
+  code {
+    background-color: rgba(0, 0, 0, 0.3);
+    font-size: 0.9em;
+    font-family: Consolas, monospace;
+    padding: 0.2em 0.4em;
+    border-radius: 0.5em;
+  }
+
+  pre {
+    background-color: rgba(0, 0, 0, 0.3);
+    font-size: 1em;
+    font-family: Consolas, monospace;
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+    overflow-x: auto;
+
+    &>code {
+      background-color: unset;
+      font-size: inherit;
+      font-family: inherit;
+      padding: 0;
+      border-radius: unset;
+    }
+  }
+
+  ul, ol {
+    padding-left: 1.5em;
+  }
+
+  li {
+    padding-left: 0.2em;
+  }
+
+  li:not(:last-child) {
+    margin-bottom: 0.25em;
+  }
+
+  li > ul:first-child,
+  li > ol:first-child {
+    margin-top: 0.25em;
+  }
+
+  ol ol {
+    list-style-type: lower-roman;
+  }
+  
+  ol ol ol {
+    list-style-type: lower-latin;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  table {
+    border-spacing: 0;
+
+    td,
+    th {
+      padding: 0.4em 0.8em;
+    }
+
+    tr>th {
+      border-bottom: 0.1rem solid rgba(255, 255, 255, 0.6);
+    }
+
+    tr:not(:last-child)>td {
+      border-bottom: 0.1rem solid rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  blockquote {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-left: 0.3em solid rgba(255, 255, 255, 0.3);
+    margin: 1em 0;
+    padding: 0.5em 1em 0.5em 1.5em;
+    border-radius: 0.5em;
+
+    &>*:first-child {
+      margin-top: 0;
+    }
+
+    &>*:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  h1 {
+    font-size: 2.75rem;
+  }
+
+  h2 {
+    font-size: 2.25rem;
+  }
+
+  h3 {
+    font-size: 1.75rem;
+  }
+
+  h4 {
+    font-size: 1.5rem;
+  }
+
+  h5 {
+    font-size: 1.25rem;
+  }
+
+  h6 {
+    font-size: 1.125rem;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  h2 {
+    border-bottom: 0.1rem solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+  }
+
+  .drop-cap {
+    float: left;
+    font-size: 5.5em;
+    line-height: 0.8;
+    padding-right: 0.05em;
+  }
+
+  .lead-text {
+    font-size: 1.2em;
+    font-style: italic;
+  }
+}
