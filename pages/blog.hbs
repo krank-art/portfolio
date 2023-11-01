@@ -3,9 +3,11 @@
     {{> page-header}}
     <div class="container-text">
       <h1 class="sr-only">Blog</h1>
-      {{#each subPages}}
-      {{this.name}}
-      {{/each}}
+      <ul>
+        {{#each subPages}}
+        <li><a href="./blog/{{this.path}}">{{this.title}}</a></li>
+        {{/each}}
+      </ul>
       {{> page-footer}}
     </div>
   </main>
@@ -15,7 +17,7 @@
 </style>
 
 <script>
-  const treeNode = path.tree.find(page => page.name === "blog"); 
+  const treeNode = path.tree.find(page => page.path === "blog");
   export default {
     layout: "default",
     data: {
@@ -25,7 +27,7 @@
       metaSubtitle: "Articles about art, coding and philosophy. ",
       metaAlt: siteThumbnailAlt,
       metaColor: siteColor,
-      subPages: treeNode?.children ?? [],
+      subPages: treeNode.children ?? [],
     }
   };
 </script>

@@ -1,5 +1,6 @@
 ---
 layout: blog
+linkTitle: Microsoft Fine Artist
 ---
 
 # Drawing in Microsoft Fine Artist with screen tablet
