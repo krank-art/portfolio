@@ -1,0 +1,31 @@
+<template>
+  <main class="container">
+    {{> page-header}}
+    <div class="container-text">
+      <h1 class="sr-only">Blog</h1>
+      {{#each subPages}}
+      {{this.name}}
+      {{/each}}
+      {{> page-footer}}
+    </div>
+  </main>
+</template>
+
+<style>
+</style>
+
+<script>
+  const treeNode = path.tree.find(page => page.name === "blog"); 
+  export default {
+    layout: "default",
+    data: {
+      title: "Blog \u2013 Krank",
+      metaImage: siteThumbnail,
+      metaTitle: "Blog \u2013 Krank Art",
+      metaSubtitle: "Articles about art, coding and philosophy. ",
+      metaAlt: siteThumbnailAlt,
+      metaColor: siteColor,
+      subPages: treeNode?.children ?? [],
+    }
+  };
+</script>
