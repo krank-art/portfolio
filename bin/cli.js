@@ -63,6 +63,7 @@ export async function handleCommand(command, ...args) {
           headerLinks: [
             { link: "/", title: "Home"},
             { link: "art", title: "Art"},
+            { link: "blog", title: "Blog"},
             { link: "changelog", title: "Changelog"},
             { link: "about", title: "About"},
           ],
