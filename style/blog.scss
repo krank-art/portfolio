@@ -159,4 +159,9 @@
   background-color: rgba(0, 0, 0, 0.2);
   padding: 1rem 2rem;
   width: 20rem;
+  overflow-y: auto;
+}
+
+.page-list-item-active {
+  font-weight: bold;
 }
