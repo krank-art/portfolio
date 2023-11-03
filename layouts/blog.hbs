@@ -1,18 +1,28 @@
 <template>
-  <main class="container">
-    {{> page-header}}
-    <div class="container-text blog-text">
-      {{{content}}}
-      {{> page-footer}}
+    <div class="blog-layout">
+      <nav class="blog-nav">
+        {{> page-list items=blogPages}}
+      </nav>
+        <main class="container">
+      {{> page-header}}
+      <div class="container-text blog-text">
+        {{{content}}}
+        {{> page-footer}}
+      </div>
+        </main>
     </div>
-  </main>
 </template>
 
 <style>
 </style>
 
 <script>
+  const treeNode = path.tree.find(page => page.path === "blog");
+  const blogPages = treeNode?.children ?? [];
   export default {
     layout: "default",
+    data: {
+      blogPages: blogPages,
+    }
   }
 </script>

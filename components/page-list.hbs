@@ -1,0 +1,17 @@
+<template>
+  <ul>
+    {{#each items}}
+    <li><a href="/{{this.absolutePath}}">{{this.title}}</a>
+      {{#if (hasItems this.children)}}
+      {{> page-list items=this.children}}
+      {{/if}}
+    </li>
+    {{/each}}
+  </ul>
+</template>
+
+<style>
+</style>
+
+<script>
+</script>

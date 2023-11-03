@@ -145,3 +145,18 @@
     font-style: italic;
   }
 }
+
+.blog-layout {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.blog-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 1rem 2rem;
+  width: 20rem;
+}
