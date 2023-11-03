@@ -10,8 +10,9 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
   const entryCache = new FileCache();
   if (useCache) entryCache.loadSafely(cacheFile);
   const targets = TemplateWriter.loadDirAsTree(inputDir, data);
+  const dirTree = TemplateWriter.addAbsolutePathsToDirTree(targets);
   const templateData = {...config, ...data};
-  templateData.path.tree = targets; // Inject page tree into data
+  templateData.path.tree = dirTree; // Inject page tree into data
   const outputCache = await templating.compileDir({
     input: inputDir,
     output: outputDir,
