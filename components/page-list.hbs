@@ -1,7 +1,14 @@
 <template>
   <ul>
     {{#each items}}
-    <li><a href="/{{this.absolutePath}}">{{this.title}}</a>
+    <li>
+      {{#if (eq this.type 'group')}}
+      <span class="page-list-item-group">{{this.title}}</span>
+      {{else if this.active}}
+      <span class="page-list-item-active">{{this.title}}</span>
+      {{else}}
+      <a class="page-list-item-link" href="/{{this.absolutePath}}">{{this.title}}</a>
+      {{/if}}
       {{#if (hasItems this.children)}}
       {{> page-list items=this.children}}
       {{/if}}
