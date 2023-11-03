@@ -1,0 +1,101 @@
+# Inspiration
+Erstellt am 13. April 2022
+
+* RTS Games (Auszug aus [List of real-time strategy video games - Wikipedia](https://en.wikipedia.org/wiki/List_of_real-time_strategy_video_games)):
+  * Herzog Zwei (1989, Sci-fi, Vorreiter für Dune II)
+  * Populous (1989, Fantasy, Erstes God-Game mit RTS-Elementen)
+  * Dune II (1992, Sci-fi, RTS von Westwood und Inspiration für viele nachfolgende RTS-Spiele)
+  * Metal Marines (1993, Sci-fi, Basis-Bau und Einheiten-Management für SNES)
+  * The Settlers (1993, Fantasy, Aufbauspiel + Warenkreislauf-Simulator + RTS)
+  * Warcraft: Orcs & Humans (1993, Fantasy, Effizientes Management einer kleinen Einheitentruppe)
+  * Baldies (1995, Fantasy, Mischung aus Siedler und Age of Empires)
+  * Command & Conquer (1995, Sci-fi)
+  * Warcraft II: Tides of Darkness (1995, Fantasy)
+  * Command & Conquer: Red Alert (1996, Sci-fi)
+  * Genewars (1996, Sci-fi)
+  * The Settlers II (1996, Fantasy)
+  * Warcraft II: Beyond the Dark Portal (1996, Fantasy)
+  * Z (1996, Sci-fi, Ausdrucksstarke Einheitenprofile und gutes Spiel-Feedback)
+  * Age of Empires (1997, Historisch)
+  * KKnD (1997, Post-Apokalypse)
+  * Total Annihilation (1997, Sci-fi)
+  * Anno 1602 (1998, Historisch, Städteaufbau + Wirtschaftssimulation + RTS)
+  * Dune 2000 (1998, Sci-fi)
+  * KKND2: Krossfire (1998, Sci-fi)
+  * The Settlers III (1998, Fantasy)
+  * StarCraft (1998, Sci-fi)
+  * Age of Empires II (1999, Historisch)
+  * Alien Nations (1999, Sci-fi, Aufbau + RTS (ähnlich wie Die Siedler))
+  * Command & Conquer: Tiberian Sun (1999, Sci-fi)
+  * Command & Conquer: Red Alert 2 (2000, Sci-fi)
+  * Sudden Strike (2000, Historisch)
+  * Submarine Titans (2000, Sci-fi)
+  * Empire Earth (2001, Sci-fi, von Steinzeit bis Zukunt RTS-Einheiten bauen)
+  * Mech Platoon (2001, Sci-fi, RTS für Gameboy Advance)
+  * Pikmin (2001, Sci-fi, Puzzle und Strategiespiel bei dem man Einheiten mit Charakter steuert)
+  * The Settlers IV (2001, Fantasy)
+  * Stronghold (2001, Fantasy)
+  * S.W.I.N.E. (2001, Fantasy, Schweine gegen Hasen)
+  * Age of Mythology (2002, Fantasy)
+  * Cossacks: European Wars (2002, Historisch)
+  * Micro Commandos (2002, Sci-fi, RTS in einem normalen Wohnhaus mit winzigen Außerirdischen)
+  * Stronghold: Crusader (2002, Fantasy)
+  * Sudden Strike 2 (2002, Historisch)
+  * Warcraft III: Reign of Chaos (2002, Fantasy)
+  * Anno 1503 (2003, Historisch)
+  * Command & Conquer: Generals (2003, Sci-fi)
+  * Rise of Nations (2003, Historisch, scheint ein Age of Empires-Klon zu sein)
+  * Warcraft III: The Frozen Throne (2003, Fantasy)
+  * Axis and Allies (2004, Historisch)
+  * Evil Genius (2004, Sci-fi, Dungeon-Keeper-Klon mit Superhelden und Superschurken)
+  * The Lord of the Rings: The Battle for Middle-earth (2004, Fantasy)
+  * Pikmin 2 (2004, Sci-fi)
+  * SpellForce (2004, Fantasy)
+  * Warhammer 40,000: Dawn of War (2004, Sci-fi + Fantasy)
+  * Age of Empires III (2005, Historisch)
+  * Empire Earth II (2005, Historisch)
+  * Stronghold 2 (2005, Historical)
+  * Anno 1701 (2006, Historical)
+  * Company of Heroes (2006, Historical, WWII)
+  * DEFCON: Everybody Dies (2006, Sci-fi)
+  * Lord of the Rings: Battle for Middle-earth II (2006, Fantasy)
+  * ParaWorld (2006, Fantasy; RTS with dinosaurs)
+  * SpellForce 2: Shadow Wars (2006, Fantasy)
+  * Star Wars: Empire at War (2006, Sci-fi)
+  * Ys Strategy (2006, Fantasy; Mix of JRPG + Age of Empires, running on a NDS)
+  * Bos Wars (2007, Sci-fi; Open-Source RTS and looks pretty bad)
+  * Command & Conquer 3: Tiberium Wars (2007, Sci-fi)
+  * Empire Earth III (2007, Sci-fi)
+  * Heroes of Mana (2007, Fantasy; JRPG + Advance Wars, running on NDS)
+  * Supreme Commander (2007, Sci-fi; Large-scale battles)
+  * 
+
+* Honorable mentions:
+  * Ys Strategy (2006, Fantasy; Mix of JRPG + Age of Empires, running on a NDS)
+  * Left Behind: Eternal Forces (2006, Fantasy; Christian RTS)
+  * Timberborn
+  * Tooth and Tail
+
+
+* Art-Style-Inspiration
+  * Wonder Boy (2017, Plattformer)
+    * Indivisible?
+    * Shantae and the Pirate's Curse?
+    * Wario Land: Shake It?
+  * Paper Mario-Serie
+  * Star Crafts (Mod for StarCraft II)
+  * Don't Starve Together
+
+* Common Settings:
+  * WWII                    (Sudden Strike, Company of Heroes, Axis and Allies)
+  * Medieval and Castles    (Age of Empires, Stronghold, Anno 1503)
+  * Sci-fi + Aliens         (StarCraft, KKND2, Command & Conquer 3: Tiberium Wars)
+  * Sci-fi + Robots         (Supreme Commander)
+  * Sci-fi + Humans         (Dune 2000, Star Wars: Empire at War)
+  * Sci-fi + Cold War       (Command & Conquer: Red Alert 2 + 3)
+  * High Fantasy            (Warcraft III, The Lord of the Rings: The Battle for Middle-earth)
+  * Nature Fantasy          (Pikmin 1 + 2)
+  * Prehistoric & Dinosaurs (ParaWorld)
+  * Modernist Conflicts     (Command & Conquer: Tiberium Dawn, DEFCON)
+  * Through the Ages        (Empire Earth)
+  * Dieselpunk              (Warhammer 40,000)
