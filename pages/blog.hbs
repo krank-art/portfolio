@@ -3,11 +3,7 @@
     {{> page-header}}
     <div class="container-text">
       <h1 class="sr-only">Blog</h1>
-      <ul>
-        {{#each subPages}}
-        <li><a href="./blog/{{this.path}}">{{this.title}}</a></li>
-        {{/each}}
-      </ul>
+      {{> page-list items=subPages}}
       {{> page-footer}}
     </div>
   </main>
