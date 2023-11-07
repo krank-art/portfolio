@@ -1,9 +1,10 @@
+---
+linkTitle: Pathfinding
+---
+
 # Pathfinding
 
-> Krank, Created on 21st April 2022
-
-
-## Introduction 
+> **Krank,** created 21st April 2022, updated 7th November 2023
 
 * Units should be able to navigate through a complex terrain.
 * This is usually implemented in RTS games using a *NavMesh*.
@@ -19,7 +20,9 @@
 * When the level geometry changes, then only the affected chunks have to be rebuilt.
 
 
-## Terrain types
+## NavMesh
+
+### Terrain types
 
 * The polygons, that make up a NavMesh, can have different properties.
 * In an RTS game, there may be units that can only move on different surfaces.
@@ -36,7 +39,7 @@
   * path blockers
 
 
-## Shortcuts
+### Shortcuts
 
 * A Navmesh can also contain special edges that connect distant polygons.
 * Theoretically, the player can build a teleporter, which the units can then take into account in their path calculation.
@@ -44,7 +47,7 @@
 * In this case it is not important how wide the unit is, it is only important that it can touch the teleporter entrance.
 
 
-## Directed surfaces
+### Directed surfaces
 
 * Edges in a navigation graph can be directed.
 * In practice, when a unit enters the area, it can only move in one direction.
@@ -54,7 +57,14 @@
 * This would mean that a target path has to move through the surface in a certain direction.
 
 
-## Agent size
+### Data structure
+
+* A NavMesh graph is normally represented by a cyclic graph.
+
+
+## Agents
+
+### Agent size
 
 * Agents (or units) that use the NavMesh can have different diameters.
 * For example, a tank unit has a wider footprint than an infantry unit.
@@ -63,7 +73,7 @@
 * This is kinda problematic, because the calculation effort quickly ramps up for each size variation.
 
 
-## Agent grouping
+### Agent grouping
 
 * In Starcraft 2 you can move any number of units at the same time.
 * Depending on the size of the group, the formation of the units behaves differently
@@ -74,7 +84,7 @@
   "Is it faster to wait for the others or to move around?"
 
 
-## Pushing away friendly units
+### Pushing away friendly units
 
 * Friendly or neutral units can be pushed away by actively moving units.
 * As example, if a group of units has gathered in front of the camp exit, they must be pushed away so that the moving unit can leave the camp.
@@ -82,17 +92,12 @@
 * Otherwise enemy units could be pushed into a more advantageous position to deal with.
 
 
-## Data structure
-
-* A NavMesh graph is normally represented by a cyclic graph.
-
-
-## Destination not reachable
+### Destination not reachable
 
 * If a unit plans a path to a destination, but the destination is not reachable, then the unit should get as close as possible to the destination.
 
 
-## Recalculating path
+### Recalculating path
 
 * If a unit is currently on its way to a destination and comes across a blockage, then the unit should calculate a new path independently.
 * The *NavigationManager* should know, which routes are currently planned.
@@ -100,14 +105,14 @@
 * The path should be deleted and the unit should calculate a new path.
 
 
-## Blocked path by friendly units
+### Blocked path by friendly units
 
 * In Starcraft 2 you can set units to hold position.
 * This means that these units do not move away, even if they are attacked or nudged by a friendly unit.
 * If now a unit wants to move through them, it's slowly jerking forward and very slowly pushing the standing unit out of the way.
 
 
-## Turn radius of agents
+### Turn radius
 
 * [Path following with turning radius and obstacle avoidance - Game Development Stack Exchange](https://gamedev.stackexchange.com/questions/188046/path-following-with-turning-radius-and-obstacle-avoidance)
 * Turn radius:
