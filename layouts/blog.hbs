@@ -1,16 +1,16 @@
 <template>
-    <div class="blog-layout">
+  <div class="blog-layout">
+    <main class="container">
+      {{> page-header}}
       <nav class="blog-nav">
         {{> page-list items=blogPages}}
       </nav>
-        <main class="container">
-      {{> page-header}}
       <div class="container-blog blog-text">
         {{{content}}}
         {{> page-footer}}
       </div>
-        </main>
-    </div>
+    </main>
+  </div>
 </template>
 
 <style>

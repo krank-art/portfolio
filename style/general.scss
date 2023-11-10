@@ -37,9 +37,7 @@ body {
 }
 
 .container-blog {
-  // If no explicit width provided, the container will take up the width of the widest child element.
-  // That means, it can happen quite often that the blog column does only take up as much space as it needs.
-  width: 100vw; 
+  width: 100%;
   max-width: 50rem;
   margin-left: auto;
   margin-right: auto;
