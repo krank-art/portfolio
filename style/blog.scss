@@ -152,10 +152,20 @@ $blog-nav-width: 20rem;
 
 .blog-nav {
   background-color: rgba(0, 0, 0, 0.2);
-  padding: 1rem 2rem;
   border-radius: 1rem;
 
-  ul, ol {
+  &:target, 
+  &.expanded {
+    .blog-nav-body {
+      height: auto;
+    }
+    .blog-nav-icon {
+      transform: rotate(90deg);
+    }
+  }
+
+  ul,
+  ol {
     padding-left: 1rem;
   }
 
@@ -167,7 +177,47 @@ $blog-nav-width: 20rem;
   li>ol:first-child {
     margin-top: 0.25em;
   }
+}
 
+.blog-nav-header {
+  border-bottom: 0.1rem solid #555555;
+}
+
+.blog-nav-expander {
+  display: block;
+  padding: 1rem 2rem;
+  color: currentColor;
+  text-decoration: none;
+  font-weight: bold;
+
+  &:visited,
+  &:active,
+  &:visited:active {
+    color: unset;
+  }
+}
+
+.blog-nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.blog-nav-body {
+  height: 12vh;
+  padding: 1rem 2rem;
+  transition: height 0.1s ease-in;
+  overflow-y: auto;
+
+  &>*:first-child {
+    margin-top: 0;
+  }
+
+  &>*:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .page-list-item-active {
@@ -193,7 +243,6 @@ $blog-nav-width: 20rem;
     bottom: 0;
     width: $blog-nav-width;
     box-sizing: border-box;
-    overflow-y: auto;
     border-radius: unset;
   }
 

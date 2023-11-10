@@ -2,8 +2,13 @@
   <div class="blog-layout">
     <main class="container">
       {{> page-header}}
-      <nav class="blog-nav">
-        {{> page-list items=blogPages}}
+      <nav id="blog-nav" class="blog-nav">
+        <div class="blog-nav-header">
+          <a class="blog-nav-expander" href="#blog-nav"><span class="blog-nav-icon">&#9654;</span>Show blog nav</a>
+        </div>
+        <div class="blog-nav-body">
+          {{> page-list items=blogPages}}
+        </div>
       </nav>
       <div class="container-blog blog-text">
         {{{content}}}
