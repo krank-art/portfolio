@@ -1,3 +1,5 @@
+$blog-nav-width: 20rem;
+
 .blog-text {
   line-height: 1.5;
 
@@ -59,6 +61,7 @@
   img {
     max-width: 100%;
     height: auto;
+    border-radius: 0.5rem;
   }
 
   table {
@@ -150,6 +153,7 @@
 .blog-layout {
   display: flex;
   flex-flow: row nowrap;
+  padding-left: $blog-nav-width;
 }
 
 .blog-nav {
@@ -159,8 +163,23 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.2);
   padding: 1rem 2rem;
-  width: 20rem;
+  width: $blog-nav-width;
+  box-sizing: border-box;
   overflow-y: auto;
+
+  ul, ol {
+    padding-left: 1rem;
+  }
+
+  li:not(:last-child) {
+    margin-bottom: 0.25em;
+  }
+
+  li>ul:first-child,
+  li>ol:first-child {
+    margin-top: 0.25em;
+  }
+
 }
 
 .page-list-item-active {
