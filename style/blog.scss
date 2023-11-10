@@ -203,6 +203,7 @@ $blog-nav-width: 20rem;
   justify-content: center;
   width: 1.5em;
   height: 1.5em;
+  margin-left: -0.6rem;
 }
 
 .blog-nav-body {
@@ -210,6 +211,7 @@ $blog-nav-width: 20rem;
   padding: 1rem 2rem;
   transition: height 0.1s ease-in;
   overflow-y: auto;
+  box-sizing: border-box;
 
   &>*:first-child {
     margin-top: 0;
