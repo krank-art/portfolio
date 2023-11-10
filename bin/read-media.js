@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 import { getVibrantColorsInImage } from '../lib/image.js';
-import { replaceUmlauts, toKebabCase } from '../lib/string.js';
+import { getPathSafeName, replaceUmlauts, toKebabCase } from '../lib/string.js';
 import { parseJsonFile, writeObjectToFile } from '../lib/filesystem.js';
 import { Color } from '../lib/terminal.js';
 import { simplifyFraction } from '../lib/maths.js';
@@ -64,9 +64,7 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
   const match = fullNameRegex.exec(fileName) ?? simpleNameRegex.exec(fileName);
   const [, rawName, rawDate, fileExtension] = match;
   const title = rawName.trim();
-  const mediaName = replaceUmlauts(toKebabCase(title))
-    .replace(/^_*(.+?)_*$/g, '$1')
-    .replace(/[',.]/g, '');
+  const mediaName = getPathSafeName(title);
   const mediaDate = rawDate.replaceAll('.', '-');
   const fileNamePublic = mediaDate.length > 0
     ? (mediaName + "_" + mediaDate + extension)
