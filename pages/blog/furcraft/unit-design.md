@@ -1,5 +1,6 @@
-# Inspiration
-Created on 21st April 2022
+# Unit Design
+
+> **Krank,** created 21st April 2022
 
 * Vehicles
   * Terran mech units in StarCraft II
