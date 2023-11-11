@@ -1,48 +1,46 @@
-# Selbstausdruck
-Erstellt am 13. April 2022
+# Self Expression
 
-Der Ziel von diesem Spiel ist Komma dass es eine flexible Designgrundlage für alle Arten von RTS spielen bitte
-Die Liste der folgenden Spiele ist inspiriert von erfolgreichen Custom Maps in Warcraft 3:
+> **Krank,** created 13th April 2022
 
-* Tower Defense     (Tropical Tower Defense, Elemental TD)
-* Aufbausimulation  (Empires II)
-* Mini-Spiele       (Canned Bread, Skibi's Castle TD, Uther Party)
-* etc.
+* The goal of this game is to please comma that it is a flexible design base for all types of RTS play
+* The list of the following games is inspired by successful custom maps in Warcraft 3:
+  * Tower Defense (Tropical Tower Defense, Elemental TD)
+  * Building simulation (Empires II)
+  * Mini games (Canned Bread, Skibi's Castle TD, Uther Party)
+  * etc.
 
-Neben einem mächtigen Welteditor soll das Spiel auch eine Kampagne besitzen.
-
-
-* Selbstausdruck
-  * Anpassbare Gebäude-Modelle in Vanilla
-  * Anpassbare Gebäude-Modelle in Vanilla
-  * 
+In addition to a powerful world editor, the game will also have a campaign.
 
 
-2,5D-Optik
-* Optik soll dann so ähnlich sein wie der StarCrafts-Mod für StarCraft 2 von Carbot.
-  Das heißt Komma das Level selbst ist 3D
-  Die Sprites selbest sind aber 2D (flache Aufsteller)
-* Siehe auch Paper Mario, wie man diese Optik gut miteinander kombinieren kann.
-  * In dem Fall wäre es praktisch, wenn Gebäude trotzdem 3D sind
-  * Was mir auch an Paper Mario gefällt ist, dass es nett ist.
+## 2.5D visuals
+
+* Optics should be similar to the StarCrafts mod for StarCraft 2 by Carbot.
+  * That means the level itself is 3D
+  * But the sprites themselves are 2D (flat stands)
+* See also Paper Mario, how you can combine these looks well.
+  * In this case it would be practical if buildings were still 3D
+  * What I also like about Paper Mario is that it's nice.
 
 
-In einem normalen Gefecht können Spieler alle ihre Einheiten-Sprites und Gebäude-Modelle selber anpassen und verändern.
-  Gebäudemodelle soll man in einem 3D-Editor wie in Spore bearbeiten können.
-  Einheiten sollen aus Sprites bestehen (also 2), damit Änderungen möglichst zugänglich sind.
-    Wenn man 3D-animierte Charaktere verwendet, dann wird ist sehr schnell kompliziert (Modellieren, Rigging, Animieren)
-    Ziel ist es eher Komma dass sich jeder Nutzer möglichst einfach ausdrücken kann, daher einfach die verschiedenen Zustände zeichnen.
-    Inspiriert von Friday Night Funkin', da es hier sehr einfach ist Mods zu erstellen.
-    Inspiration für einen Sprite-Editor wäre dann von WarioWare: DIY.
-Es soll einen ausdrucksstarken Chat-Editor geben (siehe Team Fortress: Source 2 Projekt-Ankündigungsvideo)
-  Dieser soll Emojis erlauben und verschiedene Sprachkanäle wechseln können (siehe Chatfenster in StarCraft 2)
-  Möglich wäre auch, dass Benutzer ihre eigenen Custom Emotes hochladen (so wie in Discord oder mit frankerfacez.com)
-Wichtig ist auch das Soziale. Spieler sollen andere Spieler als Freunde hinzufügen können und Gruppen (Clans) bilden.
-  Theoretisch könnte man auch eine Gruppenseite machen können in der Gruppen sich vorstellen können und die Seite beliebig gestalten.
+## Player Customization
+
+* In a normal battle, players can customize and change all their unit sprites and building models themselves.
+  * Building models should be editable in a 3D editor like in Spore.
+  * Units should consist of sprites (i.e. 2) so that changes are as accessible as possible.
+    * If you use 3D-animated characters, things get complicated very quickly (modeling, rigging, animating)
+    * The aim is to make it as easy as possible for every user to express themselves, so simply draw the different states.
+    * Inspired by Friday Night Funkin', as it is very easy to create mods here.
+    * Inspiration for a sprite editor would then be from WarioWare: DIY.
+* There will be an expressive chat editor (see Team Fortress: Source 2 project announcement video)
+  * This should allow emojis and be able to change different language channels (see chat window in StarCraft 2)
+  * It would also be possible for users to upload their own custom emotes (like in Discord or with frankerfacez.com)
+* Social is also important. Players should be able to add other players as friends and form groups (clans).
+  * Theoretically you could also make a group page where groups can introduce themselves and customize the page.
 
 
+## See also
 
 * [Paper Mario: The Origami King Test / Review: Der Papier-Hammer!](https://www.youtube.com/watch?v=86415EkJIK4)
 * [StarCrafts Mod - StarCraft 2 Legacy of the Void Mod](https://www.youtube.com/watch?v=p123J-B8D68)
-* [Spore Building Design Features](https://www.youtube.com/watch?v=QO130WJ4NoM) -- Fortgeschrittene Features des Spore-Gebäude-Editors
-* [Spore Building Editor Tutorial](https://www.youtube.com/watch?v=vOOkvcPKdeg) -- Vorstellung des Spore-Gebäude-Editors von Maxis
+* [Spore Building Design Features](https://www.youtube.com/watch?v=QO130WJ4NoM) -- Advanced features of the building editor in Spore
+* [Spore Building Editor Tutorial](https://www.youtube.com/watch?v=vOOkvcPKdeg) -- Maxis presenting the building editor in Spore
