@@ -154,11 +154,12 @@ $blog-nav-width: 20rem;
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 1rem;
 
-  &:target, 
+  &:target,
   &.expanded {
     .blog-nav-body {
       height: auto;
     }
+
     .blog-nav-icon {
       transform: rotate(90deg);
     }
@@ -246,6 +247,15 @@ $blog-nav-width: 20rem;
     width: $blog-nav-width;
     box-sizing: border-box;
     border-radius: unset;
+  }
+
+  .blog-nav-header {
+    display: none;
+  }
+
+
+  .blog-nav-body {
+    height: auto;
   }
 
   .blog-layout {
