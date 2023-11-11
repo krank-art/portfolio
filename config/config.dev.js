@@ -2,6 +2,7 @@ export default {
   path: {
     base: "http://localhost:8000"
   },
+  titleTemplate: "#{title} \u2013 Krank",
   siteName: "krank.love",
   siteTwitter: "@krankomat96",
   siteThumbnail: "art/960p/bear-tired_2022-10-25.png",
