@@ -178,6 +178,10 @@ $blog-nav-width: 20rem;
   li>ol:first-child {
     margin-top: 0.25em;
   }
+
+  a {
+    text-decoration: none;
+  }
 }
 
 .blog-nav-header {
