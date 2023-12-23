@@ -18,6 +18,10 @@
   "author": "Krank <kranko.art@gmail.com>",
   "license": "ISC",
   "devDependencies": {
+    "chartjs-node-canvas": "^4.1.6",
+    "chartjs-plugin-datalabels": "^2.2.0",
+    "d3": "^7.8.5",
+    "d3-node": "^3.0.0",
     "handlebars": "^4.7.8",
     "js-yaml": "^4.1.0",
     "jsdom": "^22.1.0",
