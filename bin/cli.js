@@ -7,6 +7,7 @@ import buildAssets from './build-assets.js';
 import FileWatcher from '../lib/filewatcher.js';
 import { Color } from '../lib/terminal.js';
 import { inspectMediaTable } from './inspect-media.js';
+import sortMedia from './sort-media.js';
 
 const pathing = Object.freeze({
   dist: path.resolve('dist'),
@@ -23,11 +24,11 @@ const pathing = Object.freeze({
 });
 
 const resizeSet = [
-  { name: "120p", size: 120},
-  { name: "240p", size: 240},
-  { name: "480p", size: 480},
-  { name: "960p", size: 960},
-  { name: "1440p", size: 1440},
+  { name: "120p", size: 120 },
+  { name: "240p", size: 240 },
+  { name: "480p", size: 480 },
+  { name: "960p", size: 960 },
+  { name: "1440p", size: 1440 },
 ];
 
 export async function handleCommand(command, ...args) {
@@ -61,11 +62,11 @@ export async function handleCommand(command, ...args) {
           name: 'John Doe',
           mediaArt: parseJsonFile(pathing.artData),
           headerLinks: [
-            { link: "/", title: "Home"},
-            { link: "art", title: "Art"},
-            { link: "blog", title: "Blog"},
-            { link: "changelog", title: "Changelog"},
-            { link: "about", title: "About"},
+            { link: "/", title: "Home" },
+            { link: "art", title: "Art" },
+            { link: "blog", title: "Blog" },
+            { link: "changelog", title: "Changelog" },
+            { link: "about", title: "About" },
           ],
           resizeSet: resizeSet,
         },
@@ -137,6 +138,9 @@ export async function handleCommand(command, ...args) {
     case "inspect:art":
       const lines = inspectMediaTable(parseJsonFile(pathing.artData));
       console.log(lines.join("\n"));
+      break;
+    case "sort:art":
+      await sortMedia(pathing.artData, args[0] ?? 'name');
       break;
     default:
       console.log(`Unknown command '${command}'`);
