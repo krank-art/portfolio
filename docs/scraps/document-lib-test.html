@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Heading Tree</title>
+</head>
+<body>
+
+<!-- Your HTML content here -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        (() => {        
+        }
+
+        // Get the JSON heading tree
+        var jsonHeadingTree = createJSONHeadingTree();
+
+        // Output the JSON heading tree to the console
+        console.log(JSON.stringify(jsonHeadingTree, null, 2));
+        
+    })();
+    (() => {
+
+        function createJSONHeadingTree() {
+            var headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            var headingTree = [];
+
+            const getHeadingLevel = (heading) => parseInt(heading.tagName.charAt(1), 10);
+            const getHeadingTree = (headings, heading, parent = null, currentLevel = 1) => {             
+                const level = getHeadingLevel(heading);
+                const text = heading.textContent;
+                const id = heading.id;
+                const index = headings.indexOf(heading);
+                for (let i = index + 1; i < headings.length; i++) {
+                    const currentHeading = headings[i];
+                    const currentLevel = getHeadingLevel(currentHeading);
+                    const levelDiff = currentLevel - level;
+                    if (levelDiff <= 0) break; // Next sibling
+                    if (levelDiff === 1) { // Next child
+                        continue;
+                    }
+                    // Else child with missing parent
+
+                }
+            }
+
+            headings.forEach(function(heading) {
+                const level = parseInt(heading.tagName.charAt(1), 10);
+                let parent = null;
+                var currentLevel = headingTree;
+
+                for (var i = 1; i < level; i++) {
+                    if (!currentLevel[currentLevel.length - 1]) {
+                        currentLevel.push({ 
+                            type: "substitue",
+                            text: "",
+                            id: "",
+                            children: [],
+                         });
+                    }
+                    if (!currentLevel[currentLevel.length - 1].children) {
+                        currentLevel[currentLevel.length - 1].children = [];
+                    }
+                    currentLevel = currentLevel[currentLevel.length - 1].children;
+                }
+
+                currentLevel.push({
+                    type: "heading",
+                    text: heading.textContent,
+                    id: heading.id
+                });
+            });
+
+            return headingTree;
+        }
+
+        // Get the JSON heading tree
+        var jsonHeadingTree = createJSONHeadingTree();
+
+        // Output the JSON heading tree to the console
+        console.log(JSON.stringify(jsonHeadingTree, null, 2));
+        
+    })();
+    });
+</script>
+
+</body>
+</html>
