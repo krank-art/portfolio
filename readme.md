@@ -10,8 +10,9 @@ This is a static side generator used to create the furry art portfolio by [@Kran
 3. Run `npm install`.
 4. Copy your art files into `static/art/`.
 5. Run `npm run cli import:art`.
-6. Run `npm run cli build`.
-7. Run `npm run serve-python` (make sure you have Python 3+ installed).
+6. Run `npm run cli sort:art` (new entries get appended, we have to sort then).
+7. Run `npm run cli build`.
+8. Run `npm run serve-python` (make sure you have Python 3+ installed).
 
 
 ## CLI Usage
@@ -57,6 +58,12 @@ Basic usage: `npm run cli <command> <args?>`.
     * Reading, processing, copying and generating files  are quite expensive operations.
     * For this reason, art files only get processed if their file size has changed OR if the "file modified" value has changed.
     * In the past, "file modified" values behaved inconsistently across different devices, so we only look at seconds as smallest time value.
+* `sort:art`
+  * Sorts `data/media-art.json` entries by using a sorting function (defaults to `'name'`).
+  * Use argument `name` to sort by **path** name (from A-Z), is default.
+  * Use argument `date` to sort by date (from newest to oldest, no date entries come last).
+    If both entries have the same date, the conflict is resolved by sorting by path again.
+    Paths have to be unique.
 * `watch`
   * Runs `watch:assets`, `watch:html`, and `watch:art` and keeps them running in parallel.
   * Press `Ctrl + C` to abort all file watchers.
