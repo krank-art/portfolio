@@ -1,5 +1,6 @@
 ---
 layout: blog
+hidden: true
 ---
 
 # Markdown Example

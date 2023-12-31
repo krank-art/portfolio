@@ -1,6 +1,7 @@
 ---
 layout: blog
 test: banana
+hidden: true
 ---
 
 # Fantastic Blog
