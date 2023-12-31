@@ -144,4 +144,4 @@ export async function handleCommand(command, ...args) {
 }
 
 const [, , command, ...args] = process.argv;
-if (command) await handleCommand(command, args);
+if (command) await handleCommand(command, ...args);
