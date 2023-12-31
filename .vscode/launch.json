@@ -38,6 +38,22 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Run art sorting",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\bin\\cli.js",
+            "args": [
+                "sort:art",
+                "date"
+            ],
+            "runtimeArgs": [
+                "--experimental-vm-modules"
+            ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Run TemplateLoader",
             "skipFiles": [
                 "<node_internals>/**"
@@ -54,7 +70,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\lib\\piechart.js"
+            "program": "${workspaceFolder}\\lib\\piechart2.js"
         }
     ]
 }
