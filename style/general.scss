@@ -54,3 +54,15 @@ body {
   white-space: nowrap;
   border: 0;
 }
+
+.inline-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+
+  & > *:not(:last-child) {
+    margin-right: 0.25em;
+  }
+}

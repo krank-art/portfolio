@@ -2,8 +2,8 @@
 
 $math-phi: 1.618;
 $math-sqrt-2: 1.414;
-$dusk-20: rgba(0,0,0,0.2);
-$dusk-30: rgba(0,0,0,0.3);
+$dusk-20: rgba(255,255,255,0.2);
+$dusk-30: rgba(255,255,255,0.3);
 $white: white;
 $teal: #19FFFF;
 $bright-blue: #32CFFF;
@@ -24,6 +24,7 @@ $tag-hole-diameter: 0.8em;
   border: none;
   font-family: inherit;
   border-radius: 0.25em;
+  color: $white;
 
   &:focus {
     outline: 0.2rem solid $bright-blue;
