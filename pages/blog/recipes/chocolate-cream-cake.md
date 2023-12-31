@@ -1,5 +1,7 @@
 # Chocolate Cream Cake
 
+> **Krank,** created 11st November 2023
+
 **Recipe for a small chocolate cream cake.**  
 **For a double recipe, use a 26cm (10") springform pan accordingly.**
 
