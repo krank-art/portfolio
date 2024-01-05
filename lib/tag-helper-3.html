@@ -232,6 +232,7 @@
         this.element = null;
         this.viewer = null;
         this.input = null;
+        this.currentPath = null;
       }
 
       async initialize() {
@@ -242,9 +243,12 @@
         const uniqueTags = TagStorage.getUniqueTags(this.storage.data);
         this.suggestedTags = new Set(uniqueTags);
         this.savedTags = new Set();
+        this.currentPath = window.location.pathname;
         this.viewer = new TagViewer({
           document: this.document,
           onItemDelete: (item) => {
+            this.storage.removeTag(this.currentPath, value);
+            this.storage.save();
             this.savedTags.delete(item);
             this.updateView();
           }
@@ -254,6 +258,8 @@
           onSubmit: (value) => {
             if (value.trim().length > 0)
               this.savedTags.add(value);
+            this.storage.addTag(this.currentPath, value);
+            this.storage.save();
             this.updateView();
             console.log(this.savedTags)
           },
@@ -293,6 +299,24 @@
 
       save(value) {
         localStorage.setItem(this.saveKey, this.data);
+      }
+
+      hasPath(path) {
+        return this.data.hasOwnProperty(path);
+      }
+
+      addTag(path, tag) {
+        const tags = this.data[path];
+        if (!tags) throw new Error(`There is no known path '${path}' for tags. `);
+        const newTags = [...new Set(tags).add(tag)].sort(); // Make sure tags are unique.
+        this.data[path] = newTags;
+      }
+
+      removeTag(path, tag) {
+        const tags = this.data[path];
+        if (!tags) throw new Error(`There is no known path '${path}' for tags. `);
+        const newTags = [...new Set(tags).delete(tag)].sort(); // Make sure tags are unique.
+        this.data[path] = newTags;
       }
 
       static getUniqueTags(data) {
