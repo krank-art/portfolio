@@ -1,8 +1,9 @@
 import copy from 'rollup-plugin-copy';
 import sass from 'rollup-plugin-sass';
+import config from './config/config.dev.js';
 
 export default {
-  input: 'lib/main.js',
+  input: config.debug ? 'lib/main-debug.js' : 'lib/main-base.js',
   output: {
     file: 'dist/bundle.js',
     format: 'iife',

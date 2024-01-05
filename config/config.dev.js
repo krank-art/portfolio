@@ -1,4 +1,5 @@
 export default {
+  debug: true,
   path: {
     base: "http://localhost:8000"
   },
