@@ -8,6 +8,7 @@ import FileWatcher from '../lib/filewatcher.js';
 import { Color } from '../lib/terminal.js';
 import { inspectMediaTable } from './inspect-media.js';
 import sortMedia from './sort-media.js';
+import readTags from './read-tags.js';
 
 const pathing = Object.freeze({
   dist: path.resolve('dist'),
@@ -19,6 +20,7 @@ const pathing = Object.freeze({
   style: path.resolve("style"),
   script: path.resolve("lib"),
   artData: path.resolve('data/media-art.json'),
+  artTags: path.resolve('data/art-tags.json'),
   artImport: path.resolve("static/art"),
   artProcessed: path.resolve("dist/media/art"),
 });
@@ -141,6 +143,9 @@ export async function handleCommand(command, ...args) {
       break;
     case "sort:art":
       await sortMedia(pathing.artData, args[0] ?? 'name');
+      break;
+    case "tags:art":
+      await readTags(pathing.artData, pathing.artTags, "/art/");
       break;
     default:
       console.log(`Unknown command '${command}'`);
