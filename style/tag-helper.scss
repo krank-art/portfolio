@@ -1,5 +1,8 @@
 .tag-helper {
   position: relative;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 0.5em;
+  border-radius: 0.5em;
 }
 
 /* Style for the popup */
@@ -42,4 +45,11 @@
     background-color: #f1f1f1;
     color: black;
   }  
+}
+
+.tag-helper-viewer {
+  button {
+    margin-left: 0.25em;
+    font-size: 0.8em;
+  }
 }
