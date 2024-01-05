@@ -31,14 +31,9 @@
 </head>
 
 <body>
-  <script>
+  <script async>
     class AutocompletePopup {
-      constructor({
-        document,
-        input,
-        suggestions = ["Apple", "Banana", "Orange", "Mango", "Grapes", "Pineapple"],
-        onInput = () => { }
-      }) {
+      constructor({ document, input, suggestions, onInput = () => { } }) {
         this.input = input;
         this.document = this.input.ownerDocument;
         this.popup = this.document.createElement("div");
@@ -181,21 +176,105 @@
       }
     }
 
-    // Create an instance of AutocompletePopup
+    class TagInput {
+      constructor({ document, onSubmit = () => { }, suggestions }) {
+        this.document = document;
+        this.element = document.createElement("div");
+        this.element.classList.add("tag-input");
+        const searchInput = document.createElement("input");
+        searchInput.type = "text";
+        searchInput.placeholder = "Type here";
+        const form = document.createElement("form");
+        form.appendChild(searchInput);
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          onSubmit(searchInput.value);
+          searchInput.value = "";
+        });
+        const autocompletePopup = new AutocompletePopup({ document, suggestions, input: searchInput });
+        this.element.appendChild(form);
+      }
+    }
 
-    const searchInput = document.createElement("input");
-    searchInput.type = "text";
-    searchInput.placeholder = "Type here";
+    class TagManager {
+      constructor({ document, saveKey, suggestions = [] }) {
+        this.savedTags = new Set();
+        this.suggestedTags = new Set(suggestions);
+        this.storage = new TagStorage(saveKey);
+        this.input = new TagInput({
+          document,
+          onSubmit: (value) => console.log(value),
+          suggestions: ["Apple", "Banana", "Orange", "Mango", "Grapes", "Pineapple"],
+        });
+      }
 
-    const form = document.createElement("form");
-    document.body.appendChild(form);
-    form.appendChild(searchInput);
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      console.log(searchInput.value);
-      searchInput.value = "";
+      load() {
+        const data = this.storage.load();
+        /* Save data structure is as follows:
+         * [ 
+         *   { path: "/art/alligator", tags: [ "alligator", "grayscale", "blackAndWhite" ] },
+         *   { path: "/art/bear-hug", tags: [ "bear", "deer", "embrace" ] },
+         *   // etc...
+         * ]
+         */
+        const knownTagsSet = data.reduce((accumulatorSet, obj) => {
+          obj.tags.forEach(value => accumulatorSet.add(value));
+          return accumulatorSet;
+        }, new Set());
+      }
+    }
+
+    class TagStorage {
+      constructor(saveKey) {
+        this.saveKey = saveKey;
+        this.data = [];
+      }
+
+      load() {
+        const item = localStorage.getItem(this.saveKey);
+        this.data = JSON.parse(item);
+      }
+
+      save(value) {
+        localStorage.setItem(this.saveKey, this.data);
+      }
+
+      static getUniqueTags(data) {
+        const uniqueTags = new Set();
+        for (const prop in data) {
+          const tagsPerPage = data[prop];
+          for (const tag of tagsPerPage)
+            uniqueTags.add(tag);
+        }
+        return [...uniqueTags].sort();
+      }
+    }
+
+    const tagInput = new TagInput({
+      document,
+      onSubmit: (value) => console.log(value),
+      suggestions: ["Apple", "Banana", "Orange", "Mango", "Grapes", "Pineapple"],
     });
-    const autocompletePopup = new AutocompletePopup({ document, input: searchInput });
+
+    async function loadJSON(url) {
+      const response = await fetch(url);
+      if (!response.ok)
+        throw new Error('Failed to fetch JSON data from ' + url);
+      return await response.json();
+    }
+
+    document.body.appendChild(tagInput.element);
+
+    (async () => {
+      const tags = await loadJSON("/data/art-tags.json")
+      const uniqueTags = TagStorage.getUniqueTags(tags);
+      console.log(uniqueTags);
+    })();
+    const tagManager = new TagManager({
+      document,
+      saveKey: "krank.tagManager.art",
+    })
+
   </script>
 
 </body>
