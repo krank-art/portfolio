@@ -1,0 +1,22 @@
+/* Style for the popup */
+.input-popup {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+/* Style for autocomplete suggestions */
+.suggestion {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestion:hover,
+.suggestion.active {
+  background-color: #f1f1f1;
+}
