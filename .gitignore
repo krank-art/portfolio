@@ -4,3 +4,5 @@ dist/
 
 # important files, but would make repository waaay too big
 static/art/
+
+data/*-tags.json
