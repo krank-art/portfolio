@@ -196,31 +196,57 @@
       }
     }
 
+    class TagViewer {
+      constructor(document) {
+        this.document = document;
+        this.element = this.document.createElement("div");
+        this.element.classList.add("tag-viewer");
+        this.list = this.document.createElement("ul");
+        this.element.appendChild(this.list);
+      }
+
+      update(...items) {
+        this.list.innerHTML = "";
+        for (const item of items) {
+          const listItem = this.document.createElement("li");
+          listItem.textContent = item;
+          this.list.appendChild(listItem);
+        }
+      }
+    }
+
     class TagManager {
       constructor({ document, saveKey, suggestions = [] }) {
+        this.element = document.createElement("div");
+        this.element.classList.add("tag-manager");
         this.savedTags = new Set();
         this.suggestedTags = new Set(suggestions);
         this.storage = new TagStorage(saveKey);
+        this.viewer = new TagViewer(document);
         this.input = new TagInput({
           document,
-          onSubmit: (value) => console.log(value),
-          suggestions: ["Apple", "Banana", "Orange", "Mango", "Grapes", "Pineapple"],
+          onSubmit: (value) => {
+            if (value.trim().length > 0)
+              this.savedTags.add(value);
+            this.viewer.update(...this.savedTags);
+            console.log(this.savedTags)
+          },
+          suggestions,
         });
+        this.element.appendChild(this.viewer.element);
+        this.element.appendChild(this.input.element);
       }
 
       load() {
         const data = this.storage.load();
-        /* Save data structure is as follows:
-         * [ 
-         *   { path: "/art/alligator", tags: [ "alligator", "grayscale", "blackAndWhite" ] },
-         *   { path: "/art/bear-hug", tags: [ "bear", "deer", "embrace" ] },
-         *   // etc...
-         * ]
-         */
         const knownTagsSet = data.reduce((accumulatorSet, obj) => {
           obj.tags.forEach(value => accumulatorSet.add(value));
           return accumulatorSet;
         }, new Set());
+      }
+
+      mount(element) {
+        element.appendChild(this.element);
       }
     }
 
@@ -240,6 +266,13 @@
       }
 
       static getUniqueTags(data) {
+        /* Save data structure is as follows:
+         * [ 
+         *   { path: "/art/alligator", tags: [ "alligator", "grayscale", "blackAndWhite" ] },
+         *   { path: "/art/bear-hug", tags: [ "bear", "deer", "embrace" ] },
+         *   // etc...
+         * ]
+         */
         const uniqueTags = new Set();
         for (const prop in data) {
           const tagsPerPage = data[prop];
@@ -250,12 +283,6 @@
       }
     }
 
-    const tagInput = new TagInput({
-      document,
-      onSubmit: (value) => console.log(value),
-      suggestions: ["Apple", "Banana", "Orange", "Mango", "Grapes", "Pineapple"],
-    });
-
     async function loadJSON(url) {
       const response = await fetch(url);
       if (!response.ok)
@@ -263,18 +290,18 @@
       return await response.json();
     }
 
-    document.body.appendChild(tagInput.element);
 
     (async () => {
       const tags = await loadJSON("/data/art-tags.json")
       const uniqueTags = TagStorage.getUniqueTags(tags);
       console.log(uniqueTags);
+      const tagManager = new TagManager({
+        document,
+        saveKey: "krank.tagManager.art",
+        suggestions: [...uniqueTags],
+      });
+      tagManager.mount(document.body);
     })();
-    const tagManager = new TagManager({
-      document,
-      saveKey: "krank.tagManager.art",
-    })
-
   </script>
 
 </body>
