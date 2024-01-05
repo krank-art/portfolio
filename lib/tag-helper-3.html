@@ -222,39 +222,45 @@
     }
 
     class TagManager {
-      constructor({ document, saveKey, suggestions = [] }) {
-        this.element = document.createElement("div");
+      constructor({ document, saveKey, fallbackDataUrl }) {
+        this.document = document;
+        this.saveKey = saveKey;
+        this.fallbackDataUrl = fallbackDataUrl;
+        this.suggestedTags = null;
+        this.savedTags = null;
+        this.storage = null;
+        this.element = null;
+        this.viewer = null;
+        this.input = null;
+      }
+
+      async initialize() {
+        this.element = this.document.createElement("div");
         this.element.classList.add("tag-manager");
+        this.storage = new TagStorage(this.saveKey);
+        await this.storage.loadWithFallback(this.fallbackDataUrl);
+        const uniqueTags = TagStorage.getUniqueTags(this.storage.data);
+        this.suggestedTags = new Set(uniqueTags);
         this.savedTags = new Set();
-        this.suggestedTags = new Set(suggestions);
-        this.storage = new TagStorage(saveKey);
         this.viewer = new TagViewer({
-          document,
+          document: this.document,
           onItemDelete: (item) => {
             this.savedTags.delete(item);
             this.updateView();
           }
         });
         this.input = new TagInput({
-          document,
+          document: this.document,
           onSubmit: (value) => {
             if (value.trim().length > 0)
               this.savedTags.add(value);
             this.updateView();
             console.log(this.savedTags)
           },
-          suggestions,
+          suggestions: this.suggestedTags,
         });
         this.element.appendChild(this.viewer.element);
         this.element.appendChild(this.input.element);
-      }
-
-      load() {
-        const data = this.storage.load();
-        const knownTagsSet = data.reduce((accumulatorSet, obj) => {
-          obj.tags.forEach(value => accumulatorSet.add(value));
-          return accumulatorSet;
-        }, new Set());
       }
 
       mount(element) {
@@ -269,12 +275,20 @@
     class TagStorage {
       constructor(saveKey) {
         this.saveKey = saveKey;
-        this.data = [];
+        this.data = null;
       }
 
       load() {
         const item = localStorage.getItem(this.saveKey);
         this.data = JSON.parse(item);
+      }
+
+      async loadWithFallback(fallbackUrl) {
+        if (localStorage.getItem(this.saveKey) === null) {
+          this.data = await TagStorage.loadJSON(fallbackUrl);
+          return;
+        }
+        this.load();
       }
 
       save(value) {
@@ -297,26 +311,26 @@
         }
         return [...uniqueTags].sort();
       }
+
+      static async loadJSON(url) {
+        const response = await fetch(url);
+        if (!response.ok)
+          throw new Error('Failed to fetch JSON data from ' + url);
+        return await response.json();
+      }
     }
 
-    async function loadJSON(url) {
-      const response = await fetch(url);
-      if (!response.ok)
-        throw new Error('Failed to fetch JSON data from ' + url);
-      return await response.json();
-    }
 
 
     (async () => {
-      const tags = await loadJSON("/data/art-tags.json")
-      const uniqueTags = TagStorage.getUniqueTags(tags);
-      console.log(uniqueTags);
       const tagManager = new TagManager({
         document,
         saveKey: "krank.tagManager.art",
-        suggestions: [...uniqueTags],
+        fallbackDataUrl: "/data/art-tags.json",
       });
+      await tagManager.initialize();
       tagManager.mount(document.body);
+      console.log(tagManager);
     })();
   </script>
 
