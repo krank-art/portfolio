@@ -1,7 +1,14 @@
+.tag-helper {
+  position: relative;
+}
+
 /* Style for the popup */
-.input-popup {
+.tag-helper-popup {
   display: none;
   position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100%;
   background-color: #fff;
   border: 1px solid #ccc;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -11,12 +18,12 @@
 }
 
 /* Style for autocomplete suggestions */
-.suggestion {
+.tag-helper-suggestion {
   padding: 10px;
   cursor: pointer;
-}
 
-.suggestion:hover,
-.suggestion.active {
-  background-color: #f1f1f1;
+  &:hover,
+  &.active {
+    background-color: #f1f1f1;
+  }  
 }
