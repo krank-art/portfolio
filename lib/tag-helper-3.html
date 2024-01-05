@@ -197,8 +197,9 @@
     }
 
     class TagViewer {
-      constructor(document) {
+      constructor({ document, onItemDelete = () => { } }) {
         this.document = document;
+        this.onItemDelete = onItemDelete;
         this.element = this.document.createElement("div");
         this.element.classList.add("tag-viewer");
         this.list = this.document.createElement("ul");
@@ -210,6 +211,11 @@
         for (const item of items) {
           const listItem = this.document.createElement("li");
           listItem.textContent = item;
+          const deleteButton = this.document.createElement("button");
+          deleteButton.type = "button";
+          deleteButton.innerHTML = "&times;";
+          deleteButton.addEventListener("click", (event) => this.onItemDelete(item));
+          listItem.appendChild(deleteButton);
           this.list.appendChild(listItem);
         }
       }
@@ -222,13 +228,19 @@
         this.savedTags = new Set();
         this.suggestedTags = new Set(suggestions);
         this.storage = new TagStorage(saveKey);
-        this.viewer = new TagViewer(document);
+        this.viewer = new TagViewer({
+          document,
+          onItemDelete: (item) => {
+            this.savedTags.delete(item);
+            this.updateView();
+          }
+        });
         this.input = new TagInput({
           document,
           onSubmit: (value) => {
             if (value.trim().length > 0)
               this.savedTags.add(value);
-            this.viewer.update(...this.savedTags);
+            this.updateView();
             console.log(this.savedTags)
           },
           suggestions,
@@ -247,6 +259,10 @@
 
       mount(element) {
         element.appendChild(this.element);
+      }
+
+      updateView() {
+        this.viewer.update(...[...this.savedTags].sort());
       }
     }
 
