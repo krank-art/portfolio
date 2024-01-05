@@ -12,6 +12,22 @@ export default {
       targets: [
         { src: 'static/favicon/*', dest: 'dist' },
         { src: 'static/blog/*', dest: 'dist/media/blog' },
+        {
+          src: 'data/media-art.json',
+          dest: 'dist/data',
+          rename: (name, extension, fullPath) => `art-tags.json`,
+          transform: (contents, filename) => {
+            // We reduce file size by a lot by throwing out whitespace and unnecessary properties.
+            const data = JSON.parse(contents.toString());
+            const truncatedData = {};
+            data.forEach(entry => {
+              const { path, tags } = entry;
+              const newPath = `/art/${path}`;
+              truncatedData[newPath] = tags;
+            });
+            return JSON.stringify(truncatedData);
+          },
+        },
       ],
     }),
     sass({
