@@ -34,6 +34,7 @@
       "gift",
       "kageki",
       "krita",
+      "pokemon",
       "purple",
       "sableye",
       "smiling",
@@ -119,6 +120,7 @@
       "bike",
       "cat",
       "christmas",
+      "clothes",
       "drHouse",
       "dragon",
       "egg",
@@ -178,7 +180,8 @@
       "font",
       "fontforge",
       "inkscape",
-      "krank"
+      "krank",
+      "text"
     ],
     "imageAlt": "Font Krank",
     "palette": []
@@ -396,9 +399,11 @@
     "tags": [
       "blue",
       "bunny",
+      "galaxy",
       "grass",
       "green",
       "krita",
+      "painting",
       "planet",
       "thumbnail",
       "tree",
@@ -476,8 +481,20 @@
       "Bunny Jay"
     ],
     "tags": [
+      "blue",
       "bunny",
-      "jay"
+      "caspar",
+      "clothes",
+      "colo",
+      "discopaws",
+      "gift",
+      "jay",
+      "krita",
+      "phone",
+      "rabbit",
+      "smiling",
+      "spy",
+      "yellow"
     ],
     "imageAlt": "Bunny Jay",
     "palette": []
@@ -509,9 +526,23 @@
       "Bunny Jay Manual"
     ],
     "tags": [
+      "blue",
       "bunny",
+      "clothes",
+      "discopaws",
+      "gift",
+      "graphicDesign",
+      "inkscape",
       "jay",
-      "manual"
+      "krita",
+      "manual",
+      "mockup",
+      "orange",
+      "phone",
+      "smiling",
+      "text",
+      "white",
+      "yellow"
     ],
     "imageAlt": "Bunny Jay Manual",
     "palette": []
@@ -543,8 +574,18 @@
       "Sheep Holy"
     ],
     "tags": [
+      "clothes",
+      "colored",
+      "golden",
       "holy",
-      "sheep"
+      "jewelry",
+      "krita",
+      "male",
+      "pink",
+      "purple",
+      "sheep",
+      "smiling",
+      "white"
     ],
     "imageAlt": "Sheep Holy",
     "palette": []
@@ -576,9 +617,14 @@
       "Bun Scribbles Cocky"
     ],
     "tags": [
-      "bun",
+      "blush",
+      "bunny",
       "cocky",
-      "scribbles"
+      "krita",
+      "lineart",
+      "scribbles",
+      "smiling",
+      "yellow"
     ],
     "imageAlt": "Bun Scribbles Cocky",
     "palette": []
@@ -610,9 +656,14 @@
       "Bun Scribbles Happy"
     ],
     "tags": [
-      "bun",
+      "blush",
+      "bunny",
+      "feral",
       "happy",
-      "scribbles"
+      "krita",
+      "lineart",
+      "scribbles",
+      "yellow"
     ],
     "imageAlt": "Bun Scribbles Happy",
     "palette": []
@@ -644,9 +695,13 @@
       "Bun Scribbles Sideview"
     ],
     "tags": [
-      "bun",
+      "blush",
+      "bunny",
+      "krita",
+      "lineart",
       "scribbles",
-      "sideview"
+      "smiling",
+      "yellow"
     ],
     "imageAlt": "Bun Scribbles Sideview",
     "palette": []
@@ -678,8 +733,18 @@
       "Bear Bun"
     ],
     "tags": [
+      "anthro",
       "bear",
-      "bun"
+      "blue",
+      "blush",
+      "brown",
+      "bunny",
+      "clothes",
+      "colored",
+      "krita",
+      "overalls",
+      "relaxed",
+      "white"
     ],
     "imageAlt": "Bear Bun",
     "palette": []
@@ -711,7 +776,11 @@
       "Bear Pissed"
     ],
     "tags": [
+      "anthro",
       "bear",
+      "grayscale",
+      "krita",
+      "lineart",
       "pissed"
     ],
     "imageAlt": "Bear Pissed",
@@ -744,8 +813,13 @@
       "Bunny Droopy"
     ],
     "tags": [
+      "anthro",
       "bunny",
-      "droopy"
+      "clothes",
+      "content",
+      "krita",
+      "red",
+      "tired"
     ],
     "imageAlt": "Bunny Droopy",
     "palette": []
@@ -777,6 +851,9 @@
       "Otter Sad"
     ],
     "tags": [
+      "anthro",
+      "grayscale",
+      "krita",
       "otter",
       "sad"
     ],
@@ -810,8 +887,14 @@
       "Bed Hug"
     ],
     "tags": [
+      "anthro",
       "bed",
-      "hug"
+      "cozy",
+      "grayscale",
+      "hug",
+      "krita",
+      "tired",
+      "wolf"
     ],
     "imageAlt": "Bed Hug",
     "palette": []
@@ -843,8 +926,15 @@
       "Bear Gun"
     ],
     "tags": [
+      "anthro",
       "bear",
-      "gun"
+      "brown",
+      "colored",
+      "dumb",
+      "gray",
+      "gun",
+      "krita",
+      "smiling"
     ],
     "imageAlt": "Bear Gun",
     "palette": []
@@ -876,8 +966,14 @@
       "Sheep Town"
     ],
     "tags": [
+      "anthro",
+      "blue",
+      "collar",
+      "fanart",
+      "krita",
       "sheep",
-      "town"
+      "town",
+      "white"
     ],
     "imageAlt": "Sheep Town",
     "palette": []
@@ -909,9 +1005,16 @@
       "Banjo Kazooie Flower"
     ],
     "tags": [
+      "anthro",
       "banjo",
+      "bear",
+      "bird",
+      "clothes",
       "flower",
-      "kazooie"
+      "happy",
+      "kazooie",
+      "krita",
+      "lineart"
     ],
     "imageAlt": "Banjo Kazooie Flower",
     "palette": []
@@ -943,9 +1046,15 @@
       "Banjo Kazooie Shook"
     ],
     "tags": [
+      "anthro",
       "banjo",
+      "bear",
+      "bird",
+      "clothes",
+      "disappointed",
       "kazooie",
-      "shook"
+      "krita",
+      "lineart"
     ],
     "imageAlt": "Banjo Kazooie Shook",
     "palette": []
@@ -977,8 +1086,14 @@
       "Bear Plumber"
     ],
     "tags": [
+      "anthro",
       "bear",
-      "plumber"
+      "brown",
+      "krita",
+      "smiling",
+      "standing",
+      "text",
+      "wrench"
     ],
     "imageAlt": "Bear Plumber",
     "palette": []
@@ -1010,8 +1125,18 @@
       "Mune Bird"
     ],
     "tags": [
+      "anthro",
       "bird",
-      "mune"
+      "blue",
+      "blush",
+      "fawn",
+      "gift",
+      "happy",
+      "krita",
+      "mune",
+      "pink",
+      "standing",
+      "text"
     ],
     "imageAlt": "Mune Bird",
     "palette": []
@@ -1043,9 +1168,20 @@
       "Banjo Kazooie Music"
     ],
     "tags": [
+      "anthro",
       "banjo",
+      "bear",
+      "bird",
+      "clothes",
+      "disappointed",
+      "dumb",
       "kazooie",
-      "music"
+      "krita",
+      "lineart",
+      "music",
+      "smiling",
+      "standing",
+      "text"
     ],
     "imageAlt": "Banjo Kazooie Music",
     "palette": []
@@ -1077,8 +1213,13 @@
       "Kageki Pony"
     ],
     "tags": [
+      "gift",
       "kageki",
-      "pony"
+      "krita",
+      "lineart",
+      "pony",
+      "sableye",
+      "standing"
     ],
     "imageAlt": "Kageki Pony",
     "palette": []
@@ -1110,8 +1251,20 @@
       "Bunny Planet"
     ],
     "tags": [
+      "anthro",
+      "blue",
       "bunny",
-      "planet"
+      "colored",
+      "feral",
+      "galaxy",
+      "human",
+      "mario",
+      "painting",
+      "planet",
+      "space",
+      "sun",
+      "teeth",
+      "white"
     ],
     "imageAlt": "Bunny Planet",
     "palette": []
@@ -1143,8 +1296,15 @@
       "Bear Blob"
     ],
     "tags": [
+      "anthro",
       "bear",
-      "blob"
+      "chubby",
+      "evil",
+      "grayscale",
+      "krita",
+      "sitting",
+      "standing",
+      "tired"
     ],
     "imageAlt": "Bear Blob",
     "palette": []
@@ -1176,8 +1336,15 @@
       "Mune Moon"
     ],
     "tags": [
+      "anthro",
+      "blue",
+      "fawn",
+      "krita",
       "moon",
-      "mune"
+      "mune",
+      "portrait",
+      "sad",
+      "white"
     ],
     "imageAlt": "Mune Moon",
     "palette": []
@@ -1209,8 +1376,16 @@
       "Kageki Plush"
     ],
     "tags": [
+      "colored",
+      "gift",
       "kageki",
-      "plush"
+      "krita",
+      "orange",
+      "plush",
+      "pokemon",
+      "purple",
+      "sableye",
+      "sitting"
     ],
     "imageAlt": "Kageki Plush",
     "palette": []
@@ -1242,9 +1417,20 @@
       "Bunny Surprise Hug"
     ],
     "tags": [
+      "anthro",
+      "blush",
+      "bored",
+      "brown",
       "bunny",
+      "chubby",
+      "dog",
+      "gray",
       "hug",
-      "surprise"
+      "krita",
+      "pink",
+      "smiling",
+      "surprised",
+      "white"
     ],
     "imageAlt": "Bunny Surprise Hug",
     "palette": []
@@ -1276,8 +1462,15 @@
       "Bull Ring"
     ],
     "tags": [
+      "anthro",
       "bull",
-      "ring"
+      "confident",
+      "jewelry",
+      "krita",
+      "lineart",
+      "orange",
+      "ring",
+      "smiling"
     ],
     "imageAlt": "Bull Ring",
     "palette": []
@@ -1309,8 +1502,17 @@
       "Kageki Bunny"
     ],
     "tags": [
+      "anthro",
+      "blush",
       "bunny",
-      "kageki"
+      "gift",
+      "kageki",
+      "krita",
+      "pokemon",
+      "purple",
+      "sableye",
+      "standing",
+      "white"
     ],
     "imageAlt": "Kageki Bunny",
     "palette": []
@@ -1342,8 +1544,14 @@
       "Inkling Happy"
     ],
     "tags": [
+      "aggie",
+      "anthro",
+      "clothes",
       "happy",
-      "inkling"
+      "inkling",
+      "purple",
+      "smiling",
+      "teeth"
     ],
     "imageAlt": "Inkling Happy",
     "palette": []
@@ -1375,8 +1583,14 @@
       "Penguin Meh"
     ],
     "tags": [
-      "meh",
-      "penguin"
+      "aggie",
+      "colored",
+      "feral",
+      "gray",
+      "orange",
+      "penguin",
+      "standing",
+      "tired"
     ],
     "imageAlt": "Penguin Meh",
     "palette": []
@@ -1408,7 +1622,21 @@
       "Kageki Yoshi"
     ],
     "tags": [
+      "clothes",
+      "dinosaur",
+      "gift",
+      "green",
+      "happy",
+      "human",
       "kageki",
+      "krita",
+      "mario",
+      "pokemon",
+      "purple",
+      "sableye",
+      "shocked",
+      "text",
+      "tongue",
       "yoshi"
     ],
     "imageAlt": "Kageki Yoshi",
@@ -1442,8 +1670,13 @@
     ],
     "tags": [
       "annoyed",
+      "anthro",
       "bear",
-      "straight"
+      "brown",
+      "chubby",
+      "colored",
+      "krita",
+      "standing"
     ],
     "imageAlt": "Bear Annoyed Straight",
     "palette": []
@@ -1475,9 +1708,14 @@
       "Bear Annoyed Stupid"
     ],
     "tags": [
-      "annoyed",
+      "anthro",
       "bear",
-      "stupid"
+      "brown",
+      "chubby",
+      "dumb",
+      "krita",
+      "standing",
+      "text"
     ],
     "imageAlt": "Bear Annoyed Stupid",
     "palette": []
@@ -1509,8 +1747,15 @@
       "Bear Ted"
     ],
     "tags": [
+      "anthro",
       "bear",
-      "ted"
+      "human",
+      "krank",
+      "krita",
+      "lineart",
+      "sizeDifference",
+      "ted",
+      "text"
     ],
     "imageAlt": "Bear Ted",
     "palette": []
@@ -1542,9 +1787,16 @@
       "Coyote Slim Downtown"
     ],
     "tags": [
+      "brown",
+      "clothes",
+      "colored",
       "coyote",
-      "downtown",
-      "slim"
+      "gift",
+      "kageki",
+      "krita",
+      "pink",
+      "text",
+      "thighSocks"
     ],
     "imageAlt": "Coyote Slim Downtown",
     "palette": []
@@ -1576,9 +1828,15 @@
       "Dragon Bubble Tea"
     ],
     "tags": [
-      "bubble",
+      "aggie",
+      "anthro",
       "dragon",
-      "tea"
+      "drinking",
+      "golden",
+      "jewelry",
+      "purple",
+      "smiling",
+      "sparkles"
     ],
     "imageAlt": "Dragon Bubble Tea",
     "palette": []
@@ -1610,8 +1868,13 @@
       "Bunny Huh"
     ],
     "tags": [
+      "blue",
       "bunny",
-      "huh"
+      "clothes",
+      "fluffy",
+      "krita",
+      "red",
+      "standing"
     ],
     "imageAlt": "Bunny Huh",
     "palette": []
@@ -1643,6 +1906,9 @@
       "Snape Portrait"
     ],
     "tags": [
+      "anondraw",
+      "human",
+      "lineart",
       "portrait",
       "snape"
     ],
@@ -1676,8 +1942,15 @@
       "Bunny Purple"
     ],
     "tags": [
+      "aggie",
+      "anthro",
+      "blush",
       "bunny",
-      "purple"
+      "fluffy",
+      "purple",
+      "smiling",
+      "sticker",
+      "yellow"
     ],
     "imageAlt": "Bunny Purple",
     "palette": []
@@ -1709,8 +1982,15 @@
       "Dragon Kobold"
     ],
     "tags": [
+      "anthro",
+      "blush",
+      "chubby",
       "dragon",
-      "kobold"
+      "green",
+      "kobold",
+      "krita",
+      "nervous",
+      "yellow"
     ],
     "imageAlt": "Dragon Kobold",
     "palette": []
@@ -1742,8 +2022,15 @@
       "Mune Broccoli"
     ],
     "tags": [
+      "aggie",
       "broccoli",
-      "mune"
+      "collab",
+      "mune",
+      "smiling",
+      "smug",
+      "sohone",
+      "text",
+      "town"
     ],
     "imageAlt": "Mune Broccoli",
     "palette": []
@@ -1775,8 +2062,13 @@
       "Cat Sleep"
     ],
     "tags": [
+      "anthro",
       "cat",
-      "sleep"
+      "krita",
+      "plush",
+      "purple",
+      "standing",
+      "worried"
     ],
     "imageAlt": "Cat Sleep",
     "palette": []
@@ -1808,8 +2100,13 @@
       "Tank Fat"
     ],
     "tags": [
-      "fat",
-      "tank"
+      "anthro",
+      "cat",
+      "gun",
+      "krita",
+      "lineart",
+      "tank",
+      "vehicle"
     ],
     "imageAlt": "Tank Fat",
     "palette": []
@@ -1841,8 +2138,14 @@
       "Cat Fine"
     ],
     "tags": [
+      "anthro",
       "cat",
-      "fine"
+      "krita",
+      "purple",
+      "smiling",
+      "standing",
+      "text",
+      "yellow"
     ],
     "imageAlt": "Cat Fine",
     "palette": []
@@ -1874,8 +2177,14 @@
       "Cat Fine"
     ],
     "tags": [
+      "anthro",
       "cat",
-      "fine"
+      "krita",
+      "purple",
+      "smiling",
+      "standing",
+      "text",
+      "yellow"
     ],
     "imageAlt": "Cat Fine",
     "palette": []
@@ -1907,8 +2216,13 @@
       "Cat Fine"
     ],
     "tags": [
+      "anthro",
       "cat",
-      "fine"
+      "colored",
+      "krita",
+      "purple",
+      "sad",
+      "sitting"
     ],
     "imageAlt": "Cat Fine",
     "palette": []
@@ -1940,7 +2254,16 @@
       "Wolf Pants"
     ],
     "tags": [
-      "pants",
+      "anthro",
+      "clothes",
+      "colored",
+      "krita",
+      "lineart",
+      "orange",
+      "pink",
+      "standing",
+      "teal",
+      "thighSocks",
       "wolf"
     ],
     "imageAlt": "Wolf Pants",
@@ -1973,7 +2296,12 @@
       "Wolf Oof"
     ],
     "tags": [
-      "oof",
+      "anthro",
+      "black",
+      "krita",
+      "red",
+      "teeth",
+      "text",
       "wolf"
     ],
     "imageAlt": "Wolf Oof",
@@ -2006,9 +2334,14 @@
       "Giveaway Dragon Skwimfwos"
     ],
     "tags": [
+      "anthro",
+      "blue",
       "dragon",
-      "giveaway",
-      "skwimfwos"
+      "gift",
+      "krita",
+      "lineart",
+      "sklifos",
+      "smiling"
     ],
     "imageAlt": "Giveaway Dragon Skwimfwos",
     "palette": []
@@ -2040,9 +2373,15 @@
       "Giveaway Raccoon Goonfather"
     ],
     "tags": [
-      "giveaway",
-      "goonfather",
-      "raccoon"
+      "anthro",
+      "brown",
+      "clothes",
+      "gift",
+      "hat",
+      "krita",
+      "raccoon",
+      "smiling",
+      "teeth"
     ],
     "imageAlt": "Giveaway Raccoon Goonfather",
     "palette": []
@@ -2074,10 +2413,15 @@
       "Giveaway Goat Gote Bro"
     ],
     "tags": [
-      "bro",
-      "giveaway",
+      "anthro",
+      "fluffy",
+      "gift",
       "goat",
-      "gote"
+      "goteBro",
+      "horns",
+      "krita",
+      "smiling",
+      "teal"
     ],
     "imageAlt": "Giveaway Goat Gote Bro",
     "palette": []
@@ -2109,8 +2453,15 @@
       "Lizard Dude"
     ],
     "tags": [
-      "dude",
-      "lizard"
+      "anthro",
+      "buff",
+      "clothes",
+      "gray",
+      "green",
+      "krita",
+      "lizard",
+      "smiling",
+      "standing"
     ],
     "imageAlt": "Lizard Dude",
     "palette": []
@@ -2142,8 +2493,15 @@
       "Little Dudes"
     ],
     "tags": [
-      "dudes",
-      "little"
+      "clothes",
+      "colored",
+      "hat",
+      "hug",
+      "human",
+      "krita",
+      "smiling",
+      "standing",
+      "tired"
     ],
     "imageAlt": "Little Dudes",
     "palette": []
@@ -2175,8 +2533,11 @@
       "Metal Test"
     ],
     "tags": [
+      "anondraw",
+      "armor",
+      "green",
       "metal",
-      "test"
+      "painting"
     ],
     "imageAlt": "Metal Test",
     "palette": []
@@ -2208,8 +2569,15 @@
       "Soldier Doodles"
     ],
     "tags": [
-      "doodles",
-      "soldier"
+      "anondraw",
+      "blue",
+      "collab",
+      "lineart",
+      "purple",
+      "soldier",
+      "standing",
+      "tank",
+      "vehicle"
     ],
     "imageAlt": "Soldier Doodles",
     "palette": []
@@ -2241,8 +2609,15 @@
       "Owl Squares"
     ],
     "tags": [
+      "anthro",
+      "colored",
+      "gift",
+      "krita",
       "owl",
-      "squares"
+      "purple",
+      "smiling",
+      "squares",
+      "standing"
     ],
     "imageAlt": "Owl Squares",
     "palette": []
@@ -2274,9 +2649,17 @@
       "Truck Wolf Büssing"
     ],
     "tags": [
-      "büssing",
+      "anondraw",
+      "anthro",
+      "blue",
+      "colored",
+      "krita",
+      "red",
+      "sitting",
       "truck",
-      "wolf"
+      "vehicle",
+      "wolf",
+      "yellow"
     ],
     "imageAlt": "Truck Wolf Büssing",
     "palette": []
@@ -2308,7 +2691,13 @@
       "Tree Pixel"
     ],
     "tags": [
-      "pixel",
+      "anthro",
+      "bear",
+      "brown",
+      "drawpile",
+      "green",
+      "pixelart",
+      "standing",
       "tree"
     ],
     "imageAlt": "Tree Pixel",
@@ -2341,8 +2730,14 @@
       "Giveaway Hyena Ty"
     ],
     "tags": [
-      "giveaway",
+      "anthro",
+      "gift",
       "hyena",
+      "krita",
+      "lineart",
+      "purple",
+      "smiling",
+      "teeth",
       "ty"
     ],
     "imageAlt": "Giveaway Hyena Ty",
@@ -2375,8 +2770,18 @@
       "Redwolf Birthday"
     ],
     "tags": [
+      "anthro",
+      "bear",
       "birthday",
-      "redwolf"
+      "cake",
+      "clothes",
+      "grayscale",
+      "krank",
+      "krita",
+      "redwolf",
+      "smiling",
+      "standing",
+      "wolf"
     ],
     "imageAlt": "Redwolf Birthday",
     "palette": []
@@ -2408,9 +2813,15 @@
       "Giveaway Goat Mangoat"
     ],
     "tags": [
-      "giveaway",
+      "anthro",
+      "gift",
       "goat",
-      "mangoat"
+      "horns",
+      "krita",
+      "lineart",
+      "mangoat",
+      "orange",
+      "smiling"
     ],
     "imageAlt": "Giveaway Goat Mangoat",
     "palette": []
@@ -2442,9 +2853,15 @@
       "Giveaway Goat Nator"
     ],
     "tags": [
-      "giveaway",
+      "anthro",
+      "brown",
+      "gift",
       "goat",
-      "nator"
+      "horns",
+      "krita",
+      "lineart",
+      "nator",
+      "smiling"
     ],
     "imageAlt": "Giveaway Goat Nator",
     "palette": []
@@ -2476,9 +2893,14 @@
       "Giveaway Marten Luke"
     ],
     "tags": [
-      "giveaway",
+      "anthro",
+      "clothes",
+      "gift",
+      "krita",
+      "lineart",
       "luke",
-      "marten"
+      "marten",
+      "smiling"
     ],
     "imageAlt": "Giveaway Marten Luke",
     "palette": []
@@ -2511,7 +2933,14 @@
     ],
     "tags": [
       "ancus",
-      "knee"
+      "anthro",
+      "cat",
+      "clothes",
+      "collab",
+      "gift",
+      "jewelry",
+      "krita",
+      "purple"
     ],
     "imageAlt": "Ancus Knee",
     "palette": []
@@ -2543,8 +2972,11 @@
       "Soyjak Bear"
     ],
     "tags": [
+      "anthro",
       "bear",
-      "soyjak"
+      "krita",
+      "lineart",
+      "meme"
     ],
     "imageAlt": "Soyjak Bear",
     "palette": []
@@ -2576,8 +3008,13 @@
       "Soyjak Duo"
     ],
     "tags": [
-      "duo",
-      "soyjak"
+      "anthro",
+      "bear",
+      "goat",
+      "horns",
+      "krita",
+      "lineart",
+      "meme"
     ],
     "imageAlt": "Soyjak Duo",
     "palette": []
@@ -2609,8 +3046,11 @@
       "Soyjak Goat"
     ],
     "tags": [
+      "anthro",
       "goat",
-      "soyjak"
+      "krita",
+      "lineart",
+      "meme"
     ],
     "imageAlt": "Soyjak Goat",
     "palette": []
@@ -2642,8 +3082,14 @@
       "Bara Red"
     ],
     "tags": [
-      "bara",
-      "red"
+      "anthro",
+      "buff",
+      "fox",
+      "golden",
+      "jewelry",
+      "pixelart",
+      "red",
+      "standing"
     ],
     "imageAlt": "Bara Red",
     "palette": []
@@ -2675,8 +3121,12 @@
       "Bear Grumpy"
     ],
     "tags": [
+      "aggie",
+      "anthro",
       "bear",
-      "grumpy"
+      "grumpy",
+      "krank",
+      "lineart"
     ],
     "imageAlt": "Bear Grumpy",
     "palette": []
@@ -2708,8 +3158,13 @@
       "Bunney Twink"
     ],
     "tags": [
-      "bunney",
-      "twink"
+      "aggie",
+      "anthro",
+      "bunny",
+      "clothes",
+      "content",
+      "red",
+      "smiling"
     ],
     "imageAlt": "Bunney Twink",
     "palette": []
@@ -2741,8 +3196,14 @@
       "Bear Overalls"
     ],
     "tags": [
+      "aggie",
+      "anthro",
       "bear",
-      "overalls"
+      "brown",
+      "clothes",
+      "gray",
+      "overalls",
+      "smiling"
     ],
     "imageAlt": "Bear Overalls",
     "palette": []
@@ -2774,8 +3235,16 @@
       "Pokemon Scribbles"
     ],
     "tags": [
+      "abra",
+      "aggie",
+      "blush",
+      "bunny",
+      "feral",
+      "pink",
+      "pixelart",
       "pokemon",
-      "scribbles"
+      "sitting",
+      "yellow"
     ],
     "imageAlt": "Pokemon Scribbles",
     "palette": []
