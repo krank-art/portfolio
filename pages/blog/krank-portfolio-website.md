@@ -131,6 +131,13 @@ If you want to learn, to actually  install and use this engine,  please check ou
 *  it red mean you could  use any server technology you want to, as long as the resulting HTML is encapsulated in itself and usable.
 *  the way I have written my whip side engine is, then each output file is written by hand.
 *  I do know, id would have been pretty interesting to use a crawl I, probably awesome drawbacks like you have to update result lings and in land links on the pages comer but on the other hand you are much more free in you using dynamic server technology.
+* For me the has always been difficult to keep the balance between technical engineering and artistic expression.
+*  I dearly you can combined both, having website that looks beautiful and also is technologically very sound.
+*  in my day profession, a work as design though and there you usually are incentivizes to make pretty images  and not to vary about the technological deeper layer.
+*  for me the problem is that have always been interested in the artistic and technological side of projects.
+*  usually though,  nobody actually cares about the implementation unless it goes wrong.
+*  that's precisely the reason why it decided to stop trying to program again, because am we to focused on making it technologically nice instead of making a fun game.
+*  for my bachelor thesis I ran into this precise problem.
 
 
 ## Thoughts on php
@@ -149,3 +156,8 @@ If you want to learn, to actually  install and use this engine,  please check ou
 *  best language I've ever worked with was se char become but also done think see sharp is a good id ear to use and web projects.
 *  that's another reason why is useful to use nod js, many of the modules can be written in a way that they're both useful by no chairs and plain old javascript which is run in the braze.
 * 
+
+
+## Naughty art
+
+
