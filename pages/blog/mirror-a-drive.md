@@ -9,8 +9,11 @@ linkTitle: Mirroring a drive
 Is quite easy to mirror a drive or directory recursively **on Windows** using [`robocopy`](https://learn.microsoft.com/en-US/windows-server/administration/windows-commands/robocopy).
 Mirroring means, that missing files in target get copied and redundant files get deleted.
 
-The same principle applies for Unix-like systems with [`rsync`](https://wiki.archlinux.org/title/rsync).
+The same principle applies for Unix-like systems (Linux, MacOS) with [`rsync`](https://wiki.archlinux.org/title/rsync).
 Keep in mind, this is done on a file base level, so it's not the same as mirroring partitions.
+
+
+## Usage
 
 ```bsh
 robocopy l:\ j:\ /mir /xd "$RECYCLE.BIN" /r:5 /w:5 /v /l
