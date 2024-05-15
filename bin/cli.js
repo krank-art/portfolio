@@ -9,6 +9,7 @@ import { Color } from '../lib/terminal.js';
 import { inspectMediaTable } from './inspect-media.js';
 import sortMedia from './sort-media.js';
 import readTags from './read-tags.js';
+import { getTagDefinitionsFromMedia } from '../lib/tag-util.js';
 
 const pathing = Object.freeze({
   dist: path.resolve('dist'),
@@ -53,6 +54,7 @@ export async function handleCommand(command, ...args) {
       });
       break;
     case "build:html":
+      const mediaArtBuildHtml = parseJsonFile(pathing.artData);
       await buildHtml({
         inputDir: pathing.pages,
         outputDir: pathing.dist,
@@ -62,7 +64,8 @@ export async function handleCommand(command, ...args) {
         data: {
           title: 'Handlebars Example',
           name: 'John Doe',
-          mediaArt: parseJsonFile(pathing.artData),
+          mediaArt: mediaArtBuildHtml,
+          tagsArt: getTagDefinitionsFromMedia(mediaArtBuildHtml, 0.8),
           headerLinks: [
             { link: "/", title: "Home" },
             { link: "art", title: "Art" },
