@@ -2,10 +2,19 @@
   <main class="container">
     {{> page-header}}
     <h1 class="sr-only">Art overview</h1>
-    <ul class="media-list">
+    <ul class="tags-filter inline-list" data-tag-list-id="art-list">
+      {{#each tagsArt}}
+      {{#if this.isRelevant}}
+      <li>
+        {{> simple-tag label=this.label aside=this.count tagId=this.id }}
+      </li>
+      {{/if}}
+      {{/each}}
+    </ul>
+    <ul class="media-list" data-tag-list-for="art-list">
       {{#each mediaArt}}
       <li>
-        <div class="media-list-item">
+        <div class="media-list-item" data-tags="{{this.tags}}">
           <a class="media-list-link" href="{{path.relative}}art/{{this.path}}">
             <div class="media-list-item-figure">
               <img class="media-list-item-image" src="media/art/120p/{{this.fileNamePublic}}" alt=""
