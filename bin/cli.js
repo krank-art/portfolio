@@ -65,7 +65,7 @@ export async function handleCommand(command, ...args) {
           title: 'Handlebars Example',
           name: 'John Doe',
           mediaArt: mediaArtBuildHtml,
-          tagsArt: getTagDefinitionsFromMedia(mediaArtBuildHtml, 0.8),
+          tagsArt: getTagDefinitionsFromMedia(mediaArtBuildHtml, 1),
           headerLinks: [
             { link: "/", title: "Home" },
             { link: "art", title: "Art" },
