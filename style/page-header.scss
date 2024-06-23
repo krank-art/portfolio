@@ -1,6 +1,6 @@
 .page-header {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 1em;
+  padding-bottom: 1em;
 }
 
 .page-header-content {
@@ -10,14 +10,14 @@
 }
 
 .page-header-title {
-  font-size: 2rem;
+  font-size: 2em;
   font-weight: bold;
   margin: 0;
   line-height: 1;
 }
 
 .page-header-subtitle {
-  font-size: 2rem;
+  font-size: 2em;
   font-weight: lighter;
   opacity: 0.6;
   margin: 0 0 0 0.25em;
@@ -27,7 +27,7 @@
 .page-header-nav {
   display: flex;
   justify-content: center;
-  margin-top: 0.5rem;
+  margin-top: 0.5em;
 }
 
 .header-nav-list {
@@ -40,13 +40,13 @@
   }
 
   & > *:not(:last-child) {
-    margin-right: 1rem;
+    margin-right: 1em;
   }
 }
 
 @media (min-width: 960px) {
   .page-header-title,
   .page-header-subtitle {
-    font-size: 3rem;
+    font-size: 3em;
   }
 }
