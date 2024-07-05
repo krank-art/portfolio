@@ -288,7 +288,8 @@ $blog-nav-width: 20rem;
   }
 
   .blog-main {
-    padding-left: $blog-nav-width + 5rem;
+    padding-left: calc(#{$blog-nav-width} + 4vw);
+    padding-right: 4vw;
   }
 
   .blog-layout {
