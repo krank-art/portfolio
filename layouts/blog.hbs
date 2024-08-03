@@ -6,15 +6,19 @@
           <div class="blog-header">
             {{> page-header}}
           </div>
+          <!--
           <div class="blog-nav-header">
             <a class="blog-nav-expander" href="#blog-nav"><span class="blog-nav-icon">&#9654;</span>Show blog pages</a>
           </div>
+          -->
           <div class="blog-nav-body">
+            <slot name="aside">Sidebar</slot>
             {{> page-list items=blogPages}}
           </div>
         </div>
       </nav>
       <div class="container-blog blog-text blog-main">
+        <slot name="main">Main</slot>
         {{{content}}}
         {{> page-footer}}
       </div>
