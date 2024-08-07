@@ -17,11 +17,22 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
   const queue = flattenDirTree(dirTree, [
     { id: "config", payload: config },
     { id: "global", payload: data, augmentor: (node, data) => {
+      const previousPage = node.previousSibling;
+      const nextPage = node.nextSibling;
+      // TODO: get page title from dir tree
       return {
         ... data,
         path: {
           relative: "../".repeat(node.depth - 1),
           absolute: node.absolutePath,
+          next: { 
+            path: nextPage ? nextPage.path : null,
+            title: nextPage ? nextPage.title : null,
+          },
+          previous: { 
+            path: previousPage ? previousPage.path : null,
+            title: previousPage ? previousPage.title : null,
+          },
         }
       }
     } },
