@@ -4,29 +4,7 @@ import { ensureDirExists, parseJsonFile, writeObjectToFile } from '../lib/filesy
 import TemplateWriter from '../lib/template-writer.js';
 import FileCache from '../lib/file-cache.js';
 import { DataChunk } from '../lib/data-chunk.js';
-
-function flattenDirNode (node, payloads) {
-  const flattenedEntries = [];
-  const dataChunk = new DataChunk();
-  for (const payload of payloads) {
-    const { id: payloadId, payload: payloadData } = payload;
-    dataChunk.addPayload(payloadId, payloadData);
-  }
-  flattenedEntries.push({ page: node, chunk: dataChunk });
-  for (const child of node.children) {
-    const childEntries = flattenDirNode(child, payloads);
-    if (childEntries.length > 0)
-      flattenedEntries.push(...childEntries);
-  }
-  return flattenedEntries;
-}
-
-function flattenDirTree (tree, payloads) {
-  // In the current definition, a tree can have multiple roots.
-  // So flattenDirNode() returns a list, so we have to reduce the list of lists into a single list.
-  return tree.map(entry => flattenDirNode(entry, payloads))
-    .reduce((acc, entries) => acc.concat(entries), []);
-}
+import { addAbsolutePathsToDirTree, flattenDirTree, loadDirAsTree } from '../lib/dir-tree.js';
 
 export default async function buildHtml({ inputDir, outputDir, data, partialsDir, cacheFile, useCache = false }) {
   const templating = new TemplateWriter({ partialsDir });
@@ -34,8 +12,8 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
   const entryCache = new FileCache();
   if (useCache) entryCache.loadSafely(cacheFile);
   // Step 1 -- Landmarking
-  const dirTreeRaw = TemplateWriter.loadDirAsTree(inputDir, data);
-  const dirTree = TemplateWriter.addAbsolutePathsToDirTree(dirTreeRaw);
+  const dirTreeRaw = loadDirAsTree(inputDir, data);
+  const dirTree = addAbsolutePathsToDirTree(dirTreeRaw);
   const queue = flattenDirTree(dirTree, [
     { id: "config", payload: config },
     { id: "global", payload: data },
