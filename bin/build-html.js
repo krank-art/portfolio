@@ -26,6 +26,20 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
       }
     } },
   ]);
+  // Add current model to data slice
+  const artModelByPath = new Map();
+  data.mediaArt.forEach(entry => artModelByPath.set(entry.path, entry));
+  for (const entry of queue) {
+    const { page, chunk } = entry;
+    const { path: pathName, model: modelName } = page;
+    if (!modelName) continue;
+    if (modelName !== "mediaArt") {
+      console.warn(`The model '${modelName}' is not supported so far. `);
+      continue;
+    }
+    const modelPayload = artModelByPath.get(pathName);
+    chunk.addPayload("model", modelPayload);
+  }
   const templateData = { ...config, ...data };
   templateData.path.tree = dirTree; // Inject page tree into data
   const outputCache = await templating.compileDir({
