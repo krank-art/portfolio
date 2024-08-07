@@ -16,7 +16,15 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
   const dirTree = addAbsolutePathsToDirTree(dirTreeRaw);
   const queue = flattenDirTree(dirTree, [
     { id: "config", payload: config },
-    { id: "global", payload: data },
+    { id: "global", payload: data, augmentor: (node, data) => {
+      return {
+        ... data,
+        path: {
+          relative: "../".repeat(node.depth - 1),
+          absolute: node.absolutePath,
+        }
+      }
+    } },
   ]);
   const templateData = { ...config, ...data };
   templateData.path.tree = dirTree; // Inject page tree into data
