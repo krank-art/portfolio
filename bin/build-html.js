@@ -6,36 +6,33 @@ import FileCache from '../lib/file-cache.js';
 import { DataChunk } from '../lib/data-chunk.js';
 import { addAbsolutePathsToDirTree, flattenDirTree, loadDirAsTree } from '../lib/dir-tree.js';
 
-export default async function buildHtml({ inputDir, outputDir, data, partialsDir, cacheFile, useCache = false }) {
+export default async function buildHtml({ inputDir, outputDir, data, partialsDir, cacheFile = null }) {
   const templating = new TemplateWriter({ partialsDir });
   await templating.load();
-  const entryCache = new FileCache();
-  if (useCache) entryCache.loadSafely(cacheFile);
   // Step 1 -- Landmarking
   const dirTreeRaw = loadDirAsTree(inputDir, data);
   const dirTree = addAbsolutePathsToDirTree(dirTreeRaw);
   const queue = flattenDirTree(dirTree, [
     { id: "config", payload: config },
-    { id: "global", payload: data, augmentor: (node, data) => {
-      const previousPage = node.previousSibling;
-      const nextPage = node.nextSibling;
-      // TODO: get page title from dir tree
-      return {
-        ... data,
-        path: {
-          relative: "../".repeat(node.depth - 1),
-          absolute: node.absolutePath,
-          next: { 
-            path: nextPage ? nextPage.path : null,
-            title: nextPage ? nextPage.title : null,
-          },
-          previous: { 
-            path: previousPage ? previousPage.path : null,
-            title: previousPage ? previousPage.title : null,
-          },
+    {
+      id: "global",
+      payload: data,
+      augmentor: (node, data) => {
+        const previousPage = node.previousSibling ?? { path: null, title: null };
+        const nextPage = node.nextSibling ?? { path: null, title: null };
+        // TODO: get page title from dir tree
+        return {
+          ...data,
+          path: {
+            relative: "../".repeat(node.depth - 1),
+            absolute: node.absolutePath,
+            //tree: dirTree,
+            next: { path: nextPage.path, title: nextPage.title },
+            previous: { path: previousPage.path, title: previousPage.title },
+          }
         }
       }
-    } },
+    },
   ]);
   // Add current model to data slice
   const artModelByPath = new Map();
@@ -51,19 +48,11 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
     const modelPayload = artModelByPath.get(pathName);
     chunk.addPayload("model", modelPayload);
   }
-  const templateData = { ...config, ...data };
-  templateData.path.tree = dirTree; // Inject page tree into data
-  const outputCache = await templating.compileDir({
-    input: inputDir,
+
+  await templating.readAndWriteQueue({ 
+    queue: queue, 
     output: outputDir,
-    buildCache: useCache ? entryCache : null,
-    data: templateData,
+    cachePath: cacheFile,
+    silent: false,
   });
-  if (useCache) {
-    outputCache.flush(cacheFile);
-    const entryCacheString = JSON.stringify(entryCache.flatten());
-    const outputCacheString = JSON.stringify(outputCache.flatten());
-    if (entryCacheString === outputCacheString)
-      console.log("No changes detected in generated HTML. ");
-  }
 }
