@@ -46,8 +46,7 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
       continue;
     }
     const modelPayload = artModelByPath.get(pathName);
-    chunk.addPayload("model", modelPayload);
-    chunk.addShorthand("modelItem", "model");
+    chunk.addPayload("model", {modelItem: modelPayload});
   }
 
   await templating.readAndWriteQueue({ 
