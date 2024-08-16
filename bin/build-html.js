@@ -4,7 +4,7 @@ import { ensureDirExists, parseJsonFile, writeObjectToFile } from '../lib/filesy
 import TemplateWriter from '../lib/template-writer.js';
 import FileCache from '../lib/file-cache.js';
 import { DataChunk } from '../lib/data-chunk.js';
-import { addAbsolutePathsToDirTree, flattenDirTree, loadDirAsTree } from '../lib/dir-tree.js';
+import { addAbsolutePathsToDirTree, flattenDirTreeSafely, loadDirAsTree } from '../lib/dir-tree.js';
 
 export default async function buildHtml({ inputDir, outputDir, data, partialsDir, cacheFile = null }) {
   const templating = new TemplateWriter({ partialsDir });
@@ -12,7 +12,7 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
   // Step 1 -- Landmarking
   const dirTreeRaw = loadDirAsTree(inputDir, data);
   const dirTree = addAbsolutePathsToDirTree(dirTreeRaw);
-  const queue = flattenDirTree(dirTree, [
+  const queue = flattenDirTreeSafely(dirTree, [
     { id: "config", payload: config },
     {
       id: "global",
@@ -26,7 +26,7 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
           path: {
             relative: "../".repeat(node.depth - 1),
             absolute: node.absolutePath,
-            //tree: dirTree,
+            tree: dirTree.map(node => node.duplicateWithoutParent()),
             next: { path: nextPage.path, title: nextPage.title },
             previous: { path: previousPage.path, title: previousPage.title },
           }
