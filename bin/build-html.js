@@ -18,17 +18,17 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
       id: "global",
       payload: data,
       augmentor: (node, data) => {
-        const previousPage = node.previousSibling ?? { path: null, title: null };
-        const nextPage = node.nextSibling ?? { path: null, title: null };
         // TODO: get page title from dir tree
+        const nextPage = node.nextSibling;
+        const previousPage = node.previousSibling;
         return {
-          ...data,
+          ...data, 
           path: {
             relative: "../".repeat(node.depth - 1),
             absolute: node.absolutePath,
             tree: dirTree.map(node => node.duplicateWithoutParent()),
-            next: { path: nextPage.path, title: nextPage.title },
-            previous: { path: previousPage.path, title: previousPage.title },
+            next: nextPage ? { path: nextPage.path, title: nextPage.title } : null,
+            previous: previousPage ? { path: previousPage.path, title: previousPage.title } : null,
           }
         }
       }
