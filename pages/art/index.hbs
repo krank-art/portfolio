@@ -16,30 +16,30 @@
           </button>
         </div>
         <div class="gallery-mainbar-nav">
-          {{#if modelItem.meta.previous}}
-          <a class="gallery-mainbar-nav-button gallery-mainbar-previous" href="./{{ modelItem.meta.previous.path }}">
+          {{#if path.previous}}
+          <a class="gallery-mainbar-nav-button gallery-mainbar-previous" href="./{{ path.previous.path }}">
             <span class="gallery-mainbar-nav-icon" aria-hidden="true">&larr;</span>
             <span class="sr-only">Previous Drawing</span>
-            <span class="gallery-mainbar-nav-label">{{ modelItem.meta.previous.title }}</span>
+            <span class="gallery-mainbar-nav-label">{{ path.previous.title }}</span>
           </a>
           {{/if}}
-          {{#if modelItem.meta.next}}
-          <a class="gallery-mainbar-nav-button gallery-mainbar-next" href="./{{ modelItem.meta.next.path }}">
+          {{#if path.next}}
+          <a class="gallery-mainbar-nav-button gallery-mainbar-next" href="./{{ path.next.path }}">
             <span class="sr-only">Next Drawing</span>
-            <span class="gallery-mainbar-nav-label">{{ modelItem.meta.next.title }}</span>
+            <span class="gallery-mainbar-nav-label">{{ path.next.title }}</span>
             <span class="gallery-mainbar-nav-icon" aria-hidden="true">&rarr;</span>
           </a>
           {{/if}}
         </div>
       </div>
       <div class="gallery-viewbox">
-        {{#if modelItem.meta.previous}}
-        <a id="gallery-previous" class="gallery-previous" href="./{{ modelItem.meta.previous.path }}">&larr;</a>
+        {{#if path.previous}}
+        <a id="gallery-previous" class="gallery-previous" href="./{{ path.previous.path }}">&larr;</a>
         {{/if}}
         <img class="gallery-image" src="../media/art/{{modelItem.fileNamePublic}}" srcset="{{join sourceSet ', '}}"
           sizes="100vw" alt="{{modelItem.title}}">
-        {{#if modelItem.meta.next}}
-        <a id="gallery-next" class="gallery-next" href="./{{ modelItem.meta.next.path }}">&rarr;</a>
+        {{#if path.next}}
+        <a id="gallery-next" class="gallery-next" href="./{{ path.next.path }}">&rarr;</a>
         {{/if}}
       </div>
     </main>
