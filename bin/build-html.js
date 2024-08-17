@@ -1,20 +1,6 @@
-import fs from 'fs';
 import config from '../config/config.dev.js';
-import { ensureDirExists, parseJsonFile, writeObjectToFile } from '../lib/filesystem.js';
 import TemplateWriter from '../lib/template-writer.js';
-import FileCache from '../lib/file-cache.js';
-import { DataChunk } from '../lib/data-chunk.js';
-import { addAbsolutePathsToDirTree, flattenDirTreeSafely, loadDirAsTree } from '../lib/dir-tree.js';
-
-async function addTitleToTreeNode(templating, node, dataChunk) {
-  const { type: nodeType, source, children } = node;
-  if (nodeType !== "page")
-    return;
-  const module = await templating.executeFile(source, dataChunk);
-  node.title = module.title ?? null;
-  for (const child of children)
-    await addTitleToTreeNode(templating, child, dataChunk);
-}
+import { addAbsolutePathsToDirTree, flattenDirTree, loadDirAsTree } from '../lib/dir-tree.js';
 
 export default async function buildHtml({ inputDir, outputDir, data, partialsDir, cacheFile = null }) {
   const templating = new TemplateWriter({ partialsDir });
@@ -22,7 +8,7 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
   // Step 1 -- Landmarking
   const dirTreeRaw = loadDirAsTree(inputDir, data);
   const dirTree = addAbsolutePathsToDirTree(dirTreeRaw);
-  const queue = flattenDirTreeSafely(dirTree);
+  const queue = flattenDirTree(dirTree);
   // Add current model to data slice
   const artModelByPath = new Map();
   data.mediaArt.forEach(entry => artModelByPath.set(entry.path, entry));
