@@ -1,0 +1,27 @@
+<template>
+  <template for="aside">
+    {{> page-list items=blogPages}}
+  </template>
+  <template for="main2">
+    {{{content}}}
+  </template>
+</template>
+
+<style>
+</style>
+
+<script>
+  const treeNode = path.tree.find(page => page.path === "blog");
+  const blogPages = treeNode?.children ?? [];
+  const traversePage = (page) => {
+    page.active = page.absolutePath === path.absolute;
+    for (const child of page.children)
+      traversePage(child);
+  }
+  for (const page of blogPages)
+    traversePage(page);
+  export default {
+    layout: "blog",
+    blogPages: blogPages,
+  }
+</script>
