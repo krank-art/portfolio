@@ -1,0 +1,30 @@
+<template>
+  <main class="container-blog">
+    <div class="blog-layout">
+      <nav id="blog-nav" class="blog-nav">
+        <div class="blog-nav-content">
+          <div class="blog-header">
+            {{> page-header}}
+          </div>
+          <div class="blog-nav-body">
+            <slot name="aside">Sidebar</slot>
+          </div>
+        </div>
+      </nav>
+      <div class="container-blog blog-text blog-main">
+        <slot name="main">Main</slot>
+        {{{content}}}
+        {{> page-footer}}
+      </div>
+    </div>
+  </main>
+</template>
+
+<style>
+</style>
+
+<script>
+  export default {
+    layout: "default",
+  }
+</script>

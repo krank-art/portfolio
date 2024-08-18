@@ -1,29 +1,10 @@
 <template>
-  <main class="container-blog">
-    <div class="blog-layout">
-      <nav id="blog-nav" class="blog-nav">
-        <div class="blog-nav-content">
-          <div class="blog-header">
-            {{> page-header}}
-          </div>
-          <!--
-          <div class="blog-nav-header">
-            <a class="blog-nav-expander" href="#blog-nav"><span class="blog-nav-icon">&#9654;</span>Show blog pages</a>
-          </div>
-          -->
-          <div class="blog-nav-body">
-            <slot name="aside">Sidebar</slot>
-            <!--{{> page-list items=blogPages}}-->
-          </div>
-        </div>
-      </nav>
-      <div class="container-blog blog-text blog-main">
-        <slot name="main">Main</slot>
-        {{{content}}}
-        {{> page-footer}}
-      </div>
-    </div>
-  </main>
+  <template for="aside">
+    {{> page-list items=blogPages}}
+  </template>
+  <template for="main">
+    {{{content}}}
+  </template>
 </template>
 
 <style>
@@ -40,7 +21,7 @@
   for (const page of blogPages)
     traversePage(page);
   export default {
-    layout: "default",
+    layout: "aside",
     blogPages: blogPages,
   }
 </script>
