@@ -54,12 +54,14 @@ export async function handleCommand(command, ...args) {
       });
       break;
     case "build:html":
+      const skippedHtmlFiles = args[0] ? args[0].split(",") : [];
       const mediaArtBuildHtml = parseJsonFile(pathing.artData);
       await buildHtml({
         inputDir: pathing.pages,
         outputDir: pathing.dist,
         partialsDir: pathing.components,
         cacheFile: pathing.pagesCache,
+        ignoredFiles: skippedHtmlFiles,
         data: {
           title: 'Handlebars Example',
           name: 'John Doe',

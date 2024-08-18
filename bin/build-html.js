@@ -1,12 +1,17 @@
+import path from 'path';
 import config from '../config/config.dev.js';
 import TemplateWriter from '../lib/template-writer.js';
 import { addAbsolutePathsToDirTree, flattenDirTree, loadDirAsTree } from '../lib/dir-tree.js';
 
-export default async function buildHtml({ inputDir, outputDir, data, partialsDir, cacheFile = null }) {
+export default async function buildHtml({ inputDir, outputDir, data, partialsDir, cacheFile = null, ignoredFiles = [] }) {
   const templating = new TemplateWriter({ partialsDir });
   await templating.load();
   // Step 1 -- Landmarking
-  const dirTreeRaw = loadDirAsTree(inputDir, data);
+  const dirTreeRaw = loadDirAsTree({
+    input: inputDir, 
+    models: data,
+    ignoredFiles: ignoredFiles.map(filePath => path.join(inputDir, filePath)),
+  });
   const dirTree = addAbsolutePathsToDirTree(dirTreeRaw);
   const queue = flattenDirTree(dirTree);
   // Add current model to data slice
