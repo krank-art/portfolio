@@ -1,6 +1,7 @@
 <template>
   <template for="aside">
-    {{> multi-button label="Test" listId="art-view" buttons=listViewButtons }}
+    {{> multi-button label="Test" listId="art-view" buttons=listViewButtons
+    attributes="data-switcher-for='art-list'" }}
     {{> multi-button label="Test" listId="art-sort" buttons=listSortButtons }}
     <ul class="tags-filter inline-list" data-tag-list-id="art-list">
       {{#each tagsArt}}
@@ -14,7 +15,7 @@
   </template>
   <template for="main">
     <h1 class="sr-only">Art overview</h1>
-    <ul class="media-list" data-tag-list-for="art-list">
+    <ul class="media-list" data-tag-list-for="art-list" data-switcher-id="art-list">
       {{#each mediaArt}}
       <li>
         <div class="media-list-item" data-tags="{{this.tags}}" data-date="{{fallback this.date 'unknown'}}">
@@ -55,9 +56,9 @@
     title: "Art Overview",
     pageTitle: "Art Overview \u2013 Krank",
     listViewButtons: [
-      { id: "thumbnails", label: "Thumbnails", active: true },
-      { id: "details", label: "Details" },
-      { id: "list", label: "List" },
+      { id: "thumbnails", label: "Thumbnails", attributes: "data-switcher-view='show-as-thumbnails'", active: true },
+      { id: "details", label: "Details", attributes: "data-switcher-view='show-as-details'" },
+      { id: "list", label: "List", attributes: "data-switcher-view='show-as-list'" },
     ],
     listSortButtons: [
       { id: "descending", label: "&darr; Descending", attributes: "data-tag-sorter='descending'", active: true },
