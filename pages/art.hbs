@@ -17,7 +17,7 @@
     <ul class="media-list" data-tag-list-for="art-list">
       {{#each mediaArt}}
       <li>
-        <div class="media-list-item" data-tags="{{this.tags}}">
+        <div class="media-list-item" data-tags="{{this.tags}}" data-date="{{fallback this.date 'unknown'}}">
           <a class="media-list-link" href="{{path.relative}}art/{{this.path}}">
             <div class="media-list-item-figure">
               <img class="media-list-item-image" src="media/art/120p/{{this.fileNamePublic}}" alt=""
@@ -60,8 +60,8 @@
       { id: "list", label: "List" },
     ],
     listSortButtons: [
-      { id: "descending", label: "&darr; Descending", active: true },
-      { id: "ascending", label: "&uarr; Ascending" },
+      { id: "descending", label: "&darr; Descending", attributes: "data-tag-sorter='descending'", active: true },
+      { id: "ascending", label: "&uarr; Ascending", attributes: "data-tag-sorter='ascending'" },
     ],
     metaImage: siteThumbnail,
     metaTitle: "Art \u2013 Krank Art",
