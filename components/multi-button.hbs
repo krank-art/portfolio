@@ -1,0 +1,22 @@
+<template>
+  <div class="multi-button">
+    <fieldset class="multi-button-frame">
+      <legend class="multi-button-label">{{label}}</legend>
+      <div class="multi-button-group">
+        {{#each buttons}}
+        <div class="multi-button-item">
+          <input class="multi-button-radio" type="radio" name="{{../listId}}" id="{{../listId}}-{{this.id}}" {{#if
+            this.active}}checked{{/if}}>
+          <label class="multi-button-text" for="{{../listId}}-{{this.id}}">{{{this.label}}}</label>
+        </div>
+        {{/each}}
+      </div>
+    </fieldset>
+  </div>
+</template>
+
+<style>
+</style>
+
+<script>
+</script>

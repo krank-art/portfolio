@@ -1,5 +1,7 @@
 <template>
   <template for="aside">
+    {{> multi-button label="Test" listId="art-view" buttons=listViewButtons }}
+    {{> multi-button label="Test" listId="art-sort" buttons=listSortButtons }}
     <ul class="tags-filter inline-list" data-tag-list-id="art-list">
       {{#each tagsArt}}
       {{#if this.isRelevant}}
@@ -52,6 +54,15 @@
     layout: "aside",
     title: "Art Overview",
     pageTitle: "Art Overview \u2013 Krank",
+    listViewButtons: [
+      { id: "thumbnails", label: "Thumbnails", active: true },
+      { id: "details", label: "Details" },
+      { id: "list", label: "List" },
+    ],
+    listSortButtons: [
+      { id: "descending", label: "&darr; Descending", active: true },
+      { id: "ascending", label: "&uarr; Ascending" },
+    ],
     metaImage: siteThumbnail,
     metaTitle: "Art \u2013 Krank Art",
     metaSubtitle: "Overview for all art pieces. ",

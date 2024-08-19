@@ -1,0 +1,53 @@
+@use "./variables.scss" as *;
+
+.multi-button {
+  margin-bottom: 1em;
+}
+
+.multi-button-frame {
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.multi-button-label {
+  height: 0;
+  visibility: hidden;
+}
+
+.multi-button-radio {
+  margin: 0;
+}
+
+.multi-button-text {
+  margin-left: 0.4em;
+}
+
+.multi-button-group {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.multi-button-item {
+  flex: 1 1 0%;
+  display: inline-flex;
+  justify-content: center;
+  padding: 0.5em 0.75em;
+  border: 0.1em solid #aaaaaa;
+
+  &:first-child {
+    border-radius: 0.5em 0 0 0.5em;
+  }
+
+  &:last-child {
+    border-radius: 0 0.5em 0.5em 0;
+  }
+
+  &:not(:last-child) {
+    border-right: none;
+  }
+
+  &.active {
+    background-color: $accent-dark;
+  }
+}
