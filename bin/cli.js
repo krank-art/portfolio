@@ -91,7 +91,7 @@ export async function handleCommand(command, ...args) {
       break;
     case "watch":
       await handleCommand("watch:assets");
-      await handleCommand("watch:html");
+      await handleCommand("watch:html", ...args);
       await handleCommand("watch:art");
       break;
     case "watch:art":
@@ -122,7 +122,7 @@ export async function handleCommand(command, ...args) {
         onChange: async (eventType, fileName) => {
           console.log(Color.Orange + `'${eventType}' on file '${fileName}'. Rebuilding HTML. `
             + Color.Gray + `(${new Date()})` + Color.Reset);
-          await handleCommand("build:html");
+          await handleCommand("build:html", ...args);
         },
       });
       break;
