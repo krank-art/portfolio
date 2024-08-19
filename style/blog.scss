@@ -1,4 +1,4 @@
-$blog-nav-width: 20rem;
+$blog-nav-width: 30rem;
 
 .blog-text {
   line-height: 1.5;
@@ -168,7 +168,7 @@ $blog-nav-width: 20rem;
 
   ul,
   ol {
-    padding-left: 1rem;
+    //padding-left: 1rem;
   }
 
   li:not(:last-child) {
@@ -247,6 +247,11 @@ $blog-nav-width: 20rem;
   font-size: 0.75rem;
   margin-bottom: 1rem;
   border-bottom: solid 0.1rem #555;
+}
+
+.blog-content {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 @media (min-width: 960px) {

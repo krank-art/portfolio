@@ -1,7 +1,5 @@
 <template>
-  <main class="container">
-    {{> page-header}}
-    <h1 class="sr-only">Art overview</h1>
+  <template for="aside">
     <ul class="tags-filter inline-list" data-tag-list-id="art-list">
       {{#each tagsArt}}
       {{#if this.isRelevant}}
@@ -11,6 +9,9 @@
       {{/if}}
       {{/each}}
     </ul>
+  </template>
+  <template for="main">
+    <h1 class="sr-only">Art overview</h1>
     <ul class="media-list" data-tag-list-for="art-list">
       {{#each mediaArt}}
       <li>
@@ -40,8 +41,7 @@
       </li>
       {{/each}}
     </ul>
-    {{> page-footer}}
-  </main>
+  </template>
 </template>
 
 <style>
@@ -49,7 +49,7 @@
 
 <script>
   export default {
-    layout: "default",
+    layout: "aside",
     title: "Art Overview",
     pageTitle: "Art Overview \u2013 Krank",
     metaImage: siteThumbnail,
