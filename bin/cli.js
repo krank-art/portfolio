@@ -75,6 +75,7 @@ export async function handleCommand(command, ...args) {
             { link: "about", title: "About" },
           ],
           resizeSet: resizeSet,
+          currentYear: new Date().getFullYear(),
         },
       });
       break;
