@@ -31,6 +31,16 @@
       padding: 0;
     }
 
+    .media-list-item-image {
+      display: none;
+    }
+
+    .media-list-item-image-big {
+      // The cropped images are about 40% larger, so we only use 'em when necessary.
+      // Amounts to about 11 MB of total page load on the art page, compared to 7 MB if small.
+      display: unset;
+    }
+
     .media-list-item-figure {
       width: 100%;
       height: 100%;
@@ -58,12 +68,6 @@
 .media-list-item {
   margin-bottom: 0.5rem;
 }
-
-.show-as-thumbnails {}
-
-.show-as-details {}
-
-.show-as-list {}
 
 .media-list-link {
   display: flex;
@@ -97,11 +101,16 @@
   flex: 0 0 6rem;
 }
 
-.media-list-item-image {
+.media-list-item-image,
+.media-list-item-image-big {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 0.25rem
+}
+
+.media-list-item-image-big {
+  display: none;
 }
 
 .media-list-item-title {

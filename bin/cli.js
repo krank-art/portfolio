@@ -27,6 +27,7 @@ const pathing = Object.freeze({
 });
 
 const resizeSet = [
+  { name: "s160p", size: 160, method: "squared" }, // The "s" stands for "square"
   { name: "120p", size: 120 },
   { name: "240p", size: 240 },
   { name: "480p", size: 480 },

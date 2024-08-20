@@ -16,6 +16,7 @@ async function resizeImage(imagePath, outputPath, sizeInPixel) {
     .resize({
       width: resizedWidth,
       height: resizedHeight,
+      fit: "inside",
       background: { r: 0, g: 0, b: 0, alpha: 0 },
     })
     .toFile(outputPath, (err, info) => {
@@ -25,6 +26,19 @@ async function resizeImage(imagePath, outputPath, sizeInPixel) {
         //console.log('Thumbnail created successfully.');
         //console.log('Thumbnail dimensions:', info.width, 'x', info.height);
       }
+    });
+}
+
+async function cropAndSquareImage(imagePath, outputPath, sizeInPixel) {
+  sharp(imagePath)
+    .resize({
+      width: sizeInPixel,
+      height: sizeInPixel,
+      fit: "cover",
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
+    .toFile(outputPath, (err, info) => {
+      if (err) console.error('Error creating thumbnail:', err);
     });
 }
 
@@ -63,14 +77,17 @@ async function processMediaList({ inputDir, outputDir, media, resizeSet = [] }) 
         );
         fs.copyFileSync(sourcePath, targetPath);
         for (const resizeEntry of resizeSet) {
-          const { name, size } = resizeEntry;
+          const { name, size, method } = resizeEntry;
           const outputBase = path.dirname(targetPath);
           const baseName = path.basename(targetPath);
           const resizedPath = path.join(outputBase, name, baseName);
           ensureDirExists(resizedPath);
           if (![".png", ".jpg", ".jpeg"].includes(path.extname(sourcePath)))
             continue;
-          await resizeImage(sourcePath, resizedPath, size);
+          if (method === "squared")
+            await cropAndSquareImage(sourcePath, resizedPath, size);
+          else
+            await resizeImage(sourcePath, resizedPath, size);
         }
       },
     });
