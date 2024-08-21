@@ -1,6 +1,13 @@
 <template>
   <main class="container-blog">
     <div class="blog-layout">
+      <div class="blog-mobile-menu">
+      <a href="/" class="blog-mobile-menu-title">
+        <span class="blog-mobile-menu-title-main">Krank</span>
+        <span class="blog-mobile-menu-title-extra">furry&hairsp;art</span>
+      </a>
+        <a href="#blog-nav" class="blog-mobile-menu-link">Open menu</a>
+      </div>
       <nav id="blog-nav" class="blog-nav">
         <div class="blog-nav-content">
           <div class="blog-header">
@@ -10,6 +17,7 @@
             <slot name="aside">Sidebar</slot>
           </div>
         </div>
+        <a class="blog-nav-backdrop" href="#" title="Close menu"></a>
       </nav>
       <div class="container-blog blog-main">
         <slot name="main">Main</slot>

@@ -1,4 +1,5 @@
 $blog-nav-width: 30rem;
+$mobile-menu-height: 3.5rem;
 
 .blog-text {
   line-height: 1.5;
@@ -151,12 +152,18 @@ $blog-nav-width: 30rem;
 }
 
 .blog-nav {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 1rem;
   height: 100vh;
+  position: fixed;
+  width: 80vw;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  display: none;
 
   &:target,
   &.expanded {
+    display: unset;
+
     .blog-nav-body {
       height: auto;
     }
@@ -213,8 +220,8 @@ $blog-nav-width: 30rem;
 }
 
 .blog-nav-body {
-  height: 12vh;
-  padding: 1rem 2rem;
+  padding: 1rem;
+  font-size: 0.9rem;
   transition: height 0.1s ease-in;
   overflow-y: auto;
   box-sizing: border-box;
@@ -249,19 +256,86 @@ $blog-nav-width: 30rem;
   border-bottom: solid 0.1rem #555;
 }
 
+.blog-mobile-menu {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #222;
+  border-bottom: 0.1rem solid #666;
+  height: $mobile-menu-height;
+  padding: 0.5rem 0.75rem;
+  box-sizing: border-box;
+
+  &>*:not(:last-child) {
+    margin-right: 0.5rem;
+    ;
+  }
+}
+
+.blog-mobile-menu-title {
+  font-size: 1.5rem;
+  line-height: 1;
+  white-space: nowrap;
+  color: unset;
+  text-decoration: none;
+
+  &:visited {
+    color: unset;
+  }
+}
+
+.blog-mobile-menu-title-main {
+  font-weight: bold;
+}
+
+.blog-mobile-menu-title-extra {
+  font-weight: lighter;
+  opacity: 0.6;
+}
+
+.blog-mobile-menu-link {
+  margin-left: auto;
+}
+
 .blog-content {
   margin-top: 2rem;
   margin-bottom: 2rem;
 }
 
+.blog-nav-content {
+  background-color: #222;
+  position: relative;
+  z-index: 100;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.blog-nav-backdrop {
+  display: block;
+  position: fixed;
+  z-index: 99;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(7, 86, 171, 0.5);
+}
+
+.blog-main {
+  padding-top: $mobile-menu-height + 0.75rem;
+}
+
 @media (min-width: 960px) {
   .blog-nav {
+    display: block;
     position: fixed;
     top: 0;
     bottom: 0;
     width: $blog-nav-width;
     box-sizing: border-box;
-    border-radius: unset;
 
     &::before {
       position: absolute;
@@ -280,7 +354,6 @@ $blog-nav-width: 30rem;
     height: 100vh;
     padding: 0 1rem 1rem 1rem;
     box-sizing: border-box;
-    overflow-y: auto;
   }
 
   .blog-nav-header {
@@ -289,10 +362,13 @@ $blog-nav-width: 30rem;
 
 
   .blog-nav-body {
+    font-size: unset;
+    padding: 1rem 2rem;
     height: auto;
   }
 
   .blog-main {
+    padding-top: unset;
     padding-left: calc(#{$blog-nav-width} + 4vw);
     padding-right: 4vw;
   }
@@ -300,5 +376,13 @@ $blog-nav-width: 30rem;
   .blog-layout {
     display: flex;
     flex-flow: row nowrap;
+  }
+
+  .blog-nav-backdrop {
+    display: none;
+  }
+  
+  .blog-mobile-menu {
+    display: none;
   }
 }
