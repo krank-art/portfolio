@@ -154,6 +154,7 @@ $mobile-menu-height: 3.5rem;
 .blog-nav {
   height: 100vh;
   position: fixed;
+  z-index: 100;
   width: 80vw;
   top: 0;
   left: 0;
@@ -325,10 +326,10 @@ $mobile-menu-height: 3.5rem;
 }
 
 .blog-main {
-  padding-top: $mobile-menu-height + 0.75rem;
+  padding: ($mobile-menu-height + 0.75rem) 4vw;
 }
 
-@media (min-width: 960px) {
+@media (min-width: 1200px) {
   .blog-nav {
     display: block;
     position: fixed;
