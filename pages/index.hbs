@@ -45,17 +45,26 @@
   <main id="main">
     <div class="art-row row-small">
       {{#each artRow1}}
-      <img class="art" src="media/art/240p/{{this.file}}" alt="{{this.title}}">
+      <a href="art/{{this.path}}" title="{{this.title}}">
+        <img class="art" src="media/art/240p/{{this.fileNamePublic}}" alt="{{this.title}}"
+          style="background-color: {{ this.vibrantColors.darkMuted }}">
+      </a>
       {{/each}}
     </div>
     <div class="art-row row-big">
       {{#each artRow2}}
-      <img class="art" src="media/art/480p/{{this.file}}" alt="{{this.title}}">
+      <a href="art/{{this.path}}" title="{{this.title}}">
+        <img class="art" src="media/art/480p/{{this.fileNamePublic}}" alt="{{this.title}}"
+          style="background-color: {{ this.vibrantColors.darkMuted }}">
+      </a>
       {{/each}}
     </div>
     <div class="art-row row-small">
       {{#each artRow3}}
-      <img class="art" src="media/art/240p/{{this.file}}" alt="{{this.title}}">
+      <a href="art/{{this.path}}" title="{{this.title}}">
+        <img class="art" src="media/art/240p/{{this.fileNamePublic}}" alt="{{this.title}}"
+          style="background-color: {{ this.vibrantColors.darkMuted }}">
+      </a>
       {{/each}}
     </div>
   </main>
@@ -93,33 +102,33 @@
     metaAlt: siteThumbnailAlt,
     metaColor: siteColor,
     artRow1: [
-      { url: "", file: "alpaca-cute-pink_2020-10-18.png", title: "" },
-      { url: "", file: "ancus-portrait_2023-03-27.png", title: "" },
-      { url: "", file: "bunny-huh_2023-10-05.png", title: "" },
-      { url: "", file: "deer-town_2023-08-12.png", title: "" },
-      { url: "", file: "deer-with-antlers_2020-10-02.png", title: "" },
-      { url: "", file: "dino-with-hat_2023-02-08.png", title: "" },
-      { url: "", file: "dragon-blond_2021-09-22.png", title: "" },
-      { url: "", file: "fur-craft-scene-lousy-factory_2023-04-16.jpg", title: "" },
-    ],
+      "alpaca-cute-pink",
+      "ancus-portrait",
+      "bunny-huh",
+      "deer-town",
+      "deer-with-antlers",
+      "dino-with-hat",
+      "dragon-blond",
+      "fur-craft-scene-lousy-factory",
+    ].map(path => mediaArtByPath[path]),
     artRow2: [
-      { url: "", file: "dragon-bubble-tea_2023-10-06.png", title: "" },
-      { url: "", file: "dragon-hug_2023-04-26.png", title: "" },
-      { url: "", file: "dragon-orange_2021-10-30.png", title: "" },
-      { url: "", file: "dragon-red_2021-02-04.png", title: "" },
-      { url: "", file: "dragon-smudge_2023-01-24.png", title: "" },
-      { url: "", file: "fur-craft-lizard-bomber_2022-03-19.png", title: "" },
-    ],
+      "dragon-bubble-tea",
+      "dragon-hug",
+      "dragon-orange",
+      "dragon-red",
+      "dragon-smudge",
+      "fur-craft-lizard-bomber",
+    ].map(path => mediaArtByPath[path]),
     artRow3: [
-      { url: "", file: "giveaway-dragon-skwimfwos_2023-09-15.png", title: "" },
-      { url: "", file: "giveaway-hyena-ty_2023-09-01.png", title: "" },
-      { url: "", file: "mune-munch_2023-12-21.png", title: "" },
-      { url: "", file: "mune-sitting_2023-04-20.png", title: "" },
-      { url: "", file: "portraits-green-dragon_2022-10-27.png", title: "" },
-      { url: "", file: "rivet_2022-07-17.png", title: "" },
-      { url: "", file: "sheep-holy_2023-12-11.png", title: "" },
-      { url: "", file: "snow-canyon-utah_2019-10-13.png", title: "" },
-      { url: "", file: "soda-shaq-mischievous_2019-11-25.png", title: "" },
-    ],
+      "giveaway-dragon-skwimfwos",
+      "giveaway-hyena-ty",
+      "mune-munch",
+      "mune-sitting",
+      "portraits-green-dragon",
+      "rivet",
+      "sheep-holy",
+      "snow-canyon-utah",
+      "soda-shaq-mischievous",
+    ].map(path => mediaArtByPath[path]),
   };
 </script>

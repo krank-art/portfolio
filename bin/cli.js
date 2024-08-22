@@ -57,6 +57,8 @@ export async function handleCommand(command, ...args) {
     case "build:html":
       const skippedHtmlFiles = args[0] ? args[0].split(",") : [];
       const mediaArtBuildHtml = parseJsonFile(pathing.artData);
+      const mediaArtByPath = {};
+      mediaArtBuildHtml.forEach(entry => mediaArtByPath[entry.path] = entry);
       await buildHtml({
         inputDir: pathing.pages,
         outputDir: pathing.dist,
@@ -67,6 +69,7 @@ export async function handleCommand(command, ...args) {
           title: 'Handlebars Example',
           name: 'John Doe',
           mediaArt: mediaArtBuildHtml,
+          mediaArtByPath,
           tagsArt: getTagDefinitionsFromMedia(mediaArtBuildHtml, 1),
           headerLinks: [
             { link: "/", title: "Home" },
