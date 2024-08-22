@@ -1,0 +1,143 @@
+html {
+  font-family: "Segoe UI", Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#header {
+  position: absolute;
+  z-index: 1;
+  background-color: #333;
+  transform: rotate(10deg);
+  box-shadow: 1rem 1rem 4rem rgba(0, 0, 0, 0.25);
+  width: 18rem;
+}
+
+.header-content {
+  transform: rotate(-10deg);
+  padding: 3em;
+}
+
+.text-row {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center
+}
+
+.blank-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.bold-font {
+  font-weight: bold;
+}
+
+.light-font {
+  font-weight: lighter;
+}
+
+.big-font {
+  font-size: 1.4rem;
+}
+
+.icon-list {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  margin: 0.5rem 0;
+  padding: 0;
+
+  &> :not(:first-child) {
+    margin-left: 0.75rem;
+  }
+}
+
+.icon {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888888;
+
+  svg {
+    fill: currentColor;
+  }
+}
+
+.icon-box {
+  margin-top: 1rem;
+  border-top: 0.1rem solid rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
+}
+
+#main {
+  padding: 1vh 0;
+  overflow-x: hidden;
+}
+
+.art-row {
+  display: flex;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  animation-duration: 20s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  /*background-color: aqua;
+    width: 20vw;*/
+  margin-left: auto;
+  margin-right: auto;
+
+  .row-small {
+    height: 24vh;
+    /* margin-left: -50vw; */
+    /* animation-name: moveRight; */
+  }
+
+  .row-big {
+    height: 44vh;
+    /* animation-name: moveLeft; */
+  }
+}
+
+.art2 {
+  height: 100%;
+  width: auto;
+}
+
+.art {
+  margin: 0 0.5rem;
+  border-radius: 1vh;
+}
+
+@keyframes moveRight {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(100vw);
+  }
+}
+
+@keyframes moveLeft {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100vw);
+  }
+}
