@@ -1,0 +1,53 @@
+.item-carousel {
+  display: flex;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  animation-duration: 20s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  /*background-color: aqua;
+    width: 20vw;*/
+  margin-left: auto;
+  margin-right: auto;
+
+  .row-small {
+    height: 24vh;
+    /* margin-left: -50vw; */
+    /* animation-name: moveRight; */
+  }
+
+  .row-big {
+    height: 44vh;
+    /* animation-name: moveLeft; */
+  }
+}
+
+.item-carousel-art {
+  margin: 0 0.5rem;
+  border-radius: 1vh;
+}
+
+.art2 {
+  height: 100%;
+  width: auto;
+}
+
+@keyframes moveRight {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(100vw);
+  }
+}
+
+@keyframes moveLeft {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100vw);
+  }
+}

@@ -13,3 +13,32 @@
     -webkit-box-orient: vertical;
   }
 }
+
+.text-row {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center
+}
+
+.blank-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.bold-font {
+  font-weight: bold;
+}
+
+.light-font {
+  font-weight: lighter;
+}
+
+.big-font {
+  font-size: 1.4rem;
+}

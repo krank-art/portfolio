@@ -1,0 +1,30 @@
+.icon-list {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  margin: 0.5rem 0;
+  padding: 0;
+
+  &> :not(:first-child) {
+    margin-left: 0.75rem;
+  }
+}
+
+.icon {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888888;
+
+  svg {
+    fill: currentColor;
+  }
+}
+
+.icon-box {
+  margin-top: 1rem;
+  border-top: 0.1rem solid rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
+}
