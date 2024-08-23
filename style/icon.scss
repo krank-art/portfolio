@@ -2,11 +2,25 @@
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
+  list-style-type: none;
   margin: 0.5rem 0;
   padding: 0;
 
   &> :not(:first-child) {
     margin-left: 0.75rem;
+  }
+}
+
+.icon-link {
+
+  &,
+  &:visited {
+    color: #888888;
+  }
+
+  &:hover,
+  &:hover:visited {
+    color: #bbbbbb;
   }
 }
 
@@ -16,7 +30,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #888888;
+  color: inherit;
 
   svg {
     fill: currentColor;
@@ -25,6 +39,6 @@
 
 .icon-box {
   margin-top: 1rem;
-  border-top: 0.1rem solid rgba(0, 0, 0, 0.2);
+  border-top: 0.1rem solid rgba(255, 255, 255, 0.2);
   padding: 0.5rem;
 }
