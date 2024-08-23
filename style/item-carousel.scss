@@ -10,19 +10,22 @@
   margin-left: auto;
   margin-right: auto;
 
-  .row-small {
+  &.row-small {
     height: 24vh;
     /* margin-left: -50vw; */
     /* animation-name: moveRight; */
   }
 
-  .row-big {
+  &.row-big {
     height: 44vh;
     /* animation-name: moveLeft; */
   }
 }
 
 .item-carousel-art {
+  display: block;
+  height: 100%;
+  width: auto;
   margin: 0 0.5rem;
   border-radius: 1vh;
 }
