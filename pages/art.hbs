@@ -15,7 +15,7 @@
   </template>
   <template for="main">
     <h1 class="sr-only">Art overview</h1>
-    <ul class="media-list" data-tag-list-for="art-list" data-switcher-id="art-list">
+    <ul class="media-list show-as-thumbnails" data-tag-list-for="art-list" data-switcher-id="art-list">
       {{#each mediaArt}}
       <li>
         <div class="media-list-item" data-tags="{{this.tags}}" data-date="{{fallback this.date 'unknown'}}">
