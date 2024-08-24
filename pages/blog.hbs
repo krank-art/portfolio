@@ -1,12 +1,5 @@
 <template>
-  <main class="container">
-    {{> page-header}}
-    <div class="container-text">
-      <h1 class="sr-only">Blog</h1>
-      {{> page-list items=subPages}}
-      {{> page-footer}}
-    </div>
-  </main>
+  Select a blog page.
 </template>
 
 <style>
@@ -15,7 +8,7 @@
 <script>
   const treeNode = path.tree.find(page => page.path === "blog");
   export default {
-    layout: "default",
+    layout: "blog",
     title: "Blog",
     pageTitle: "Blog \u2013 Krank",
     metaImage: siteThumbnail,
