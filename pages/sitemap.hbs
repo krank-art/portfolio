@@ -1,0 +1,26 @@
+<template>
+  <main class="container">
+    {{> page-header}}
+    <div class="container-text">
+      <h1 class="sr-only">Sitemap</h1>
+      {{> page-list items=path.tree}}
+      {{> page-footer}}
+    </div>
+  </main>
+</template>
+
+<style>
+</style>
+
+<script>
+  export default {
+    layout: "default",
+    title: "Sitemap",
+    pageTitle: "Sitemap \u2013 Krank",
+    metaImage: siteThumbnail,
+    metaTitle: "Sitemap \u2013 Krank Art",
+    metaSubtitle: "Overview of all pages for the online portfolio. ",
+    metaAlt: siteThumbnailAlt,
+    metaColor: siteColor,
+  };
+</script>
