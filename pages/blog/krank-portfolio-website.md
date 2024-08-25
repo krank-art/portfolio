@@ -1,3 +1,91 @@
+# Krank's Portfolio
+
+Many artists upload their works onto some website.
+After all, we are creating things and one a shared with people who like it.
+among ferries, websites are also very common, you simply write some met web host and upload your that and art to the world to seen.
+
+so what's special about this website?
+well, nothing really come on yet another furry,  enjoying connecting With other furries.
+what special is, that I wrote this website from the ground up.
+I've always had a keen interest in web development.
+there's something about coding,  it's very rational process of splitting up a problem into smaller manage botch tanks that really appeals to me.
+
+I  find great joy in creating robust systems and engines for solving various problems.
+in my day job became I've written many automation tools grips and plugins to help speed up mundane tasks.
+in my mind come up problems should be solved efficiently and repeatably ( even if  usually automating the task it takes longer than just doing it a few times).
+sometimes this is a huge waste of time for tasks the donned really require to be executed more than once a year.
+but in some they saved me from doing a lot of boring brainless busywork ( which I despise with a passion).
+
+so for the last ten years he was fascinated with the idea come of writing my own templating engine.
+theres already so many solutions out there (Hugo, Twig, Handlebars, Pelican) --  but I wanted to write my engine in a very specific way because he wasn't satisfied  with the available solutions.
+
+so I started long and tedious progress of creating my own templating engine.
+it runs like crap,  it's missing a lot of features --  but the specific purpose I created it for, it does really well.
+
+this website is basically a database of the art I created over the years and also they thought they had every.
+you can also find the code for this website and get help, if the curiosa are so hosting a similar portfolio.
+I never intended to make this a product for everyone,  you'll need to be somewhat Servian coding and  web development to make use of it.
+if you do upload a website that is using parts of this code, please provide a link back to this side.
+I'd appreciate it greatly!
+
+  back when a wrote bachelor these is
+
+## Art comes first
+
+The site is written in a way,  that art comes first.
+ this website is basically a very elaborate way to show of all the I've created in recent years.
+
+the first is that for his website was to compile  all the art I created over the last five years.
+((TODO:  insert image of winners explorer))
+I created a big folder  in my one drive named "Portfolio"  and started copying out pieces into there.
+ many artists create many drawings, but often the problem is making the works actually presentable.
+ if you have some sketch lying around in a sketchbook, it's was really much used to anyone.
+ you need to make it... *presentable*.
+
+ so once you have the folder of all your art pieces, you can then start extracting information about each art piece from in.
+ I used special format with my art files `<Title> Release YYYY-MM-DD.png`.
+ this way, wind reading in the art pieces, I can extract the title and the creation date from the filename.
+ the next step when importing is extracting metadata from the art piece like width, height, common colors, aspect ratio and pathname.
+ these attributes help later on to create the website.
+
+ once all the data is written in,  you have to copy the actual alt files into a special folder.
+For  for web optimization, we need to shrink down the images so potential visitors don't blow their monthly theater volume on a single wizard on our site.
+ I'm using the library sharpjs ( which in turn is using the famous image magic)  two create resized versions of the available out pieces.
+ mal has this very need feature of sourced na, were depending on the current size of the image an image it is chosen from a list of sources too save on bandwidth.
+
+ as an example, I  rewrote the id overview page in August 2024.
+That point time come  I had 513 art pieces  which a total foul size of 253 megabytes.
+The images are loaded lazily on the add overview.
+ this means, the client only requests the images,  when an image slowly reges the fee port then eventually comes into few ( when scrawling the page).
+ I used resized  versions with a max with an hide of one hundred and twenty pixels so we NA visitor look add all five hundred and thirty three images, they only Downloaded 6.75 MB of images in total.
+ very good!
+
+## Automation is good
+
+I could have written the webpage as static HTML.
+and to be fair, would probably have been alt faster than creating this elaborate library of tools and  static website generation engine.
+
+back in university, when I got really into coding after the third try,  something clicked in my brain.
+my professor was all rider coding, copy and pasted a lot of stuff was lazy and not very de script with his variable names and wasn't working in a the main oriented way.
+
+this code, found to be very hard to understand because it was much  more abstract.
+and if there's one thing I've learned about clean code income it is that it's usually a very good idea to keep code understandable.
+website generator runs like shed, especially after the last rewrite where I  changed templating technology to use data chunks.
+
+I introduced this concept,  because on the previous stage generating the actual websites was really confusing.
+the HML generation works by taking a template and then filling in messing gaps on the template with data.
+you have to put each variable its correct slot. 
+like filling out a tax form.
+
+staying with this metaphor of filling our taxes I had the problem that stack of receipts invoices and financial records kept getting change different spots in the code.
+it was very hard to actually determine where the data was coming from the things went wrong at any step of the way.
+the template compilation was actually quite fast but a sacrificed speed for transparency.
+
+the new model is a data chung it is  like stapling together multiple tabula sheds.
+if you don't find a variable on the first sheet, you can simply flip over the page and look on the next sheep.
+if both sheets include the same list,  then you can combine I two lists into one.
+it sheet is also associated with an id, so you know who issued it at what point in the code.
+this held a lot when debugging, because it made very clear where the data was coming from.
 
 
 ## Motivation
