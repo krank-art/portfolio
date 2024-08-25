@@ -4,6 +4,15 @@ $mobile-menu-height: 3.5rem;
 .blog-text {
   line-height: 1.5;
 
+  p,
+  li {
+    max-width: 50rem;
+  }
+  
+  img {
+    max-width: 60rem;
+  }
+
   p {
     line-height: 1.6;
   }
