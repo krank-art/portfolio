@@ -105,6 +105,23 @@ To run Python on Windows 10 & 11, follow these steps:
 17. Press `Ctrl + C` to abort running the dev server.
 
 
+### PHP in WSL 
+
+Run `npm run serve-php` to start the local PHP webserver `localhost:8000` at `dist/` (make sure you have PHP installed).
+This is important when you wanna test if the `server.php` is gonna work on your PHP deployment server.
+
+The default version of Node for Ubuntu is v12, which is seriously outdated. 
+When trying to run the command, it will say that `php` could not be loaded. 
+You need to install `nvm` (Node version manager), and use it to install at least Node v16.
+
+1. Make sure `curl` is installed.
+2. Run `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash` (go to https://github.com/nvm-sh/nvm/releases and update the version number to last release).
+3. Run `source ~/.bashrc` so `npm` is available as environment variable in the current bash session.
+4. Run `nvm` to check if nvm works.
+5. Run `nvm install 16` to install the last Node v16 version (should be v16.20.2).
+6. Run `nvm use 16` to switch Node version to v16.
+
+
 ## Deployment
 
 1. Update version of project:
