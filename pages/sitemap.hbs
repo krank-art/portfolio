@@ -1,11 +1,11 @@
 <template>
-  <main class="container">
-    {{> page-header}}
-    <div class="container-text">
+  <main>
+    <div class="container-text">{{> page-header}}</div>
+    <div class="container-newspaper">
       <h1 class="sr-only">Sitemap</h1>
-      {{> page-list items=path.tree}}
-      {{> page-footer}}
+      {{> page-list items=sortedPageTree}}
     </div>
+    <div class="container-text">{{> page-footer}}</div>
   </main>
 </template>
 
@@ -13,6 +13,16 @@
 </style>
 
 <script>
+
+  function sortChildren(node) {
+    const { children } = node;
+    const newNode = { ...node };
+    if (!children) return newNode;
+    const sortedChildren = [...children].sort((a, b) => a.title.localeCompare(b.title));
+    newNode.children = sortedChildren.map(child => sortChildren(child));
+    return newNode;
+  }
+
   export default {
     layout: "default",
     title: "Sitemap",
@@ -22,5 +32,6 @@
     metaSubtitle: "Overview of all pages for the online portfolio. ",
     metaAlt: siteThumbnailAlt,
     metaColor: siteColor,
+    sortedPageTree: path.tree.map(node => sortChildren(node)),
   };
 </script>

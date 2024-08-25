@@ -43,6 +43,13 @@ body {
   box-sizing: border-box;
 }
 
+.container-newspaper {
+  max-width: 40rem;
+  margin-left: auto;
+  margin-right: auto;
+  column-count: 1;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -64,5 +71,44 @@ body {
 
   & > *:not(:last-child) {
     margin-right: 0.25em;
+  }
+
+  &.spaced-items > *:not(:last-child) {
+    margin-right: 1em;
+  }
+}
+
+@media (min-width: 720px) {
+  .container-newspaper {
+    max-width: 40rem;
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1080px) {
+  .container-newspaper {
+    max-width: 60rem;
+    column-count: 3;
+  }
+}
+
+@media (min-width: 1440px) {
+  .container-newspaper {
+    max-width: 80rem;
+    column-count: 4;
+  }
+}
+
+@media (min-width: 1800px) {
+  .container-newspaper {
+    max-width: 100rem;
+    column-count: 5;
+  }
+}
+
+@media (min-width: 2160px) {
+  .container-newspaper {
+    max-width: 120rem;
+    column-count: 6;
   }
 }
