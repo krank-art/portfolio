@@ -49,7 +49,11 @@
       <h3 class="sr-only">Date</h3>
       <p>{{ modelItem.date }}</p>
       <h3 class="sr-only">Tags</h3>
-      <ul class="inline-list">{{#each modelItem.tags}}<li>{{> simple-tag label=this }}</li>{{/each}}</ul>
+      <ul class="inline-list">
+        {{#each modelItem.tags}}
+        <li>{{> simple-tag label=this tagId=this target="art"}}</li>
+        {{/each}}
+      </ul>
       <hr>
       {{{markdown (join modelItem.description) }}}
     </aside>

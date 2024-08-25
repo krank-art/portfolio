@@ -1,6 +1,6 @@
 <template>
-  <button class="simple-tag" {{#if tagId}} data-tag-id="{{tagId}}" {{/if}}><span
-      class="simple-tag-head">&ZeroWidthSpace;</span><span class="simple-tag-body">{{ label
+  <button class="simple-tag" {{#if tagId}} data-tag-id="{{tagId}}" {{/if}} {{#if target}} data-target="{{target}}"
+    {{/if}}><span class="simple-tag-head">&ZeroWidthSpace;</span><span class="simple-tag-body">{{ label
       }}</span>{{#if aside}}&nbsp;<span class="simple-tag-aside">{{aside}}</span>{{/if}}
   </button>
 </template>
