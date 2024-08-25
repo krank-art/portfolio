@@ -1,6 +1,11 @@
 <template>
   <footer class="page-footer">
-    Each character depicted belongs to their respective owner.<br>
+    Each&nbsp;character&nbsp;depicted&nbsp;belongs to&nbsp;their&nbsp;respective&nbsp;owner.<br>
+    <ul class="footer-list">
+      {{#each footerLinks}}
+      <li><a class="{{this.active}}" href="{{this.link}}">{{this.title}}</a></li>
+      {{/each}}
+    </ul>
     Krank &copy; {{currentYear}}
   </footer>
 </template>
