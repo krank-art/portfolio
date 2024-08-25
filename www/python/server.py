@@ -17,8 +17,9 @@ class MyHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, directory=web_dir)
     def do_GET(self):
+        path, _, query = self.path.partition('?')
         if self.path != "/" and not "." in self.path:
-            self.path += ".html"
+            self.path = f"{path}.html?{query}" if query else f"{path}.html"
         absolutePath = self.translate_path(self.path)
         if not os.path.exists(absolutePath):
             self.path = "404.html"
