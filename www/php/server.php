@@ -84,7 +84,7 @@ if (file_exists($file_path)) {
   readfile($file_path);
 } else {
   // Serve the 404 page if the file doesn't exist
-  echo "Could not find '$file_path'";
+  error_log("Could not find '$file_path'");
   header("HTTP/1.1 404 Not Found");
   include $_SERVER['DOCUMENT_ROOT'] . '/404.html';
 }
