@@ -26,16 +26,13 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
     // Add global to data chunk
     chunk.addPayload("global", data);
     // Add navigation
-    const nextPage = page.nextSibling;
-    page.test = "bobo-bär"
-    const previousPage = page.previousSibling;
     chunk.addPayload("navigation", {
       path: {
         relative: "../".repeat(page.depth - 1),
         absolute: page.absolutePath,
-        tree: dirTree, //dirTree.map(page => page.duplicateWithoutParent()),
-        next: nextPage ? { path: nextPage.path, title: nextPage.title } : null,
-        previous: previousPage ? { path: previousPage.path, title: previousPage.title } : null,
+        tree: dirTree,
+        next: null,
+        previous: null,
       }
     });
     // Add model to data chunk (if model page)
@@ -61,10 +58,10 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
     const { page, chunk } = entry;
     const navigationSlice = chunk.getSlice("navigation").payload;
     const navPath = navigationSlice.path;
-    if (navPath.next && nextSibling && nextSibling.depth === page.depth)
-      navPath.next.title = nextSibling.title;
-    if (navPath.previous && previousSibling && previousSibling.depth === page.depth)
-      navPath.previous.title = previousSibling.title;
+    if (nextSibling && nextSibling.depth === page.depth)
+      navPath.next = { path: nextSibling.path, title: nextSibling.title };
+    if (previousSibling && previousSibling.depth === page.depth)
+      navPath.previous = { path: previousSibling.path, title: previousSibling.title };
   }
   await templating.readAndWriteQueue({
     queue: queue,
