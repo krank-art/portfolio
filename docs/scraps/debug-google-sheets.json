@@ -1,0 +1,9 @@
+{
+    "type": "node",
+    "request": "launch",
+    "name": "Run Google Docs",
+    "skipFiles": [
+        "<node_internals>/**"
+    ],
+    "program": "${workspaceFolder}\\docs\\scraps\\timesheet-google-docs.js"
+}
