@@ -3,12 +3,14 @@ import config from '../config/config.dev.js';
 import TemplateWriter from '../lib/template-writer.js';
 import { addAbsolutePathsToDirTree, flattenDirTree, loadDirAsTree } from '../lib/dir-tree.js';
 
-export default async function buildHtml({ inputDir, outputDir, data, partialsDir, cacheFile = null, ignoredFiles = [] }) {
+export default async function buildHtml({ inputDir, outputDir, data, partialsDir,
+  cacheFile = null, ignoredFiles = [], profiling = true }) {
+  const startTime = Date.now();
   const templating = new TemplateWriter({ partialsDir });
   await templating.load();
   // Step 1 -- Landmarking
   const dirTreeRaw = loadDirAsTree({
-    input: inputDir, 
+    input: inputDir,
     models: data,
     ignoredFiles: ignoredFiles.map(filePath => path.join(inputDir, filePath)),
   });
@@ -63,10 +65,14 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
     if (previousSibling && previousSibling.depth === page.depth)
       navPath.previous = { path: previousSibling.path, title: previousSibling.title };
   }
+  const midTime = Date.now();
+  if (profiling) console.log(`HTML landmarking took ${(midTime - startTime) / 1000} sec.`);
   await templating.readAndWriteQueue({
     queue: queue,
     output: outputDir,
     cachePath: cacheFile,
     silent: false,
   });
+  const endTime = Date.now();
+  if (profiling) console.log(`HTML build took ${(endTime - startTime) / 1000} sec.`);
 }
