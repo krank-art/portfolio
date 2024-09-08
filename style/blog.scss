@@ -155,8 +155,9 @@ $mobile-menu-height: 3.5rem;
   }
 
   .lead-text {
-    font-size: 1.2em;
+    font-size: 1.25em;
     font-style: italic;
+    line-height: 1.5;
   }
 }
 
@@ -339,6 +340,14 @@ $mobile-menu-height: 3.5rem;
 }
 
 @media (min-width: 1200px) {
+  .blog-text {
+    font-size: 1.2rem;
+
+    p {
+      line-height: 1.7;
+    }
+  }
+
   .blog-nav {
     display: block;
     position: fixed;
