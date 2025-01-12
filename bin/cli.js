@@ -10,6 +10,7 @@ import { inspectMediaTable } from './inspect-media.js';
 import sortMedia from './sort-media.js';
 import readTags from './read-tags.js';
 import { getTagDefinitionsFromMedia } from '../lib/tag-util.js';
+import { encryptImageWithKey } from '../lib/crypto.js';
 
 const pathing = Object.freeze({
   dist: path.resolve('dist'),
@@ -162,6 +163,14 @@ export async function handleCommand(command, ...args) {
       break;
     case "tags:art":
       await readTags(pathing.artData, pathing.artTags, "/art/");
+      break;
+    case "build:nsfw":
+      await encryptImageWithKey({
+        inputFilePath: path.resolve("static", "art", "Alligator 2019-11-05 Raw.png"),
+        outputFilePath: path.resolve("Alligator 2019-11-05 Raw encrypted.png"),
+        key: "my secret",
+        iv: "Alligator 2019-11-05 Raw.png",
+      });
       break;
     default:
       console.log(`Unknown command '${command}'`);
