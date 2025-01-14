@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Canvas LSB tester</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <style>
+    html {
+      font-family: "Fira Sans", "Segoe UI", Helvetica, sans-serif;
+    }
+
+    img {
+      width: 256px;
+      height: 256px;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      background-color: black;
+      border: 8px solid #eee;
+    }
+
+    em {
+      display: inline-block;
+      font-size: 0.9em;
+      border-radius: 0.4em;
+      background-color: #333;
+      color: white;
+    }
+
+    table {
+      border-collapse: collapse;
+      font-variant-numeric: tabular-nums
+    }
+
+    th {
+      border: 1px solid grey;
+    }
+
+    th, td {
+      padding: 0.2em 0.4em;
+      border-left: 1px solid grey;
+      border-right: 1px solid grey;
+    }
+  </style>
+</head>
+
+<body>
+
+  <img
+    src="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAklEQVR4AewaftIAAABCSURBVKXBgQkDQRADMQ1s/xX/QdKDpb4/hBA9hBA9hBA9hNDJ5GRyMrmeycnkZHIyuZ7JyeRkcjK5nsnJ5GRyMvkBctgKOoRZ7dUAAAAASUVORK5CYII="
+    alt="Example image" width="16" height="16">
+
+  <table id="pixel-table">
+    <thead>
+      <tr>
+        <th rowspan="2">Index</th>
+        <th colspan="4">Image Color<sub>10</sub></th>
+        <th colspan="4">Image Color<sub>2</sub></th>
+        <th rowspan="2">Encoded Data<sub>10</sub></th>
+        <th colspan="4">Canvas Color<sub>10</sub></th>
+        <th colspan="4">Canvas Color<sub>2</sub></th>
+        <th rowspan="2">Decoded Data<sub>10</sub></th>
+        <th rowspan="2">Pass?</th>
+      </tr>
+      <tr>
+        <th>R</th>
+        <th>G</th>
+        <th>B</th>
+        <th>A</th>
+        <th>R</th>
+        <th>G</th>
+        <th>B</th>
+        <th>A</th>
+        <th>R</th>
+        <th>G</th>
+        <th>B</th>
+        <th>A</th>
+        <th>R</th>
+        <th>G</th>
+        <th>B</th>
+        <th>A</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function readNthLSBs(imageSrc, n) {
+      if (n < 1 || n > 8) {
+        throw new Error("n must be between 1 and 8.");
+      }
+
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = imageSrc;
+
+        img.onload = () => {
+          // Create a canvas and draw the image
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width;
+          canvas.height = img.height;
+
+          const ctx = canvas.getContext("2d", { colorSpace: 'srgb' });
+          ctx.imageSmoothingEnabled = false;
+          ctx.drawImage(img, 0, 0);
+
+          // Get image pixel data
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          console.log(imageData);
+          const data = imageData.data;
+
+          // Mask to extract the last n bits
+          const bitMask = (1 << n) - 1; // E.g., for n=2, mask = 0b11
+
+          const nthLSBs = [];
+          for (let i = 0; i < data.length; i += 4) {
+            if (i === 24)
+              console.log("lol");
+            // Extract last n LSBs from each channel
+            const r = data[i] & bitMask;       // Red
+            const g = data[i + 1] & bitMask;   // Green
+            const b = data[i + 2] & bitMask;   // Blue
+            const a = data[i + 3] & bitMask;   // Alpha
+
+            nthLSBs.push({ r, g, b, a });
+          }
+
+          resolve(nthLSBs);
+        };
+
+        img.onerror = (err) => {
+          reject(new Error("Failed to load image: " + err.message));
+        };
+      });
+    }
+
+    function consolidateRGBAArrayToUint8Array(rgbaArray, bitLength) {
+      if (bitLength < 1 || bitLength > 8)
+        throw new Error("bitLength must be between 1 and 8.");
+      const bitsPerPixel = 4 * bitLength; // r, g, b, a
+      const totalBits = rgbaArray.length * bitsPerPixel;
+      const totalBytes = Math.ceil(totalBits / 8);
+      const uint8Array = new Uint8Array(totalBytes);
+
+      let currentByteIndex = 0; // Byte index in the Uint8Array
+      let bitOffset = 0;        // Current bit position within the byte
+
+      for (const pixel of rgbaArray) {
+        const { r, g, b, a } = pixel;
+        for (const value of [r, g, b, a]) {
+          if (value >= (1 << bitLength))
+            throw new Error(`Value ${value} exceeds maximum for ${bitLength} bits.`);
+          // Write the bits of the channel to the Uint8Array
+          for (let bit = 0; bit < bitLength; bit++) {
+            const bitValue = (value >> (bitLength - bit - 1)) & 1; // Extract bit
+            uint8Array[currentByteIndex] |= bitValue << (7 - bitOffset); // Write bit
+            bitOffset++;
+            if (bitOffset === 8) {
+              bitOffset = 0;
+              currentByteIndex++;
+            }
+          }
+        }
+      }
+      return uint8Array;
+    }
+
+    function bytesToString(bytes) {
+      const decoder = new TextDecoder("utf-8");
+      return decoder.decode(bytes);
+    }
+
+    async function setupImageDecoder() {
+      const images = Array.from(document.querySelectorAll("img"));
+      for (const image of images) {
+        if (!image.classList.contains("encoded-image"))
+          continue;
+        const leastSignificantBits = await readNthLSBs(image.src, 2);
+        const payload = consolidateRGBAArrayToUint8Array(leastSignificantBits, 2);
+        console.log(leastSignificantBits);
+        console.log(image.src, payload, bytesToString(payload));
+        console.log([...payload].slice(0, 40).map(item => item.toString(2).padStart(8, "0")));
+
+        const encoder = new TextEncoder();
+        const data = encoder.encode("This is a super secret message.");
+        console.log("data before ", data)
+        console.log([...data].map(item => item.toString(2).padStart(8, "0")));
+
+      }
+    }
+
+    function generateImageData() {
+      const size = 256;
+      const data = new Uint8Array(size * 4);
+      for (let i = 0; i < size; i++) {
+        const byteValue = i;
+
+        // Distribute the 8 bits across the RGBA channels (2 bits per channel)
+        const r = (byteValue >> 6) & 0x03; // Bits 6-7
+        const g = (byteValue >> 4) & 0x03; // Bits 4-5
+        const b = (byteValue >> 2) & 0x03; // Bits 2-3
+        const a = byteValue & 0x03;        // Bits 0-1
+
+        // Write the pixel data
+        const dataMask = 0xFF << 2 & 0xFF;
+        const idx = i * 4;
+        data[idx] = 255 & dataMask | r;
+        data[idx + 1] = 255 & dataMask | g;
+        data[idx + 2] = 255 & dataMask | b;
+        data[idx + 3] = 255 & dataMask | a;
+      }
+      return data;
+    }
+
+    function h(tag, parent, content) {
+      const element = document.createElement(tag);
+      if (parent) parent.appendChild(element);
+      if (content) element.textContent = content;
+      return element;
+    }
+
+    function setupTable(rawImageData, canvasImageData) {
+      const table = document.getElementById("pixel-table");
+      const tableBody = table.querySelector("tbody");
+      for (let i = 0; i < rawImageData.length; i+=4) {
+        const row = h("tr", tableBody);
+        const idCell = h("td", row, (i / 4) + "");
+        const imageColorDecimalR = h("td", row, rawImageData[i]);
+        const imageColorDecimalG = h("td", row, rawImageData[i + 1]);
+        const imageColorDecimalB = h("td", row, rawImageData[i + 2]);
+        const imageColorDecimalA = h("td", row, rawImageData[i + 3]);
+        const imageColorBinaryR = h("td", row, rawImageData[i].toString(2).padStart(8, "0"));
+        const imageColorBinaryG = h("td", row, rawImageData[i + 1].toString(2).padStart(8, "0"));
+        const imageColorBinaryB = h("td", row, rawImageData[i + 2].toString(2).padStart(8, "0"));
+        const imageColorBinaryA = h("td", row, rawImageData[i + 3].toString(2).padStart(8, "0"));
+        const encodedDataDecimal = h("td", row, (i / 4) + "");
+      }
+    }
+
+    setupTable(generateImageData(), );
+  </script>
+</body>
+
+</html>
