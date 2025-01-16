@@ -37,7 +37,7 @@
 
     th,
     td {
-      padding: 0.2em 0.4em;
+      padding: 0.2em 0.5em;
       border-left: 1px solid grey;
       border-right: 1px solid grey;
     }
@@ -46,8 +46,7 @@
 
 <body>
 
-  <img
-    id="sample-image"
+  <img id="sample-image"
     src="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAklEQVR4AewaftIAAABCSURBVKXBgQkDQRADMQ1s/xX/QdKDpb4/hBA9hBA9hBA9hNDJ5GRyMrmeycnkZHIyuZ7JyeRkcjK5nsnJ5GRyMvkBctgKOoRZ7dUAAAAASUVORK5CYII="
     alt="Example image" width="16" height="16">
 
@@ -86,23 +85,21 @@
   </table>
 
   <script>
-    async function readNthLSBs(image, n) {
-      if (n < 1 || n > 8)
-        throw new Error("n must be between 1 and 8.");
-
-      // Create a canvas and draw the image
+    function getImageData(image) {
       const canvas = document.createElement("canvas");
       canvas.width = image.width;
       canvas.height = image.height;
-
       const ctx = canvas.getContext("2d", { colorSpace: 'srgb' });
       ctx.imageSmoothingEnabled = false;
       ctx.drawImage(image, 0, 0);
+      return ctx.getImageData(0, 0, canvas.width, canvas.height);
+    }
 
-      // Get image pixel data
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      console.log(imageData);
-      const data = imageData.data;
+    function readNthLSBs(image, n) {
+      if (n < 1 || n > 8)
+        throw new Error("n must be between 1 and 8.");
+
+      const { data } = getImagePixelData(image);
 
       // Mask to extract the last n bits
       const bitMask = (1 << n) - 1; // E.g., for n=2, mask = 0b11
@@ -202,8 +199,19 @@
     function h(tag, parent, content) {
       const element = document.createElement(tag);
       if (parent) parent.appendChild(element);
-      if (content) element.textContent = content;
+      if (content) {
+        if (typeof content === "object" && !Array.isArray(content))
+          for (const prop in content)
+            element[prop] = content[prop];
+        else
+          element.textContent = content;
+      }
       return element;
+    }
+
+    function byteToBinaryString(value) {
+      const valueAsString = value.toString(2).padStart(8, "0");
+      return valueAsString.slice(0, 4) + "&nbsp;" + valueAsString.slice(4);
     }
 
     function setupTable(rawImageData, canvasImageData) {
@@ -216,18 +224,27 @@
         const imageColorDecimalG = h("td", row, rawImageData[i + 1]);
         const imageColorDecimalB = h("td", row, rawImageData[i + 2]);
         const imageColorDecimalA = h("td", row, rawImageData[i + 3]);
-        const imageColorBinaryR = h("td", row, rawImageData[i].toString(2).padStart(8, "0"));
-        const imageColorBinaryG = h("td", row, rawImageData[i + 1].toString(2).padStart(8, "0"));
-        const imageColorBinaryB = h("td", row, rawImageData[i + 2].toString(2).padStart(8, "0"));
-        const imageColorBinaryA = h("td", row, rawImageData[i + 3].toString(2).padStart(8, "0"));
+        const imageColorBinaryR = h("td", row, { innerHTML: byteToBinaryString(rawImageData[i]) });
+        const imageColorBinaryG = h("td", row, { innerHTML: byteToBinaryString(rawImageData[i + 1]) });
+        const imageColorBinaryB = h("td", row, { innerHTML: byteToBinaryString(rawImageData[i + 2]) });
+        const imageColorBinaryA = h("td", row, { innerHTML: byteToBinaryString(rawImageData[i + 3]) });
         const encodedDataDecimal = h("td", row, (i / 4) + "");
+        const canvasColorDecimalR = h("td", row, canvasImageData[i]);
+        const canvasColorDecimalG = h("td", row, canvasImageData[i + 1]);
+        const canvasColorDecimalB = h("td", row, canvasImageData[i + 2]);
+        const canvasColorDecimalA = h("td", row, canvasImageData[i + 3]);
+        const canvasColorBinaryR = h("td", row, { innerHTML: byteToBinaryString(canvasImageData[i]) });
+        const canvasColorBinaryG = h("td", row, { innerHTML: byteToBinaryString(canvasImageData[i + 1]) });
+        const canvasColorBinaryB = h("td", row, { innerHTML: byteToBinaryString(canvasImageData[i + 2]) });
+        const canvasColorBinaryA = h("td", row, { innerHTML: byteToBinaryString(canvasImageData[i + 3]) });
+        //const decodedDataDecimal = h("td", row, (i / 4) + "");
       }
     }
 
     const sampleImage = document.getElementById("sample-image");
 
     document.addEventListener("DOMContentLoaded", (event) => {
-      setupTable(generateImageData(), readNthLSBs(sampleImage));
+      setupTable(generateImageData(), getImageData(sampleImage).data);
     });
   </script>
 </body>
