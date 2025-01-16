@@ -20,10 +20,9 @@
 
     em {
       display: inline-block;
-      font-size: 0.9em;
-      border-radius: 0.4em;
-      background-color: #333;
-      color: white;
+      font-size: 1em;
+      border-radius: 0.1em;
+      background-color: rgba(0,0,0,0.1);
     }
 
     table {
@@ -40,6 +39,10 @@
       padding: 0.2em 0.5em;
       border-left: 1px solid grey;
       border-right: 1px solid grey;
+    }
+
+    .faulty-line {
+      background-color: pink;
     }
   </style>
 </head>
@@ -99,7 +102,7 @@
       if (n < 1 || n > 8)
         throw new Error("n must be between 1 and 8.");
 
-      const { data } = getImagePixelData(image);
+      const { data } = getImageData(image);
 
       // Mask to extract the last n bits
       const bitMask = (1 << n) - 1; // E.g., for n=2, mask = 0b11
@@ -201,8 +204,14 @@
       if (parent) parent.appendChild(element);
       if (content) {
         if (typeof content === "object" && !Array.isArray(content))
-          for (const prop in content)
-            element[prop] = content[prop];
+          for (const prop in content) {
+            const propValue = content[prop];
+            if (prop === "class" && propValue.length > 0) {
+              element.classList.add(propValue);
+              continue;
+            }
+            element[prop] = propValue;
+          }
         else
           element.textContent = content;
       }
@@ -210,15 +219,21 @@
     }
 
     function byteToBinaryString(value) {
-      const valueAsString = value.toString(2).padStart(8, "0");
-      return valueAsString.slice(0, 4) + "&nbsp;" + valueAsString.slice(4);
+      const val = value.toString(2).padStart(8, "0");
+      return `${val.slice(0, 4)}&nbsp;${val.slice(4, 6)}<b>${val.slice(6)}</b>`;
     }
 
-    function setupTable(rawImageData, canvasImageData) {
+    function setupTable({rawImageData, canvasImageData, decodedData}) {
+      console.log(rawImageData, canvasImageData);
       const table = document.getElementById("pixel-table");
       const tableBody = table.querySelector("tbody");
       for (let i = 0; i < rawImageData.length; i += 4) {
-        const row = h("tr", tableBody);
+        const encodedValue = (i / 4);
+        const decodedValue = decodedData[i / 4];
+        const isCorrect = encodedValue === decodedValue;
+        
+        // Add cells
+        const row = h("tr", tableBody, { class: isCorrect ? "" : "faulty-line"});
         const idCell = h("td", row, (i / 4) + "");
         const imageColorDecimalR = h("td", row, rawImageData[i]);
         const imageColorDecimalG = h("td", row, rawImageData[i + 1]);
@@ -237,14 +252,21 @@
         const canvasColorBinaryG = h("td", row, { innerHTML: byteToBinaryString(canvasImageData[i + 1]) });
         const canvasColorBinaryB = h("td", row, { innerHTML: byteToBinaryString(canvasImageData[i + 2]) });
         const canvasColorBinaryA = h("td", row, { innerHTML: byteToBinaryString(canvasImageData[i + 3]) });
-        //const decodedDataDecimal = h("td", row, (i / 4) + "");
+        const decodedDataDecimal = h("td", row, decodedData[i / 4] + "");
+        const passCell = h("td", row, isCorrect ? "Pass" : "Fail");
       }
     }
 
     const sampleImage = document.getElementById("sample-image");
 
     document.addEventListener("DOMContentLoaded", (event) => {
-      setupTable(generateImageData(), getImageData(sampleImage).data);
+      const leastSignificantBits = readNthLSBs(sampleImage, 2);
+      const decodedData = consolidateRGBAArrayToUint8Array(leastSignificantBits, 2);
+      setupTable({
+        rawImageData: generateImageData(), 
+        canvasImageData: getImageData(sampleImage).data,
+        decodedData: decodedData,
+      });
     });
   </script>
 </body>
