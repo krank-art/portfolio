@@ -18,11 +18,19 @@
       border: 8px solid #eee;
     }
 
-    em {
+    p {
+      max-width: 40em;
+      line-height: 1.4;
+    }
+
+    .faulty-bit {
       display: inline-block;
       font-size: 1em;
       border-radius: 0.1em;
-      background-color: rgba(0,0,0,0.1);
+      background-color: red;
+      color: white;
+      border: 0.1em solid red;
+      font-style: normal;
     }
 
     table {
@@ -31,7 +39,16 @@
     }
 
     th {
+      height: 1.5em;
       border: 1px solid grey;
+      position: sticky;
+      top: 0;
+      box-sizing: border-box;
+      background-color: white;
+    }
+
+    tr:nth-child(2) > th {
+      top: 1.5em;
     }
 
     th,
@@ -42,12 +59,18 @@
     }
 
     .faulty-line {
-      background-color: pink;
+      background-color: #ffd8df;;
     }
   </style>
 </head>
 
 <body>
+
+  <h1>Canvas Least Significant Bit Tester</h1>
+  <p>Written by <a href="https://krank.love/">Krank</a> on 2025-01-16 because Firefox does silly things when trying to read raw pixel data from a canvas.</p>
+  <p>Below is the example image, encoded with a secret message in the two least significant bits of each color channel. 
+    We use a base64 inlined PNG image with RGBA (6) color mode, that gives us 2 bits per 4 channels, or 8 bits, or 1 byte per pixel.
+    In this case the secret message simply goes up from 0 to 255 to test the reliability of reading the raw pixel data.</p>
 
   <img id="sample-image"
     src="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAklEQVR4AewaftIAAABCSURBVKXBgQkDQRADMQ1s/xX/QdKDpb4/hBA9hBA9hBA9hNDJ5GRyMrmeycnkZHIyuZ7JyeRkcjK5nsnJ5GRyMvkBctgKOoRZ7dUAAAAASUVORK5CYII="
@@ -218,9 +241,14 @@
       return element;
     }
 
-    function byteToBinaryString(value) {
+    function byteToBinaryString(value, comparedValue) {
       const val = value.toString(2).padStart(8, "0");
-      return `${val.slice(0, 4)}&nbsp;${val.slice(4, 6)}<b>${val.slice(6)}</b>`;
+      const cmp = comparedValue.toString(2).padStart(8, "0");
+      const bits = [...val];
+      for (let i = 0; i < 8; i++)
+        if (val[i] !== cmp[i])
+          bits[i] = `<em class="faulty-bit">${val[i]}</em>`;
+      return `${bits.slice(0, 4).join("")}&nbsp;${bits.slice(4, 6).join("")}<b>${bits.slice(6).join("")}</b>`;
     }
 
     function setupTable({rawImageData, canvasImageData, decodedData}) {
@@ -231,7 +259,16 @@
         const encodedValue = (i / 4);
         const decodedValue = decodedData[i / 4];
         const isCorrect = encodedValue === decodedValue;
-        
+
+        const rawR = rawImageData[i];
+        const rawG = rawImageData[i + 1];
+        const rawB = rawImageData[i + 2];
+        const rawA = rawImageData[i + 3];
+        const canvasR = canvasImageData[i];
+        const canvasG = canvasImageData[i + 1];
+        const canvasB = canvasImageData[i + 2];
+        const canvasA = canvasImageData[i + 3];
+
         // Add cells
         const row = h("tr", tableBody, { class: isCorrect ? "" : "faulty-line"});
         const idCell = h("td", row, (i / 4) + "");
@@ -239,19 +276,19 @@
         const imageColorDecimalG = h("td", row, rawImageData[i + 1]);
         const imageColorDecimalB = h("td", row, rawImageData[i + 2]);
         const imageColorDecimalA = h("td", row, rawImageData[i + 3]);
-        const imageColorBinaryR = h("td", row, { innerHTML: byteToBinaryString(rawImageData[i]) });
-        const imageColorBinaryG = h("td", row, { innerHTML: byteToBinaryString(rawImageData[i + 1]) });
-        const imageColorBinaryB = h("td", row, { innerHTML: byteToBinaryString(rawImageData[i + 2]) });
-        const imageColorBinaryA = h("td", row, { innerHTML: byteToBinaryString(rawImageData[i + 3]) });
+        const imageColorBinaryR = h("td", row, { innerHTML: byteToBinaryString(rawR, canvasR)});
+        const imageColorBinaryG = h("td", row, { innerHTML: byteToBinaryString(rawG, canvasG)});
+        const imageColorBinaryB = h("td", row, { innerHTML: byteToBinaryString(rawB, canvasB)});
+        const imageColorBinaryA = h("td", row, { innerHTML: byteToBinaryString(rawA, canvasA)});
         const encodedDataDecimal = h("td", row, (i / 4) + "");
         const canvasColorDecimalR = h("td", row, canvasImageData[i]);
         const canvasColorDecimalG = h("td", row, canvasImageData[i + 1]);
         const canvasColorDecimalB = h("td", row, canvasImageData[i + 2]);
         const canvasColorDecimalA = h("td", row, canvasImageData[i + 3]);
-        const canvasColorBinaryR = h("td", row, { innerHTML: byteToBinaryString(canvasImageData[i]) });
-        const canvasColorBinaryG = h("td", row, { innerHTML: byteToBinaryString(canvasImageData[i + 1]) });
-        const canvasColorBinaryB = h("td", row, { innerHTML: byteToBinaryString(canvasImageData[i + 2]) });
-        const canvasColorBinaryA = h("td", row, { innerHTML: byteToBinaryString(canvasImageData[i + 3]) });
+        const canvasColorBinaryR = h("td", row, { innerHTML: byteToBinaryString(canvasR, rawR)});
+        const canvasColorBinaryG = h("td", row, { innerHTML: byteToBinaryString(canvasG, rawG)});
+        const canvasColorBinaryB = h("td", row, { innerHTML: byteToBinaryString(canvasB, rawB)});
+        const canvasColorBinaryA = h("td", row, { innerHTML: byteToBinaryString(canvasA, rawA)});
         const decodedDataDecimal = h("td", row, decodedData[i / 4] + "");
         const passCell = h("td", row, isCorrect ? "Pass" : "Fail");
       }
