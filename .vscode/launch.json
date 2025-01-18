@@ -54,6 +54,21 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Run nsfw build",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\bin\\cli.js",
+            "args": [
+                "build:nsfw"
+            ],
+            "runtimeArgs": [
+                "--experimental-vm-modules"
+            ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Run TemplateLoader",
             "skipFiles": [
                 "<node_internals>/**"
