@@ -10,7 +10,7 @@ import { inspectMediaTable } from './inspect-media.js';
 import sortMedia from './sort-media.js';
 import readTags from './read-tags.js';
 import { getTagDefinitionsFromMedia } from '../lib/tag-util.js';
-import { embedTextInImage } from '../lib/crypto.js';
+import { createTestPNG, embedTextInImage } from '../lib/crypto.js';
 
 const pathing = Object.freeze({
   dist: path.resolve('dist'),
@@ -181,6 +181,9 @@ export async function handleCommand(command, ...args) {
         text: "This is a super secret message.",
       });
       break;
+      case "build:png":
+        createTestPNG();
+        break;
     default:
       console.log(`Unknown command '${command}'`);
   }
