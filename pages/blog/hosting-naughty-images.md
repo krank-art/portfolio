@@ -1,12 +1,31 @@
 # Hosting NSFW images
 Written on 11 January 2025
 
- I've ran a lot of things ever the years  including NSFW  artwork.
- I want to host it on my website,  but there is legal ramifications  about hosting adult content.
-Depending on the country, you are not allow to host specific kinds of pornography.
+I've drawn a lot of things over the years, including NSFW artwork (ehem, *pornography* 💅).
+I've hidden artworks deep in folder structures, on encrypted drives and niche social media accounts.
+Being sneaky is fun and it also gives you security in this very sensitive area.
 
- to ben problem I'm facing is that you have to make sure  that if you is over eighteen years old.
- because I cannot reliably guarantee that he uses over eighteen years old comer,  we will encrypt all nsfw  images.
+> Just think if you had a breach in a social domain, like coworkers finding out about your fruity side. Oof, no thanks.
+
+Still, being sneaky makes it quite annoying to share  distinguished artwork with distinguished people.
+It also makes it annoying for myself, I want to have a catalogue of all the art I created over the years.
+
+For a while now I've been thinking on how to best restrict access to it.
+There is legal ramifications about hosting adult content, you need to ensure that the viewer is over 18 years old.
+The content should not be available to the general public,  including random visitors and search engines.
+ furthermore I don't want to host the images directly on my webserver.
+ if I mess up the security configuration,  things could leak.
+ if  people from my hosting provider
+
+Also I only want to expose this side of me to selected people.
+The worst case would be that images appear in the image search when typing in my user handle.
+
+All the content on my website are my responsibility. 
+I'm renting a webserver, so platform availability is out of my domain.
+As a nsfw website owner you have to make sure that the viewer is over eighteen years old.
+I cannot reliably guarantee that every user is over eighteen years old, but I can do so to my best judgment.
+
+ we will encrypt all nsfw  images.
  you need to insert a password to decrypt the images.
  stirring the images in  encrypted form  on the server has also the benefit that no sensitive images can leak if there is some kind of configuration problem.
 
