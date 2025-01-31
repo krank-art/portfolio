@@ -1,36 +1,139 @@
-# Krank's Portfolio
+# Krank's Portfolio Website
 
-Many artists upload their works onto some website.
-After all, we are creating things and one a shared with people who like it.
-among ferries, websites are also very common, you simply write some met web host and upload your that and art to the world to seen.
+> Why do it the easy way, when you can do it the hard way?
 
-so what's special about this website?
-well, nothing really come on yet another furry,  enjoying connecting With other furries.
-what special is, that I wrote this website from the ground up.
-I've always had a keen interest in web development.
-there's something about coding,  it's very rational process of splitting up a problem into smaller manage botch tanks that really appeals to me.
+I'm a person with many hobbies. 
+Coincidentally most of them seem to map well onto digital presentation.
+This includes drawing, programming, web development, creating component-based systems, composing electronic music, and cooking. 
+Yes, this bear [cooks](./recipes/chocolate-cream-cake).
 
-I  find great joy in creating robust systems and engines for solving various problems.
-in my day job became I've written many automation tools grips and plugins to help speed up mundane tasks.
-in my mind come up problems should be solved efficiently and repeatably ( even if  usually automating the task it takes longer than just doing it a few times).
-sometimes this is a huge waste of time for tasks the donned really require to be executed more than once a year.
-but in some they saved me from doing a lot of boring brainless busywork ( which I despise with a passion).
+Every artist has that innate desire to be cherished, to have done good, to have made someone's day a little bit better.
+And you can only connect with people if you actually show your art to the world. <!-- 
+Artists upload their works onto various social media platforms and websites. -->
+A quite posh approach is to host your own website.
+Which I'm doing right now.
+Splendid!
 
-so for the last ten years he was fascinated with the idea come of writing my own templating engine.
-theres already so many solutions out there (Hugo, Twig, Handlebars, Pelican) --  but I wanted to write my engine in a very specific way because he wasn't satisfied  with the available solutions.
 
-so I started long and tedious progress of creating my own templating engine.
-it runs like crap,  it's missing a lot of features --  but the specific purpose I created it for, it does really well.
+- [Krank's Portfolio Website](#kranks-portfolio-website)
+  - [Motivation](#motivation)
+  - [Implementation](#implementation)
+    - [Static site generator (SSG)](#static-site-generator-ssg)
+    - [Art comes first](#art-comes-first)
+  - [Concepts](#concepts)
+  - [Project Structure](#project-structure)
+  - [Further thoughts](#further-thoughts)
+    - [Structured data is cool](#structured-data-is-cool)
+    - [Progressive enhancement](#progressive-enhancement)
+    - [Fear of the mundane](#fear-of-the-mundane)
+  - [Naughty art](#naughty-art)
+  - [about the nature of publishing](#about-the-nature-of-publishing)
 
-this website is basically a database of the art I created over the years and also they thought they had every.
-you can also find the code for this website and get help, if the curiosa are so hosting a similar portfolio.
-I never intended to make this a product for everyone,  you'll need to be somewhat Servian coding and  web development to make use of it.
-if you do upload a website that is using parts of this code, please provide a link back to this side.
-I'd appreciate it greatly!
 
-  back when a wrote bachelor these is
 
-## Art comes first
+## Motivation
+
+Why I created my own **website**:
+
+* **Catalogueing and presentation.** \
+  I've created a lot of art over the years and I want to proudly show it to the world.
+  It also helps me finding my own stuff from years ago.
+  Nothing more embarrassing than going: 
+  "Hey I drew a kangaroo before! Let me show you... hold on it's not here... just a little longer... uhh..." 🙄
+* **Technical challenges.** \
+  I'm fascinated with how HTML components can be written and reused.
+  I always wanted to write a templating engine  that is made up of simple building blocks that together form a complex website.
+  And all the other aspects of web development are very interesting to me.
+* **Artistic outlet.** \
+  Due to health reasons I cannot draw much anymore.
+  This made me *very* sad in the past, being with other artists and seeing them draw but just not being able to do it myself.<!--
+  There is actually an absurd amount of "competition" in the furry community when it comes to drawing.-->
+  So me working on my website is an artistic outlet.
+  Also I can use all my past works as inertia for the little new stuff I create at a time.
+* **Alternative to social media.** \
+  Sharing your art is an integral part of being an artist.
+  The feeling of "Good job! Let's hang this onto the fridge" is what many of us strive for.
+  I try to spend only little time on social media, worrying about likes and posting artwork.
+  A few times in the past I wasn't drawing for myself, but rather in anticipation of what people might like.
+  And then those posts flopped.
+  That messed me up a lot.
+  So this website allows me to publish my artwork completely on my own terms.
+* **Finding friends.** \
+  This one is a little bit embarrassing.
+  The first version of my portfolio I published before attending my first furry meetup.
+  I was hoping that putting my art out there would impress people and that they want to my friends.
+  Through drawing I made quite a lot of online friends over the years!
+
+<!--
+bdb
+
+*    how did I create the website
+*  lessons learned
+-->
+
+And to be meta, here are the reasons why I'm writing this **blog post**:
+
+* **Pride.** \
+  I spent a lot of time, thought and energy on this project.
+  I am proud of all the technical solutions and artworks I've created over the years.
+  This is my very own place where I have full control on how I present my works.
+  So this blog post is some nice promotion.
+* **Documentation.** \
+  Explaining to myself and others how the actual website works.
+  Maybe someone can gain some wisdom on how to create their own.
+  And it also helps updating me the website in the future.
+* **Writing.** \
+  Writing in native language is very fun to me.
+  But I also always wanted to write something in English.
+  This topic is near and dear to my heart and a good choice to write about.
+
+
+## Implementation
+
+There is something about coding that tickles my brain in a good way.
+It's a very rational process of splitting up a problem into smaller manageable chunks.
+When coding, you're essentially creating gears, sprockets, springs and frames.
+These components can then be put together into anything, like a watch.
+Or an [electro-mechanical computer controlling nuclear bombs](http://www.righto.com/2024/08/minuteman-guidance-computer.html).
+Just this once tho, they create a furry art portfolio website.
+
+> By the way, "portfolio" is just saying "art folder" in a fancy way.
+> When applying to a design school or for an art job, you have to provide a portfolio with selected works showing that you know your shit.
+
+This portfolio website is made up of three parts:
+
+1. The website
+2. The static site generator
+3. The artworks and content
+
+
+### Static site generator (SSG)
+
+Back in August 2023 I started writing this website.
+I could have chosen any of the many available static site generators like [Hugo](https://gohugo.io/), [Jekyll](https://jekyllrb.com/) or [Pelican](https://getpelican.com/).
+Could have, yes, but I have very specific expectations on how my website should be constructed.
+So instead of doing the sensible approach and lowering my expectations, I went full-on "but I dont wanna!".
+I created my own tools that are tailored to processing lots of art and output a website as deployable as possible.
+
+A static site generator is a program that generates HTML files, which can be served on any webserver.
+All browsers actually only interpret HTML files for elements on a page.
+Usually the content is built dynamically on the server or (in recent years) on the client.
+A bog standard example would be a PHP webserver that queries a MySQL database for all posts and then sends the finished HTML to the page visitor.
+For a static site, this makes you very dependent on the specific server technology.
+(Also I really don't like PHP lol, but this horse has been beaten so much, only dust particles remain.)
+
+Well too bad though, my hosting provider only offers PHP as the backend technology. 
+Because I am too cheap to step up the pricing tier.
+PHP also keeps dominating the space of server-side programming languages with 75%, next come Ruby (6.2%), ASP.NET (5.4%) and Java (5.0%) (see [w3techs survey](https://w3techs.com/technologies/overview/programming_language/), last checked 2025-01-29).
+So I will run into this problem again and again.
+That's why the website must be built preemptively!
+
+In hindsight I should have just built a dynamic  website and then integrated a crawler, that goes through all pages and saves the website as static HML files.
+This is exactly what happens when you run the [`generate` command in Nuxt](https://nuxt.com/docs/api/commands/generate).
+Oh well, better luck next time.
+
+
+### Art comes first
 
 The site is written in a way,  that art comes first.
  this website is basically a very elaborate way to show of all the I've created in recent years.
@@ -60,7 +163,12 @@ The images are loaded lazily on the add overview.
  I used resized  versions with a max with an hide of one hundred and twenty pixels so we NA visitor look add all five hundred and thirty three images, they only Downloaded 6.75 MB of images in total.
  very good!
 
-## Automation is good
+## Concepts
+
+* Data Chunk
+* Model
+* component
+* page
 
 I could have written the webpage as static HTML.
 and to be fair, would probably have been alt faster than creating this elaborate library of tools and  static website generation engine.
@@ -87,13 +195,14 @@ if both sheets include the same list,  then you can combine I two lists into one
 it sheet is also associated with an id, so you know who issued it at what point in the code.
 this held a lot when debugging, because it made very clear where the data was coming from.
 
-
+<!--
 ## Motivation
 
  I wrote this website because I wasn't happy with the available tools for static site generation
 Their multiple tools that allow this,  but none  are based on nodejs
  if pages about no jars, they usually are serve ide rendered
  I wanted my output to be as portable as possible, so the output should be static HTML.
+-->
 
 
 ## Project Structure
@@ -193,25 +302,110 @@ Their multiple tools that allow this,  but none  are based on nodejs
 If you want to learn, to actually  install and use this engine,  please check out the [readme](https://github.com/krank-art/portfolio/blob/master/readme.md) file.
 
 
-## Over engineering
+## Further thoughts
 
-*  if it is not abundantly clear at this point, I am a Jarman.
-*  I really like work projects, but I also really want to make efficient and sustainable solutions when coding.
-*   this naturally leads to me building quite complicated and intricate systems.
-*  I hope by looking at my current code come a Uganda rave some knowledge for your own code projects.
-*  what I am really bad at is doing repetitive task which are super boring
-*  this includes tagging individual all petites, so they can later be searched by different tax and parameters.
-*  of course, I also had a lot of fun building my own templating  engine.
-*  to real reason my a started doing it is come of what because I did not find a suitable solution written in javascript.
-*  for me the ideal templating framework is bugs, because it has a very elegant style which is also component based.
-*   the problem as, view js is I inherently dependent on he vin javascript running, which a don't thing in is a good approach when creating website.
-*    there is this book a read which I really approve of, which is called progressive enhancement.
-*     in the spoke, the author talks about or websites should be build mostly as possible.
-*      some websites today are only loaded, when the side is accessible with a browser that runs javascript.
-*       I don't think this is a good a dear come ideally everything should be served in workable manner by the server.
-*       
+### Structured data is cool
+
+<!--
+so what's special about this website?
+well, nothing really come on yet another furry,  enjoying connecting With other furries.
+what special is, that I wrote this website from the ground up.
+I've always had a keen interest in web development.
+-->
+
+In my day job, I've written many automation tools and plugins to help speed up mundane tasks.
+I'm a designer and in our job we have a singular, monolithic project that has been going on for ten years.
+There are over 2000 artboards, many control elements and variants.
+There was a very high cost of updating many artboards upon a single change.
+Just imagine: you change the color of a button and then you have to *manually* go through all artboards and to *manually* update each button and then *manually* update each artboard to synchronize the changes. 
+Ugh.
+
+My design colleague saw the need for a structured approach.
+While I started my job there, he laid the groundwork and built up the majority of a [design library](https://www.sketch.com/docs/libraries/) in [Sketch](https://www.sketch.com/).
+Slowly but surely we replaced the static design elements with linked components from the library.
+Now every time you want to update a artboard, you just have to update all the symbol instances used in the artboard.
+
+Sketch also provides a [very well thought out and beautiful API](https://developer.sketch.com/reference/api/) to interact with the design documents.
+Sketch is written in Objective C, but the API itself uses NodeJS.
+This data-structured approach made it an absolute joy to develop tools for batch-editing artboards or generating new symbols for the library in all kinds of theme variants.
+During my time at the company I have written a utility plugin that even has it's own UI panels -- implemented with a web view and [Vue.js](https://vuejs.org/).
+Super cool!
+
+This experience showed me that a well structured data source can generate all kinds of cool stuff.
+And this also rings very true for *this* website project.
+As of writing, this website hosts over 500 individual art pieces.
+The naive approach would have been to create individual pages for each art file.
+Upfront it would have been significantly faster, but would've also made every single change an absolute nightmare.
+
+<!--
+was necessary to introduce some kind of structured library.
+My colleague built it up  a lot of the library, while a pervaded automation tools to speed up the process.
+
+It's very rewarding to build tools that save you hours of  mindless clicking of buttons.
+Tho more often than not, programmers spend more time on creating automation tools  then on the task itself.
+
+I find great joy in creating robust systems and engines for solving various problems.
+in my mind come up problems should be solved efficiently and repeatably ( even if  usually automating the task it takes longer than just doing it a few times).
+sometimes this is a huge waste of time for tasks the donned really require to be executed more than once a year.
+but in some they saved me from doing a lot of boring brainless busywork ( which I despise with a passion).
+
+so for the last ten years he was fascinated with the idea come of writing my own templating engine.
+theres already so many solutions out there (Hugo, Twig, Handlebars, Pelican) --  but I wanted to write my engine in a very specific way because he wasn't satisfied  with the available solutions.
+
+so I started long and tedious progress of creating my own templating engine.
+it runs like crap,  it's missing a lot of features --  but the specific purpose I created it for, it does really well.
+
+this website is basically a database of the art I created over the years and also they thought they had every.
+you can also find the code for this website and get help, if the curiosa are so hosting a similar portfolio.
+I never intended to make this a product for everyone,  you'll need to be somewhat Servian coding and  web development to make use of it.
+if you do upload a website that is using parts of this code, please provide a link back to this side.
+I'd appreciate it greatly!
+
+  back when a wrote bachelor these is
+-->
 
 
+### Progressive enhancement
+
+For me the ideal templating framework is Vue.js, because it has a very elegant syntax and is component based.
+Unfortunately Vue.js is dependent on JavaScript, either the website gets built on a NodeJS server (server side rendering) or built on the client (client side rendering). 
+This goes against my philosophy of keeping the website as portable as possible (no NodeJS).
+And building the website on the client goes against the philosophy of [Progressive Enhancement](https://en.wikipedia.org/wiki/Progressive_enhancement).
+
+I read the book [Adaptive Web Design](https://adaptivewebdesign.info/) by Aaron Gustafson, and a lot messages resonated with me.
+Progressive Enhancement is basically about building a website with robust individual layers.
+First comes content (HTML), which is the most important.
+Then you get styling (CSS).
+On top comes JavaScript, which adds additional functionality (like interacting with the main menu).
+The thought is to make the website more robust, so e.g. the JavaScript fails and the website is still usable.
+
+There are web **apps** of course where JavaScript is integral to the experience, like an [online drawing site](https://skribbl.io/) or [HTML5 games](https://www.newgrounds.com/). 
+But in my eyes a simple web **page** should not require JavaScript to display text.
+If there is any exception in the JavaScript code (e.g. the developer made an oopsie-doodle), some parts of the website will simply fail to appear.
+Maybe even the user decides to block JavaScript (lol what a goofball).
+
+It's probably not that big'a deal, but among other things I try to use semantically correct HTML elements.
+*Correctly* using semantic elements improves the [accessibility](https://developer.mozilla.org/en-US/docs/Web/Accessibility) of a web page, which is helpful for everyone.
+Ironically enough, the [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/patterns/) has multiple examples were control elements only work with full use of JavaScript.
+
+
+### Fear of the mundane
+
+I have this pet peeve of doing repetitive and boring tasks.
+Often the time-efficient solution would be to [Just Do It™](https://www.youtube.com/watch?v=ZXsQAXx_ao0), but I prefer to come up with some automated tool that can do it for me.
+For example I tagged all 513 art images and I HATED IT. 
+Ugh.
+In this case there was no smart solution and I had to manually go through each individual image.
+Tho I created a Tag Helper for the browser, which helped a lot with typing in tags and saving them in the correct format.
+Huzzah! 
+Total work time successfully reduced from 15 hours to ... 14 hours.
+
+And it's really weird, I waste my time a lot during the day.
+But for some reason when it comes to work, absolutely dread when I have to be dumb and mindless.
+During university I had a few apprenticeships and those turned very boring very fast.
+
+
+<!--
 ## Different approaches
 
 *  it would also have been feat the bold to ride a serve engine and then generate the project aesthetic fates, by running a crawl  which then traverses all the possible  links on the website.
@@ -226,8 +420,9 @@ If you want to learn, to actually  install and use this engine,  please check ou
 *  usually though,  nobody actually cares about the implementation unless it goes wrong.
 *  that's precisely the reason why it decided to stop trying to program again, because am we to focused on making it technologically nice instead of making a fun game.
 *  for my bachelor thesis I ran into this precise problem.
+-->
 
-
+<!--
 ## Thoughts on php
 
 * for me come with as always bind problem that in ream really full on of php.
@@ -243,9 +438,15 @@ If you want to learn, to actually  install and use this engine,  please check ou
 *  it also very useful that no js is pretties as for an interpret baited language and says it also is by popular among scales.
 *  best language I've ever worked with was se char become but also done think see sharp is a good id ear to use and web projects.
 *  that's another reason why is useful to use nod js, many of the modules can be written in a way that they're both useful by no chairs and plain old javascript which is run in the braze.
-* 
+-->
 
 
 ## Naughty art
 
 
+
+##  about the nature of publishing
+
+I've started and dropped many coding projects and never published them.
+Lots of things were learned but I have nothing to show for it.
+Actually publishing something forces you to bring it to a presentable state.
