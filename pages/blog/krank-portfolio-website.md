@@ -26,6 +26,7 @@ Splendid!
     - [Structured data is cool](#structured-data-is-cool)
     - [Progressive enhancement](#progressive-enhancement)
     - [Fear of the mundane](#fear-of-the-mundane)
+    - [Static through crawler](#static-through-crawler)
   - [Naughty art](#naughty-art)
   - [about the nature of publishing](#about-the-nature-of-publishing)
 
@@ -127,10 +128,6 @@ Because I am too cheap to step up the pricing tier.
 PHP also keeps dominating the space of server-side programming languages with 75%, next come Ruby (6.2%), ASP.NET (5.4%) and Java (5.0%) (see [w3techs survey](https://w3techs.com/technologies/overview/programming_language/), last checked 2025-01-29).
 So I will run into this problem again and again.
 That's why the website must be built preemptively!
-
-In hindsight I should have just built a dynamic  website and then integrated a crawler, that goes through all pages and saves the website as static HML files.
-This is exactly what happens when you run the [`generate` command in Nuxt](https://nuxt.com/docs/api/commands/generate).
-Oh well, better luck next time.
 
 
 ### Art comes first
@@ -304,6 +301,9 @@ If you want to learn, to actually  install and use this engine,  please check ou
 
 ## Further thoughts
 
+While writing this blog post I had a lot of thoughts that touch on the website, but do not fit neatly into the current reading structure.
+None of them seem particularly deep or developed, but I wanted to collect them here instead of just tossing them out.
+
 ### Structured data is cool
 
 <!--
@@ -403,15 +403,25 @@ Total work time successfully reduced from 15 hours to ... 14 hours.
 And it's really weird, I waste my time a lot during the day.
 But for some reason when it comes to work, absolutely dread when I have to be dumb and mindless.
 During university I had a few apprenticeships and those turned very boring very fast.
+I supposed you only really start valuing your time when you sell it to someone else.
 
 
-<!--
-## Different approaches
+### Static through crawler
 
-*  it would also have been feat the bold to ride a serve engine and then generate the project aesthetic fates, by running a crawl  which then traverses all the possible  links on the website.
-*  this is actually hard knocks project does in the generate step and think it's a very sensible approach.
-*  it red mean you could  use any server technology you want to, as long as the resulting HTML is encapsulated in itself and usable.
-*  the way I have written my whip side engine is, then each output file is written by hand.
+
+In hindsight I should have just built a dynamic  website and then integrated a crawler, that goes through all pages and saves the website as static HML files.
+This is exactly what happens when you run the [`generate` command in Nuxt](https://nuxt.com/docs/api/commands/generate).
+Oh well, better luck next time.
+
+A lot of tools are specifically tailored to this, for example [`wget`](https://www.gnu.org/software/wget/manual/wget.html).
+The crawler works by going through all HTML files, saving links and references to other pages and resources, crawling them next and repeat.
+At the end you get a directory of all **reachable** pages and files.
+You can then upload it onto a webserver and host it.
+
+It's a very sensible approach, because you can use any server technology you want.
+My own site engine generates and writes each output file by hand.
+
+
 *  I do know, id would have been pretty interesting to use a crawl I, probably awesome drawbacks like you have to update result lings and in land links on the pages comer but on the other hand you are much more free in you using dynamic server technology.
 * For me the has always been difficult to keep the balance between technical engineering and artistic expression.
 *  I dearly you can combined both, having website that looks beautiful and also is technologically very sound.
@@ -420,7 +430,7 @@ During university I had a few apprenticeships and those turned very boring very 
 *  usually though,  nobody actually cares about the implementation unless it goes wrong.
 *  that's precisely the reason why it decided to stop trying to program again, because am we to focused on making it technologically nice instead of making a fun game.
 *  for my bachelor thesis I ran into this precise problem.
--->
+
 
 <!--
 ## Thoughts on php
