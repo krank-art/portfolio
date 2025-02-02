@@ -14,12 +14,17 @@ A quite posh approach is to host your own website.
 Which I'm doing right now.
 Splendid!
 
+<div class="toc">
+
+## Table of content
 
 - [Krank's Portfolio Website](#kranks-portfolio-website)
+  - [Table of content](#table-of-content)
   - [Motivation](#motivation)
   - [Implementation](#implementation)
+    - [Website](#website)
     - [Static site generator (SSG)](#static-site-generator-ssg)
-    - [Art comes first](#art-comes-first)
+    - [Artworks and content](#artworks-and-content)
   - [Concepts](#concepts)
   - [Project Structure](#project-structure)
   - [Further thoughts](#further-thoughts)
@@ -27,10 +32,12 @@ Splendid!
     - [Progressive enhancement](#progressive-enhancement)
     - [Fear of the mundane](#fear-of-the-mundane)
     - [Static through crawler](#static-through-crawler)
+    - [File size optimization](#file-size-optimization)
   - [Naughty art](#naughty-art)
+  - [Tools](#tools)
   - [about the nature of publishing](#about-the-nature-of-publishing)
 
-
+</div>
 
 ## Motivation
 
@@ -43,8 +50,8 @@ Why I created my own **website**:
   "Hey I drew a kangaroo before! Let me show you... hold on it's not here... just a little longer... uhh..." 🙄
 * **Technical challenges.** \
   I'm fascinated with how HTML components can be written and reused.
-  I always wanted to write a templating engine  that is made up of simple building blocks that together form a complex website.
-  And all the other aspects of web development are very interesting to me.
+  I always wanted to write a templating engine that is made up of simple building blocks that together form a complex website.
+  Not to mention all the other aspects of web development!
 * **Artistic outlet.** \
   Due to health reasons I cannot draw much anymore.
   This made me *very* sad in the past, being with other artists and seeing them draw but just not being able to do it myself.<!--
@@ -108,6 +115,10 @@ This portfolio website is made up of three parts:
 3. The artworks and content
 
 
+### Website
+
+
+
 ### Static site generator (SSG)
 
 Back in August 2023 I started writing this website.
@@ -129,36 +140,78 @@ PHP also keeps dominating the space of server-side programming languages with 75
 So I will run into this problem again and again.
 That's why the website must be built preemptively!
 
+### Artworks and content
 
-### Art comes first
+When I first started writing this website, I had to compile all the art I created over the last five years. 
+As designer I learned that *presentation* makes up about half of your artistic value.
+So I created a folder in OneDrive named "Portfolio" and started copying art pieces into it.
+I feel so fancy~ 💅✨
 
-The site is written in a way,  that art comes first.
- this website is basically a very elaborate way to show of all the I've created in recent years.
+<!--TODO: Insert image of windows explorer? -->
 
-the first is that for his website was to compile  all the art I created over the last five years.
-((TODO:  insert image of winners explorer))
-I created a big folder  in my one drive named "Portfolio"  and started copying out pieces into there.
- many artists create many drawings, but often the problem is making the works actually presentable.
- if you have some sketch lying around in a sketchbook, it's was really much used to anyone.
- you need to make it... *presentable*.
+> You will not find any art files on my [Github repository](https://github.com/krank-art/portfolio) because [Github has a soft limit of 1 GB and a hard limit of 5 GB per repository](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github#repository-size-limits).
+> My art files alone are at 253 MB, which is well below the limit, but these are binary files so any change gets saved in the git history.
+> Also no, [Git LFS](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage) is not a workaround, you only get [1 GB of storage](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-storage-and-bandwidth-usage) for free.
 
- so once you have the folder of all your art pieces, you can then start extracting information about each art piece from in.
- I used special format with my art files `<Title> Release YYYY-MM-DD.png`.
- this way, wind reading in the art pieces, I can extract the title and the creation date from the filename.
- the next step when importing is extracting metadata from the art piece like width, height, common colors, aspect ratio and pathname.
- these attributes help later on to create the website.
+The very first step was **staging**.
+Here is my process for preparing the art files:
 
- once all the data is written in,  you have to copy the actual alt files into a special folder.
-For  for web optimization, we need to shrink down the images so potential visitors don't blow their monthly theater volume on a single wizard on our site.
- I'm using the library sharpjs ( which in turn is using the famous image magic)  two create resized versions of the available out pieces.
- mal has this very need feature of sourced na, were depending on the current size of the image an image it is chosen from a list of sources too save on bandwidth.
+<!--
+ you also need to go through all of your raw files, export new drawings,  give them uniform the dimensions.
 
- as an example, I  rewrote the id overview page in August 2024.
-That point time come  I had 513 art pieces  which a total foul size of 253 megabytes.
-The images are loaded lazily on the add overview.
- this means, the client only requests the images,  when an image slowly reges the fee port then eventually comes into few ( when scrawling the page).
- I used resized  versions with a max with an hide of one hundred and twenty pixels so we NA visitor look add all five hundred and thirty three images, they only Downloaded 6.75 MB of images in total.
- very good!
+Artists create many drawings... but often when meeting someone you do not have that exact drawing at hand you want to show.
+Like a sketch in a sketchbook, where you first have to pull out the sketchbook and browse to the specific page.
+You need to make it... *presentable*.
+-->
+
+1. Go through my screenshots and find out what drawings I created on [Anondraw](https://www.anondraw.com/).
+   > In the early years of my digital art phase, I used this site exclusively.
+   > Drawing together on a giant collaborative artboard really resonated with me.
+   > The drawing tools are quite basic, like there are no layers or pressure sensitivity.
+2. Extracted the drawings from Anondraw and create local folders. 
+3. If you used any other drawing software (like [Photoshop](https://www.adobe.com/products/photoshop.html), [Clip Studio Paint](https://www.clipstudio.net/), [Krita](https://krita.org/)), you can do final adjustments on the artwork before exporting a PNG.
+4. Upscale the images with [waifu2x](https://github.com/lltcggie/waifu2x-caffe/releases) if they are too small. 
+   > The model in this tool was specifically trained on stylized illustrations.
+   > It predates newer AI models and is unable to generate new images from scratch.
+   > This is purely for upscaling and denoising, can recommend!
+5. Tweak the image to improve quality:
+   1. Clean up drawings by removing unrelated content and messy lines.
+   2. Optionally finish coloring/painting (not recommended because you will get stuck if you do this for everything).
+   3. [Adjust curves](https://docs.krita.org/en/reference_manual/filters/adjust.html#color-adjustment-curves) so faint lineart drawings are readable.
+   4. Give drawings uniform pixel dimensions, e.g. `711 x 1321` --> `720 x 1280`.
+      > Using *good numbers* for your image dimensions is good practice.
+      > I'm a big fan of [highly composite numbers](https://en.wikipedia.org/wiki/Highly_composite_number), like multiples of 120 (720, 960, 1080, 1200, ...) or of 2 (512, 1024, ...) or of screen dimensions (1080, 1280, 1920, 2160, 3840).
+      > They guarantee that you do not end up with weird pixel values when some transformation happens, like scaling down the image for a thumbnail.
+   5. Make sure that the image has a somewhat common aspect ratio like 1:1, 2:1, 2:3, 4:5, 3:5, or 16:9.
+      > Having uniform aspect ratios does help you.
+      > If you take a photo, those usually are 3:2.
+      > Most picture frames are 1:1, 3:2 or 4:3,  if you want to print and frame your artwork.
+      > Instagram only allows you to upload works in 1:1, 5:4 or 16:9.
+   6. Scale down the image or save as JPEG if the file size is bigger than 2 MB.
+      > We are creating a website after all. 
+      > If we send huge files to visitors, it takes ages to load and we use up a lot of internet traffic (this is a big deal on mobile).
+      > Furthermore it slows down the whole artwork pipeline when creating the website.
+      >  I recommend using [paint.NET](https://www.getpaint.net/), the export window shows you the resulting file size nicely.
+      > 
+      > As a rule of thumb,  if you have more stylized images or graphic design, use PNG (lossless).
+      > If you have a lot of detail and noise use JPEG (lossy, recommended quality rate between 75-90%).
+6. Change the file name to follow the pattern of `<Title> Release YYYY-MM-DD.png`.
+7. Copy the file into `/static/art`  as preparation for importing.
+
+<!-- add megamind meme about presentation -->
+
+The next step is **importing**.
+Once you have a folder of all your art pieces, you can start extracting information from them.
+I used a special naming format: `<Title> Release YYYY-MM-DD.png`.
+`<Title>` consists of `<domain> <further description>`, like drawings about bunnies are named *Bunny Hug*, *Bunny Sad*, *Bunny Bear*, etc.
+This helps a lot when sorting the art files by name.
+From this structured file name I can then extract the title and the creation date.
+I also extract metadata like width, height, [common colors](https://vibrant.dev/), aspect ratio and pathname.
+
+All of this information then gets saved in `media-art.json`.
+This file lists all artworks with **generated** properties (like file name, width, common colors)  and **user-specified** properties (title, description, tags).
+The user specified properties are never overwritten and rather integrated upon reimport.
+
 
 ## Concepts
 
@@ -432,6 +485,23 @@ My own site engine generates and writes each output file by hand.
 *  for my bachelor thesis I ran into this precise problem.
 
 
+### File size optimization
+
+Once all the data is read in, you have to copy the actual art files into the `/dist` folder.
+For optimization, we use [source sets](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset) on our images.
+That means we take the original image and shrink it down to decrease filesize
+That way the visitor only downloads an image that fits onto their current screen.
+need to shrink down the images so potential visitors don't blow their monthly theater volume on a single wizard on our site.
+ I'm using the library sharpjs ( which in turn is using the famous image magic)  two create resized versions of the available out pieces.
+ mal has this very need feature of sourced na, were depending on the current size of the image an image it is chosen from a list of sources too save on bandwidth.
+
+ as an example, I  rewrote the id overview page in August 2024.
+That point time come  I had 513 art pieces  which a total foul size of 253 megabytes.
+The images are loaded lazily on the add overview.
+ this means, the client only requests the images,  when an image slowly reges the fee port then eventually comes into few ( when scrawling the page).
+ I used resized  versions with a max with an hide of one hundred and twenty pixels so we NA visitor look add all five hundred and thirty three images, they only Downloaded 6.75 MB of images in total.
+ very good!
+
 <!--
 ## Thoughts on php
 
@@ -453,6 +523,15 @@ My own site engine generates and writes each output file by hand.
 
 ## Naughty art
 
+
+## Tools
+
+Comprehensive list of all the tools I use for different tasks
+* Krita, paint.NET, Aseprite, mspaint
+* waifu2x
+* VS Code, github, ChatGPT
+* NodeJS, scss, rollup
+* Hetzner
 
 
 ##  about the nature of publishing
