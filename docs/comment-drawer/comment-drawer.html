@@ -1,101 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comment Drawer</title>
 </head>
+
 <body>
-<script>
-const canvas = document.createElement("canvas");
-canvas.width = 320;
-canvas.height = 160;
-canvas.style.border = "1px solid black";
-document.body.appendChild(canvas);
+    <script>
+        const canvas = document.createElement("canvas");
+        canvas.width = 320;
+        canvas.height = 120;
+        canvas.style.border = "1px solid black";
+        document.body.appendChild(canvas);
 
-const ctx = canvas.getContext("2d");
-let drawing = false;
-let paths = [];
-let currentPath = [];
-const lastKnownPosition = { x: null, y: null };
+        const ctx = canvas.getContext("2d");
+        let drawing = false;
+        let paths = [];
+        let currentPath = [];
+        const lastKnownPosition = { x: null, y: null };
 
 
-function drawPixelLine(from, to) {
-    const maxPixelDrawing = 10000;
-    let x0 = Math.round(from.x), y0 = Math.round(from.y);
-    let x1 = Math.round(to.x), y1 = Math.round(to.y);
-    
-    let dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-    let dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
-    let err = dx + dy;
-    
-    let currentPixelDrawingLimit = 0;
-    while (currentPixelDrawingLimit < maxPixelDrawing) {
-        drawPixel(x0, y0);
-        currentPixelDrawingLimit++;
-        if (x0 === x1 && y0 === y1) break;
-        let e2 = 2 * err;
-        if (e2 >= dy) { err += dy; x0 += sx; }
-        if (e2 <= dx) { err += dx; y0 += sy; }
-    }
-}
+        function drawPixelLine(from, to, brusher = null) {
+            const maxPixelDrawing = 10000;
+            let x0 = Math.round(from.x), y0 = Math.round(from.y);
+            let x1 = Math.round(to.x), y1 = Math.round(to.y);
 
-canvas.addEventListener("mousedown", () => {
-    drawing = true;
-    currentPath = [];
-    paths.push(currentPath);
-});
+            let dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+            let dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+            let err = dx + dy;
 
-canvas.addEventListener("mousemove", (e) => {
-    if (!drawing) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const currentPosition = { x, y };
-    currentPath.push(currentPosition);
-    if (lastKnownPosition.x && lastKnownPosition.y)
-        drawPixelLine(lastKnownPosition, currentPosition);
-    else
-        drawPixel(x, y);
-    lastKnownPosition.x = currentPosition.x;
-    lastKnownPosition.y = currentPosition.y;
-});
+            let currentPixelDrawingLimit = 0;
+            while (currentPixelDrawingLimit < maxPixelDrawing) {
+                brusher ? brusher(x0, y0) : drawPixel(x0, y0);
+                currentPixelDrawingLimit++;
+                if (x0 === x1 && y0 === y1) break;
+                let e2 = 2 * err;
+                if (e2 >= dy) { err += dy; x0 += sx; }
+                if (e2 <= dx) { err += dx; y0 += sy; }
+            }
+        }
 
-canvas.addEventListener("mouseup", () => {
-    drawing = false;
-    lastKnownPosition.x = null;
-    lastKnownPosition.y = null;
-});
-
-canvas.addEventListener("mouseleave", () => {
-    drawing = false;
-    lastKnownPosition.x = null;
-    lastKnownPosition.y = null;
-});
-
-function drawPixel(x, y) {
-    ctx.fillRect(x, y, 1, 1);
-}
-
-const undoButton = document.createElement("button");
-undoButton.textContent = "Undo";
-document.body.appendChild(undoButton);
-
-undoButton.addEventListener("click", () => {
-    paths.pop();
-    redraw();
-});
-
-function redraw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    paths.forEach(path => {
-        path.forEach(point => {
-            drawPixel(point.x, point.y);
+        canvas.addEventListener("mousedown", () => {
+            drawing = true;
+            currentPath = [];
+            paths.push(currentPath);
         });
-    });
-}
 
+        canvas.addEventListener("mousemove", (e) => {
+            const brush = (x, y) => drawSquare(x, y, 3);
+            if (!drawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const currentPosition = { x, y };
+            currentPath.push(currentPosition);
+            if (lastKnownPosition.x && lastKnownPosition.y)
+                drawPixelLine(lastKnownPosition, currentPosition, brush);
+            else
+                brush(x, y);
+            lastKnownPosition.x = currentPosition.x;
+            lastKnownPosition.y = currentPosition.y;
+        });
 
-</script>
+        canvas.addEventListener("mouseup", () => {
+            drawing = false;
+            lastKnownPosition.x = null;
+            lastKnownPosition.y = null;
+        });
+
+        canvas.addEventListener("mouseleave", () => {
+            drawing = false;
+            lastKnownPosition.x = null;
+            lastKnownPosition.y = null;
+        });
+
+        function drawPixel(x, y) {
+            ctx.fillRect(x, y, 1, 1);
+        }
+
+        function drawSquare(x, y, size = 2) {
+            const centerX = x - Math.round(size / 2);
+            const centerY = y - Math.round(size / 2);
+            ctx.fillRect(centerX, centerY, size, size);
+        }
+
+        const undoButton = document.createElement("button");
+        undoButton.textContent = "Undo";
+        document.body.appendChild(undoButton);
+
+        undoButton.addEventListener("click", () => {
+            paths.pop();
+            redraw();
+        });
+
+        function redraw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const path of paths) {
+                for (let i = 0; i < path.length; i++) {
+                    const currentPoint = path[i];
+                    const lastPoint = i < 0 ? null : path[i - 1];
+                    if (lastPoint)
+                        drawPixelLine(lastPoint, currentPoint, (x, y) => drawSquare(x, y, 3));
+                    else
+                        drawSquare(currentPoint.x, currentPoint.y, 3);
+                }
+            }
+        }
+
+    </script>
 </body>
+
 </html>
