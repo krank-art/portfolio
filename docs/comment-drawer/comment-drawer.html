@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment Drawer</title>
+</head>
+<body>
+<script>
+    const canvas = document.createElement("canvas");
+canvas.width = 320;
+canvas.height = 160;
+canvas.style.border = "1px solid black";
+document.body.appendChild(canvas);
+
+const ctx = canvas.getContext("2d");
+let drawing = false;
+let paths = [];
+let currentPath = [];
+
+canvas.addEventListener("mousedown", () => {
+    drawing = true;
+    currentPath = [];
+    paths.push(currentPath);
+});
+
+canvas.addEventListener("mousemove", (e) => {
+    if (!drawing) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    currentPath.push({ x, y });
+    redraw();
+});
+
+canvas.addEventListener("mouseup", () => {
+    drawing = false;
+});
+
+canvas.addEventListener("mouseleave", () => {
+    drawing = false;
+});
+
+function redraw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    paths.forEach(path => {
+        if (path.length > 0) {
+            ctx.moveTo(path[0].x, path[0].y);
+            for (let i = 1; i < path.length; i++) {
+                ctx.lineTo(path[i].x, path[i].y);
+            }
+        }
+    });
+    ctx.stroke();
+}
+
+const undoButton = document.createElement("button");
+undoButton.textContent = "Undo";
+document.body.appendChild(undoButton);
+
+undoButton.addEventListener("click", () => {
+    paths.pop();
+    redraw();
+});
+
+</script>
+</body>
+</html>
