@@ -10,8 +10,9 @@
 <body>
   <script>
     const canvas = document.createElement("canvas");
-    canvas.width = 320;
-    canvas.height = 120;
+    const scale = 4;
+    canvas.width = 320 * scale;
+    canvas.height = 120 * scale;
     canvas.style.border = "1px solid black";
     document.body.appendChild(canvas);
 
@@ -52,8 +53,10 @@
       const brush = (x, y) => drawSquare(x, y, 3);
       if (!drawing) return;
       const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const rawX = e.clientX - rect.left;
+      const rawY = e.clientY - rect.top;
+      const x = Math.round(rawX / scale);
+      const y = Math.round(rawY / scale);
       const currentPosition = { x, y };
       currentPath.push(currentPosition);
       if (lastKnownPosition.x && lastKnownPosition.y)
@@ -77,13 +80,13 @@
     });
 
     function drawPixel(x, y) {
-      ctx.fillRect(x, y, 1, 1);
+      ctx.fillRect(x * scale, y * scale, scale, scale);
     }
 
     function drawSquare(x, y, size = 2) {
       const centerX = x - Math.round(size / 2);
       const centerY = y - Math.round(size / 2);
-      ctx.fillRect(centerX, centerY, size, size);
+      ctx.fillRect(centerX * scale, centerY * scale, size * scale, size * scale);
     }
 
     const undoButton = document.createElement("button");
