@@ -108,7 +108,16 @@
         }
       }
     }
+    const downloadButton = document.createElement("button");
+    downloadButton.textContent = "Download PNG";
+    document.body.appendChild(downloadButton);
 
+    downloadButton.addEventListener("click", () => {
+      const link = document.createElement("a");
+      link.download = "drawing.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
   </script>
 </body>
 
