@@ -23,7 +23,7 @@
     const lastKnownPosition = { x: null, y: null };
 
 
-    function drawPixelLine(from, to, brusher = null) {
+    function drawPixelLine({from, to, brusher = null, scale = 1}) {
       const maxPixelDrawing = 10000;
       let x0 = Math.round(from.x), y0 = Math.round(from.y);
       let x1 = Math.round(to.x), y1 = Math.round(to.y);
@@ -34,7 +34,7 @@
 
       let currentPixelDrawingLimit = 0;
       while (currentPixelDrawingLimit < maxPixelDrawing) {
-        brusher ? brusher(x0, y0) : drawPixel(x0, y0);
+        brusher ? brusher(x0, y0) : drawPixel({x: x0, y: y0, scale});
         currentPixelDrawingLimit++;
         if (x0 === x1 && y0 === y1) break;
         let e2 = 2 * err;
@@ -50,7 +50,7 @@
     });
 
     canvas.addEventListener("mousemove", (e) => {
-      const brush = (x, y) => drawSquare(x, y, 3);
+      const brush = (x, y) => drawSquare({x, y, scale, size: 3});
       if (!drawing) return;
       const rect = canvas.getBoundingClientRect();
       const rawX = e.clientX - rect.left;
@@ -60,7 +60,7 @@
       const currentPosition = { x, y };
       currentPath.push(currentPosition);
       if (lastKnownPosition.x && lastKnownPosition.y)
-        drawPixelLine(lastKnownPosition, currentPosition, brush);
+        drawPixelLine({from: lastKnownPosition, to: currentPosition, brusher: brush, scale});
       else
         brush(x, y);
       lastKnownPosition.x = currentPosition.x;
@@ -79,14 +79,15 @@
       lastKnownPosition.y = null;
     });
 
-    function drawPixel(x, y) {
+    function drawPixel({x, y, scale = 1}) {
       ctx.fillRect(x * scale, y * scale, scale, scale);
     }
 
-    function drawSquare(x, y, size = 2) {
+    function drawSquare({x, y, size = 2, scale = 1, pattern = null}) {
       const centerX = x - Math.round(size / 2);
       const centerY = y - Math.round(size / 2);
-      ctx.fillRect(centerX * scale, centerY * scale, size * scale, size * scale);
+      const filler = pattern ? pattern : ctx.fillRect.bind(ctx);
+      filler(centerX * scale, centerY * scale, size * scale, size * scale);
     }
 
     const undoButton = document.createElement("button");
@@ -105,9 +106,14 @@
           const currentPoint = path[i];
           const lastPoint = i < 0 ? null : path[i - 1];
           if (lastPoint)
-            drawPixelLine(lastPoint, currentPoint, (x, y) => drawSquare(x, y, 3));
+            drawPixelLine({
+              from: lastPoint, 
+              to: currentPoint, 
+              brusher: (x, y) => drawSquare({x, y, scale, size: 3}),
+              scale,
+            });
           else
-            drawSquare(currentPoint.x, currentPoint.y, 3);
+            drawSquare({x: currentPoint.x, y: currentPoint.y, scale, size: 3});
         }
       }
     }
