@@ -93,28 +93,28 @@
       }
       // We want to minimize the calls to 'ctx.fillRect', so depending on the pattern the iteration varies.
       if (pattern === "25%") {
-        for (let i = x; i < x + size; i++)
-          for (let j = y; j < y + size; j++) {
+        for (let i = centerX; i < centerX + size; i++)
+          for (let j = centerY; j < centerY + size; j++) {
             if (i % 2 === 0 && j % 2 === 0)
               ctx.fillRect(i * scale, j * scale, 1 * scale, 1 * scale);
           }
         return;
       }
       if (pattern === "50%") {
-        for (let i = x; i < x + size; i++)
-          for (let j = y; j < y + size; j++) {
+        for (let i = centerX; i < centerX + size; i++)
+          for (let j = centerY; j < centerY + size; j++) {
             if ((i + j) % 2 === 0)
               ctx.fillRect(i * scale, j * scale, 1 * scale, 1 * scale);
           }
         return;
       }
       if (pattern === "75%") {
-        for (let i = x; i < x + size; i++)
+        for (let i = centerX; i < centerX + size; i++)
           if (i % 2 === 0)
-            ctx.fillRect(i * scale, y * scale, 1 * scale, size * scale);
-        for (let j = y; j < y + size; j++)
+            ctx.fillRect(i * scale, centerY * scale, 1 * scale, size * scale);
+        for (let j = centerY; j < centerY + size; j++)
           if (j % 2 === 0)
-            ctx.fillRect(x * scale, j * scale, size * scale, 1 * scale);
+            ctx.fillRect(centerX * scale, j * scale, size * scale, 1 * scale);
         return;
       }
       throw new Error(`Unknown pattern '${pattern}'. `);
