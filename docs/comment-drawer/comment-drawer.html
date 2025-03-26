@@ -102,9 +102,11 @@
     document.body.appendChild(canvas);
 
     const ctx = canvas.getContext("2d");
-    let pattern = "75%";
+    let pattern = null;
+    let brush = null;
+    let size = -1;
     let drawing = false;
-    let paths = [];
+    const history = [];
     let currentPath = [];
     const lastKnownPosition = { x: null, y: null };
 
@@ -130,12 +132,15 @@
 
     canvas.addEventListener("mousedown", () => {
       drawing = true;
+      // We could save brush type and brush size per single point in path to apply neat effects.
+      // Like if we track velocity of the brush, we could do a try brushing effect (opacity decreases).
+      // For now we will use the simple approach and keep brush type and brush size constant per each stroke.
       currentPath = [];
-      paths.push(currentPath);
+      history.push({ brush, size, pattern, path: currentPath});
     });
 
     canvas.addEventListener("mousemove", (e) => {
-      const brush = (x, y) => drawSquare({ x, y, scale, size: 3, pattern });
+      const brush = (x, y) => drawSquare({ x, y, scale, size, pattern });
       if (!drawing) return;
       const rect = canvas.getBoundingClientRect();
       const rawX = e.clientX - rect.left;
@@ -171,7 +176,7 @@
     function drawSquare({ x, y, size = 2, scale = 1, pattern = null }) {
       const centerX = x - Math.round(size / 2);
       const centerY = y - Math.round(size / 2);
-      if (!pattern) {
+      if (!pattern || pattern === "100%") {
         ctx.fillRect(centerX * scale, centerY * scale, size * scale, size * scale);
         return;
       }
@@ -209,13 +214,13 @@
     document.body.appendChild(undoButton);
 
     undoButton.addEventListener("click", () => {
-      paths.pop();
+      history.pop();
       redraw();
     });
 
     function redraw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const path of paths) {
+      for (const {brush, size, pattern, path} of history) {
         for (let i = 0; i < path.length; i++) {
           const currentPoint = path[i];
           const lastPoint = i < 0 ? null : path[i - 1];
@@ -223,11 +228,11 @@
             drawPixelLine({
               from: lastPoint,
               to: currentPoint,
-              brusher: (x, y) => drawSquare({ x, y, scale, size: 3, pattern }),
+              brusher: (x, y) => drawSquare({ x, y, scale, size: size, pattern: pattern }),
               scale,
             });
           else
-            drawSquare({ x: currentPoint.x, y: currentPoint.y, scale, size: 3, pattern });
+            drawSquare({ x: currentPoint.x, y: currentPoint.y, scale, size: size, pattern: pattern });
         }
       }
     }
@@ -243,22 +248,34 @@
       link.click();
     });
 
-    const toolRadios = Array.from(document.querySelectorAll(".row-button-radio[name='tool']"));
-    for (const input of toolRadios)
-      input.addEventListener("change", (event) => {
-        const value = event.target.value;
-        const match = value.match(/^([a-zA-Z]+).*([0-9]+)$/);
-        const brushType = match[1];
-        const brushSize = parseInt(match[2]);
-        console.log(brushType, brushSize)
+    const toolRadioElements = Array.from(document.querySelectorAll(".row-button-radio[name='tool']"));
+    const toolRadios = toolRadioElements.map(element => {
+      const value = element.value;
+      const match = value.match(/^([a-zA-Z]+).*?([0-9]+)$/);
+      const brushType = match[1];
+      const brushSize = parseInt(match[2]);
+      return { id: value, element, brushType, brushSize };
+    });
+    for (const radio of toolRadios)
+      radio.element.addEventListener("change", (event) => {
+        const toolRadio = toolRadios.find(radio => radio.id === event.target.value);
+        brush = toolRadio.brushType;
+        size = toolRadio.brushSize;
+        //console.log(brush, size);
       });
 
-    const patternRadios = Array.from(document.querySelectorAll(".row-button-radio[name='pattern']"));
-    for (const input of patternRadios)
-      input.addEventListener("change", (event) => {
-        const value = event.target.value;
-        console.log(value);
+    const initialBrush = toolRadios.find(radio => radio.element.checked);
+    brush = initialBrush.brushType;
+    size = initialBrush.brushSize;
+
+    const patternRadios = Array.from(document.querySelectorAll(".row-button-radio[name='pattern']"));    
+    for (const radio of patternRadios)
+      radio.addEventListener("change", (event) => {
+        pattern = event.target.value;
+        //console.log(value);
       });
+    const initialPattern = patternRadios.find(radio => radio.checked);
+    pattern = initialPattern.value;
 
   </script>
 </body>
