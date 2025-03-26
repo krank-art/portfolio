@@ -136,7 +136,7 @@
       // Like if we track velocity of the brush, we could do a try brushing effect (opacity decreases).
       // For now we will use the simple approach and keep brush type and brush size constant per each stroke.
       currentPath = [];
-      history.push({ brush, size, pattern, path: currentPath});
+      history.push({ brush, size, pattern, path: currentPath });
     });
 
     canvas.addEventListener("mousemove", (e) => {
@@ -229,7 +229,7 @@
 
     function redraw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const {brush, size, pattern, path} of history) {
+      for (const { brush, size, pattern, path } of history) {
         for (let i = 0; i < path.length; i++) {
           const currentPoint = path[i];
           const lastPoint = i < 0 ? null : path[i - 1];
@@ -246,6 +246,38 @@
       }
     }
 
+    function downloadImage(scale = 1) {
+      const originalData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+      // New canvas dimensions
+      const newWidth = Math.floor(canvas.width / scale);
+      const newHeight = Math.floor(canvas.height / scale);
+
+      const newCanvas = document.createElement("canvas");
+      newCanvas.width = newWidth;
+      newCanvas.height = newHeight;
+      const newCtx = newCanvas.getContext("2d");
+      const newImageData = newCtx.createImageData(newWidth, newHeight);
+      const newPixels = newImageData.data;
+
+      // Copy every nth pixel in both directions
+      for (let y = 0; y < newHeight; y++) {
+        for (let x = 0; x < newWidth; x++) {
+          const origIndex = ((y * scale * canvas.width) + (x * scale)) * 4;
+          const newIndex = (y * newWidth + x) * 4;
+
+          newPixels[newIndex] = originalData[origIndex];       // R
+          newPixels[newIndex + 1] = originalData[origIndex + 1]; // G
+          newPixels[newIndex + 2] = originalData[origIndex + 2]; // B
+          newPixels[newIndex + 3] = originalData[origIndex + 3]; // A
+        }
+      }
+
+      // Draw new pixels onto the new canvas
+      newCtx.putImageData(newImageData, 0, 0);
+      return newCanvas.toDataURL("image/png");
+    }
+
     const downloadButton = document.createElement("button");
     downloadButton.textContent = "Download PNG";
     document.body.appendChild(downloadButton);
@@ -253,7 +285,7 @@
     downloadButton.addEventListener("click", () => {
       const link = document.createElement("a");
       link.download = "drawing.png";
-      link.href = canvas.toDataURL("image/png");
+      link.href = downloadImage(scale);
       link.click();
     });
 
@@ -277,7 +309,7 @@
     brush = initialBrush.brushType;
     size = initialBrush.brushSize;
 
-    const patternRadios = Array.from(document.querySelectorAll(".row-button-radio[name='pattern']"));    
+    const patternRadios = Array.from(document.querySelectorAll(".row-button-radio[name='pattern']"));
     for (const radio of patternRadios)
       radio.addEventListener("change", (event) => {
         pattern = event.target.value;
@@ -286,6 +318,9 @@
     const initialPattern = patternRadios.find(radio => radio.checked);
     pattern = initialPattern.value;
 
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "black"; // TODO: Add eraser functionality
   </script>
 </body>
 
