@@ -5,9 +5,94 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Comment Drawer</title>
+
+  <style>
+    .row-button-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .row-button {
+      display: inline-block;
+    }
+
+    .row-button-label {
+      display: inline-flex;
+      padding: 10px 20px;
+      border: 1px solid black;
+      cursor: pointer;
+      background: white;
+      user-select: none;
+    }
+
+    .row-button-radio {
+      display: none;
+    }
+
+    .row-button-radio:checked+.row-button-label {
+      background: #ffcc00;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="row-button-group">
+    <label class="row-button">
+      <input class="row-button-radio" type="radio" name="tool" value="brush2" checked>
+      <span class="row-button-label">Brush 2</span>
+    </label>
+    <label class="row-button">
+      <input class="row-button-radio" type="radio" name="tool" value="brush3">
+      <span class="row-button-label">Brush 3</span>
+    </label>
+    <label class="row-button">
+      <input class="row-button-radio" type="radio" name="tool" value="brush5">
+      <span class="row-button-label">Brush 5</span>
+    </label>
+    <label class="row-button">
+      <input class="row-button-radio" type="radio" name="tool" value="brush10">
+      <span class="row-button-label">Brush 10</span>
+    </label>
+  </div>
+
+  <div class="row-button-group">
+    <label class="row-button">
+      <input class="row-button-radio" type="radio" name="tool" value="eraser3">
+      <span class="row-button-label">Eraser 3</span>
+    </label>
+    <label class="row-button">
+      <input class="row-button-radio" type="radio" name="tool" value="eraser5">
+      <span class="row-button-label">Eraser 5</span>
+    </label>
+    <label class="row-button">
+      <input class="row-button-radio" type="radio" name="tool" value="eraser7">
+      <span class="row-button-label">Eraser 7</span>
+    </label>
+    <label class="row-button">
+      <input class="row-button-radio" type="radio" name="tool" value="eraser12">
+      <span class="row-button-label">Eraser 12</span>
+    </label>
+  </div>
+
+  <div class="row-button-group">
+    <label class="row-button">
+      <input class="row-button-radio" type="radio" name="pattern" value="100%" checked>
+      <span class="row-button-label">Solid</span>
+    </label>
+    <label class="row-button">
+      <input class="row-button-radio" type="radio" name="pattern" value="75%">
+      <span class="row-button-label">Pattern 75%</span>
+    </label>
+    <label class="row-button">
+      <input class="row-button-radio" type="radio" name="pattern" value="50%">
+      <span class="row-button-label">Pattern 50%</span>
+    </label>
+    <label class="row-button">
+      <input class="row-button-radio" type="radio" name="pattern" value="25%">
+      <span class="row-button-label">Pattern 25%</span>
+    </label>
+  </div>
+
   <script>
     const canvas = document.createElement("canvas");
     const scale = 4;
@@ -22,7 +107,6 @@
     let paths = [];
     let currentPath = [];
     const lastKnownPosition = { x: null, y: null };
-
 
     function drawPixelLine({ from, to, brusher = null, scale = 1 }) {
       const maxPixelDrawing = 10000;
@@ -158,6 +242,24 @@
       link.href = canvas.toDataURL("image/png");
       link.click();
     });
+
+    const toolRadios = Array.from(document.querySelectorAll(".row-button-radio[name='tool']"));
+    for (const input of toolRadios)
+      input.addEventListener("change", (event) => {
+        const value = event.target.value;
+        const match = value.match(/^([a-zA-Z]+).*([0-9]+)$/);
+        const brushType = match[1];
+        const brushSize = parseInt(match[2]);
+        console.log(brushType, brushSize)
+      });
+
+    const patternRadios = Array.from(document.querySelectorAll(".row-button-radio[name='pattern']"));
+    for (const input of patternRadios)
+      input.addEventListener("change", (event) => {
+        const value = event.target.value;
+        console.log(value);
+      });
+
   </script>
 </body>
 
