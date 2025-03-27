@@ -94,6 +94,67 @@
   </div>
 
   <script>
+    class CanvasHistory {
+      constructor(maxSize = 20) {
+        this.maxSize = maxSize;
+        this.states = [];
+        this.index = -1;
+      }
+
+      add({ brush, size, pattern, path, pixelData }) {
+        /*
+         * Note: pixelData represents the image data *before* the current stroke has been applied.
+         * It's a bit awkard, but the problem is that the delicate drawing process can be interrupted
+         * by any event caused by the user or browser. If we add an entry at the very start, we can
+         * rest safely that most of the relevant data is remembered by the history.
+         */
+        this.trim();
+        this.states.push({ brush, size, pattern, path, pixelData });
+        if (this.states.length > this.maxSize) {
+          this.states.shift();
+        } else {
+          this.index++;
+        }
+      }
+
+      undo() {
+        if (this.states.length === 0)
+          return null;
+        this.index = Math.max(0, this.index - 1);
+        return this.states[this.index];
+      }
+
+      redo() {
+        if (this.states.length === 0)
+          return null;
+        this.index = Math.min(this.states.length, this.index + 1);
+        return this.states[this.index];
+      }
+
+      trim() {
+        if (this.index < this.states.length - 1) {
+          this.states = this.states.slice(0, this.index + 1);
+        }
+      }
+
+      hasMoreUndos() {
+        if (this.states.length < 2)
+          return false;
+        return this.index > 0;
+      }
+
+      hasMoreRedos() {
+        if (this.states.length < 2)
+          return false;
+        return this.index < this.states.length - 1;
+      }
+
+      reset() {
+        this.states = [];
+        this.index = -1;
+      }
+    }
+
     const canvas = document.createElement("canvas");
     const scale = 4;
     canvas.width = 320 * scale;
@@ -102,13 +163,16 @@
     document.body.appendChild(canvas);
 
     const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "black"; // TODO: Add eraser functionality
     const { width, height } = canvas;
-    const imageData = ctx.getImageData(0, 0, width, height);
+    let imageData = ctx.getImageData(0, 0, width, height);
     let pattern = null;
     let brush = null;
     let size = -1;
     let drawing = false;
-    const history = [];
+    const history = new CanvasHistory();
     let currentPath = [];
     const lastKnownPosition = { x: null, y: null };
 
@@ -138,11 +202,10 @@
       // Like if we track velocity of the brush, we could do a try brushing effect (opacity decreases).
       // For now we will use the simple approach and keep brush type and brush size constant per each stroke.
       currentPath = [];
-      history.push({ brush, size, pattern, path: currentPath });
+      history.add({ brush, size, pattern, path: currentPath, pixelData: new ImageData(new Uint8ClampedArray(imageData.data), imageData.width, imageData.height) });
     });
 
     canvas.addEventListener("mousemove", (e) => {
-      const brush = (x, y) => drawSquare({ x, y, scale, size, pattern });
       if (!drawing) return;
       const rect = canvas.getBoundingClientRect();
       const rawX = e.clientX - rect.left;
@@ -151,10 +214,12 @@
       const y = Math.round(rawY / scale);
       const currentPosition = { x, y };
       currentPath.push(currentPosition);
-      if (lastKnownPosition.x && lastKnownPosition.y)
-        drawPixelLine({ from: lastKnownPosition, to: currentPosition, brusher: brush, scale });
-      else
-        brush(x, y);
+      drawPixelLine({
+        from: lastKnownPosition.x && lastKnownPosition.y ? lastKnownPosition : currentPosition,
+        to: currentPosition,
+        brusher: (x, y) => drawSquare({ x, y, scale, size, pattern }),
+        scale: scale,
+      });
       ctx.putImageData(imageData, 0, 0); // Flush image data
       lastKnownPosition.x = currentPosition.x;
       lastKnownPosition.y = currentPosition.y;
@@ -224,28 +289,26 @@
     document.body.appendChild(undoButton);
 
     undoButton.addEventListener("click", () => {
-      history.pop();
-      redraw();
+      if (!history.hasMoreUndos())
+        return;
+      const { brush, size, pattern, path, pixelData } = history.undo();
+      console.log("beep")
+      //const undoData = new ImageData(pixelData, imageData.width, imageData.height);
+      //ctx.putImageData(undoData, 0, 0);
+      imageData = pixelData;
+      ctx.putImageData(imageData, 0, 0);
+      //for (let i = 0; i < path.length; i++) {
+      //  const currentPoint = path[i];
+      //  const lastPoint = i < 0 ? null : path[i - 1];
+      //  drawPixelLine({
+      //    from: lastPoint ?? currentPoint,
+      //    to: currentPoint,
+      //    brusher: (x, y) => drawSquare({ x, y, scale, size, pattern }),
+      //    scale: scale,
+      //  });
+      //}
+      //ctx.putImageData(imageData, 0, 0);
     });
-
-    function redraw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const { brush, size, pattern, path } of history) {
-        for (let i = 0; i < path.length; i++) {
-          const currentPoint = path[i];
-          const lastPoint = i < 0 ? null : path[i - 1];
-          if (lastPoint)
-            drawPixelLine({
-              from: lastPoint,
-              to: currentPoint,
-              brusher: (x, y) => drawSquare({ x, y, scale, size: size, pattern: pattern }),
-              scale,
-            });
-          else
-            drawSquare({ x: currentPoint.x, y: currentPoint.y, scale, size: size, pattern: pattern });
-        }
-      }
-    }
 
     function downloadImage(scale = 1) {
       const originalData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
@@ -319,9 +382,6 @@
     const initialPattern = patternRadios.find(radio => radio.checked);
     pattern = initialPattern.value;
 
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "black"; // TODO: Add eraser functionality
   </script>
 </body>
 
