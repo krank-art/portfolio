@@ -102,6 +102,8 @@
     document.body.appendChild(canvas);
 
     const ctx = canvas.getContext("2d");
+    const { width, height } = canvas;
+    const imageData = ctx.getImageData(0, 0, width, height);
     let pattern = null;
     let brush = null;
     let size = -1;
@@ -153,6 +155,7 @@
         drawPixelLine({ from: lastKnownPosition, to: currentPosition, brusher: brush, scale });
       else
         brush(x, y);
+      ctx.putImageData(imageData, 0, 0); // Flush image data
       lastKnownPosition.x = currentPosition.x;
       lastKnownPosition.y = currentPosition.y;
     });
@@ -176,46 +179,44 @@
     function drawSquare({ x, y, size = 2, scale = 1, pattern = null }) {
       const centerX = x - Math.round(size / 2);
       const centerY = y - Math.round(size / 2);
-      if (!pattern || pattern === "100%") {
-        ctx.fillRect(centerX * scale, centerY * scale, size * scale, size * scale);
-        return;
-      }
-      // We want to minimize the calls to 'ctx.fillRect', so depending on the pattern the iteration varies.
-      if (pattern === "25%") {
-        for (let i = centerX; i < centerX + size; i++)
-          for (let j = centerY; j < centerY + size; j++) {
-            if (i % 2 === 0 && j % 2 === 0)
-              ctx.fillRect(i * scale, j * scale, 1 * scale, 1 * scale);
+      const pixels = imageData.data;
+      for (let dy = -1 * scale * size; dy < scale * size; dy++) {
+        for (let dx = -1 * scale * size; dx < scale * size; dx++) {
+          const nx = x * scale + dx;
+          const ny = y * scale + dy;
+          if (nx < 0 || ny < 0 || nx > width || ny > height)
+            continue;
+          const baseX = Math.floor(nx / scale);
+          const baseY = Math.floor(ny / scale);
+          const pixelIsDrawable = () => {
+            if (!pattern || pattern === "100%")
+              return true;
+            if (pattern === "25%")
+              return baseX % 2 === 0 && baseY % 2 === 0;
+            if (pattern === "50%")
+              return (baseX + baseY) % 2 === 0;
+            if (pattern === "75%")
+              /*
+              * We need to do odd lines so 75% pattern does not stack up with the 50% and 25% pattern
+              * A known issue is that now when we put the 75% pattern and 25% pattern horizontally next to each other,
+              * we get a small line of fuzz (essentially 50% pattern) because of how the 75% pattern is offset.
+              * This is not a huge deal, but that means vertical lines that swap from 75% to 25% look slighty fuzzy.
+              * We could turn the 75% pattern by rotating 180°, but then we have fuzzy horizontal lines.
+              * Since our artboard is in orientation landscape, it is prolly smarter to keep the fuzz in that direction.
+              * Besides, this small problem is a lot better than before where 75% and 25% pattern stacked to solid black.
+              */
+              return baseX % 2 === 0 || baseY % 2 === 1;
+            throw new Error(`Unknown pattern '${pattern}'. `);
           }
-        return;
+          if (!pixelIsDrawable())
+            continue;
+          const index = (ny * width + nx) * 4;
+          pixels[index] = 0;      // Red
+          pixels[index + 1] = 0;  // Green
+          pixels[index + 2] = 0;  // Blue
+          pixels[index + 3] = 255; // Alpha (fully opaque)
+        }
       }
-      if (pattern === "50%") {
-        for (let i = centerX; i < centerX + size; i++)
-          for (let j = centerY; j < centerY + size; j++) {
-            if ((i + j) % 2 === 0)
-              ctx.fillRect(i * scale, j * scale, 1 * scale, 1 * scale);
-          }
-        return;
-      }
-      if (pattern === "75%") {
-        for (let i = centerX; i < centerX + size; i++)
-          if (i % 2 === 0)
-            ctx.fillRect(i * scale, centerY * scale, 1 * scale, size * scale);
-        for (let j = centerY; j < centerY + size; j++)
-          /*
-           * We need to do odd lines so 75% pattern does not stack up with the 50% and 25% pattern
-           * A known issue is that now when we put the 75% pattern and 25% pattern horizontally next to each other,
-           * we get a small line of fuzz (essentially 50% pattern) because of how the 75% pattern is offset.
-           * This is not a huge deal, but that means vertical lines that swap from 75% to 25% look slighty fuzzy.
-           * We could turn the 75% pattern by rotating 180°, but then we have fuzzy horizontal lines.
-           * Since our artboard is in orientation landscape, it is prolly smarter to keep the fuzz in that direction.
-           * Besides, this small problem is a lot better than before where 75% and 25% pattern stacked to solid black.
-           */
-          if (j % 2 === 1)
-            ctx.fillRect(centerX * scale, j * scale, size * scale, 1 * scale);
-        return;
-      }
-      throw new Error(`Unknown pattern '${pattern}'. `);
     }
 
     const undoButton = document.createElement("button");
