@@ -213,10 +213,11 @@
       const currentPosition = { x, y };
       currentPath.push(currentPosition);
       const color = brush === "eraser" ? { r: 255, g: 255, b: 255 } : { r: 0, g: 0, b: 0 };
+      const toolPattern = brush === "eraser" ? "100%" : pattern;
       drawPixelLine({
         from: lastKnownPosition.x && lastKnownPosition.y ? lastKnownPosition : currentPosition,
         to: currentPosition,
-        brusher: (x, y) => drawSquare({ x, y, scale, size, pattern, color }),
+        brusher: (x, y) => drawSquare({ x, y, scale, size, pattern: toolPattern, color }),
         scale: scale,
       });
       ctx.putImageData(imageData, 0, 0); // Flush image data
