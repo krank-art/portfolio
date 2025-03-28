@@ -7,9 +7,37 @@
   <title>Comment Drawer</title>
 
   <style>
+    .tool-bar {
+      display: flex;
+      flex-direction: row nowrap;
+    }
+
+    .tool-bar>*:not(:last-child) {
+      margin-right: 0.5rem;
+    }
+
+    .comment-canvas {
+      /* TODO: Add small padding around canvas, so you can actually fill in pixels at the corners and edges */
+      padding: 0rem; 
+    }
+
     .row-button-group {
       display: flex;
-      gap: 10px;
+      flex-direction: row nowrap;
+    }
+
+    .row-button-group .row-button:first-child .row-button-label {
+      border-top-left-radius: 0.5rem;
+      border-bottom-left-radius: 0.5rem;
+    }
+
+    .row-button-group .row-button:last-child .row-button-label {
+      border-top-right-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+    }
+
+    .row-button-group .row-button:not(:last-child) .row-button-label {
+      border-right: none;
     }
 
     .row-button {
@@ -36,61 +64,61 @@
 </head>
 
 <body>
-  <div class="row-button-group">
-    <label class="row-button">
-      <input class="row-button-radio" type="radio" name="tool" value="brush2" checked>
-      <span class="row-button-label">Brush 2</span>
-    </label>
-    <label class="row-button">
-      <input class="row-button-radio" type="radio" name="tool" value="brush3">
-      <span class="row-button-label">Brush 3</span>
-    </label>
-    <label class="row-button">
-      <input class="row-button-radio" type="radio" name="tool" value="brush5">
-      <span class="row-button-label">Brush 5</span>
-    </label>
-    <label class="row-button">
-      <input class="row-button-radio" type="radio" name="tool" value="brush10">
-      <span class="row-button-label">Brush 10</span>
-    </label>
-  </div>
-
-  <div class="row-button-group">
-    <label class="row-button">
-      <input class="row-button-radio" type="radio" name="tool" value="eraser3">
-      <span class="row-button-label">Eraser 3</span>
-    </label>
-    <label class="row-button">
-      <input class="row-button-radio" type="radio" name="tool" value="eraser5">
-      <span class="row-button-label">Eraser 5</span>
-    </label>
-    <label class="row-button">
-      <input class="row-button-radio" type="radio" name="tool" value="eraser7">
-      <span class="row-button-label">Eraser 7</span>
-    </label>
-    <label class="row-button">
-      <input class="row-button-radio" type="radio" name="tool" value="eraser12">
-      <span class="row-button-label">Eraser 12</span>
-    </label>
-  </div>
-
-  <div class="row-button-group">
-    <label class="row-button">
-      <input class="row-button-radio" type="radio" name="pattern" value="100%" checked>
-      <span class="row-button-label">Solid</span>
-    </label>
-    <label class="row-button">
-      <input class="row-button-radio" type="radio" name="pattern" value="75%">
-      <span class="row-button-label">Pattern 75%</span>
-    </label>
-    <label class="row-button">
-      <input class="row-button-radio" type="radio" name="pattern" value="50%">
-      <span class="row-button-label">Pattern 50%</span>
-    </label>
-    <label class="row-button">
-      <input class="row-button-radio" type="radio" name="pattern" value="25%">
-      <span class="row-button-label">Pattern 25%</span>
-    </label>
+  <div class="tool-bar">
+    <div class="row-button-group">
+      <label class="row-button">
+        <input class="row-button-radio" type="radio" name="tool" value="brush2" checked>
+        <span class="row-button-label">Brush 2</span>
+      </label>
+      <label class="row-button">
+        <input class="row-button-radio" type="radio" name="tool" value="brush3">
+        <span class="row-button-label">Brush 3</span>
+      </label>
+      <label class="row-button">
+        <input class="row-button-radio" type="radio" name="tool" value="brush5">
+        <span class="row-button-label">Brush 5</span>
+      </label>
+      <label class="row-button">
+        <input class="row-button-radio" type="radio" name="tool" value="brush10">
+        <span class="row-button-label">Brush 10</span>
+      </label>
+    </div>
+    <div class="row-button-group">
+      <label class="row-button">
+        <input class="row-button-radio" type="radio" name="tool" value="eraser3">
+        <span class="row-button-label">Eraser 3</span>
+      </label>
+      <label class="row-button">
+        <input class="row-button-radio" type="radio" name="tool" value="eraser5">
+        <span class="row-button-label">Eraser 5</span>
+      </label>
+      <label class="row-button">
+        <input class="row-button-radio" type="radio" name="tool" value="eraser7">
+        <span class="row-button-label">Eraser 7</span>
+      </label>
+      <label class="row-button">
+        <input class="row-button-radio" type="radio" name="tool" value="eraser12">
+        <span class="row-button-label">Eraser 12</span>
+      </label>
+    </div>
+    <div class="row-button-group">
+      <label class="row-button">
+        <input class="row-button-radio" type="radio" name="pattern" value="100%" checked>
+        <span class="row-button-label">Solid</span>
+      </label>
+      <label class="row-button">
+        <input class="row-button-radio" type="radio" name="pattern" value="75%">
+        <span class="row-button-label">Pattern 75%</span>
+      </label>
+      <label class="row-button">
+        <input class="row-button-radio" type="radio" name="pattern" value="50%">
+        <span class="row-button-label">Pattern 50%</span>
+      </label>
+      <label class="row-button">
+        <input class="row-button-radio" type="radio" name="pattern" value="25%">
+        <span class="row-button-label">Pattern 25%</span>
+      </label>
+    </div>
   </div>
 
   <script>
@@ -163,6 +191,7 @@
     }
 
     const canvas = document.createElement("canvas");
+    canvas.classList.add("comment-canvas");
     const scale = 4;
     canvas.width = 320 * scale;
     canvas.height = 120 * scale;
