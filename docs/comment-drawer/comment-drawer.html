@@ -204,20 +204,10 @@
       }
     }
 
-    canvas.addEventListener("mousedown", () => {
-      drawing = true;
-      // We could save brush type and brush size per single point in path to apply neat effects.
-      // Like if we track velocity of the brush, we could do a try brushing effect (opacity decreases).
-      // For now we will use the simple approach and keep brush type and brush size constant per each stroke.
-      currentPath = [];
-      currentRecord = { brush, size, pattern, path: currentPath, pixelData: imageData };
-    });
-
-    canvas.addEventListener("mousemove", (e) => {
-      if (!drawing) return;
+    function drawOnCanvas(clientX, clientY) {
       const rect = canvas.getBoundingClientRect();
-      const rawX = e.clientX - rect.left;
-      const rawY = e.clientY - rect.top;
+      const rawX = clientX - rect.left;
+      const rawY = clientY - rect.top;
       const x = Math.round(rawX / scale);
       const y = Math.round(rawY / scale);
       const currentPosition = { x, y };
@@ -231,23 +221,39 @@
       ctx.putImageData(imageData, 0, 0); // Flush image data
       lastKnownPosition.x = currentPosition.x;
       lastKnownPosition.y = currentPosition.y;
-    });
+    }
 
-    canvas.addEventListener("mouseup", () => {
+    function stopDrawingOnCanvas() {
       drawing = false;
       lastKnownPosition.x = null;
       lastKnownPosition.y = null;
       history.add(currentRecord); 
       // We need to push the record only when the current stroke ends.
       // The image data is passed by reference and will change while the brush stroke is still ongoing.
+    }
+
+    canvas.addEventListener("mousedown", (e) => {
+      drawing = true;
+      // We could save brush type and brush size per single point in path to apply neat effects.
+      // Like if we track velocity of the brush, we could do a try brushing effect (opacity decreases).
+      // For now we will use the simple approach and keep brush type and brush size constant per each stroke.
+      currentPath = [];
+      currentRecord = { brush, size, pattern, path: currentPath, pixelData: imageData };
+      drawOnCanvas(e.clientX, e.clientY);
+    });
+
+    canvas.addEventListener("mousemove", (e) => {
+      if (!drawing) return;
+      drawOnCanvas(e.clientX, e.clientY);
+    });
+
+    canvas.addEventListener("mouseup", () => {
+      if (drawing) stopDrawingOnCanvas();
     });
 
     canvas.addEventListener("mouseleave", () => {
       // Note: This event is called every time the mouse leaves the canvas, no matter if the LMB is presed down.
-      if (drawing) history.add(currentRecord);
-      drawing = false;
-      lastKnownPosition.x = null;
-      lastKnownPosition.y = null;
+      if (drawing) stopDrawingOnCanvas();
     });
 
     function drawPixel({ x, y, scale = 1 }) {
