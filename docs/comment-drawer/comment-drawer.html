@@ -94,11 +94,16 @@
   </div>
 
   <script>
+    function duplicateImageData(imageData) {
+      return new ImageData(new Uint8ClampedArray(imageData.data), imageData.width, imageData.height);
+    }
+
     class CanvasHistory {
       constructor(maxSize = 20) {
         this.maxSize = maxSize;
         this.states = [];
         this.index = -1;
+        this.sequenceNumber = 0;
       }
 
       add({ brush, size, pattern, path, pixelData }) {
@@ -109,7 +114,9 @@
          * rest safely that most of the relevant data is remembered by the history.
          */
         this.trim();
-        this.states.push({ brush, size, pattern, path, pixelData });
+        // TODO: Copy missing settings, prolly like color space
+        this.states.push({ id: `record-${this.sequenceNumber}`,  brush, size, pattern, path, pixelData: duplicateImageData(pixelData) });
+        this.sequenceNumber++;
         if (this.states.length > this.maxSize) {
           this.states.shift();
         } else {
@@ -173,6 +180,7 @@
     let size = -1;
     let drawing = false;
     const history = new CanvasHistory();
+    let currentRecord = null;
     let currentPath = [];
     const lastKnownPosition = { x: null, y: null };
 
@@ -202,7 +210,7 @@
       // Like if we track velocity of the brush, we could do a try brushing effect (opacity decreases).
       // For now we will use the simple approach and keep brush type and brush size constant per each stroke.
       currentPath = [];
-      history.add({ brush, size, pattern, path: currentPath, pixelData: new ImageData(new Uint8ClampedArray(imageData.data), imageData.width, imageData.height) });
+      currentRecord = { brush, size, pattern, path: currentPath, pixelData: imageData };
     });
 
     canvas.addEventListener("mousemove", (e) => {
@@ -229,12 +237,16 @@
       drawing = false;
       lastKnownPosition.x = null;
       lastKnownPosition.y = null;
+      history.add(currentRecord); 
+      // We need to push the record only when the current stroke ends.
+      // The image data is passed by reference and will change while the brush stroke is still ongoing.
     });
 
     canvas.addEventListener("mouseleave", () => {
       drawing = false;
       lastKnownPosition.x = null;
       lastKnownPosition.y = null;
+      history.add(currentRecord);
     });
 
     function drawPixel({ x, y, scale = 1 }) {
@@ -292,22 +304,8 @@
       if (!history.hasMoreUndos())
         return;
       const { brush, size, pattern, path, pixelData } = history.undo();
-      console.log("beep")
-      //const undoData = new ImageData(pixelData, imageData.width, imageData.height);
-      //ctx.putImageData(undoData, 0, 0);
-      imageData = pixelData;
+      imageData = duplicateImageData(pixelData); 
       ctx.putImageData(imageData, 0, 0);
-      //for (let i = 0; i < path.length; i++) {
-      //  const currentPoint = path[i];
-      //  const lastPoint = i < 0 ? null : path[i - 1];
-      //  drawPixelLine({
-      //    from: lastPoint ?? currentPoint,
-      //    to: currentPoint,
-      //    brusher: (x, y) => drawSquare({ x, y, scale, size, pattern }),
-      //    scale: scale,
-      //  });
-      //}
-      //ctx.putImageData(imageData, 0, 0);
     });
 
     function downloadImage(scale = 1) {
@@ -381,6 +379,8 @@
       });
     const initialPattern = patternRadios.find(radio => radio.checked);
     pattern = initialPattern.value;
+
+    history.add({ brush, size, pattern, path: currentPath, pixelData: imageData });
 
   </script>
 </body>
