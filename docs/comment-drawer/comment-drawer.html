@@ -115,7 +115,7 @@
          */
         this.trim();
         // TODO: Copy missing settings, prolly like color space
-        this.states.push({ id: `record-${this.sequenceNumber}`,  brush, size, pattern, path, pixelData: duplicateImageData(pixelData) });
+        this.states.push({ id: `record-${this.sequenceNumber}`, brush, size, pattern, path, pixelData: duplicateImageData(pixelData) });
         this.sequenceNumber++;
         if (this.states.length > this.maxSize) {
           this.states.shift();
@@ -212,10 +212,11 @@
       const y = Math.round(rawY / scale);
       const currentPosition = { x, y };
       currentPath.push(currentPosition);
+      const color = brush === "eraser" ? { r: 255, g: 255, b: 255 } : { r: 0, g: 0, b: 0 };
       drawPixelLine({
         from: lastKnownPosition.x && lastKnownPosition.y ? lastKnownPosition : currentPosition,
         to: currentPosition,
-        brusher: (x, y) => drawSquare({ x, y, scale, size, pattern }),
+        brusher: (x, y) => drawSquare({ x, y, scale, size, pattern, color }),
         scale: scale,
       });
       ctx.putImageData(imageData, 0, 0); // Flush image data
@@ -227,7 +228,7 @@
       drawing = false;
       lastKnownPosition.x = null;
       lastKnownPosition.y = null;
-      history.add(currentRecord); 
+      history.add(currentRecord);
       // We need to push the record only when the current stroke ends.
       // The image data is passed by reference and will change while the brush stroke is still ongoing.
     }
@@ -260,7 +261,7 @@
       ctx.fillRect(x * scale, y * scale, scale, scale);
     }
 
-    function drawSquare({ x, y, size = 2, scale = 1, pattern = null }) {
+    function drawSquare({ x, y, size = 2, scale = 1, pattern = null, color = { r: 0, g: 0, b: 0 } }) {
       const centerX = x - Math.round(size / 2);
       const centerY = y - Math.round(size / 2);
       const pixels = imageData.data;
@@ -295,9 +296,10 @@
           if (!pixelIsDrawable())
             continue;
           const index = (ny * width + nx) * 4;
-          pixels[index] = 0;      // Red
-          pixels[index + 1] = 0;  // Green
-          pixels[index + 2] = 0;  // Blue
+          const { r, g, b } = color;
+          pixels[index] = r;
+          pixels[index + 1] = g;
+          pixels[index + 2] = b;
           pixels[index + 3] = 255; // Alpha (fully opaque)
         }
       }
@@ -311,7 +313,7 @@
       if (!history.hasMoreUndos())
         return;
       const { brush, size, pattern, path, pixelData } = history.undo();
-      imageData = duplicateImageData(pixelData); 
+      imageData = duplicateImageData(pixelData);
       ctx.putImageData(imageData, 0, 0);
     });
 
