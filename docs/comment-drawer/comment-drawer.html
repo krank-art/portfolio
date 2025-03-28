@@ -243,10 +243,11 @@
     });
 
     canvas.addEventListener("mouseleave", () => {
+      // Note: This event is called every time the mouse leaves the canvas, no matter if the LMB is presed down.
+      if (drawing) history.add(currentRecord);
       drawing = false;
       lastKnownPosition.x = null;
       lastKnownPosition.y = null;
-      history.add(currentRecord);
     });
 
     function drawPixel({ x, y, scale = 1 }) {
