@@ -295,8 +295,10 @@
       const centerX = x - Math.round(size / 2);
       const centerY = y - Math.round(size / 2);
       const pixels = imageData.data;
-      for (let dy = -1 * scale * size; dy < scale * size; dy++) {
-        for (let dx = -1 * scale * size; dx < scale * size; dx++) {
+      const bottomLimit = -1 * Math.floor(size / 2) * scale;
+      const topLimit = Math.ceil(size / 2) * scale;
+      for (let dy = bottomLimit; dy < topLimit; dy++) {
+        for (let dx = bottomLimit; dx < topLimit; dx++) {
           const nx = x * scale + dx;
           const ny = y * scale + dy;
           if (nx < 0 || ny < 0 || nx > width || ny > height)
