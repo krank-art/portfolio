@@ -60,63 +60,169 @@
     .row-button-radio:checked+.row-button-label {
       background: #ffcc00;
     }
+    
+    .row-button-radio:checked+* .row-button-icon {
+      opacity: 1;
+    }
+
+    .row-button-text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      border: 0;
+      clip: rect(0, 0, 0, 0);
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .row-button-icon {
+      width: 16px;
+      height: 16px;
+      image-rendering: pixelated;
+      background-image: url("./comment-drawer-icons.png");
+      background-size: 128px 80px;
+      opacity: 0.3;
+    }
+    
+    .bi-scale-1 .row-button-icon { width: 16px; height: 16px; background-size: 128px 80px; }
+    .bi-scale-2 .row-button-icon { width: 32px; height: 32px; background-size: 256px 160px; }
+    .bi-scale-3 .row-button-icon { width: 48px; height: 48px; background-size: 384px 240px; }
+    .bi-scale-4 .row-button-icon { width: 64px; height: 64px; background-size: 512px 320px; }
+    .bi-scale-5 .row-button-icon { width: 80px; height: 80px; background-size: 640px 400px; }
+
+    .bi-pen-1 { background-position: calc(0 / 7 * 100%) calc(0 / 4 * 100%); }
+    .bi-pen-2 { background-position: calc(1 / 7 * 100%) calc(0 / 4 * 100%); }
+    .bi-pen-3 { background-position: calc(2 / 7 * 100%) calc(0 / 4 * 100%); }
+    .bi-pen-4 { background-position: calc(3 / 7 * 100%) calc(0 / 4 * 100%); }
+    .bi-pen-5 { background-position: calc(4 / 7 * 100%) calc(0 / 4 * 100%); }
+    .bi-pen-6 { background-position: calc(5 / 7 * 100%) calc(0 / 4 * 100%); }
+    .bi-eraser-1 { background-position: calc(0 / 7 * 100%) calc(1 / 4 * 100%); }
+    .bi-eraser-2 { background-position: calc(1 / 7 * 100%) calc(1 / 4 * 100%); }
+    .bi-eraser-3 { background-position: calc(2 / 7 * 100%) calc(1 / 4 * 100%); }
+    .bi-eraser-4 { background-position: calc(3 / 7 * 100%) calc(1 / 4 * 100%); }
+    .bi-eraser-5 { background-position: calc(4 / 7 * 100%) calc(1 / 4 * 100%); }
+    .bi-eraser-6 { background-position: calc(5 / 7 * 100%) calc(1 / 4 * 100%); }
+    .bi-pattern-1 { background-position: calc(0 / 7 * 100%) calc(2 / 4 * 100%); }
+    .bi-pattern-2 { background-position: calc(1 / 7 * 100%) calc(2 / 4 * 100%); }
+    .bi-pattern-3 { background-position: calc(2 / 7 * 100%) calc(2 / 4 * 100%); }
+    .bi-pattern-4 { background-position: calc(3 / 7 * 100%) calc(2 / 4 * 100%); }
+    .bi-backward { background-position: calc(4 / 7 * 100%) calc(2 / 4 * 100%); }
+    .bi-forward { background-position: calc(5 / 7 * 100%) calc(2 / 4 * 100%); }
+    .bi-about { background-position: calc(6 / 7 * 100%) calc(2 / 4 * 100%); }
+    .bi-undo { background-position: calc(0 / 7 * 100%) calc(3 / 4 * 100%); }
+    .bi-redo { background-position: calc(1 / 7 * 100%) calc(3 / 4 * 100%); }
+    .bi-save { background-position: calc(2 / 7 * 100%) calc(3 / 4 * 100%); }
+    .bi-play { background-position: calc(3 / 7 * 100%) calc(3 / 4 * 100%); }
+    .bi-accept { background-position: calc(4 / 7 * 100%) calc(3 / 4 * 100%); }
+    .bi-deny { background-position: calc(5 / 7 * 100%) calc(3 / 4 * 100%); }
+    .bi-submit { background-position: calc(6 / 7 * 100%) calc(3 / 4 * 100%); }
+    .bi-clear { background-position: calc(7 / 7 * 100%) calc(3 / 4 * 100%); }
+    .bi-undo-inactive { background-position: calc(0 / 7 * 100%) calc(4 / 4 * 100%); }
+    .bi-redo-inactive { background-position: calc(1 / 7 * 100%) calc(4 / 4 * 100%); }
+    .bi-save-inactive { background-position: calc(2 / 7 * 100%) calc(4 / 4 * 100%); }
+    .bi-play-inactive { background-position: calc(3 / 7 * 100%) calc(4 / 4 * 100%); }
+    .bi-accept-inactive { background-position: calc(4 / 7 * 100%) calc(4 / 4 * 100%); }
+    .bi-deny-inactive { background-position: calc(5 / 7 * 100%) calc(4 / 4 * 100%); }
+    .bi-submit-inactive { background-position: calc(6 / 7 * 100%) calc(4 / 4 * 100%); }
+    .bi-clear-inactive { background-position: calc(7 / 7 * 100%) calc(4 / 4 * 100%); }
   </style>
 </head>
 
 <body>
-  <div class="tool-bar">
+  <div class="tool-bar bi-scale-3">
     <div class="row-button-group">
       <label class="row-button">
         <input class="row-button-radio" type="radio" name="tool" value="brush2" checked>
-        <span class="row-button-label">Brush 2</span>
+        <span class="row-button-label">
+          <i class="row-button-icon bi-pen-1"></i>
+          <span class="row-button-text">Brush 2</span>
+        </span>
       </label>
       <label class="row-button">
         <input class="row-button-radio" type="radio" name="tool" value="brush3">
-        <span class="row-button-label">Brush 3</span>
+        <span class="row-button-label">
+          <i class="row-button-icon bi-pen-2"></i>
+          <span class="row-button-text">Brush 3</span>
+        </span>
       </label>
       <label class="row-button">
         <input class="row-button-radio" type="radio" name="tool" value="brush5">
-        <span class="row-button-label">Brush 5</span>
+        <span class="row-button-label">
+          <i class="row-button-icon bi-pen-3"></i>
+          <span class="row-button-text">Brush 5</span>
+        </span>
       </label>
       <label class="row-button">
         <input class="row-button-radio" type="radio" name="tool" value="brush10">
-        <span class="row-button-label">Brush 10</span>
+        <span class="row-button-label">
+          <i class="row-button-icon bi-pen-5"></i>
+          <span class="row-button-text">Brush 10</span>
+        </span>
       </label>
     </div>
     <div class="row-button-group">
       <label class="row-button">
         <input class="row-button-radio" type="radio" name="tool" value="eraser3">
-        <span class="row-button-label">Eraser 3</span>
+        <span class="row-button-label">
+          <i class="row-button-icon bi-eraser-1"></i>
+          <span class="row-button-text">Eraser 3</span>
+        </span>
       </label>
       <label class="row-button">
         <input class="row-button-radio" type="radio" name="tool" value="eraser5">
-        <span class="row-button-label">Eraser 5</span>
+        <span class="row-button-label">
+          <i class="row-button-icon bi-eraser-2"></i>
+          <span class="row-button-text">Eraser 5</span>
+        </span>
       </label>
       <label class="row-button">
         <input class="row-button-radio" type="radio" name="tool" value="eraser7">
-        <span class="row-button-label">Eraser 7</span>
+        <span class="row-button-label">
+          <i class="row-button-icon bi-eraser-3"></i>
+          <span class="row-button-text">Eraser 7</span>
+        </span>
       </label>
       <label class="row-button">
         <input class="row-button-radio" type="radio" name="tool" value="eraser12">
-        <span class="row-button-label">Eraser 12</span>
+        <span class="row-button-label">
+          <i class="row-button-icon bi-eraser-5"></i>
+          <span class="row-button-text">Eraser 12</span>
+        </span>
       </label>
     </div>
     <div class="row-button-group">
       <label class="row-button">
         <input class="row-button-radio" type="radio" name="pattern" value="100%" checked>
-        <span class="row-button-label">Solid</span>
+        <span class="row-button-label">
+          <i class="row-button-icon bi-pattern-1"></i>
+          <span class="row-button-text">Solid</span>
+        </span>
       </label>
       <label class="row-button">
         <input class="row-button-radio" type="radio" name="pattern" value="75%">
-        <span class="row-button-label">Pattern 75%</span>
+        <span class="row-button-label">
+          <i class="row-button-icon bi-pattern-2"></i>
+          <span class="row-button-text">Pattern 75%
+          </span>
+        </span>
       </label>
       <label class="row-button">
         <input class="row-button-radio" type="radio" name="pattern" value="50%">
-        <span class="row-button-label">Pattern 50%</span>
+        <span class="row-button-label">
+          <i class="row-button-icon bi-pattern-3"></i>
+          <span class="row-button-text">Pattern 50%
+          </span>
+        </span>
       </label>
       <label class="row-button">
         <input class="row-button-radio" type="radio" name="pattern" value="25%">
-        <span class="row-button-label">Pattern 25%</span>
+        <span class="row-button-label">
+          <i class="row-button-icon bi-pattern-4"></i>
+          <span class="row-button-text">Pattern 25%
+          </span>
+        </span>
       </label>
     </div>
   </div>
