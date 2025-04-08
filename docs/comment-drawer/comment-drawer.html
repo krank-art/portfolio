@@ -21,36 +21,95 @@
       padding: 0rem; 
     }
 
+    #comment-drawer {
+      position: relative;
+      display: inline-flex;
+      flex-flow: column nowrap;
+      background-color: rgba(0,0,0,0.05);
+      border-radius: 1rem;
+      padding: 1rem;
+    }
+
+    #comment-drawer > *:not(:last-child) {
+      margin-bottom: 1rem;
+    }
+
+    #comment-board {
+      display: flex;
+    }
+
     .row-button-group {
       display: flex;
       flex-direction: row nowrap;
     }
 
-    .row-button-group .row-button:first-child .row-button-label {
+    .row-button-group .row-multi-button:first-child .row-button-label,
+    .row-button-group .row-button:first-child {
       border-top-left-radius: 0.5rem;
       border-bottom-left-radius: 0.5rem;
     }
 
-    .row-button-group .row-button:last-child .row-button-label {
+    .row-button-group .row-multi-button:last-child .row-button-label,
+    .row-button-group .row-button:last-child {
       border-top-right-radius: 0.5rem;
       border-bottom-right-radius: 0.5rem;
     }
 
-    .row-button-group .row-button:not(:last-child) .row-button-label {
+    .row-button-group .row-multi-button:not(:last-child) .row-button-label,
+    .row-button-group .row-button:not(:last-child) {
       border-right: none;
     }
 
-    .row-button {
+    .row-multi-button {
       display: inline-block;
     }
 
+    .row-button,
     .row-button-label {
       display: inline-flex;
       padding: 10px 20px;
       border: 1px solid black;
       cursor: pointer;
-      background: white;
+      background-color: rgba(0,0,0,0.05);
       user-select: none;
+    }
+
+    .row-button:hover,
+    .row-button-label:hover {
+      background-color: white;
+    }
+
+    .row-button:active,
+    .row-button-label:active {
+      background-color: rgba(0,0,0,0.1);
+    }
+
+    .positive-button {
+      background-color: rgb(134, 244, 154);
+    }
+    
+    .positive-button:hover {
+      background-color: rgb(196, 251, 206);
+    }
+    
+    .positive-button:active {
+      background-color: rgb(79, 235, 108);
+    }
+
+    .negative-button {
+      background-color: rgb(255, 161, 161);
+    }
+
+    .negative-button:hover {
+      background-color: rgb(251, 196, 196);
+    }
+
+    .negative-button:active {
+      background-color: rgb(255, 128, 128);
+    }
+
+    .at-end {
+      margin-left: auto;
     }
 
     .row-button-radio {
@@ -59,6 +118,10 @@
 
     .row-button-radio:checked+.row-button-label {
       background: #ffcc00;
+    }
+    
+    .row-button-radio+* .row-button-icon {
+      opacity: 0.3;
     }
     
     .row-button-radio:checked+* .row-button-icon {
@@ -83,7 +146,7 @@
       image-rendering: pixelated;
       background-image: url("./comment-drawer-icons.png");
       background-size: 128px 80px;
-      opacity: 0.3;
+      display: inline-block;
     }
     
     .bi-scale-1 .row-button-icon { width: 16px; height: 16px; background-size: 128px 80px; }
@@ -131,99 +194,140 @@
 </head>
 
 <body>
-  <div class="tool-bar bi-scale-3">
-    <div class="row-button-group">
-      <label class="row-button">
-        <input class="row-button-radio" type="radio" name="tool" value="brush2" checked>
-        <span class="row-button-label">
-          <i class="row-button-icon bi-pen-1"></i>
-          <span class="row-button-text">Brush 2</span>
-        </span>
-      </label>
-      <label class="row-button">
-        <input class="row-button-radio" type="radio" name="tool" value="brush3">
-        <span class="row-button-label">
-          <i class="row-button-icon bi-pen-2"></i>
-          <span class="row-button-text">Brush 3</span>
-        </span>
-      </label>
-      <label class="row-button">
-        <input class="row-button-radio" type="radio" name="tool" value="brush5">
-        <span class="row-button-label">
-          <i class="row-button-icon bi-pen-3"></i>
-          <span class="row-button-text">Brush 5</span>
-        </span>
-      </label>
-      <label class="row-button">
-        <input class="row-button-radio" type="radio" name="tool" value="brush10">
-        <span class="row-button-label">
-          <i class="row-button-icon bi-pen-5"></i>
-          <span class="row-button-text">Brush 10</span>
-        </span>
-      </label>
+  <div id="comment-drawer">
+    <div id ="tools-editing" class="tool-bar bi-scale-3">
+      <div class="row-button-group">
+        <label class="row-multi-button">
+          <input class="row-button-radio" type="radio" name="tool" value="brush2" checked>
+          <span class="row-button-label">
+            <i class="row-button-icon bi-pen-1"></i>
+            <span class="row-button-text">Brush 2</span>
+          </span>
+        </label>
+        <label class="row-multi-button">
+          <input class="row-button-radio" type="radio" name="tool" value="brush3">
+          <span class="row-button-label">
+            <i class="row-button-icon bi-pen-2"></i>
+            <span class="row-button-text">Brush 3</span>
+          </span>
+        </label>
+        <label class="row-multi-button">
+          <input class="row-button-radio" type="radio" name="tool" value="brush5">
+          <span class="row-button-label">
+            <i class="row-button-icon bi-pen-3"></i>
+            <span class="row-button-text">Brush 5</span>
+          </span>
+        </label>
+        <label class="row-multi-button">
+          <input class="row-button-radio" type="radio" name="tool" value="brush10">
+          <span class="row-button-label">
+            <i class="row-button-icon bi-pen-5"></i>
+            <span class="row-button-text">Brush 10</span>
+          </span>
+        </label>
+      </div>
+      <div class="row-button-group">
+        <label class="row-multi-button">
+          <input class="row-button-radio" type="radio" name="tool" value="eraser3">
+          <span class="row-button-label">
+            <i class="row-button-icon bi-eraser-1"></i>
+            <span class="row-button-text">Eraser 3</span>
+          </span>
+        </label>
+        <label class="row-multi-button">
+          <input class="row-button-radio" type="radio" name="tool" value="eraser5">
+          <span class="row-button-label">
+            <i class="row-button-icon bi-eraser-2"></i>
+            <span class="row-button-text">Eraser 5</span>
+          </span>
+        </label>
+        <label class="row-multi-button">
+          <input class="row-button-radio" type="radio" name="tool" value="eraser7">
+          <span class="row-button-label">
+            <i class="row-button-icon bi-eraser-3"></i>
+            <span class="row-button-text">Eraser 7</span>
+          </span>
+        </label>
+        <label class="row-multi-button">
+          <input class="row-button-radio" type="radio" name="tool" value="eraser12">
+          <span class="row-button-label">
+            <i class="row-button-icon bi-eraser-5"></i>
+            <span class="row-button-text">Eraser 12</span>
+          </span>
+        </label>
+      </div>
+      <div class="row-button-group">
+        <label class="row-multi-button">
+          <input class="row-button-radio" type="radio" name="pattern" value="100%" checked>
+          <span class="row-button-label">
+            <i class="row-button-icon bi-pattern-1"></i>
+            <span class="row-button-text">Solid</span>
+          </span>
+        </label>
+        <label class="row-multi-button">
+          <input class="row-button-radio" type="radio" name="pattern" value="75%">
+          <span class="row-button-label">
+            <i class="row-button-icon bi-pattern-2"></i>
+            <span class="row-button-text">Pattern 75%
+            </span>
+          </span>
+        </label>
+        <label class="row-multi-button">
+          <input class="row-button-radio" type="radio" name="pattern" value="50%">
+          <span class="row-button-label">
+            <i class="row-button-icon bi-pattern-3"></i>
+            <span class="row-button-text">Pattern 50%
+            </span>
+          </span>
+        </label>
+        <label class="row-multi-button">
+          <input class="row-button-radio" type="radio" name="pattern" value="25%">
+          <span class="row-button-label">
+            <i class="row-button-icon bi-pattern-4"></i>
+            <span class="row-button-text">Pattern 25%
+            </span>
+          </span>
+        </label>
+      </div>
+      <div class="row-button-group at-end">  
+        <button type="button" class="row-button negative-button">
+            <i class="row-button-icon bi-clear"></i>
+            <span class="row-button-text">Clear</span>
+        </button>
+      </div>
     </div>
-    <div class="row-button-group">
-      <label class="row-button">
-        <input class="row-button-radio" type="radio" name="tool" value="eraser3">
-        <span class="row-button-label">
-          <i class="row-button-icon bi-eraser-1"></i>
-          <span class="row-button-text">Eraser 3</span>
-        </span>
-      </label>
-      <label class="row-button">
-        <input class="row-button-radio" type="radio" name="tool" value="eraser5">
-        <span class="row-button-label">
-          <i class="row-button-icon bi-eraser-2"></i>
-          <span class="row-button-text">Eraser 5</span>
-        </span>
-      </label>
-      <label class="row-button">
-        <input class="row-button-radio" type="radio" name="tool" value="eraser7">
-        <span class="row-button-label">
-          <i class="row-button-icon bi-eraser-3"></i>
-          <span class="row-button-text">Eraser 7</span>
-        </span>
-      </label>
-      <label class="row-button">
-        <input class="row-button-radio" type="radio" name="tool" value="eraser12">
-        <span class="row-button-label">
-          <i class="row-button-icon bi-eraser-5"></i>
-          <span class="row-button-text">Eraser 12</span>
-        </span>
-      </label>
-    </div>
-    <div class="row-button-group">
-      <label class="row-button">
-        <input class="row-button-radio" type="radio" name="pattern" value="100%" checked>
-        <span class="row-button-label">
-          <i class="row-button-icon bi-pattern-1"></i>
-          <span class="row-button-text">Solid</span>
-        </span>
-      </label>
-      <label class="row-button">
-        <input class="row-button-radio" type="radio" name="pattern" value="75%">
-        <span class="row-button-label">
-          <i class="row-button-icon bi-pattern-2"></i>
-          <span class="row-button-text">Pattern 75%
-          </span>
-        </span>
-      </label>
-      <label class="row-button">
-        <input class="row-button-radio" type="radio" name="pattern" value="50%">
-        <span class="row-button-label">
-          <i class="row-button-icon bi-pattern-3"></i>
-          <span class="row-button-text">Pattern 50%
-          </span>
-        </span>
-      </label>
-      <label class="row-button">
-        <input class="row-button-radio" type="radio" name="pattern" value="25%">
-        <span class="row-button-label">
-          <i class="row-button-icon bi-pattern-4"></i>
-          <span class="row-button-text">Pattern 25%
-          </span>
-        </span>
-      </label>
+    <div id="comment-board"></div>
+    <div id ="tools-main" class="tool-bar bi-scale-3">
+      <div class="row-button-group">  
+        <button type="button" class="row-button">
+            <i class="row-button-icon bi-undo"></i>
+            <span class="row-button-text">Undo</span>
+        </button>
+        <button type="button" class="row-button">
+            <i class="row-button-icon bi-redo"></i>
+            <span class="row-button-text">Redo</span>
+        </button>
+      </div>
+      <div class="row-button-group">  
+        <button type="button" class="row-button">
+            <i class="row-button-icon bi-about"></i>
+            <span class="row-button-text">About</span>
+        </button>
+        <button type="button" class="row-button">
+            <i class="row-button-icon bi-play"></i>
+            <span class="row-button-text">Play</span>
+        </button>
+        <button type="button" class="row-button">
+            <i class="row-button-icon bi-save"></i>
+            <span class="row-button-text">Save</span>
+        </button>
+      </div>
+      <div class="row-button-group at-end">  
+        <button type="button" class="row-button positive-button">
+            <i class="row-button-icon bi-submit"></i>
+            <span class="row-button-text">Submit</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -302,7 +406,8 @@
     canvas.width = 320 * scale;
     canvas.height = 120 * scale;
     canvas.style.border = "1px solid black";
-    document.body.appendChild(canvas);
+    const canvasContainer = document.getElementById("comment-board");
+    canvasContainer.appendChild(canvas);
 
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = "white";
