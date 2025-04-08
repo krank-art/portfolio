@@ -7,6 +7,10 @@
   <title>Comment Drawer</title>
 
   <style>
+    body {
+      display: flex;
+    }
+
     .tool-bar {
       display: flex;
       flex-direction: row nowrap;
@@ -28,6 +32,7 @@
       background-color: rgba(0,0,0,0.05);
       border-radius: 1rem;
       padding: 1rem;
+      margin: 1rem auto; 
     }
 
     #comment-drawer > *:not(:last-child) {
@@ -290,7 +295,7 @@
         </label>
       </div>
       <div class="row-button-group at-end">  
-        <button type="button" class="row-button negative-button">
+        <button type="button" class="row-button negative-button" id="reset">
             <i class="row-button-icon bi-clear"></i>
             <span class="row-button-text">Clear</span>
         </button>
@@ -299,11 +304,11 @@
     <div id="comment-board"></div>
     <div id ="tools-main" class="tool-bar bi-scale-3">
       <div class="row-button-group">  
-        <button type="button" class="row-button">
+        <button type="button" class="row-button" id="undo">
             <i class="row-button-icon bi-undo"></i>
             <span class="row-button-text">Undo</span>
         </button>
-        <button type="button" class="row-button">
+        <button type="button" class="row-button" id="redo">
             <i class="row-button-icon bi-redo"></i>
             <span class="row-button-text">Redo</span>
         </button>
@@ -317,7 +322,7 @@
             <i class="row-button-icon bi-play"></i>
             <span class="row-button-text">Play</span>
         </button>
-        <button type="button" class="row-button">
+        <button type="button" class="row-button" id="download">
             <i class="row-button-icon bi-save"></i>
             <span class="row-button-text">Save</span>
         </button>
@@ -412,8 +417,10 @@
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "black"; // TODO: Add eraser functionality
+    ctx.fillStyle = "black";
     const { width, height } = canvas;
+    // We need to fill background before retrieving image data
+    // Otherwise bg is transparent on first brush stroke.
     let imageData = ctx.getImageData(0, 0, width, height);
     let pattern = null;
     let brush = null;
@@ -548,14 +555,27 @@
       }
     }
 
-    const undoButton = document.createElement("button");
-    undoButton.textContent = "Undo";
-    document.body.appendChild(undoButton);
+    function clear() {
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "black";
+      history.add({ brush, size, pattern, path: currentPath, pixelData: imageData });
+    }
 
+    const undoButton = document.getElementById("undo");
     undoButton.addEventListener("click", () => {
       if (!history.hasMoreUndos())
         return;
       const { brush, size, pattern, path, pixelData } = history.undo();
+      imageData = duplicateImageData(pixelData);
+      ctx.putImageData(imageData, 0, 0);
+    });
+
+    const redoButton = document.getElementById("redo");
+    redoButton.addEventListener("click", () => {
+      if (!history.hasMoreRedos())
+        return;
+      const { brush, size, pattern, path, pixelData } = history.redo();
       imageData = duplicateImageData(pixelData);
       ctx.putImageData(imageData, 0, 0);
     });
@@ -592,16 +612,16 @@
       return newCanvas.toDataURL("image/png");
     }
 
-    const downloadButton = document.createElement("button");
-    downloadButton.textContent = "Download PNG";
-    document.body.appendChild(downloadButton);
-
+    const downloadButton = document.getElementById("download");
     downloadButton.addEventListener("click", () => {
       const link = document.createElement("a");
       link.download = "drawing.png";
       link.href = downloadImage(scale);
       link.click();
     });
+
+    const resetButton = document.getElementById("reset");
+    resetButton.addEventListener("click", clear);
 
     const toolRadioElements = Array.from(document.querySelectorAll(".row-button-radio[name='tool']"));
     const toolRadios = toolRadioElements.map(element => {
@@ -631,9 +651,7 @@
       });
     const initialPattern = patternRadios.find(radio => radio.checked);
     pattern = initialPattern.value;
-
-    history.add({ brush, size, pattern, path: currentPath, pixelData: imageData });
-
+    clear();
   </script>
 </body>
 
