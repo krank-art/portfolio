@@ -22,20 +22,20 @@
 
     .comment-canvas {
       /* TODO: Add small padding around canvas, so you can actually fill in pixels at the corners and edges */
-      padding: 0rem; 
+      padding: 0rem;
     }
 
     #comment-drawer {
       position: relative;
       display: inline-flex;
       flex-flow: column nowrap;
-      background-color: rgba(0,0,0,0.05);
+      background-color: rgba(0, 0, 0, 0.05);
       border-radius: 1rem;
       padding: 1rem;
-      margin: 1rem auto; 
+      margin: 1rem auto;
     }
 
-    #comment-drawer > *:not(:last-child) {
+    #comment-drawer>*:not(:last-child) {
       margin-bottom: 1rem;
     }
 
@@ -75,7 +75,7 @@
       padding: 10px 20px;
       border: 1px solid black;
       cursor: pointer;
-      background-color: rgba(0,0,0,0.05);
+      background-color: rgba(0, 0, 0, 0.05);
       user-select: none;
     }
 
@@ -86,17 +86,17 @@
 
     .row-button:active,
     .row-button-label:active {
-      background-color: rgba(0,0,0,0.1);
+      background-color: rgba(0, 0, 0, 0.1);
     }
 
     .positive-button {
       background-color: rgb(134, 244, 154);
     }
-    
+
     .positive-button:hover {
       background-color: rgb(196, 251, 206);
     }
-    
+
     .positive-button:active {
       background-color: rgb(79, 235, 108);
     }
@@ -124,11 +124,11 @@
     .row-button-radio:checked+.row-button-label {
       background: #ffcc00;
     }
-    
+
     .row-button-radio+* .row-button-icon {
       opacity: 0.3;
     }
-    
+
     .row-button-radio:checked+* .row-button-icon {
       opacity: 1;
     }
@@ -153,54 +153,182 @@
       background-size: 128px 80px;
       display: inline-block;
     }
-    
-    .bi-scale-1 .row-button-icon { width: 16px; height: 16px; background-size: 128px 80px; }
-    .bi-scale-2 .row-button-icon { width: 32px; height: 32px; background-size: 256px 160px; }
-    .bi-scale-3 .row-button-icon { width: 48px; height: 48px; background-size: 384px 240px; }
-    .bi-scale-4 .row-button-icon { width: 64px; height: 64px; background-size: 512px 320px; }
-    .bi-scale-5 .row-button-icon { width: 80px; height: 80px; background-size: 640px 400px; }
 
-    .bi-pen-1 { background-position: calc(0 / 7 * 100%) calc(0 / 4 * 100%); }
-    .bi-pen-2 { background-position: calc(1 / 7 * 100%) calc(0 / 4 * 100%); }
-    .bi-pen-3 { background-position: calc(2 / 7 * 100%) calc(0 / 4 * 100%); }
-    .bi-pen-4 { background-position: calc(3 / 7 * 100%) calc(0 / 4 * 100%); }
-    .bi-pen-5 { background-position: calc(4 / 7 * 100%) calc(0 / 4 * 100%); }
-    .bi-pen-6 { background-position: calc(5 / 7 * 100%) calc(0 / 4 * 100%); }
-    .bi-eraser-1 { background-position: calc(0 / 7 * 100%) calc(1 / 4 * 100%); }
-    .bi-eraser-2 { background-position: calc(1 / 7 * 100%) calc(1 / 4 * 100%); }
-    .bi-eraser-3 { background-position: calc(2 / 7 * 100%) calc(1 / 4 * 100%); }
-    .bi-eraser-4 { background-position: calc(3 / 7 * 100%) calc(1 / 4 * 100%); }
-    .bi-eraser-5 { background-position: calc(4 / 7 * 100%) calc(1 / 4 * 100%); }
-    .bi-eraser-6 { background-position: calc(5 / 7 * 100%) calc(1 / 4 * 100%); }
-    .bi-pattern-1 { background-position: calc(0 / 7 * 100%) calc(2 / 4 * 100%); }
-    .bi-pattern-2 { background-position: calc(1 / 7 * 100%) calc(2 / 4 * 100%); }
-    .bi-pattern-3 { background-position: calc(2 / 7 * 100%) calc(2 / 4 * 100%); }
-    .bi-pattern-4 { background-position: calc(3 / 7 * 100%) calc(2 / 4 * 100%); }
-    .bi-backward { background-position: calc(4 / 7 * 100%) calc(2 / 4 * 100%); }
-    .bi-forward { background-position: calc(5 / 7 * 100%) calc(2 / 4 * 100%); }
-    .bi-about { background-position: calc(6 / 7 * 100%) calc(2 / 4 * 100%); }
-    .bi-undo { background-position: calc(0 / 7 * 100%) calc(3 / 4 * 100%); }
-    .bi-redo { background-position: calc(1 / 7 * 100%) calc(3 / 4 * 100%); }
-    .bi-save { background-position: calc(2 / 7 * 100%) calc(3 / 4 * 100%); }
-    .bi-play { background-position: calc(3 / 7 * 100%) calc(3 / 4 * 100%); }
-    .bi-accept { background-position: calc(4 / 7 * 100%) calc(3 / 4 * 100%); }
-    .bi-deny { background-position: calc(5 / 7 * 100%) calc(3 / 4 * 100%); }
-    .bi-submit { background-position: calc(6 / 7 * 100%) calc(3 / 4 * 100%); }
-    .bi-clear { background-position: calc(7 / 7 * 100%) calc(3 / 4 * 100%); }
-    .bi-undo-inactive { background-position: calc(0 / 7 * 100%) calc(4 / 4 * 100%); }
-    .bi-redo-inactive { background-position: calc(1 / 7 * 100%) calc(4 / 4 * 100%); }
-    .bi-save-inactive { background-position: calc(2 / 7 * 100%) calc(4 / 4 * 100%); }
-    .bi-play-inactive { background-position: calc(3 / 7 * 100%) calc(4 / 4 * 100%); }
-    .bi-accept-inactive { background-position: calc(4 / 7 * 100%) calc(4 / 4 * 100%); }
-    .bi-deny-inactive { background-position: calc(5 / 7 * 100%) calc(4 / 4 * 100%); }
-    .bi-submit-inactive { background-position: calc(6 / 7 * 100%) calc(4 / 4 * 100%); }
-    .bi-clear-inactive { background-position: calc(7 / 7 * 100%) calc(4 / 4 * 100%); }
+    .bi-scale-1 .row-button-icon {
+      width: 16px;
+      height: 16px;
+      background-size: 128px 80px;
+    }
+
+    .bi-scale-2 .row-button-icon {
+      width: 32px;
+      height: 32px;
+      background-size: 256px 160px;
+    }
+
+    .bi-scale-3 .row-button-icon {
+      width: 48px;
+      height: 48px;
+      background-size: 384px 240px;
+    }
+
+    .bi-scale-4 .row-button-icon {
+      width: 64px;
+      height: 64px;
+      background-size: 512px 320px;
+    }
+
+    .bi-scale-5 .row-button-icon {
+      width: 80px;
+      height: 80px;
+      background-size: 640px 400px;
+    }
+
+    .bi-pen-1 {
+      background-position: calc(0 / 7 * 100%) calc(0 / 4 * 100%);
+    }
+
+    .bi-pen-2 {
+      background-position: calc(1 / 7 * 100%) calc(0 / 4 * 100%);
+    }
+
+    .bi-pen-3 {
+      background-position: calc(2 / 7 * 100%) calc(0 / 4 * 100%);
+    }
+
+    .bi-pen-4 {
+      background-position: calc(3 / 7 * 100%) calc(0 / 4 * 100%);
+    }
+
+    .bi-pen-5 {
+      background-position: calc(4 / 7 * 100%) calc(0 / 4 * 100%);
+    }
+
+    .bi-pen-6 {
+      background-position: calc(5 / 7 * 100%) calc(0 / 4 * 100%);
+    }
+
+    .bi-eraser-1 {
+      background-position: calc(0 / 7 * 100%) calc(1 / 4 * 100%);
+    }
+
+    .bi-eraser-2 {
+      background-position: calc(1 / 7 * 100%) calc(1 / 4 * 100%);
+    }
+
+    .bi-eraser-3 {
+      background-position: calc(2 / 7 * 100%) calc(1 / 4 * 100%);
+    }
+
+    .bi-eraser-4 {
+      background-position: calc(3 / 7 * 100%) calc(1 / 4 * 100%);
+    }
+
+    .bi-eraser-5 {
+      background-position: calc(4 / 7 * 100%) calc(1 / 4 * 100%);
+    }
+
+    .bi-eraser-6 {
+      background-position: calc(5 / 7 * 100%) calc(1 / 4 * 100%);
+    }
+
+    .bi-pattern-1 {
+      background-position: calc(0 / 7 * 100%) calc(2 / 4 * 100%);
+    }
+
+    .bi-pattern-2 {
+      background-position: calc(1 / 7 * 100%) calc(2 / 4 * 100%);
+    }
+
+    .bi-pattern-3 {
+      background-position: calc(2 / 7 * 100%) calc(2 / 4 * 100%);
+    }
+
+    .bi-pattern-4 {
+      background-position: calc(3 / 7 * 100%) calc(2 / 4 * 100%);
+    }
+
+    .bi-backward {
+      background-position: calc(4 / 7 * 100%) calc(2 / 4 * 100%);
+    }
+
+    .bi-forward {
+      background-position: calc(5 / 7 * 100%) calc(2 / 4 * 100%);
+    }
+
+    .bi-about {
+      background-position: calc(6 / 7 * 100%) calc(2 / 4 * 100%);
+    }
+
+    .bi-undo {
+      background-position: calc(0 / 7 * 100%) calc(3 / 4 * 100%);
+    }
+
+    .bi-redo {
+      background-position: calc(1 / 7 * 100%) calc(3 / 4 * 100%);
+    }
+
+    .bi-save {
+      background-position: calc(2 / 7 * 100%) calc(3 / 4 * 100%);
+    }
+
+    .bi-play {
+      background-position: calc(3 / 7 * 100%) calc(3 / 4 * 100%);
+    }
+
+    .bi-accept {
+      background-position: calc(4 / 7 * 100%) calc(3 / 4 * 100%);
+    }
+
+    .bi-deny {
+      background-position: calc(5 / 7 * 100%) calc(3 / 4 * 100%);
+    }
+
+    .bi-submit {
+      background-position: calc(6 / 7 * 100%) calc(3 / 4 * 100%);
+    }
+
+    .bi-clear {
+      background-position: calc(7 / 7 * 100%) calc(3 / 4 * 100%);
+    }
+
+    .bi-undo-inactive {
+      background-position: calc(0 / 7 * 100%) calc(4 / 4 * 100%);
+    }
+
+    .bi-redo-inactive {
+      background-position: calc(1 / 7 * 100%) calc(4 / 4 * 100%);
+    }
+
+    .bi-save-inactive {
+      background-position: calc(2 / 7 * 100%) calc(4 / 4 * 100%);
+    }
+
+    .bi-play-inactive {
+      background-position: calc(3 / 7 * 100%) calc(4 / 4 * 100%);
+    }
+
+    .bi-accept-inactive {
+      background-position: calc(4 / 7 * 100%) calc(4 / 4 * 100%);
+    }
+
+    .bi-deny-inactive {
+      background-position: calc(5 / 7 * 100%) calc(4 / 4 * 100%);
+    }
+
+    .bi-submit-inactive {
+      background-position: calc(6 / 7 * 100%) calc(4 / 4 * 100%);
+    }
+
+    .bi-clear-inactive {
+      background-position: calc(7 / 7 * 100%) calc(4 / 4 * 100%);
+    }
   </style>
 </head>
 
 <body>
   <div id="comment-drawer">
-    <div id ="tools-editing" class="tool-bar bi-scale-3">
+    <div id="tools-editing" class="tool-bar bi-scale-3">
       <div class="row-button-group">
         <label class="row-multi-button">
           <input class="row-button-radio" type="radio" name="tool" value="brush2" checked>
@@ -294,43 +422,43 @@
           </span>
         </label>
       </div>
-      <div class="row-button-group at-end">  
+      <div class="row-button-group at-end">
         <button type="button" class="row-button negative-button" id="reset">
-            <i class="row-button-icon bi-clear"></i>
-            <span class="row-button-text">Clear</span>
+          <i class="row-button-icon bi-clear"></i>
+          <span class="row-button-text">Clear</span>
         </button>
       </div>
     </div>
     <div id="comment-board"></div>
-    <div id ="tools-main" class="tool-bar bi-scale-3">
-      <div class="row-button-group">  
+    <div id="tools-main" class="tool-bar bi-scale-3">
+      <div class="row-button-group">
         <button type="button" class="row-button" id="undo">
-            <i class="row-button-icon bi-undo"></i>
-            <span class="row-button-text">Undo</span>
+          <i class="row-button-icon bi-undo"></i>
+          <span class="row-button-text">Undo</span>
         </button>
         <button type="button" class="row-button" id="redo">
-            <i class="row-button-icon bi-redo"></i>
-            <span class="row-button-text">Redo</span>
+          <i class="row-button-icon bi-redo"></i>
+          <span class="row-button-text">Redo</span>
         </button>
       </div>
-      <div class="row-button-group">  
+      <div class="row-button-group">
         <button type="button" class="row-button">
-            <i class="row-button-icon bi-about"></i>
-            <span class="row-button-text">About</span>
+          <i class="row-button-icon bi-about"></i>
+          <span class="row-button-text">About</span>
         </button>
         <button type="button" class="row-button">
-            <i class="row-button-icon bi-play"></i>
-            <span class="row-button-text">Play</span>
+          <i class="row-button-icon bi-play"></i>
+          <span class="row-button-text">Play</span>
         </button>
         <button type="button" class="row-button" id="download">
-            <i class="row-button-icon bi-save"></i>
-            <span class="row-button-text">Save</span>
+          <i class="row-button-icon bi-save"></i>
+          <span class="row-button-text">Save</span>
         </button>
       </div>
-      <div class="row-button-group at-end">  
+      <div class="row-button-group at-end">
         <button type="button" class="row-button positive-button">
-            <i class="row-button-icon bi-submit"></i>
-            <span class="row-button-text">Submit</span>
+          <i class="row-button-icon bi-submit"></i>
+          <span class="row-button-text">Submit</span>
         </button>
       </div>
     </div>
