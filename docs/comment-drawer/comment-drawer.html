@@ -533,253 +533,263 @@
       }
     }
 
-    const canvas = document.createElement("canvas");
-    canvas.classList.add("comment-canvas");
-    const scale = 4;
-    canvas.width = 320 * scale;
-    canvas.height = 120 * scale;
-    canvas.style.border = "1px solid black";
-    const canvasContainer = document.getElementById("comment-board");
-    canvasContainer.appendChild(canvas);
 
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "black";
-    const { width, height } = canvas;
-    // We need to fill background before retrieving image data
-    // Otherwise bg is transparent on first brush stroke.
-    let imageData = ctx.getImageData(0, 0, width, height);
-    let pattern = null;
-    let brush = null;
-    let size = -1;
-    let drawing = false;
-    const history = new CanvasHistory();
-    let currentRecord = null;
-    let currentPath = [];
-    const lastKnownPosition = { x: null, y: null };
+    class CommentDrawer {
+      constructor() {
+        const canvas = document.createElement("canvas");
+        canvas.classList.add("comment-canvas");
+        const scale = 4;
+        canvas.width = 320 * scale;
+        canvas.height = 120 * scale;
+        canvas.style.border = "1px solid black";
+        const canvasContainer = document.getElementById("comment-board");
+        canvasContainer.appendChild(canvas);
 
-    function drawPixelLine({ from, to, brusher = null, scale = 1 }) {
-      const maxPixelDrawing = 10000;
-      let x0 = Math.round(from.x), y0 = Math.round(from.y);
-      let x1 = Math.round(to.x), y1 = Math.round(to.y);
-
-      let dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-      let dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
-      let err = dx + dy;
-
-      let currentPixelDrawingLimit = 0;
-      while (currentPixelDrawingLimit < maxPixelDrawing) {
-        brusher ? brusher(x0, y0) : drawPixel({ x: x0, y: y0, scale });
-        currentPixelDrawingLimit++;
-        if (x0 === x1 && y0 === y1) break;
-        let e2 = 2 * err;
-        if (e2 >= dy) { err += dy; x0 += sx; }
-        if (e2 <= dx) { err += dx; y0 += sy; }
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "black";
+        const { width, height } = canvas;
+        // We need to fill background before retrieving image data
+        // Otherwise bg is transparent on first brush stroke.
+        let imageData = ctx.getImageData(0, 0, width, height);
+        let pattern = null;
+        let brush = null;
+        let size = -1;
+        let drawing = false;
+        const history = new CanvasHistory();
+        let currentRecord = null;
+        let currentPath = [];
+        const lastKnownPosition = { x: null, y: null };
       }
-    }
 
-    function drawOnCanvas(clientX, clientY) {
-      const rect = canvas.getBoundingClientRect();
-      const rawX = clientX - rect.left;
-      const rawY = clientY - rect.top;
-      const x = Math.round(rawX / scale);
-      const y = Math.round(rawY / scale);
-      const currentPosition = { x, y };
-      currentPath.push(currentPosition);
-      const color = brush === "eraser" ? { r: 255, g: 255, b: 255 } : { r: 0, g: 0, b: 0 };
-      const toolPattern = brush === "eraser" ? "100%" : pattern;
-      drawPixelLine({
-        from: lastKnownPosition.x && lastKnownPosition.y ? lastKnownPosition : currentPosition,
-        to: currentPosition,
-        brusher: (x, y) => drawSquare({ x, y, scale, size, pattern: toolPattern, color }),
-        scale: scale,
-      });
-      ctx.putImageData(imageData, 0, 0); // Flush image data
-      lastKnownPosition.x = currentPosition.x;
-      lastKnownPosition.y = currentPosition.y;
-    }
+      drawPixelLine({ from, to, brusher = null, scale = 1 }) {
+        const maxPixelDrawing = 10000;
+        let x0 = Math.round(from.x), y0 = Math.round(from.y);
+        let x1 = Math.round(to.x), y1 = Math.round(to.y);
 
-    function stopDrawingOnCanvas() {
-      drawing = false;
-      lastKnownPosition.x = null;
-      lastKnownPosition.y = null;
-      history.add(currentRecord);
-      // We need to push the record only when the current stroke ends.
-      // The image data is passed by reference and will change while the brush stroke is still ongoing.
-    }
+        let dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+        let dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+        let err = dx + dy;
 
-    canvas.addEventListener("mousedown", (e) => {
-      drawing = true;
-      // We could save brush type and brush size per single point in path to apply neat effects.
-      // Like if we track velocity of the brush, we could do a try brushing effect (opacity decreases).
-      // For now we will use the simple approach and keep brush type and brush size constant per each stroke.
-      currentPath = [];
-      currentRecord = { brush, size, pattern, path: currentPath, pixelData: imageData };
-      drawOnCanvas(e.clientX, e.clientY);
-    });
+        let currentPixelDrawingLimit = 0;
+        while (currentPixelDrawingLimit < maxPixelDrawing) {
+          brusher ? brusher(x0, y0) : drawPixel({ x: x0, y: y0, scale });
+          currentPixelDrawingLimit++;
+          if (x0 === x1 && y0 === y1) break;
+          let e2 = 2 * err;
+          if (e2 >= dy) { err += dy; x0 += sx; }
+          if (e2 <= dx) { err += dx; y0 += sy; }
+        }
+      }
 
-    canvas.addEventListener("mousemove", (e) => {
-      if (!drawing) return;
-      drawOnCanvas(e.clientX, e.clientY);
-    });
+      drawOnCanvas(clientX, clientY) {
+        const rect = canvas.getBoundingClientRect();
+        const rawX = clientX - rect.left;
+        const rawY = clientY - rect.top;
+        const x = Math.round(rawX / scale);
+        const y = Math.round(rawY / scale);
+        const currentPosition = { x, y };
+        currentPath.push(currentPosition);
+        const color = brush === "eraser" ? { r: 255, g: 255, b: 255 } : { r: 0, g: 0, b: 0 };
+        const toolPattern = brush === "eraser" ? "100%" : pattern;
+        drawPixelLine({
+          from: lastKnownPosition.x && lastKnownPosition.y ? lastKnownPosition : currentPosition,
+          to: currentPosition,
+          brusher: (x, y) => drawSquare({ x, y, scale, size, pattern: toolPattern, color }),
+          scale: scale,
+        });
+        ctx.putImageData(imageData, 0, 0); // Flush image data
+        lastKnownPosition.x = currentPosition.x;
+        lastKnownPosition.y = currentPosition.y;
+      }
 
-    canvas.addEventListener("mouseup", () => {
-      if (drawing) stopDrawingOnCanvas();
-    });
+      stopDrawingOnCanvas() {
+        drawing = false;
+        lastKnownPosition.x = null;
+        lastKnownPosition.y = null;
+        history.add(currentRecord);
+        // We need to push the record only when the current stroke ends.
+        // The image data is passed by reference and will change while the brush stroke is still ongoing.
+      }
 
-    canvas.addEventListener("mouseleave", () => {
-      // Note: This event is called every time the mouse leaves the canvas, no matter if the LMB is presed down.
-      if (drawing) stopDrawingOnCanvas();
-    });
+      initMouseControls() {
+        canvas.addEventListener("mousedown", (e) => {
+          drawing = true;
+          // We could save brush type and brush size per single point in path to apply neat effects.
+          // Like if we track velocity of the brush, we could do a try brushing effect (opacity decreases).
+          // For now we will use the simple approach and keep brush type and brush size constant per each stroke.
+          currentPath = [];
+          currentRecord = { brush, size, pattern, path: currentPath, pixelData: imageData };
+          drawOnCanvas(e.clientX, e.clientY);
+        });
 
-    function drawPixel({ x, y, scale = 1 }) {
-      ctx.fillRect(x * scale, y * scale, scale, scale);
-    }
+        canvas.addEventListener("mousemove", (e) => {
+          if (!drawing) return;
+          drawOnCanvas(e.clientX, e.clientY);
+        });
 
-    function drawSquare({ x, y, size = 2, scale = 1, pattern = null, color = { r: 0, g: 0, b: 0 } }) {
-      const centerX = x - Math.round(size / 2);
-      const centerY = y - Math.round(size / 2);
-      const pixels = imageData.data;
-      const bottomLimit = -1 * Math.floor(size / 2) * scale;
-      const topLimit = Math.ceil(size / 2) * scale;
-      for (let dy = bottomLimit; dy < topLimit; dy++) {
-        for (let dx = bottomLimit; dx < topLimit; dx++) {
-          const nx = x * scale + dx;
-          const ny = y * scale + dy;
-          if (nx < 0 || ny < 0 || nx > width || ny > height)
-            continue;
-          const baseX = Math.floor(nx / scale);
-          const baseY = Math.floor(ny / scale);
-          const pixelIsDrawable = () => {
-            if (!pattern || pattern === "100%")
-              return true;
-            if (pattern === "25%")
-              return baseX % 2 === 0 && baseY % 2 === 0;
-            if (pattern === "50%")
-              return (baseX + baseY) % 2 === 0;
-            if (pattern === "75%")
-              /*
-              * We need to do odd lines so 75% pattern does not stack up with the 50% and 25% pattern
-              * A known issue is that now when we put the 75% pattern and 25% pattern horizontally next to each other,
-              * we get a small line of fuzz (essentially 50% pattern) because of how the 75% pattern is offset.
-              * This is not a huge deal, but that means vertical lines that swap from 75% to 25% look slighty fuzzy.
-              * We could turn the 75% pattern by rotating 180°, but then we have fuzzy horizontal lines.
-              * Since our artboard is in orientation landscape, it is prolly smarter to keep the fuzz in that direction.
-              * Besides, this small problem is a lot better than before where 75% and 25% pattern stacked to solid black.
-              */
-              return baseX % 2 === 0 || baseY % 2 === 1;
-            throw new Error(`Unknown pattern '${pattern}'. `);
+        canvas.addEventListener("mouseup", () => {
+          if (drawing) stopDrawingOnCanvas();
+        });
+
+        canvas.addEventListener("mouseleave", () => {
+          // Note: This event is called every time the mouse leaves the canvas, no matter if the LMB is presed down.
+          if (drawing) stopDrawingOnCanvas();
+        });
+      }
+
+      initButtonControls() {
+        const undoButton = document.getElementById("undo");
+        undoButton.addEventListener("click", () => {
+          if (!history.hasMoreUndos())
+            return;
+          const { brush, size, pattern, path, pixelData } = history.undo();
+          imageData = duplicateImageData(pixelData);
+          ctx.putImageData(imageData, 0, 0);
+        });
+
+        const redoButton = document.getElementById("redo");
+        redoButton.addEventListener("click", () => {
+          if (!history.hasMoreRedos())
+            return;
+          const { brush, size, pattern, path, pixelData } = history.redo();
+          imageData = duplicateImageData(pixelData);
+          ctx.putImageData(imageData, 0, 0);
+        });
+
+        const downloadButton = document.getElementById("download");
+        downloadButton.addEventListener("click", () => {
+          const link = document.createElement("a");
+          link.download = "drawing.png";
+          link.href = downloadImage(scale);
+          link.click();
+        });
+
+        const resetButton = document.getElementById("reset");
+        resetButton.addEventListener("click", clear);
+
+        const toolRadioElements = Array.from(document.querySelectorAll(".row-button-radio[name='tool']"));
+        const toolRadios = toolRadioElements.map(element => {
+          const value = element.value;
+          const match = value.match(/^([a-zA-Z]+).*?([0-9]+)$/);
+          const brushType = match[1];
+          const brushSize = parseInt(match[2]);
+          return { id: value, element, brushType, brushSize };
+        });
+        for (const radio of toolRadios)
+          radio.element.addEventListener("change", (event) => {
+            const toolRadio = toolRadios.find(radio => radio.id === event.target.value);
+            brush = toolRadio.brushType;
+            size = toolRadio.brushSize;
+            //console.log(brush, size);
+          });
+
+        const initialBrush = toolRadios.find(radio => radio.element.checked);
+        brush = initialBrush.brushType;
+        size = initialBrush.brushSize;
+
+        const patternRadios = Array.from(document.querySelectorAll(".row-button-radio[name='pattern']"));
+        for (const radio of patternRadios)
+          radio.addEventListener("change", (event) => {
+            pattern = event.target.value;
+            //console.log(value);
+          });
+        const initialPattern = patternRadios.find(radio => radio.checked);
+        pattern = initialPattern.value;
+      }
+      
+      drawPixel({ x, y, scale = 1 }) {
+        ctx.fillRect(x * scale, y * scale, scale, scale);
+      }
+
+      drawSquare({ x, y, size = 2, scale = 1, pattern = null, color = { r: 0, g: 0, b: 0 } }) {
+        const centerX = x - Math.round(size / 2);
+        const centerY = y - Math.round(size / 2);
+        const pixels = imageData.data;
+        const bottomLimit = -1 * Math.floor(size / 2) * scale;
+        const topLimit = Math.ceil(size / 2) * scale;
+        for (let dy = bottomLimit; dy < topLimit; dy++) {
+          for (let dx = bottomLimit; dx < topLimit; dx++) {
+            const nx = x * scale + dx;
+            const ny = y * scale + dy;
+            if (nx < 0 || ny < 0 || nx > width || ny > height)
+              continue;
+            const baseX = Math.floor(nx / scale);
+            const baseY = Math.floor(ny / scale);
+            const pixelIsDrawable = () => {
+              if (!pattern || pattern === "100%")
+                return true;
+              if (pattern === "25%")
+                return baseX % 2 === 0 && baseY % 2 === 0;
+              if (pattern === "50%")
+                return (baseX + baseY) % 2 === 0;
+              if (pattern === "75%")
+                /*
+                * We need to do odd lines so 75% pattern does not stack up with the 50% and 25% pattern
+                * A known issue is that now when we put the 75% pattern and 25% pattern horizontally next to each other,
+                * we get a small line of fuzz (essentially 50% pattern) because of how the 75% pattern is offset.
+                * This is not a huge deal, but that means vertical lines that swap from 75% to 25% look slighty fuzzy.
+                * We could turn the 75% pattern by rotating 180°, but then we have fuzzy horizontal lines.
+                * Since our artboard is in orientation landscape, it is prolly smarter to keep the fuzz in that direction.
+                * Besides, this small problem is a lot better than before where 75% and 25% pattern stacked to solid black.
+                */
+                return baseX % 2 === 0 || baseY % 2 === 1;
+              throw new Error(`Unknown pattern '${pattern}'. `);
+            }
+            if (!pixelIsDrawable())
+              continue;
+            const index = (ny * width + nx) * 4;
+            const { r, g, b } = color;
+            pixels[index] = r;
+            pixels[index + 1] = g;
+            pixels[index + 2] = b;
+            pixels[index + 3] = 255; // Alpha (fully opaque)
           }
-          if (!pixelIsDrawable())
-            continue;
-          const index = (ny * width + nx) * 4;
-          const { r, g, b } = color;
-          pixels[index] = r;
-          pixels[index + 1] = g;
-          pixels[index + 2] = b;
-          pixels[index + 3] = 255; // Alpha (fully opaque)
-        }
-      }
-    }
-
-    function clear() {
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "black";
-      imageData = ctx.getImageData(0, 0, width, height);
-      history.add({ brush, size, pattern, path: currentPath, pixelData: imageData });
-    }
-
-    const undoButton = document.getElementById("undo");
-    undoButton.addEventListener("click", () => {
-      if (!history.hasMoreUndos())
-        return;
-      const { brush, size, pattern, path, pixelData } = history.undo();
-      imageData = duplicateImageData(pixelData);
-      ctx.putImageData(imageData, 0, 0);
-    });
-
-    const redoButton = document.getElementById("redo");
-    redoButton.addEventListener("click", () => {
-      if (!history.hasMoreRedos())
-        return;
-      const { brush, size, pattern, path, pixelData } = history.redo();
-      imageData = duplicateImageData(pixelData);
-      ctx.putImageData(imageData, 0, 0);
-    });
-
-    function downloadImage(scale = 1) {
-      const originalData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-      // New canvas dimensions
-      const newWidth = Math.floor(canvas.width / scale);
-      const newHeight = Math.floor(canvas.height / scale);
-
-      const newCanvas = document.createElement("canvas");
-      newCanvas.width = newWidth;
-      newCanvas.height = newHeight;
-      const newCtx = newCanvas.getContext("2d");
-      const newImageData = newCtx.createImageData(newWidth, newHeight);
-      const newPixels = newImageData.data;
-
-      // Copy every nth pixel in both directions
-      for (let y = 0; y < newHeight; y++) {
-        for (let x = 0; x < newWidth; x++) {
-          const origIndex = ((y * scale * canvas.width) + (x * scale)) * 4;
-          const newIndex = (y * newWidth + x) * 4;
-
-          newPixels[newIndex] = originalData[origIndex];       // R
-          newPixels[newIndex + 1] = originalData[origIndex + 1]; // G
-          newPixels[newIndex + 2] = originalData[origIndex + 2]; // B
-          newPixels[newIndex + 3] = originalData[origIndex + 3]; // A
         }
       }
 
-      // Draw new pixels onto the new canvas
-      newCtx.putImageData(newImageData, 0, 0);
-      return newCanvas.toDataURL("image/png");
+      clear() {
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "black";
+        imageData = ctx.getImageData(0, 0, width, height);
+        history.add({ brush, size, pattern, path: currentPath, pixelData: imageData });
+      }
+
+      downloadImage(scale = 1) {
+        const originalData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+        // New canvas dimensions
+        const newWidth = Math.floor(canvas.width / scale);
+        const newHeight = Math.floor(canvas.height / scale);
+
+        const newCanvas = document.createElement("canvas");
+        newCanvas.width = newWidth;
+        newCanvas.height = newHeight;
+        const newCtx = newCanvas.getContext("2d");
+        const newImageData = newCtx.createImageData(newWidth, newHeight);
+        const newPixels = newImageData.data;
+
+        // Copy every nth pixel in both directions
+        for (let y = 0; y < newHeight; y++) {
+          for (let x = 0; x < newWidth; x++) {
+            const origIndex = ((y * scale * canvas.width) + (x * scale)) * 4;
+            const newIndex = (y * newWidth + x) * 4;
+
+            newPixels[newIndex] = originalData[origIndex];       // R
+            newPixels[newIndex + 1] = originalData[origIndex + 1]; // G
+            newPixels[newIndex + 2] = originalData[origIndex + 2]; // B
+            newPixels[newIndex + 3] = originalData[origIndex + 3]; // A
+          }
+        }
+
+        // Draw new pixels onto the new canvas
+        newCtx.putImageData(newImageData, 0, 0);
+        return newCanvas.toDataURL("image/png");
+      }
     }
 
-    const downloadButton = document.getElementById("download");
-    downloadButton.addEventListener("click", () => {
-      const link = document.createElement("a");
-      link.download = "drawing.png";
-      link.href = downloadImage(scale);
-      link.click();
-    });
-
-    const resetButton = document.getElementById("reset");
-    resetButton.addEventListener("click", clear);
-
-    const toolRadioElements = Array.from(document.querySelectorAll(".row-button-radio[name='tool']"));
-    const toolRadios = toolRadioElements.map(element => {
-      const value = element.value;
-      const match = value.match(/^([a-zA-Z]+).*?([0-9]+)$/);
-      const brushType = match[1];
-      const brushSize = parseInt(match[2]);
-      return { id: value, element, brushType, brushSize };
-    });
-    for (const radio of toolRadios)
-      radio.element.addEventListener("change", (event) => {
-        const toolRadio = toolRadios.find(radio => radio.id === event.target.value);
-        brush = toolRadio.brushType;
-        size = toolRadio.brushSize;
-        //console.log(brush, size);
-      });
-
-    const initialBrush = toolRadios.find(radio => radio.element.checked);
-    brush = initialBrush.brushType;
-    size = initialBrush.brushSize;
-
-    const patternRadios = Array.from(document.querySelectorAll(".row-button-radio[name='pattern']"));
-    for (const radio of patternRadios)
-      radio.addEventListener("change", (event) => {
-        pattern = event.target.value;
-        //console.log(value);
-      });
-    const initialPattern = patternRadios.find(radio => radio.checked);
-    pattern = initialPattern.value;
     clear();
   </script>
 </body>
