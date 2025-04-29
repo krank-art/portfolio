@@ -646,6 +646,18 @@
         return { canvas, ctx, imageData };
       }
 
+      isDirty() {
+        const pixels = this.imageData.data;
+        const increment = this.scale * 4; // the 4 channels RGBA
+        for (let i = 0; i < pixels.length; i+= increment) {
+          if (pixels[i] !== 255) return true;
+          if (pixels[i + 1] !== 255) return true;
+          if (pixels[i + 2] !== 255) return true;
+          if (pixels[i + 3] !== 255) return true;
+        }
+        return false;
+      }
+
       drawPixelLine({ from, to, brusher = null, scale = 1 }) {
         const maxPixelDrawing = 10000;
         let x0 = Math.round(from.x), y0 = Math.round(from.y);
@@ -736,6 +748,8 @@
           const { brush, size, pattern, path, pixelData } = this.history.undo();
           this.imageData = CanvasHistory.duplicateImageData(pixelData);
           this.lastImageData = CanvasHistory.duplicateImageData(pixelData);
+          // We have to update the history again, because history callbacks are invoked before the undo state is applied.
+          this.history.notify();
           this.flush();
         });
 
@@ -746,6 +760,8 @@
           const { brush, size, pattern, path, pixelData } = this.history.redo();
           this.imageData = CanvasHistory.duplicateImageData(pixelData);
           this.lastImageData = CanvasHistory.duplicateImageData(pixelData);
+          // We have to update the history again, because history callbacks are invoked before the redo state is applied.
+          this.history.notify();
           this.flush();
         });
 
@@ -765,7 +781,9 @@
           // Because no changes happened since the last clear, the new clear is not added to the history.
           // Normally when adding a new record to the history, all remaining redos are trimmed.
           // We now have to remove the redos manually to circumvent the awkwardness.
-          this.history.trim(); 
+          this.history.trim();
+          // We have to update the history again, because history callbacks are invoked before the reset button is applied.
+          this.history.notify();
         }).bind(this));
 
         const toolRadioElements = Array.from(this.container.querySelectorAll(".row-button-radio[name='tool']"));
@@ -801,6 +819,7 @@
       updateButtonControls() {
         this.undoButton.disabled = !this.history.hasMoreUndos();
         this.redoButton.disabled = !this.history.hasMoreRedos();
+        this.resetButton.disabled = !this.isDirty() && !this.history.hasMoreRedos();
       }
 
       drawPixel({ x, y, scale = 1 }) {
