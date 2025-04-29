@@ -734,7 +734,15 @@
         });
 
         const resetButton = this.container.querySelector("#reset");
-        resetButton.addEventListener("click", ((e) => this.clear()).bind(this));
+        resetButton.addEventListener("click", ((e) =>{
+          this.clear();
+          // It is awkward to have redos left after clearing the image.
+          // This can happen when clearing, drawing something, hitting undo and then clear again.
+          // Because no changes happened since the last clear, the new clear is not added to the history.
+          // Normally when adding a new record to the history, all remaining redos are trimmed.
+          // We now have to remove the redos manually to circumvent the awkwardness.
+          this.history.trim(); 
+        }).bind(this));
 
         const toolRadioElements = Array.from(this.container.querySelectorAll(".row-button-radio[name='tool']"));
         const toolRadios = toolRadioElements.map(element => {
