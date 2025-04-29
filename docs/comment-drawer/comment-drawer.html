@@ -502,6 +502,28 @@
         }
       }
 
+      static areImageDataEqual(data1, data2, scale = 1) {
+        if (data1.width !== data2.width) return false;
+        if (data1.height !== data2.height) return false;
+        const buffer1 = data1.data;
+        const buffer2 = data2.data;
+        if (buffer1.length !== buffer2.length) return false;
+        // If we scale the canvas, we can get away with checking only the very first pixel of the image data.
+        // This reduces the checked pixel count from (pixels * scale^2) to (pixels * 1).
+        const increment = scale * 4; // the 4 channels RGBA
+        for (let i = 0; i < buffer1.length; i+= increment) {
+          if (buffer1[i] !== buffer2[i]) return false;
+          if (buffer1[i + 1] !== buffer2[i + 1]) return false;
+          if (buffer1[i + 2] !== buffer2[i + 2]) return false;
+          if (buffer1[i + 3] !== buffer2[i + 3]) return false;
+        }
+        return true;
+      }
+
+      get size() {
+        return this.states.length;
+      }
+
       undo() {
         if (this.states.length === 0)
           return null;
@@ -556,6 +578,7 @@
         this.canvas = canvas;
         this.ctx = ctx;
         this.imageData = imageData;
+        this.lastImageData = null;
         this.history = new CanvasHistory();
 
         // Dynamic properties
@@ -644,7 +667,7 @@
         this.drawing = false;
         this.lastKnownPosition.x = null;
         this.lastKnownPosition.y = null;
-        this.history.add(this.currentRecord);
+        this.remember(this.currentRecord);
         // We need to push the record only when the current stroke ends.
         // The image data is passed by reference and will change while the brush stroke is still ongoing.
       }
@@ -688,6 +711,7 @@
             return;
           const { brush, size, pattern, path, pixelData } = this.history.undo();
           this.imageData = CanvasHistory.duplicateImageData(pixelData);
+          this.lastImageData = CanvasHistory.duplicateImageData(pixelData);
           this.flush();
         });
 
@@ -697,6 +721,7 @@
             return;
           const { brush, size, pattern, path, pixelData } = this.history.redo();
           this.imageData = CanvasHistory.duplicateImageData(pixelData);
+          this.lastImageData = CanvasHistory.duplicateImageData(pixelData);
           this.flush();
         });
 
@@ -704,7 +729,7 @@
         downloadButton.addEventListener("click", () => {
           const link = document.createElement("a");
           link.download = "drawing.png";
-          link.href = downloadImage(scale);
+          link.href = this.downloadImage(this.scale);
           link.click();
         });
 
@@ -800,7 +825,7 @@
         this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
         this.ctx.fillStyle = "black";
         this.imageData = this.ctx.getImageData(0, 0, this.canvasWidth, this.canvasHeight);
-        this.history.add({ 
+        this.remember({ 
           brush: this.brush, 
           size: this.size, 
           pattern: this.pattern, 
@@ -839,6 +864,16 @@
         // Draw new pixels onto the new canvas
         newCtx.putImageData(newImageData, 0, 0);
         return newCanvas.toDataURL("image/png");
+      }
+
+      remember(record) {
+        const currentImageData = record.pixelData;
+        if (!this.lastImageData || !CanvasHistory.areImageDataEqual(this.lastImageData, currentImageData, this.scale)) {
+          this.history.add(record);
+        } else {
+          // console.log("last image data was the same, not recording in history", this.history.size);
+        }
+        this.lastImageData = CanvasHistory.duplicateImageData(currentImageData);
       }
     }
 
