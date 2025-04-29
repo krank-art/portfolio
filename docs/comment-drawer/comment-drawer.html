@@ -74,19 +74,22 @@
       display: inline-flex;
       padding: 10px 20px;
       border: 1px solid black;
-      cursor: pointer;
       background-color: rgba(0, 0, 0, 0.05);
       user-select: none;
     }
 
-    .row-button:hover,
-    .row-button-label:hover {
+    .row-button:hover:not([disabled]),
+    .row-button-label:hover:not([disabled]) {
       background-color: white;
     }
 
-    .row-button:active,
-    .row-button-label:active {
+    .row-button:active:not([disabled]),
+    .row-button-label:active:not([disabled]) {
       background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .row-button[disabled] {
+      opacity: 0.2;
     }
 
     .positive-button {
@@ -466,11 +469,12 @@
 
   <script>
     class CanvasHistory {
-      constructor(maxSize = 20) {
+      constructor({maxSize = 20, callbacks}) {
         this.maxSize = maxSize;
         this.states = [];
         this.index = -1;
         this.sequenceNumber = 0;
+        this.callbacks = callbacks;
       }
       
     static duplicateImageData(imageData) {
@@ -500,6 +504,7 @@
         } else {
           this.index++;
         }
+        this.notify();
       }
 
       static areImageDataEqual(data1, data2, scale = 1) {
@@ -528,20 +533,25 @@
         if (this.states.length === 0)
           return null;
         this.index = Math.max(0, this.index - 1);
-        return this.states[this.index];
+        const lastState = this.states[this.index];
+        this.notify();
+        return lastState;
       }
 
       redo() {
         if (this.states.length === 0)
           return null;
         this.index = Math.min(this.states.length, this.index + 1);
-        return this.states[this.index];
+        const nextSate = this.states[this.index];
+        this.notify();
+        return nextSate;
       }
 
       trim() {
         if (this.index < this.states.length - 1) {
           this.states = this.states.slice(0, this.index + 1);
         }
+        this.notify();
       }
 
       hasMoreUndos() {
@@ -559,10 +569,16 @@
       reset() {
         this.states = [];
         this.index = -1;
+        this.notify();
+      }
+
+      notify() {
+        if (!this.callbacks || this.callbacks.length <= 0) return;
+        for (const callback of this.callbacks) callback();
       }
     }
 
-    class CommentDrawer {
+    class CommentDrawer { 
       constructor({ width, height, scale, container }) {
         // Static properties
         this.width = width;
@@ -579,7 +595,9 @@
         this.ctx = ctx;
         this.imageData = imageData;
         this.lastImageData = null;
-        this.history = new CanvasHistory();
+        this.history = new CanvasHistory({ callbacks: [ 
+          (() => { this.updateButtonControls() }).bind(this), 
+        ]});
 
         // Dynamic properties
         this.pattern = null;
@@ -589,6 +607,12 @@
         this.currentRecord = null;
         this.currentPath = [];
         this.lastKnownPosition = { x: null, y: null };
+
+        // HTML element controls
+        this.undoButton = null;
+        this.redoButton = null;
+        this.downloadButton = null;
+        this.resetButton = null;
 
         // Initialize controls
         this.initMouseControls();
@@ -705,8 +729,8 @@
       }
 
       initButtonControls() {
-        const undoButton = this.container.querySelector("#undo");
-        undoButton.addEventListener("click", () => {
+        this.undoButton = this.container.querySelector("#undo");
+        this.undoButton.addEventListener("click", () => {
           if (!this.history.hasMoreUndos())
             return;
           const { brush, size, pattern, path, pixelData } = this.history.undo();
@@ -715,8 +739,8 @@
           this.flush();
         });
 
-        const redoButton = this.container.querySelector("#redo");
-        redoButton.addEventListener("click", () => {
+        this.redoButton = this.container.querySelector("#redo");
+        this.redoButton.addEventListener("click", () => {
           if (!this.history.hasMoreRedos())
             return;
           const { brush, size, pattern, path, pixelData } = this.history.redo();
@@ -725,16 +749,16 @@
           this.flush();
         });
 
-        const downloadButton = this.container.querySelector("#download");
-        downloadButton.addEventListener("click", () => {
+        this.downloadButton = this.container.querySelector("#download");
+        this.downloadButton.addEventListener("click", () => {
           const link = document.createElement("a");
           link.download = "drawing.png";
           link.href = this.downloadImage(this.scale);
           link.click();
         });
 
-        const resetButton = this.container.querySelector("#reset");
-        resetButton.addEventListener("click", ((e) =>{
+        this.resetButton = this.container.querySelector("#reset");
+        this.resetButton.addEventListener("click", ((e) =>{
           this.clear();
           // It is awkward to have redos left after clearing the image.
           // This can happen when clearing, drawing something, hitting undo and then clear again.
@@ -772,6 +796,11 @@
           });
         const initialPattern = patternRadios.find(radio => radio.checked);
         this.pattern = initialPattern.value;
+      }
+
+      updateButtonControls() {
+        this.undoButton.disabled = !this.history.hasMoreUndos();
+        this.redoButton.disabled = !this.history.hasMoreRedos();
       }
 
       drawPixel({ x, y, scale = 1 }) {
