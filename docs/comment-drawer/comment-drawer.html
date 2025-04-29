@@ -449,7 +449,7 @@
           <i class="row-button-icon bi-about"></i>
           <span class="row-button-text">About</span>
         </button>
-        <button type="button" class="row-button">
+        <button type="button" class="row-button" id="playback">
           <i class="row-button-icon bi-play"></i>
           <span class="row-button-text">Play</span>
         </button>
@@ -459,7 +459,7 @@
         </button>
       </div>
       <div class="row-button-group at-end">
-        <button type="button" class="row-button positive-button">
+        <button type="button" class="row-button positive-button" id="submit">
           <i class="row-button-icon bi-submit"></i>
           <span class="row-button-text">Submit</span>
         </button>
@@ -611,8 +611,10 @@
         // HTML element controls
         this.undoButton = null;
         this.redoButton = null;
+        this.playbackButton = null;
         this.downloadButton = null;
         this.resetButton = null;
+        this.submitButton = null;
 
         // Initialize controls
         this.initMouseControls();
@@ -741,6 +743,10 @@
       }
 
       initButtonControls() {
+        this.playbackButton = this.container.querySelector("#playback");
+        this.submitButton = this.container.querySelector("#submit");
+
+
         this.undoButton = this.container.querySelector("#undo");
         this.undoButton.addEventListener("click", () => {
           if (!this.history.hasMoreUndos())
@@ -820,6 +826,9 @@
         this.undoButton.disabled = !this.history.hasMoreUndos();
         this.redoButton.disabled = !this.history.hasMoreRedos();
         this.resetButton.disabled = !this.isDirty() && !this.history.hasMoreRedos();
+        this.submitButton.disabled = !this.isDirty();
+        this.playbackButton.disabled = !this.isDirty();
+        this.downloadButton.disabled = !this.isDirty();
       }
 
       drawPixel({ x, y, scale = 1 }) {
