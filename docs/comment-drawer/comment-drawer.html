@@ -854,7 +854,7 @@
         this.redoButton.disabled = !this.acceptsInput || !this.history.hasMoreRedos();
         this.resetButton.disabled = !this.acceptsInput || !this.isDirty() && !this.history.hasMoreRedos();
         this.submitButton.disabled = !this.acceptsInput || !this.isDirty();
-        this.playbackButton.disabled = !this.acceptsInput || !this.isDirty();
+        this.playbackButton.disabled = !this.acceptsInput || !this.history.hasMoreUndos();
         this.downloadButton.disabled = !this.acceptsInput || !this.isDirty();
         this.aboutButton.disabled = !this.acceptsInput;
       }
