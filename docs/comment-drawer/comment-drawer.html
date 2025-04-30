@@ -472,6 +472,9 @@
       constructor({maxSize = 20, callbacks}) {
         this.maxSize = maxSize;
         this.states = [];
+        // We will record ALL input provided to the canvas history, but toss out the pixel data if the amount of states
+        // go beyond maxSize. These are special states that are intended for the playback function.
+        this.shadowStates = [];
         this.index = -1;
         this.sequenceNumber = 0;
         this.callbacks = callbacks;
@@ -500,7 +503,9 @@
         });
         this.sequenceNumber++;
         if (this.states.length > this.maxSize) {
-          this.states.shift();
+          const shadowState = this.states.shift();
+          shadowState.pixelData = null;
+          this.shadowStates.push(shadowState);
         } else {
           this.index++;
         }
@@ -527,6 +532,15 @@
 
       get size() {
         return this.states.length;
+      }
+
+      get inputs() {
+        const activeStates = this.states.slice(0, this.index + 1);
+        const records = [...this.shadowStates, ...activeStates];
+        return records.map(record => {
+          const { brush, size, pattern, path } = record;
+          return { brush, size, pattern, path };
+        });
       }
 
       undo() {
@@ -743,9 +757,7 @@
       }
 
       initButtonControls() {
-        this.playbackButton = this.container.querySelector("#playback");
         this.submitButton = this.container.querySelector("#submit");
-
 
         this.undoButton = this.container.querySelector("#undo");
         this.undoButton.addEventListener("click", () => {
@@ -769,6 +781,11 @@
           // We have to update the history again, because history callbacks are invoked before the redo state is applied.
           this.history.notify();
           this.flush();
+        });
+
+        this.playbackButton = this.container.querySelector("#playback");
+        this.playbackButton.addEventListener("click", () => {
+          this.playback(100);
         });
 
         this.downloadButton = this.container.querySelector("#download");
@@ -939,6 +956,40 @@
           // console.log("last image data was the same, not recording in history", this.history.size);
         }
         this.lastImageData = CanvasHistory.duplicateImageData(currentImageData);
+      }
+
+      playback(speed = 10) {
+        this.clear();
+        /*
+         * TODO: Make delay based on distance rather than individual points
+         * The problem is that currently the playback slows down considerably when the user was moving 
+         * their mouse slowly around a corner and then suddenly jumps forward with a big sweeping stroke.
+         * Also: Add delay between lifting the brush stroke and the next brush. Looks a bit weird when a
+         * cloud of dots appears almost instantly.
+         */
+        const delay = Math.round(1000 / speed);
+        let totalDelay = 0;
+        for (const action of this.history.inputs) {
+          const { brush, size, pattern, path } = action;
+          if ( path.length === 0) continue;
+          const maxIndex = path.length === 1 ? path.length : path.length - 1;
+          for (let i = 0; i < maxIndex; i++) {
+            const currentPoint = path[i];
+            const nextPoint = path[i + 1] ?? currentPoint;
+            const color = brush === "eraser" ? { r: 255, g: 255, b: 255 } : { r: 0, g: 0, b: 0 };
+            const toolPattern = brush === "eraser" ? "100%" : pattern;
+            setTimeout(() => {
+              this.drawPixelLine({
+                from: currentPoint,
+                to: nextPoint,
+                brusher: (x, y) => this.drawSquare({ x, y, size, pattern: toolPattern, color }),
+                scale: this.scale,
+              });
+              this.flush();
+            }, totalDelay);
+            totalDelay += delay;
+          }
+        }
       }
     }
 
