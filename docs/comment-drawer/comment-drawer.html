@@ -631,10 +631,13 @@
         this.resetButton = null;
         this.submitButton = null;
         this.aboutButton = null;
+        this.toolRadios = null;
+        this.buttonRadios = null;
 
         // Initialize controls
         this.initMouseControls();
         this.initButtonControls();
+        this.initHotkeys();
         this.clear();
       }
 
@@ -820,32 +823,32 @@
         });
 
         const toolRadioElements = Array.from(this.container.querySelectorAll(".row-button-radio[name='tool']"));
-        const toolRadios = toolRadioElements.map(element => {
+        this.toolRadios = toolRadioElements.map(element => {
           const value = element.value;
           const match = value.match(/^([a-zA-Z]+).*?([0-9]+)$/);
           const brushType = match[1];
           const brushSize = parseInt(match[2]);
           return { id: value, element, brushType, brushSize };
         });
-        for (const radio of toolRadios)
+        for (const radio of this.toolRadios)
           radio.element.addEventListener("change", (event) => {
-            const toolRadio = toolRadios.find(radio => radio.id === event.target.value);
+            const toolRadio = this.toolRadios.find(radio => radio.id === event.target.value);
             this.brush = toolRadio.brushType;
             this.size = toolRadio.brushSize;
             //console.log(brush, size);
           });
 
-        const initialBrush = toolRadios.find(radio => radio.element.checked);
+        const initialBrush = this.toolRadios.find(radio => radio.element.checked);
         this.brush = initialBrush.brushType;
         this.size = initialBrush.brushSize;
 
-        const patternRadios = Array.from(this.container.querySelectorAll(".row-button-radio[name='pattern']"));
-        for (const radio of patternRadios)
+        this.patternRadios = Array.from(this.container.querySelectorAll(".row-button-radio[name='pattern']"));
+        for (const radio of this.patternRadios)
           radio.addEventListener("change", (event) => {
             this.pattern = event.target.value;
             //console.log(value);
           });
-        const initialPattern = patternRadios.find(radio => radio.checked);
+        const initialPattern = this.patternRadios.find(radio => radio.checked);
         this.pattern = initialPattern.value;
       }
 
@@ -857,6 +860,70 @@
         this.playbackButton.disabled = !this.acceptsInput || !this.history.hasMoreUndos();
         this.downloadButton.disabled = !this.acceptsInput || !this.isDirty();
         this.aboutButton.disabled = !this.acceptsInput;
+      }
+
+      initHotkeys() {
+        const brushTools = this.toolRadios.filter(radio => radio.brushType === "brush");
+        const eraserTools = this.toolRadios.filter(radio => radio.brushType === "eraser");
+        const getActiveToolIndex = () => {
+          const brushIndex = brushTools.findIndex(radio => radio.element.checked);
+          const eraserIndex = eraserTools.findIndex(radio => radio.element.checked);
+          const toolIndex = brushIndex >= 0 ? brushIndex : eraserIndex;
+          const activeTool = brushIndex >= 0 ? "brush" : "eraser";
+          const targetTools = activeTool === "eraser" ? eraserTools : brushTools;
+          return { toolIndex, activeTool, targetTools };
+        };
+        const incrementSelectedTool = (increment) => {
+          const { toolIndex, targetTools } = getActiveToolIndex();
+          const currentIndex = toolIndex + increment;
+          const maxIndex = targetTools.length - 1;
+          const targetIndex = Math.max(0, Math.min(currentIndex, maxIndex));
+          targetTools[targetIndex].element.click();
+        };
+        document.addEventListener('keydown', ((event) => {
+          if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') {
+            event.preventDefault(); // prevent browser undo
+            this.undoButton.click();
+          }
+          if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') {
+            event.preventDefault();
+            this.redoButton.click();
+          }
+          if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+            event.preventDefault();
+            this.downloadButton.click();
+          }
+          if (event.key.toLowerCase() === 'r') {
+            console.log("clear");
+            this.resetButton.click();
+          }
+          if (event.key.toLowerCase() === 'b') {
+            const { toolIndex } = getActiveToolIndex();
+            brushTools[toolIndex].element.click();
+          }
+          if (event.key.toLowerCase() === 'e') {
+            const { toolIndex } = getActiveToolIndex();
+            eraserTools[toolIndex].element.click();
+          }
+          if (["1", "2", "3", "4"].some(key => key === event.key.toLowerCase())) {
+            const digit = parseInt(event.key);
+            const { targetTools } = getActiveToolIndex();
+            targetTools[digit - 1].element.click();
+          }
+          if (["5", "6", "7", "8"].some(key => key === event.key.toLowerCase())) {
+            const digit = parseInt(event.key);
+            this.patternRadios[digit - 5].click();
+          }
+          if (event.key.toLowerCase() === 'p') {
+            this.playbackButton.click();
+          }
+          if (event.key.toLowerCase() === '+') {
+            incrementSelectedTool(1);
+          }
+          if (event.key.toLowerCase() === '-') {
+            incrementSelectedTool(-1);
+          }
+        }).bind(this));
       }
 
       drawPixel({ x, y, scale = 1 }) {
