@@ -445,7 +445,7 @@
         </button>
       </div>
       <div class="row-button-group">
-        <button type="button" class="row-button">
+        <button type="button" class="row-button" id="about">
           <i class="row-button-icon bi-about"></i>
           <span class="row-button-text">About</span>
         </button>
@@ -614,6 +614,7 @@
         ]});
 
         // Dynamic properties
+        this.acceptsInput = true;
         this.pattern = null;
         this.brush = null;
         this.size = -1;
@@ -629,6 +630,7 @@
         this.downloadButton = null;
         this.resetButton = null;
         this.submitButton = null;
+        this.aboutButton = null;
 
         // Initialize controls
         this.initMouseControls();
@@ -726,6 +728,7 @@
 
       initMouseControls() {
         this.canvas.addEventListener("mousedown", ((e) => {
+          if (!this.acceptsInput) return;
           this.drawing = true;
           // We could save brush type and brush size per single point in path to apply neat effects.
           // Like if we track velocity of the brush, we could do a try brushing effect (opacity decreases).
@@ -742,6 +745,7 @@
         }).bind(this));
 
         this.canvas.addEventListener("mousemove", ((e) => {
+          if (!this.acceptsInput) return;
           if (!this.drawing) return;
           this.drawOnCanvas(e.clientX, e.clientY);
         }).bind(this));
@@ -809,6 +813,12 @@
           this.history.notify();
         }).bind(this));
 
+        this.aboutButton = this.container.querySelector("#about");
+        this.aboutButton.addEventListener("click", () => {
+          alert("Created by Krank (c) 2025");
+          // TODO show custom dialogue
+        });
+
         const toolRadioElements = Array.from(this.container.querySelectorAll(".row-button-radio[name='tool']"));
         const toolRadios = toolRadioElements.map(element => {
           const value = element.value;
@@ -840,12 +850,13 @@
       }
 
       updateButtonControls() {
-        this.undoButton.disabled = !this.history.hasMoreUndos();
-        this.redoButton.disabled = !this.history.hasMoreRedos();
-        this.resetButton.disabled = !this.isDirty() && !this.history.hasMoreRedos();
-        this.submitButton.disabled = !this.isDirty();
-        this.playbackButton.disabled = !this.isDirty();
-        this.downloadButton.disabled = !this.isDirty();
+        this.undoButton.disabled = !this.acceptsInput || !this.history.hasMoreUndos();
+        this.redoButton.disabled = !this.acceptsInput || !this.history.hasMoreRedos();
+        this.resetButton.disabled = !this.acceptsInput || !this.isDirty() && !this.history.hasMoreRedos();
+        this.submitButton.disabled = !this.acceptsInput || !this.isDirty();
+        this.playbackButton.disabled = !this.acceptsInput || !this.isDirty();
+        this.downloadButton.disabled = !this.acceptsInput || !this.isDirty();
+        this.aboutButton.disabled = !this.acceptsInput;
       }
 
       drawPixel({ x, y, scale = 1 }) {
@@ -902,18 +913,19 @@
         this.ctx.putImageData(this.imageData, 0, 0);
       }
 
-      clear() {
+      clear(addToHistory = true) {
         this.ctx.fillStyle = "white";
         this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
         this.ctx.fillStyle = "black";
         this.imageData = this.ctx.getImageData(0, 0, this.canvasWidth, this.canvasHeight);
-        this.remember({ 
-          brush: this.brush, 
-          size: this.size, 
-          pattern: this.pattern, 
-          path: this.currentPath, 
-          pixelData: this.imageData, 
-        });
+        if (addToHistory)
+          this.remember({ 
+            brush: this.brush, 
+            size: this.size, 
+            pattern: this.pattern, 
+            path: this.currentPath, 
+            pixelData: this.imageData, 
+          });
       }
 
       downloadImage(scale = 1) {
@@ -959,9 +971,11 @@
       }
 
       playback(speed = 10) {
-        this.clear();
+        this.acceptsInput = false;
+        this.updateButtonControls();
+        this.clear(false);
         /*
-         * TODO: Make delay based on distance rather than individual points
+         * TODO?: Make delay based on distance rather than individual points
          * The problem is that currently the playback slows down considerably when the user was moving 
          * their mouse slowly around a corner and then suddenly jumps forward with a big sweeping stroke.
          * Also: Add delay between lifting the brush stroke and the next brush. Looks a bit weird when a
@@ -989,7 +1003,13 @@
             }, totalDelay);
             totalDelay += delay;
           }
+          // Extra delay between brush strokes so the lines dont appear immediately when the previous ends.
+          totalDelay += delay * 10;
         }
+        setTimeout(() => {
+          this.acceptsInput = true;
+          this.updateButtonControls();
+        }, totalDelay);
       }
     }
 
