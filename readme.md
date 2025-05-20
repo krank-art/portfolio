@@ -122,6 +122,21 @@ You need to install `nvm` (Node version manager), and use it to install at least
 6. Run `nvm use 16` to switch Node version to v16.
 
 
+## Run PHP dev environemnt
+
+The current target platform uses PHP with a MariaDB database.
+To check the current MariaDB version:
+
+1. On Windows, open PowerShell with admin privileges and run `choco install mariadb`.
+2. Open new `cmd` and run `mysql -D <DATABASE_NAME> -u <ADMIN_NAME> -p<PASSWORD> -h <SERVER_URL> --skip-ssl`.
+   This connects to the production database and lists the database version.
+3. Install Docker.
+4. If you have a Windows Distro still running at WSL v1, first list with `wsl -l -v` and then update with `wsl --set-version <DISTRO_NAME> 2`.
+   This takes a few minutes.
+5. Open terminal and move into `www/php`. Run `docker-compose up -d --build`.
+6. Go to `http://localhost:8080/`. It should display the current time of the database (in UTC+0).
+
+
 ## Deployment
 
 1. Update version of project:
