@@ -26,9 +26,11 @@ if (isset($_GET['logout'])) {
 <head>
     <title>Admin Panel</title>
     <style>
-        body { font-family: sans-serif; margin: 2em; }
-        .panel { margin-top: 1em; padding: 1em; border: 1px solid #ccc; max-width: 400px; }
+        body { font-family: sans-serif; margin: 2em auto; max-width: 400px; }
+        .panel { margin-top: 1em; padding: 1em; border: 1px solid #ccc; }
         .error { color: red; }
+        .action-list { list-style-type: none;}
+        .action-list > *:not(:last-child) {margin-bottom: 1em;}
     </style>
 </head>
 <body>
@@ -47,12 +49,25 @@ if (isset($_GET['logout'])) {
 <?php else: ?>
     <div class="panel">
         <h3>Admin Controls</h3>
-        <ul>
-            <li><a href="/send-newsletter.php">📥 Send newsletter</a></li>
-            <li><a href="#">🧹 Clear database</a></li>
-            <li><a href="#">🔧 System settings</a></li>
+        <ul class="action-list">
+            <li>
+                <a href="/test-database-connection.php">🔧 Test database connection</a><br>
+                <small>Manual test if the provided database can be reached.</small>
+            </li>
+            <li>
+                <a href="/create-newsletter-table.php">🧹 Create newsletter table</a><br>
+                <small>Creates database table for newsletter adresses. If the table already exists, nothing happens.</small>
+            </li>
+            <li>
+                <a href="/send-newsletter.php">📥 Send newsletter</a><br>
+                <small>
+                    This will send an update notification email to all subscribers.
+                    We won't send emails to unvalidated people, imagine someone just adding random email adresses without the owner's consent.
+                </small>
+            </li>
         </ul>
-        <p><a href="?logout=1">Logout</a></p>
+        <p><a href="?logout=1">Logout</a><br>
+        <small>(Session will expire after 24 minutes of inaction)</small></p>
     </div>
 <?php endif; ?>
 
