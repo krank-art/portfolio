@@ -1,13 +1,12 @@
 RewriteEngine On
 DirectorySlash Off
 
-# Deny access to all dotfiles
-<FilesMatch "^\.">
-    Require all denied
-</FilesMatch>
-
+# Append 'index' if has trailing slash as path
+RewriteRule (.+)/([?#].*)?$ $1/index$2
 
 # Display views https://example.com/about instead of https://example.com/about.html
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^(?!.*\.\w{2,5}$)(.+) $1.php [L]
 RewriteRule ^(?!.*\.\w{2,5}$)(.+) $1.html [L]
 
 # Display error page
