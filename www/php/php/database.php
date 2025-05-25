@@ -1,14 +1,20 @@
 <?php
 $config = require_once __DIR__ . '/config.php';
 
-$dsn = "mysql:host=" . $config['db_host'] . ";dbname=" . $config['db_name'] . ";charset=" . $config['db_charset'];
+$host = getenv('DB_HOST');
+$name = getenv('DB_NAME');
+$user = getenv('DB_USER');
+$pass = getenv('DB_PASS');
+$charset = getenv('DB_CHARSET');
+ 
+$dsn = "mysql:host=$host;dbname=$name;charset=$charset";
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
 ];
 
 try {
-    $pdo = new PDO($dsn, $config['db_user'], $config['db_pass'], $options);
+    $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
     http_response_code(500);
     //echo $e->getMessage();

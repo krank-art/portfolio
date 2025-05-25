@@ -1,6 +1,5 @@
 <?php
 require 'database.php';
-//$config = require_once __DIR__ . '/config.php';
 
 function base64url_encode(string $data): string {
     return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');

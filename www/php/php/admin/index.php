@@ -1,8 +1,9 @@
 <?php
 session_start();
+require __DIR__ . '/../load-env.php';
+loadEnv(__DIR__ . '/../.env');
 
-// Define your admin password here (store in env file or config in production)
-$adminPassword = 'supersecret123';
+$adminPassword = getenv('ADMIN_PANEL_PASS');
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
@@ -51,15 +52,15 @@ if (isset($_GET['logout'])) {
         <h3>Admin Controls</h3>
         <ul class="action-list">
             <li>
-                <a href="/test-database-connection.php">🔧 Test database connection</a><br>
+                <a href="/admin/test-database-connection.php">🔧 Test database connection</a><br>
                 <small>Manual test if the provided database can be reached.</small>
             </li>
             <li>
-                <a href="/create-newsletter-table.php">🧹 Create newsletter table</a><br>
+                <a href="/admin/create-newsletter-table.php">🧹 Create newsletter table</a><br>
                 <small>Creates database table for newsletter adresses. If the table already exists, nothing happens.</small>
             </li>
             <li>
-                <a href="/send-newsletter.php">📥 Send newsletter</a><br>
+                <a href="/admin/send-newsletter.php">📥 Send newsletter</a><br>
                 <small>
                     This will send an update notification email to all subscribers.
                     We won't send emails to unvalidated people, imagine someone just adding random email adresses without the owner's consent.

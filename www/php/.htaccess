@@ -1,6 +1,12 @@
 RewriteEngine On
 DirectorySlash Off
 
+# Deny access to all dotfiles
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+
 # Display views https://example.com/about instead of https://example.com/about.html
 RewriteRule ^(?!.*\.\w{2,5}$)(.+) $1.html [L]
 

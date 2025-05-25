@@ -1,20 +1,9 @@
 <?php
-$host = 'mariadb'; // This matches the service name in docker-compose
-$db   = 'exampledb';
-$user = 'exampleuser';
-$pass = 'examplepass';
-$charset = 'utf8mb4';
+require 'database.php';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-
-phpinfo();
+//phpinfo();
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    ]);
-
-    // Simple read query as example
     $stmt = $pdo->query("SELECT NOW() AS access_time");
     $row = $stmt->fetch();
 
