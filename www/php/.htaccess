@@ -1,13 +1,42 @@
 RewriteEngine On
 DirectorySlash Off
 
-# Append 'index' if has trailing slash as path
-RewriteRule (.+)/([?#].*)?$ $1/index$2
-
-# Display views https://example.com/about instead of https://example.com/about.html
-RewriteCond %{DOCUMENT_ROOT}/$1.php -f
-RewriteRule ^(?!.*\.\w{2,5}$)(.+) $1.php [L]
-RewriteRule ^(?!.*\.\w{2,5}$)(.+) $1.html [L]
+# Examples
+#    1.                      2.                3.                     4.
+# A  /my-dir  ---(R302)--->  /my-dir/  ----->  /my-dir/index  ----->  /my-dir/index.php
+# B  /some-page                                               ----->  /some-page.php
+# C  /subdir/this-is-static                                   ----->  /subdir/this-is-static.html
+# D  /res/Dockerfile                                          ----->  /res/Dockerfile
+# E  /res/examples.tar.gz                                     ----->  /res/examples.tar.gz
 
 # Display error page
 ErrorDocument 404 /404.html
+
+# Append '/' if trying to access a directory
+# (WARNING: Must be run before adding 'index' to path with trailing slash)
+# "If URL does not end with slash AND is a directory, then redirect to URL with a trailing slash."
+# Important: We have to use a slash as rewrite target so the rewrite gets resolved with an absolute path. 
+#   Without a slash it gets treated as relative and we get the server doc root (e.g. '/var/www/html') appended.
+RewriteCond %{REQUEST_URI} ^(.+)[^/]$
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^(.+?)$ /$1/ [R=302,L]
+
+# Append 'index' if has trailing slash as path
+RewriteCond %{REQUEST_URI} ^(.+)/$
+RewriteRule ^ %1/index [L]
+
+# Skip if it's an existing file or directory
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Skip if the request already includes an extension
+# This also works for double extensions like '.tar.gz' or '.png.enc'
+RewriteCond %{REQUEST_URI} !\.(?:\w{2,5}\.)*\w{2,5}$
+
+# 1. Try .php
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^(.+)$ $1.php [L]
+
+# 2. If no .php, try .html
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^(.+)$ $1.html [L]
