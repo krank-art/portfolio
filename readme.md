@@ -135,6 +135,7 @@ To check the current MariaDB version:
    This takes a few minutes.
 5. Open terminal and move into `www/php`. Run `docker-compose up -d --build`.
 6. Go to `http://localhost:8080/`. It should display the current time of the database (in UTC+0).
+7. To connect to the MariaDB instance, run `docker exec -it mariadb mysql -u exampleuser -p` and then type in the password `examplepass`.
 
 
 ## Deployment
