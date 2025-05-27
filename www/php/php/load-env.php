@@ -29,3 +29,15 @@ function loadEnv($path)
         }
     }
 }
+
+function isProduction() {
+    $host = $_SERVER['HTTP_HOST'] ?? '';
+    if (strpos($host, 'localhost') !== false || 
+        strpos($host, '127.0.0.1') !== false || 
+        strpos($host, '.local') !== false) {
+        return false; // development
+    }
+    return true; // production
+}
+
+$envFile = isProduction() ? __DIR__ . '/../.htenv.prod' : __DIR__ . '/../.htenv.dev';

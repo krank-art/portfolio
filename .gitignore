@@ -6,3 +6,6 @@ dist/
 static/art/
 
 data/*-tags.json
+
+# Production files like secrets
+*.prod
