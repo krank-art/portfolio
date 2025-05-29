@@ -9,3 +9,8 @@ data/*-tags.json
 
 # Production files like secrets
 *.prod
+
+# Static files in PHP dev folder
+www/php/public/*
+!www/php/public/newsletter/
+!www/php/public/newsletter/**

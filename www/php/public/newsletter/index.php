@@ -1,5 +1,5 @@
 <?php
-require 'database.php';
+require __DIR__ . 'database.php';
 
 //phpinfo();
 
