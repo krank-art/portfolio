@@ -162,3 +162,33 @@ Among herbivores, many species put a lot of worth into the number of offspring, 
  it's not surprising that they're not coping well in losing most of the power in social status in recent years.
 
  there are in total three campaigns that can alter the fate of the war
+
+
+## Economy
+
+All  three factions have industrialized economies.
+meaning factories pray a very important role in the economy.
+ a lot of the conflict actually revolves around curing resources to feed into the own factory chains.
+of course these of these disciplines are present in all factions,  but they have different strengths.
+
+the carnivorous animals focused on  ore mining, steel production,  construction, Forestry,  conventional weaponry,  coal power plants,
+the prey animals have focused on Tooling, precious metals, electronics, agriculture, Nuclear power plant, Early telecommunication.
+the scales have focused on chemistry, oil production, Toxic gas, geothermal power,  oil power plant, rare minerals, fishing.
+
+
+## Climate
+
+ scales live around the equator,  in had deserts in warm and damp swarms and jungles.
+ they need sufficient heat and humidity to be able to survive.
+Many reptiles are also cold-blooded creatures ( they need external warmth to keep going).
+In colder regions they usually place durn heating elments.
+
+For the scales come of the fact that the overall world is cooling down is quite bad.
+they are most threatened by the martial temperatures in terms of survivability (and less in terms of food).
+
+ pray animals live just about in any kind of climate,  but most of them were concentrated in the moderate areas.
+ they either have a big furor many feathers though they are sufficiently protected against coldness (and too much heat).
+ the main drive is that  they keep losing agricultural land  and they desperately need it to grow their crops.
+Herbivores need to consume a lot more food than carnivals, because generally there is less energy density in it.
+
+
