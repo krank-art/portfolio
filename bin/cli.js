@@ -1,6 +1,6 @@
 import path from 'path';
 import buildMedia from './build-media.js';
-import { deleteDirRecursive, ensureDirExists, parseJsonFile } from '../lib/filesystem.js';
+import { copyRecursive, deleteDirRecursive, ensureDirExists, parseJsonFile } from '../lib/filesystem.js';
 import readMedia from './read-media.js';
 import buildHtml from './build-html.js';
 import buildAssets from './build-assets.js';
@@ -184,6 +184,11 @@ export async function handleCommand(command, ...args) {
       case "build:png":
         createTestPNG();
         break;
+    case "dev:copy:php":
+      const phpDevServerTarget = path.resolve("www/php/public");
+      ensureDirExists(phpDevServerTarget);
+      await copyRecursive(path.resolve("dist"), phpDevServerTarget);
+      break;
     default:
       console.log(`Unknown command '${command}'`);
   }
