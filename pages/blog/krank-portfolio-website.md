@@ -26,6 +26,7 @@ Splendid!
     - [Static site generator (SSG)](#static-site-generator-ssg)
     - [Artworks and content](#artworks-and-content)
   - [Concepts](#concepts)
+    - [Single File Components](#single-file-components)
   - [Project Structure](#project-structure)
   - [Further thoughts](#further-thoughts)
     - [Structured data is cool](#structured-data-is-cool)
@@ -191,7 +192,7 @@ You need to make it... *presentable*.
       > We are creating a website after all. 
       > If we send huge files to visitors, it takes ages to load and we use up a lot of internet traffic (this is a big deal on mobile).
       > Furthermore it slows down the whole artwork pipeline when creating the website.
-      >  I recommend using [paint.NET](https://www.getpaint.net/), the export window shows you the resulting file size nicely.
+      > I recommend using [paint.NET](https://www.getpaint.net/), the export window shows you the resulting file size nicely.
       > 
       > As a rule of thumb,  if you have more stylized images or graphic design, use PNG (lossless).
       > If you have a lot of detail and noise use JPEG (lossy, recommended quality rate between 75-90%).
@@ -220,6 +221,191 @@ The user specified properties are never overwritten and rather integrated upon r
 * component
 * page
 
+The process to generate the website is quite easy.
+We take a template and fill in data.
+he templating engine uses data churns
+
+
+### Single File Components
+
+Pages are built up from components and text.
+Pages can have a layout which they inherit from.
+
+![A chocolate cream cake sitting on a plate](/static/blog/page-structure.png)
+
+The most important layout file is `default.hbs`.
+It provides the boiler plate for the whole HTML pages.
+There are three special  interpolations here, `{{{style}}}`, `{{{content}}}`, and `{{{script}}}`.
+Style and script get inlined onto the page.
+The HTML string of a sub component gets evaluated and then inserted at `{{{content}}}`.
+It is a special interpolation when  a page inherits from a layout.
+
+
+```html
+<template>
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <!-- Meta tags omitted for brevity -->
+      <title>{{ pageTitle }}</title>
+      <link rel="stylesheet" type="text/css" href="/bundle.css">
+      <style>{{{ style }}}</style>
+    </head>
+    <body>
+      {{{ content }}}
+      <script type="text/javascript" src="/bundle.js"></script>
+      <script>{{{ script }}}</script>
+    </body>
+  </html>
+</template>
+<style></style>
+<script></script>
+```
+
+ a layout can also inherit from a different layout.
+ this is necessary because we do not want to  maintain the boilerplate like metate peached I'd learned including inline style for each individual layout.
+ the special interpolation `{{{content}}}` gets evaluated for each layout step.
+
+```html
+<template>
+  <main>
+    {{> page-header}}
+    <div class="blog-nav-body">
+      <slot name="aside">Sidebar</slot>
+    </div>
+    <div class="container-blog blog-main">
+      <slot name="main">Main</slot>
+      {{{content}}}
+      {{> page-footer}}
+    </div>
+  </main>
+</template>
+<style></style>
+<script>
+  export default {
+    layout: "default",
+  }
+</script>
+```
+
+ this is also a special layout.
+  notice how we have support for individual slots ( also called blocks or regions in different applications).
+ this is necessary so we actually have multiple regions inheriting page can insert its content to.
+ in this case the layout aside is debases for all pages the have navigation section to the left and the main body to the right.
+ this also includes the layout for the blog.
+ here we can see an application where the slots are then filled with  the content of the current blog page.
+
+```html
+<template>
+  <template for="aside">
+    {{> page-list items=blogPages}}
+  </template>
+  <template for="main">
+    <div class="blog-text">
+      {{{content}}}
+    </div>
+  </template>
+</template>
+
+<style></style>
+
+<script>
+  // Retrieving the blog page hierarchy was simplified for demonstration purposes
+  const blogPages = path.tree.filter(page => page.path === "blog");
+  export default {
+    layout: "aside",
+    blogPages: blogPages,
+  }
+</script>
+```
+
+ when we are executing the  script per layer, we are actually providing few custom variables as context to the module.
+ in this case we provide the path object which during the hamel built step gathers information on what pages are actually  gonna be built at the end.
+ this is very helpful information because we can then pass these blog pages into de lad himself to automatically create the page navigation.
+
+Notice how  again we are using the special interpolation content to insert the evaluated markdown into the slot.
+ this is actually again a special page type because all  block pages originate as markdown documents.
+ this comes with some limitations currently, because markdown is interpreted as is and doesn't accept any handlebar interpolation.
+ but this could be extended to support other page types content like a different lightweight murk up language or some custom file type two insert as HTML.
+ imagine providing code listings as examples for the page which in turn then get embedded in a code view that supports actions like copy ran or provides anchors to each line of the code.
+
+Pages are actually *Single File Components*.
+This is a concept borrowed from [Vue.js](https://vuejs.org/guide/scaling-up/sfc.html).
+A file is a self contained component with templating, styling and JavaScript.
+Here is an example explaining each part:
+
+```html
+<template>
+  <main class="container">
+    {{> page-header}}
+    <h1>Welcome to {{ websiteTitle }}!</h1>
+  </main>
+</template>
+
+<style>
+  body {
+    background-color: #222;
+    color: white;
+  }
+</style>
+
+<script>
+  export default {
+    layout: "default",
+    title: "About",
+    websiteTitle: "Krank's Homepage",
+  };
+</script>
+```
+
+This SFC groups together the different layers to make editing more clean.
+For templating we use [Handlebars](https://handlebarsjs.com/).
+It's a simple templating language that is somewhat obsolete by now.
+Handlebars provides the following features:
+
+* Interpolations `{{myVariable}}`
+*  if else conditional flow `{{#if isActive}}...{{/if}}`
+*   looping `{{#each items}}...{{/each}}`
+*   Comments `{{! This comment will not show up in the output}}`
+* Helper functions `{{uppercase lastname}}`
+* HTML escaping `{{{specialChars}}}`
+* Components ( called "partials") `{{> page-header}}`
+
+ what is missing
+
+* Blocks ( named regions that can be replaced when inheriting a component)
+* template inheritance
+  * [Jinja](https://jinja.palletsprojects.com/en/stable/) does a good job with this, see [Template Inheritance](https://jinja.palletsprojects.com/en/stable/templates/#template-inheritance).
+* Arbitrary code execution
+
+Handlebars is a minimalistic templating language by design, with all the logic offset to the data providing layer.
+This was done due to security and simplicity.
+Imagine working with user provided data  and then just willy-nilly executing it without any checks.
+To actually use logic in your templates, you need to use helper functions.
+This makes it very cumbersome though because every little transformation of data needs to be a function.
+And also I'm not working with any user data here, everything happens in the backend through the developer.
+
+[EJS](https://ejs.co/) does a very good job at this, but it's not perfect either.
+It's features set and syntax is  relatively simple.
+And I don't like that you have to provide all variables, if something is missing an exception gets thrown.
+The best templating language I saw so far was [Blade](https://laravel.com/docs/11.x/blade#raw-php).
+They have a very robust templating syntax and also allow the developer to execute raw code (PHP in this case).
+
+By providing the `<script>` section in the SFCs I tried to mitigate this issue.
+ upon evaluating the component, the data blog gets executed with the current context and then its resulting data is added to the current data chunk.
+ a data chung is just structure data, to which slices of data are added instead of  mutating the  data that is already there.
+
+I introduced this concept because it was not transparent at all where data is coming from.
+This made debugging the templating system an absolute nightmare.
+Evaluating and generating the final HTML was really confusing.
+
+During the actual compilation step, the data chunk is flattened into a simple data object and  is then supplied to handlebars to fill in the final template.
+
+<!--
+the HML generation works by taking a template and then filling in messing gaps on the template with data.
+you have to put each variable its correct slot. 
+like filling out a tax form.
+
 I could have written the webpage as static HTML.
 and to be fair, would probably have been alt faster than creating this elaborate library of tools and  static website generation engine.
 
@@ -229,11 +415,7 @@ my professor was all rider coding, copy and pasted a lot of stuff was lazy and n
 this code, found to be very hard to understand because it was much  more abstract.
 and if there's one thing I've learned about clean code income it is that it's usually a very good idea to keep code understandable.
 website generator runs like shed, especially after the last rewrite where I  changed templating technology to use data chunks.
-
-I introduced this concept,  because on the previous stage generating the actual websites was really confusing.
-the HML generation works by taking a template and then filling in messing gaps on the template with data.
-you have to put each variable its correct slot. 
-like filling out a tax form.
+-->
 
 staying with this metaphor of filling our taxes I had the problem that stack of receipts invoices and financial records kept getting change different spots in the code.
 it was very hard to actually determine where the data was coming from the things went wrong at any step of the way.
@@ -522,6 +704,8 @@ The images are loaded lazily on the add overview.
 
 
 ## Naughty art
+
+
 
 
 ## Tools
