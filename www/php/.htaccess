@@ -12,14 +12,19 @@ DirectorySlash Off
 # Display error page
 ErrorDocument 404 /404.html
 
-# Append '/' if trying to access a directory
-# (WARNING: Must be run before adding 'index' to path with trailing slash)
-# "If URL does not end with slash AND is a directory, then redirect to URL with a trailing slash."
-# Important: We have to use a slash as rewrite target so the rewrite gets resolved with an absolute path. 
-#   Without a slash it gets treated as relative and we get the server doc root (e.g. '/var/www/html') appended.
-RewriteCond %{REQUEST_URI} ^(.+)[^/]$
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^(.+?)$ /$1/ [R=302,L]
+# Rewrite to serve files from /public
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/$1 [L]
+
+# THIS IS BUGGED UGH
+#   # Append '/' if trying to access a directory
+#   # (WARNING: Must be run before adding 'index' to path with trailing slash)
+#   # "If URL does not end with slash AND is a directory, then redirect to URL with a trailing slash."
+#   # Important: We have to use a slash as rewrite target so the rewrite gets resolved with an absolute path. 
+#   #   Without a slash it gets treated as relative and we get the server doc root (e.g. '/var/www/html') appended.
+#   RewriteCond %{REQUEST_URI} ^(.+)[^/]$
+#   RewriteCond %{REQUEST_FILENAME} -d
+#   RewriteRule ^(.+?)$ /$1/ [R=302,L]
 
 # Append 'index' if has trailing slash as path
 RewriteCond %{REQUEST_URI} ^(.+)/$
