@@ -1,7 +1,5 @@
 <?php
-require __DIR__ . 'database.php';
-
-//phpinfo();
+require __DIR__ . '/../../database.php';
 
 try {
     $stmt = $pdo->query("SELECT NOW() AS access_time");

@@ -1,5 +1,5 @@
 <?php
-require 'database.php';
+require __DIR__ . '/../../database.php';
 
 function base64url_encode(string $data): string {
     return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
