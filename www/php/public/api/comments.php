@@ -30,18 +30,24 @@ $tableName = $config['comments_table'];
 
 try {
     // Query the data
-    $stmt = $pdo->query("
-        SELECT created, approved, imagePath, username, website 
+    $stmt = $pdo->prepare("
+        SELECT created, approved, imagePath, username, website, target
         FROM $tableName 
-        WHERE target = '$target' 
+        WHERE target = ? 
         ORDER BY created DESC
     ");
+    $stmt->execute([$target]);
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $formattedResults = array_map(function ($record) {
+        $publicFilePath = str_replace($_SERVER["DOCUMENT_ROOT"], '', $record['imagePath']);
+        $record['imagePath'] = $publicFilePath;
+        return $record;
+    }, $results);
 
     // Output JSON
     echo json_encode([
         'success' => true,
-        'data' => $results
+        'data' => $formattedResults,
     ]);
 
 } catch (PDOException $e) {
