@@ -65,6 +65,10 @@ if (isset($_GET['logout'])) {
                     We won't send emails to unvalidated people, imagine someone just adding random email adresses without the owner's consent.
                 </small>
             </li>
+            <li>
+                <a href="./create-comments-table.php">💬 Create comments table</a><br>
+                <small>Creates database table for drawn comments. If the table already exists, nothing happens.</small>
+            </li>
         </ul>
         <p><a href="?logout=1">Logout</a><br>
         <small>(Session will expire after 24 minutes of inaction)</small></p>

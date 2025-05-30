@@ -18,4 +18,5 @@ loadEnv(__DIR__ . (isProduction() ? '/.htpasswd.env.prod' : '/.htpasswd.env.dev'
 
 return [
     'newsletter_table' => 'krank_subscribers',
+    'comments_table' => 'krank_comments',
 ];
