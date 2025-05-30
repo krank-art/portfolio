@@ -14,7 +14,7 @@ function normalizePath($path) {
             $parts[] = $segment;
         }
     }
-    return implode('/', $parts);
+    return "/" . implode('/', $parts) . "/";
 }
 
 function base64url_encode(string $data): string {
