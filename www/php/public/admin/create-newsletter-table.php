@@ -7,11 +7,13 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     exit;
 }
 
-require __DIR__ . '/../../../database.php';
+require __DIR__ . '/../../database.php';
+
+$tableName = $config['newsletter_table'];
 
 try {
     $pdo->exec("
-        CREATE TABLE IF NOT EXISTS krank_subscribers (
+        CREATE TABLE IF NOT EXISTS $tableName (
             id INT AUTO_INCREMENT PRIMARY KEY,
             email VARCHAR(255) NOT NULL UNIQUE,
             joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -19,7 +21,7 @@ try {
             secret VARCHAR(255) NOT NULL UNIQUE
         );
     ");
-    echo "✅ Table 'users' created successfully (if already exists, nothing happened).";
+    echo "✅ Table '$tableName' created successfully (if already exists, nothing happened).";
 } catch (PDOException $e) {
     echo "❌ Error: " . $e->getMessage();
 }

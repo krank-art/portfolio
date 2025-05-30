@@ -1,6 +1,6 @@
 <?php
 session_start();
-require __DIR__ . '/../../../database.php';
+require __DIR__ . '/../../database.php';
 
 $adminPassword = getenv('ADMIN_PANEL_PASS');
 

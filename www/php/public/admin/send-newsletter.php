@@ -7,7 +7,7 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     exit;
 }
 
-require __DIR__ . '/../../../database.php';
+require __DIR__ . '/../../database.php';
 
 $stmt = $pdo->query("SELECT email,validated,`secret` FROM " . $config['newsletter_table']);
 $emails = $stmt->fetchAll();

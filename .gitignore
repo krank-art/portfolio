@@ -14,3 +14,7 @@ data/*-tags.json
 www/php/public/*
 !www/php/public/newsletter/
 !www/php/public/newsletter/**
+!www/php/public/comments/
+!www/php/public/comments/**
+!www/php/public/admin/
+!www/php/public/admin/**
