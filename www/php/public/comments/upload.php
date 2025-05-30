@@ -4,8 +4,8 @@ require __DIR__ . '/../../database.php';
 // Configuration
 $validSecret = 'mySecret';
 $validPassphrase = 'myPass';
-$uploadDir = __DIR__ . '/../../uploads/';
-$errorDir = __DIR__ .  "/../../uploads_failed/";
+$uploadDir = normalizePath(__DIR__ . '/../../uploads/');
+$errorDir = normalizePath(__DIR__ .  "/../../uploads_failed/");
 
 // Validate secret and passphrase
 if ($_POST['secret'] !== $validSecret || $_POST['passphrase'] !== $validPassphrase) {
