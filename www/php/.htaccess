@@ -12,6 +12,10 @@ DirectorySlash Off
 # Display error page
 ErrorDocument 404 /404.html
 
+# Serve uploaded files (only other top level files reachable from public are in 'public/')
+RewriteCond %{REQUEST_URI} ^/uploads/
+RewriteRule ^(.*)$ $1 [L]
+
 # Rewrite to serve files from /public
 RewriteCond %{REQUEST_URI} !^/public/
 RewriteRule ^(.*)$ public/$1 [L]
