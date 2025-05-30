@@ -4,7 +4,7 @@ import sharp from 'sharp';
 import { ensureDirExists, handleFileIfNewerAsync, parseJsonFile } from '../lib/filesystem.js';
 import { Color } from '../lib/terminal.js';
 
-async function resizeImage(imagePath, outputPath, sizeInPixel) {
+async function resizeImage(imagePath, sizeInPixel) {
   // https://sharp.pixelplumbing.com/api-resize
   const { width, height } = await sharp(imagePath).metadata();
   // When we provide both width and height, the output image will have both sizes.
@@ -12,33 +12,32 @@ async function resizeImage(imagePath, outputPath, sizeInPixel) {
   // Also we do NOT upscale an image if it is are smaller than the specified resize dimension.
   const resizedWidth = width >= height ? Math.min(sizeInPixel, width) : null;
   const resizedHeight = width < height ? Math.min(sizeInPixel, height) : null;
-  sharp(imagePath)
+  return sharp(imagePath)
     .resize({
       width: resizedWidth,
       height: resizedHeight,
       fit: "inside",
       background: { r: 0, g: 0, b: 0, alpha: 0 },
     })
-    .toFile(outputPath, (err, info) => {
-      if (err) {
-        console.error('Error creating thumbnail:', err);
-      } else {
-        //console.log('Thumbnail created successfully.');
-        //console.log('Thumbnail dimensions:', info.width, 'x', info.height);
-      }
+    .toBuffer()
+    .catch(err => { 
+      console.error('Error creating thumbnail:', err);
+      throw err;
     });
 }
 
 async function cropAndSquareImage(imagePath, sizeInPixel) {
-  sharp(imagePath)
+  return sharp(imagePath)
     .resize({
       width: sizeInPixel,
       height: sizeInPixel,
       fit: "cover",
       background: { r: 0, g: 0, b: 0, alpha: 0 },
     })
-    .toBuffer((err, info) => {
-      if (err) console.error('Error creating thumbnail:', err);
+    .toBuffer()
+    .catch(err => { 
+      console.error('Error creating thumbnail:', err);
+      throw err;
     });
 }
 
@@ -86,7 +85,7 @@ async function processMediaList({ inputDir, outputDir, media, resizeSet = [], tr
             continue;
           const resizedImageBuffer = method === "squared"
             ? await cropAndSquareImage(sourcePath, size)
-            : await resizeImage(sourcePath, resizedPath, size);
+            : await resizeImage(sourcePath, size);
           const transformedResizedImage = transformer ? transformer(resizedImageBuffer) : resizedImageBuffer;
           fs.writeFileSync(resizedPath, transformedResizedImage);
         }
