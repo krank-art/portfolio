@@ -20,3 +20,5 @@ www/php/public/*
 !www/php/public/comments/**
 !www/php/public/admin/
 !www/php/public/admin/**
+!www/php/public/api/
+!www/php/public/api/**
