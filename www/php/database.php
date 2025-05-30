@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/util.php';
 $config = require_once __DIR__ . '/config.php';
 
 $host = getenv('DB_HOST');
