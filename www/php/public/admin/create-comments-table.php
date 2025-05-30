@@ -17,6 +17,7 @@ try {
             id INT AUTO_INCREMENT PRIMARY KEY,
             created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             approved TIMESTAMP DEFAULT NULL,
+            target VARCHAR(255) NOT NULL,
             imagePath VARCHAR(255) NOT NULL,
             username VARCHAR(100) NOT NULL,
             website VARCHAR(255),

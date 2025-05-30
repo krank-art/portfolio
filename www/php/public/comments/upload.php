@@ -6,6 +6,8 @@ $validSecret = 'mySecret';
 $validPassphrase = 'myPass';
 $uploadDir = normalizePath(__DIR__ . '/../../uploads/');
 $errorDir = normalizePath(__DIR__ .  "/../../uploads_failed/");
+$rawPagePath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$pathname = preg_replace('/\.[a-zA-Z0-9]+$/', '', $rawPagePath); // We want to strip file endings like '.html'
 
 // Validate secret
 if ($_POST['secret'] !== $validSecret) {
@@ -57,8 +59,8 @@ if (!file_exists($errorDir)) {
 }
 
 try {
-    $stmt = $pdo->prepare("INSERT INTO $tableName (created, imagePath, approved, username, website, hash) VALUES (NOW(), ?, NULL, ?, ?, ?)");
-    $stmt->execute([$imagePath, $_POST['username'], $_POST['website'] ?? '', $hash]);
+    $stmt = $pdo->prepare("INSERT INTO $tableName (created, imagePath, target, approved, username, website, hash) VALUES (NOW(), ?, ?, NULL, ?, ?, ?)");
+    $stmt->execute([$imagePath, $pathname, $_POST['username'], $_POST['website'] ?? '', $hash]);
     file_put_contents($imagePath, $decodedData);
     echo 'Upload successful!';
 } catch (PDOException $e) {
