@@ -7,8 +7,8 @@ $validPassphrase = 'myPass';
 $uploadDir = normalizePath(__DIR__ . '/../../uploads/');
 $errorDir = normalizePath(__DIR__ .  "/../../uploads_failed/");
 
-// Validate secret and passphrase
-if ($_POST['secret'] !== $validSecret || $_POST['passphrase'] !== $validPassphrase) {
+// Validate secret
+if ($_POST['secret'] !== $validSecret) {
     http_response_code(403);
     exit('Unauthorized');
 }

@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Canvas Upload</title>
 </head>
+
 <body>
   <canvas id="myCanvas" width="300" height="150" style="border:1px solid #000;"></canvas>
   <br>
-  <input type="text" id="username" placeholder="Username" required>
-  <input type="text" id="website" placeholder="Website">
-  <input type="hidden" id="secret" value="mySecret">
-  <input type="hidden" id="passphrase" value="myPass">
-  <button onclick="submitCanvas()">Submit</button>
+  <form id="comment-form" method="POST">
+    <input type="text" name="username" placeholder="Username" required>
+    <input type="text" name="website" placeholder="Website">
+    <input type="hidden" name="secret" value="mySecret">
+    <button type="submit">Submit</button>
+  </form>
 
   <script>
-    function submitCanvas() {
+    const form = document.getElementById('comment-form');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
       const canvas = document.getElementById('myCanvas');
       const dataURL = canvas.toDataURL('image/png');
+      const formElement = document.getElementById("comment-form");
 
       const formData = new FormData();
+      const getField = (prop) => formElement.querySelector(`[name=${prop}]`)
       formData.append('image', dataURL);
-      formData.append('username', document.getElementById('username').value);
-      formData.append('website', document.getElementById('website').value);
-      formData.append('secret', document.getElementById('secret').value);
-      formData.append('passphrase', document.getElementById('passphrase').value);
+      formData.append('username', getField('username').value);
+      formData.append('website', getField('website').value);
+      formData.append('secret', getField('secret').value);
 
       fetch('upload.php', {
         method: 'POST',
         body: formData
       })
-      .then(response => response.text())
-      .then(result => alert(result))
-      .catch(error => console.error('Error:', error));
-    }
+        .then(response => response.text())
+        .then(result => alert(result))
+        .catch(error => console.error('Error:', error));
+    });
   </script>
 </body>
+
 </html>
