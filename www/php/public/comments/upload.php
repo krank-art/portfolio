@@ -58,6 +58,9 @@ if (!file_exists($errorDir)) {
     mkdir($errorDir, 0755, true);
 }
 
+// TIMESTAMP in MariaDB is always stored as date UTC+0, so we need to set the server timezone before adding to DB
+date_default_timezone_set('UTC');
+
 try {
     $stmt = $pdo->prepare("INSERT INTO $tableName (created, imagePath, target, approved, username, website, hash) VALUES (NOW(), ?, ?, NULL, ?, ?, ?)");
     $stmt->execute([$imagePath, $pathname, $_POST['username'], $_POST['website'] ?? '', $hash]);
