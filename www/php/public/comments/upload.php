@@ -62,8 +62,10 @@ if (!file_exists($errorDir)) {
 date_default_timezone_set('UTC');
 
 try {
+    $sanitizedUsername = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
+    $sanitizedWebsite = htmlspecialchars($_POST['website'], ENT_QUOTES, 'UTF-8');
     $stmt = $pdo->prepare("INSERT INTO $tableName (created, imagePath, target, approved, username, website, hash) VALUES (NOW(), ?, ?, NULL, ?, ?, ?)");
-    $stmt->execute([$imagePath, $pathname, $_POST['username'], $_POST['website'] ?? '', $hash]);
+    $stmt->execute([$imagePath, $pathname, $sanitizedUsername, $sanitizedWebsite ?? '', $hash]);
     file_put_contents($imagePath, $decodedData);
     echo 'Upload successful!';
 } catch (PDOException $e) {
