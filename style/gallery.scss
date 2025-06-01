@@ -34,6 +34,7 @@ $gallery-nav-width: 20%;
   height: calc(50% - #{$gallery-bar-height-mobile * 0.5});
   padding: 1rem;
   box-sizing: border-box;
+  overflow-y: auto;
 
   &>*:first-child {
     margin-top: 0;
@@ -314,6 +315,7 @@ $gallery-nav-width: 20%;
   .gallery-info {
     position: absolute;
     width: $gallery-sidebar-width;
+    height: 100%;
   }
 
   .gallery-mainbar-nav-button {
