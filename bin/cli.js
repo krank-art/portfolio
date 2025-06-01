@@ -13,7 +13,8 @@ import { getTagDefinitionsFromMedia } from '../lib/tag-util.js';
 import { createTestPNG, embedTextInImage } from '../lib/crypto.js';
 
 const pathing = Object.freeze({
-  dist: path.resolve('dist'),
+  //dist: path.resolve('dist'),
+  dist: path.resolve('www/php/public'),
   pages: path.resolve("pages"),
   cache: path.resolve(".cache"),
   pagesCache: path.resolve(".cache/pages.json"),
@@ -92,7 +93,7 @@ export async function handleCommand(command, ...args) {
       });
       break;
     case "build:assets":
-      await buildAssets();
+      await buildAssets({ outputDir: pathing.dist });
       break;
     case "import:art":
       const skipUnchanged = args[0] && args[0] === "force";
