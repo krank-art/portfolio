@@ -235,9 +235,9 @@ Pages can have a layout which they inherit from.
 
 The most important layout file is `default.hbs`.
 It provides the boiler plate for the whole HTML pages.
-There are three special  interpolations here, `{{{style}}}`, `{{{content}}}`, and `{{{script}}}`.
+There are three special  interpolations here, `&#123;&#123;&#123;style&#125;&#125;&#125;`, `&#123;&#123;&#123;content&#125;&#125;&#125;`, and `&#123;&#123;&#123;script&#125;&#125;&#125;`.
 Style and script get inlined onto the page.
-The HTML string of a sub component gets evaluated and then inserted at `{{{content}}}`.
+The HTML string of a sub component gets evaluated and then inserted at `&#123;&#123;&#123;content&#125;&#125;&#125;`.
 It is a special interpolation when  a page inherits from a layout.
 
 
@@ -247,14 +247,14 @@ It is a special interpolation when  a page inherits from a layout.
   <html lang="en">
     <head>
       <!-- Meta tags omitted for brevity -->
-      <title>{{ pageTitle }}</title>
+      <title>&#123;&#123; pageTitle &#125;&#125;</title>
       <link rel="stylesheet" type="text/css" href="/bundle.css">
-      <style>{{{ style }}}</style>
+      <style>&#123;&#123;&#123; style &#125;&#125;&#125;</style>
     </head>
     <body>
-      {{{ content }}}
+      &#123;&#123;&#123; content &#125;&#125;&#125;
       <script type="text/javascript" src="/bundle.js"></script>
-      <script>{{{ script }}}</script>
+      <script>&#123;&#123;&#123; script &#125;&#125;&#125;</script>
     </body>
   </html>
 </template>
@@ -264,19 +264,21 @@ It is a special interpolation when  a page inherits from a layout.
 
  a layout can also inherit from a different layout.
  this is necessary because we do not want to  maintain the boilerplate like metate peached I'd learned including inline style for each individual layout.
- the special interpolation `{{{content}}}` gets evaluated for each layout step.
+ the special interpolation <!-- `&#123;&#123;&#123;content&#125;&#125;&#125;` --> gets evaluated for each layout step.
 
+<!--
+This is valid markup and causes the layout engine to crash
 ```html
 <template>
   <main>
-    {{> page-header}}
+    &#123;&#123;> page-header&#125;&#125;
     <div class="blog-nav-body">
       <slot name="aside">Sidebar</slot>
     </div>
     <div class="container-blog blog-main">
       <slot name="main">Main</slot>
-      {{{content}}}
-      {{> page-footer}}
+      &#123;&#123;&#123;content&#125;&#125;&#125;
+      &#123;&#123;> page-footer&#125;&#125;
     </div>
   </main>
 </template>
@@ -287,6 +289,7 @@ It is a special interpolation when  a page inherits from a layout.
   }
 </script>
 ```
+-->
 
  this is also a special layout.
   notice how we have support for individual slots ( also called blocks or regions in different applications).
@@ -295,17 +298,20 @@ It is a special interpolation when  a page inherits from a layout.
  this also includes the layout for the blog.
  here we can see an application where the slots are then filled with  the content of the current blog page.
 
+<!--
+This is valid markup and causes the layout engine to crash
 ```html
 <template>
   <template for="aside">
-    {{> page-list items=blogPages}}
+    &#123;&#123;> page-list items=blogPages&#125;&#125;
   </template>
   <template for="main">
     <div class="blog-text">
-      {{{content}}}
+      &#123;&#123;&#123;content&#125;&#125;&#125;
     </div>
   </template>
 </template>
+-->
 
 <style></style>
 
@@ -334,11 +340,13 @@ This is a concept borrowed from [Vue.js](https://vuejs.org/guide/scaling-up/sfc.
 A file is a self contained component with templating, styling and JavaScript.
 Here is an example explaining each part:
 
+<!--
+This is valid markup and causes the layout engine to crash
 ```html
 <template>
   <main class="container">
-    {{> page-header}}
-    <h1>Welcome to {{ websiteTitle }}!</h1>
+    &#123;&#123;> page-header&#125;&#125;
+    <h1>Welcome to &#123;&#123; websiteTitle &#125;&#125;!</h1>
   </main>
 </template>
 
@@ -357,19 +365,24 @@ Here is an example explaining each part:
   };
 </script>
 ```
+--> 
 
 This SFC groups together the different layers to make editing more clean.
 For templating we use [Handlebars](https://handlebarsjs.com/).
 It's a simple templating language that is somewhat obsolete by now.
 Handlebars provides the following features:
 
-* Interpolations `{{myVariable}}`
-*  if else conditional flow `{{#if isActive}}...{{/if}}`
-*   looping `{{#each items}}...{{/each}}`
-*   Comments `{{! This comment will not show up in the output}}`
-* Helper functions `{{uppercase lastname}}`
-* HTML escaping `{{{specialChars}}}`
-* Components ( called "partials") `{{> page-header}}`
+<!--
+This is valid markup and causes the layout engine to crash
+
+* Interpolations `&#123;&#123;myVariable&#125;&#125;`
+*  if else conditional flow `&#123;&#123;#if isActive&#125;&#125;...&#123;&#123;/if&#125;&#125;`
+*   looping `&#123;&#123;#each items&#125;&#125;...&#123;&#123;/each&#125;&#125;`
+*   Comments `&#123;&#123;! This comment will not show up in the output&#125;&#125;`
+* Helper functions `&#123;&#123;uppercase lastname&#125;&#125;`
+* HTML escaping `&#123;&#123;&#123;specialChars&#125;&#125;&#125;`
+* Components ( called "partials") `&#123;&#123;> page-header&#125;&#125;`
+-->
 
  what is missing
 
