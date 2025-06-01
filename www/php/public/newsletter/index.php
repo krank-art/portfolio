@@ -1,6 +1,8 @@
 <?php
 require __DIR__ . '/../../database.php';
 
+echo "PHP Server time " . date("Y-m-d H:i:s T");
+
 try {
     $stmt = $pdo->query("SELECT NOW() AS access_time");
     $row = $stmt->fetch();
