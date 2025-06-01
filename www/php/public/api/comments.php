@@ -24,6 +24,12 @@ if (!isset($target) || empty($target)) {
     exit;
 }
 
+function formatDate($someDate) {
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
+    // We use the date format of JS with "yyyy-mm-ddThh-ii-ssZ" where T is a time literal and Z means "UTC+0"
+    return $someDate->format('Y-m-d') . "T" . $someDate->format('H:i:s') . "Z";
+}
+
 require __DIR__ . '/../../database.php';
 
 $tableName = $config['comments_table'];
@@ -31,7 +37,7 @@ $tableName = $config['comments_table'];
 try {
     // Query the data
     $stmt = $pdo->prepare("
-        SELECT created, approved, imagePath, username, website, target
+        SELECT created, approved, imagePath, username, website, target, hash
         FROM $tableName 
         WHERE target = ? 
         ORDER BY created DESC
@@ -39,8 +45,8 @@ try {
     $stmt->execute([$target]);
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $formattedResults = array_map(function ($record) {
-        $publicFilePath = str_replace($_SERVER["DOCUMENT_ROOT"], '', $record['imagePath']);
-        $record['imagePath'] = $publicFilePath;
+        $record['imagePath'] = str_replace($_SERVER["DOCUMENT_ROOT"], '', $record['imagePath']);
+        $record['created'] = formatDate(new DateTime($record['created']));
         return $record;
     }, $results);
 
