@@ -15,6 +15,7 @@ export default ({ outputDir }) => {
         targets: [
           { src: 'static/favicon/*', dest: outputDir },
           { src: 'static/blog/*', dest: outputDir + '/media/blog' },
+          { src: 'static/tools/*', dest: outputDir + '/media/tools' },
           {
             src: 'data/media-art.json',
             dest: outputDir + '/data',
