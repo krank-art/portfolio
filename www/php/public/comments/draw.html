@@ -6,7 +6,7 @@
 </head>
 
 <body>
-  <canvas id="myCanvas" width="300" height="150" style="border:1px solid #000;"></canvas>
+  <canvas id="myCanvas" width="320" height="120" style="border:1px solid #000;"></canvas>
   <br>
   <form id="comment-form" method="POST">
     <input type="text" name="username" placeholder="Username" required>
@@ -39,6 +39,32 @@
         .then(result => alert(result))
         .catch(error => console.error('Error:', error));
     });
+
+    function drawRandomShapes(ctx) {
+      const rectCount = Math.floor(Math.random() * 5) + 4; // 4 to 8 rectangles
+      for (let i = 0; i < rectCount; i++) {
+        // Random size
+        const width = Math.floor(Math.random() * 100) + 20;  // 20–120px
+        const height = Math.floor(Math.random() * 50) + 10;  // 10–60px
+
+        // Random position, ensuring it stays within bounds
+        const x = Math.floor(Math.random() * (canvas.width - width));
+        const y = Math.floor(Math.random() * (canvas.height - height));
+
+        // Random color
+        const r = Math.floor(Math.random() * 256);
+        const g = Math.floor(Math.random() * 256);
+        const b = Math.floor(Math.random() * 256);
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
+
+        ctx.fillRect(x, y, width, height);
+      }
+    }
+
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    drawRandomShapes(ctx);
   </script>
 </body>
 
