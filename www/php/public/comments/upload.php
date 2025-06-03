@@ -16,7 +16,7 @@ if ($_POST['secret'] !== $validSecret) {
 }
 
 // Validate image data
-if (!isset($_POST['image']) || !isset($_POST['username'])) {
+if (!isset($_POST['image']) || !isset($_POST['username']) || !isset($_POST['target'])) {
     http_response_code(400);
     exit('Invalid input');
 }
@@ -64,9 +64,10 @@ date_default_timezone_set('UTC');
 try {
     $sanitizedUsername = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
     $sanitizedWebsite = htmlspecialchars($_POST['website'], ENT_QUOTES, 'UTF-8');
+    $sanitizedTarget = htmlspecialchars($_POST['target'], ENT_QUOTES, 'UTF-8');
     $stmt = $pdo->prepare("INSERT INTO $tableName (created, imagePath, target, approved, username, website, hash) VALUES (NOW(), ?, ?, NULL, ?, ?, ?)");
-    $stmt->execute([$imagePath, $pathname, $sanitizedUsername, $sanitizedWebsite ?? '', $hash]);
     file_put_contents($imagePath, $decodedData);
+    $stmt->execute([$imagePath, $sanitizedTarget, $sanitizedUsername, $sanitizedWebsite ?? '', $hash]);
     echo 'Upload successful!';
 } catch (PDOException $e) {
     http_response_code(500);

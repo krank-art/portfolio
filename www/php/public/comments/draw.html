@@ -11,24 +11,28 @@
   <form id="comment-form" method="POST">
     <input type="text" name="username" placeholder="Username" required>
     <input type="text" name="website" placeholder="Website">
+    <input type="hidden" name="target" value="">
     <input type="hidden" name="secret" value="mySecret">
     <button type="submit">Submit</button>
   </form>
 
   <script>
     const form = document.getElementById('comment-form');
+    const canvas = document.getElementById('myCanvas');
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      const canvas = document.getElementById('myCanvas');
       const dataURL = canvas.toDataURL('image/png');
       const formElement = document.getElementById("comment-form");
+      const targetField = form.querySelector("[name=target]");
+      targetField.value = window.location.pathname;
 
       const formData = new FormData();
       const getField = (prop) => formElement.querySelector(`[name=${prop}]`)
       formData.append('image', dataURL);
       formData.append('username', getField('username').value);
       formData.append('website', getField('website').value);
+      formData.append('target', getField('target').value);
       formData.append('secret', getField('secret').value);
 
       fetch('upload.php', {
