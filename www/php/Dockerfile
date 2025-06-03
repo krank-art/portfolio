@@ -3,6 +3,16 @@ FROM php:8.3-apache
 # Install PDO extension for MySQL/MariaDB
 RUN docker-php-ext-install pdo pdo_mysql
 
+# Update and install extensions for libgd
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    && docker-php-ext-configure gd \
+        --with-freetype \
+        --with-jpeg \
+    && docker-php-ext-install gd
+
 # Use the default development configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
