@@ -198,142 +198,59 @@ body {
   background-size: 640px 400px;
 }
 
-.bi-pen-1 {
-  background-position: calc(0 / 7 * 100%) calc(0 / 4 * 100%);
+$sprites: (
+  ("pen-1", 0, 0, 7, 4),
+  ("pen-2", 1, 0, 7, 4),
+  ("pen-3", 2, 0, 7, 4),
+  ("pen-4", 3, 0, 7, 4),
+  ("pen-5", 4, 0, 7, 4),
+  ("pen-6", 5, 0, 7, 4),
+
+  ("eraser-1", 0, 1, 7, 4),
+  ("eraser-2", 1, 1, 7, 4),
+  ("eraser-3", 2, 1, 7, 4),
+  ("eraser-4", 3, 1, 7, 4),
+  ("eraser-5", 4, 1, 7, 4),
+  ("eraser-6", 5, 1, 7, 4),
+
+  ("pattern-1", 0, 2, 7, 4),
+  ("pattern-2", 1, 2, 7, 4),
+  ("pattern-3", 2, 2, 7, 4),
+  ("pattern-4", 3, 2, 7, 4),
+  ("backward", 4, 2, 7, 4),
+  ("forward", 5, 2, 7, 4),
+  ("about", 6, 2, 7, 4),
+
+  ("undo", 0, 3, 7, 4),
+  ("redo", 1, 3, 7, 4),
+  ("save", 2, 3, 7, 4),
+  ("play", 3, 3, 7, 4),
+  ("accept", 4, 3, 7, 4),
+  ("deny", 5, 3, 7, 4),
+  ("submit", 6, 3, 7, 4),
+  ("clear", 7, 3, 7, 4),
+
+  ("undo-inactive", 0, 4, 7, 4),
+  ("redo-inactive", 1, 4, 7, 4),
+  ("save-inactive", 2, 4, 7, 4),
+  ("play-inactive", 3, 4, 7, 4),
+  ("accept-inactive", 4, 4, 7, 4),
+  ("deny-inactive", 5, 4, 7, 4),
+  ("submit-inactive", 6, 4, 7, 4),
+  ("clear-inactive", 7, 4, 7, 4),
+);
+
+@mixin sprite-class($name, $x, $y, $width, $height) {
+  .bi-#{$name} {
+    background-position: calc(#{$x} / #{$width} * 100%) calc(#{$y} / #{$height} * 100%);
+  }
 }
 
-.bi-pen-2 {
-  background-position: calc(1 / 7 * 100%) calc(0 / 4 * 100%);
-}
-
-.bi-pen-3 {
-  background-position: calc(2 / 7 * 100%) calc(0 / 4 * 100%);
-}
-
-.bi-pen-4 {
-  background-position: calc(3 / 7 * 100%) calc(0 / 4 * 100%);
-}
-
-.bi-pen-5 {
-  background-position: calc(4 / 7 * 100%) calc(0 / 4 * 100%);
-}
-
-.bi-pen-6 {
-  background-position: calc(5 / 7 * 100%) calc(0 / 4 * 100%);
-}
-
-.bi-eraser-1 {
-  background-position: calc(0 / 7 * 100%) calc(1 / 4 * 100%);
-}
-
-.bi-eraser-2 {
-  background-position: calc(1 / 7 * 100%) calc(1 / 4 * 100%);
-}
-
-.bi-eraser-3 {
-  background-position: calc(2 / 7 * 100%) calc(1 / 4 * 100%);
-}
-
-.bi-eraser-4 {
-  background-position: calc(3 / 7 * 100%) calc(1 / 4 * 100%);
-}
-
-.bi-eraser-5 {
-  background-position: calc(4 / 7 * 100%) calc(1 / 4 * 100%);
-}
-
-.bi-eraser-6 {
-  background-position: calc(5 / 7 * 100%) calc(1 / 4 * 100%);
-}
-
-.bi-pattern-1 {
-  background-position: calc(0 / 7 * 100%) calc(2 / 4 * 100%);
-}
-
-.bi-pattern-2 {
-  background-position: calc(1 / 7 * 100%) calc(2 / 4 * 100%);
-}
-
-.bi-pattern-3 {
-  background-position: calc(2 / 7 * 100%) calc(2 / 4 * 100%);
-}
-
-.bi-pattern-4 {
-  background-position: calc(3 / 7 * 100%) calc(2 / 4 * 100%);
-}
-
-.bi-backward {
-  background-position: calc(4 / 7 * 100%) calc(2 / 4 * 100%);
-}
-
-.bi-forward {
-  background-position: calc(5 / 7 * 100%) calc(2 / 4 * 100%);
-}
-
-.bi-about {
-  background-position: calc(6 / 7 * 100%) calc(2 / 4 * 100%);
-}
-
-.bi-undo {
-  background-position: calc(0 / 7 * 100%) calc(3 / 4 * 100%);
-}
-
-.bi-redo {
-  background-position: calc(1 / 7 * 100%) calc(3 / 4 * 100%);
-}
-
-.bi-save {
-  background-position: calc(2 / 7 * 100%) calc(3 / 4 * 100%);
-}
-
-.bi-play {
-  background-position: calc(3 / 7 * 100%) calc(3 / 4 * 100%);
-}
-
-.bi-accept {
-  background-position: calc(4 / 7 * 100%) calc(3 / 4 * 100%);
-}
-
-.bi-deny {
-  background-position: calc(5 / 7 * 100%) calc(3 / 4 * 100%);
-}
-
-.bi-submit {
-  background-position: calc(6 / 7 * 100%) calc(3 / 4 * 100%);
-}
-
-.bi-clear {
-  background-position: calc(7 / 7 * 100%) calc(3 / 4 * 100%);
-}
-
-.bi-undo-inactive {
-  background-position: calc(0 / 7 * 100%) calc(4 / 4 * 100%);
-}
-
-.bi-redo-inactive {
-  background-position: calc(1 / 7 * 100%) calc(4 / 4 * 100%);
-}
-
-.bi-save-inactive {
-  background-position: calc(2 / 7 * 100%) calc(4 / 4 * 100%);
-}
-
-.bi-play-inactive {
-  background-position: calc(3 / 7 * 100%) calc(4 / 4 * 100%);
-}
-
-.bi-accept-inactive {
-  background-position: calc(4 / 7 * 100%) calc(4 / 4 * 100%);
-}
-
-.bi-deny-inactive {
-  background-position: calc(5 / 7 * 100%) calc(4 / 4 * 100%);
-}
-
-.bi-submit-inactive {
-  background-position: calc(6 / 7 * 100%) calc(4 / 4 * 100%);
-}
-
-.bi-clear-inactive {
-  background-position: calc(7 / 7 * 100%) calc(4 / 4 * 100%);
+@each $sprite in $sprites {
+  $name: nth($sprite, 1);
+  $x: nth($sprite, 2);
+  $y: nth($sprite, 3);
+  $width: nth($sprite, 4);
+  $height: nth($sprite, 5);
+  @include sprite-class($name, $x, $y, $width, $height);
 }
