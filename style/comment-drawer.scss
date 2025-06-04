@@ -4,11 +4,11 @@ body {
 
 .tool-bar {
   display: flex;
-  flex-direction: row nowrap;
+  flex-flow: row wrap;
 }
 
 .tool-bar>*:not(:last-child) {
-  margin-right: 0.5rem;
+  margin-right: 0.25em;
 }
 
 .comment-canvas {
@@ -27,7 +27,7 @@ body {
 }
 
 #comment-drawer>*:not(:last-child) {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5em;
 }
 
 #comment-board {
@@ -41,14 +41,14 @@ body {
 
 .row-button-group .row-multi-button:first-child .row-button-label,
 .row-button-group .row-button:first-child {
-  border-top-left-radius: 0.5rem;
-  border-bottom-left-radius: 0.5rem;
+  border-top-left-radius: 0.4em;
+  border-bottom-left-radius: 0.4em;
 }
 
 .row-button-group .row-multi-button:last-child .row-button-label,
 .row-button-group .row-button:last-child {
-  border-top-right-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
+  border-top-right-radius: 0.4em;
+  border-bottom-right-radius: 0.4em;
 }
 
 .row-button-group .row-multi-button:not(:last-child) .row-button-label,
@@ -63,7 +63,7 @@ body {
 .row-button,
 .row-button-label {
   display: inline-flex;
-  padding: 10px 20px;
+  padding: 0.4em 0.6em;
   border: 1px solid black;
   background-color: rgba(0, 0, 0, 0.05);
   user-select: none;
@@ -146,6 +146,26 @@ body {
   background-image: url("/media/tools/comment-drawer-icons.png");
   background-size: 128px 80px;
   display: inline-block;
+}
+
+.bi-scale-1 {
+  font-size: 1rem;
+}
+
+.bi-scale-2 {
+  font-size: 2rem;
+}
+
+.bi-scale-3 {
+  font-size: 3rem;
+}
+
+.bi-scale-4 {
+  font-size: 4rem;
+}
+
+.bi-scale-5 {
+  font-size: 5rem;
 }
 
 .bi-scale-1 .row-button-icon {
