@@ -1,14 +1,10 @@
-body {
-  display: flex;
-}
-
 .tool-bar {
   display: flex;
   flex-flow: row wrap;
-}
 
-.tool-bar>*:not(:last-child) {
-  margin-right: 0.25em;
+  &>*:not(:last-child) {
+    margin-right: 0.25em;
+  }
 }
 
 .comment-canvas {
@@ -24,10 +20,10 @@ body {
   border-radius: 1rem;
   padding: 1rem;
   margin: 1rem auto;
-}
 
-#comment-drawer>*:not(:last-child) {
-  margin-bottom: 0.5em;
+  &>*:not(:last-child) {
+    margin-bottom: 0.5em;
+  }
 }
 
 #comment-board {
@@ -37,23 +33,23 @@ body {
 .row-button-group {
   display: flex;
   flex-direction: row nowrap;
-}
 
-.row-button-group .row-multi-button:first-child .row-button-label,
-.row-button-group .row-button:first-child {
-  border-top-left-radius: 0.4em;
-  border-bottom-left-radius: 0.4em;
-}
+  .row-multi-button:first-child .row-button-label,
+  .row-button:first-child {
+    border-top-left-radius: 0.4em;
+    border-bottom-left-radius: 0.4em;
+  }
 
-.row-button-group .row-multi-button:last-child .row-button-label,
-.row-button-group .row-button:last-child {
-  border-top-right-radius: 0.4em;
-  border-bottom-right-radius: 0.4em;
-}
+  .row-multi-button:last-child .row-button-label,
+  .row-button:last-child {
+    border-top-right-radius: 0.4em;
+    border-bottom-right-radius: 0.4em;
+  }
 
-.row-button-group .row-multi-button:not(:last-child) .row-button-label,
-.row-button-group .row-button:not(:last-child) {
-  border-right: none;
+  .row-multi-button:not(:last-child) .row-button-label,
+  .row-button:not(:last-child) {
+    border-right: none;
+  }
 }
 
 .row-multi-button {
@@ -67,16 +63,14 @@ body {
   border: 1px solid black;
   background-color: rgba(0, 0, 0, 0.05);
   user-select: none;
-}
 
-.row-button:hover:not([disabled]),
-.row-button-label:hover:not([disabled]) {
-  background-color: white;
-}
+  &:hover:not([disabled]) {
+    background-color: white;
+  }
 
-.row-button:active:not([disabled]),
-.row-button-label:active:not([disabled]) {
-  background-color: rgba(0, 0, 0, 0.1);
+  &:active:not([disabled]) {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 }
 
 .row-button[disabled] {
@@ -85,26 +79,26 @@ body {
 
 .positive-button {
   background-color: rgb(134, 244, 154);
-}
 
-.positive-button:hover {
-  background-color: rgb(196, 251, 206);
-}
+  &:hover {
+    background-color: rgb(196, 251, 206);
+  }
 
-.positive-button:active {
-  background-color: rgb(79, 235, 108);
+  &:active {
+    background-color: rgb(79, 235, 108);
+  }
 }
 
 .negative-button {
   background-color: rgb(255, 161, 161);
-}
 
-.negative-button:hover {
-  background-color: rgb(251, 196, 196);
-}
+  &:hover {
+    background-color: rgb(251, 196, 196);
+  }
 
-.negative-button:active {
-  background-color: rgb(255, 128, 128);
+  &:active {
+    background-color: rgb(255, 128, 128);
+  }
 }
 
 .at-end {
@@ -113,18 +107,18 @@ body {
 
 .row-button-radio {
   display: none;
-}
 
-.row-button-radio:checked+.row-button-label {
-  background: #ffcc00;
-}
+  &:checked+.row-button-label {
+    background: #ffcc00;
+  }
 
-.row-button-radio+* .row-button-icon {
-  opacity: 0.3;
-}
+  &+* .row-button-icon {
+    opacity: 0.3;
+  }
 
-.row-button-radio:checked+* .row-button-icon {
-  opacity: 1;
+  &:checked+* .row-button-icon {
+    opacity: 1;
+  }
 }
 
 .row-button-text {
@@ -148,54 +142,16 @@ body {
   display: inline-block;
 }
 
-.bi-scale-1 {
-  font-size: 1rem;
-}
+@for $i from 1 through 5 {
+  .bi-scale-#{$i} {
+    font-size: 1rem * $i;
 
-.bi-scale-2 {
-  font-size: 2rem;
-}
-
-.bi-scale-3 {
-  font-size: 3rem;
-}
-
-.bi-scale-4 {
-  font-size: 4rem;
-}
-
-.bi-scale-5 {
-  font-size: 5rem;
-}
-
-.bi-scale-1 .row-button-icon {
-  width: 16px;
-  height: 16px;
-  background-size: 128px 80px;
-}
-
-.bi-scale-2 .row-button-icon {
-  width: 32px;
-  height: 32px;
-  background-size: 256px 160px;
-}
-
-.bi-scale-3 .row-button-icon {
-  width: 48px;
-  height: 48px;
-  background-size: 384px 240px;
-}
-
-.bi-scale-4 .row-button-icon {
-  width: 64px;
-  height: 64px;
-  background-size: 512px 320px;
-}
-
-.bi-scale-5 .row-button-icon {
-  width: 80px;
-  height: 80px;
-  background-size: 640px 400px;
+    .row-button-icon {
+      width: 16px * $i;
+      height: 16px * $i;
+      background-size: (128px * $i) (80px * $i);
+    }
+  }
 }
 
 $sprites: (
