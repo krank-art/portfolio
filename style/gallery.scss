@@ -25,11 +25,6 @@ $gallery-nav-width: 20%;
     border-right: none;
     border-bottom: 1px solid #555;
   }
-
-  h3 {
-    padding-bottom: 0.3rem;
-    border-bottom: 1px solid #555;
-  }
 }
 
 .gallery-main {
@@ -55,6 +50,16 @@ $gallery-nav-width: 20%;
 
   &>*:last-child {
     margin-bottom: 0;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.8rem;
+  }
+
+  h3 {
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #555;
   }
 }
 
