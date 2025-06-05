@@ -47,7 +47,24 @@
       <h2>{{ modelItem.title }}</h2>
       <hr>
       <h3 class="sr-only">Date</h3>
-      <p>{{ modelItem.date }}</p>
+      <dl class="metadata-table">
+        <div class="metadata-table-row">
+          <dt>Created:</dt>
+          <dd><time datetime="{{ modelItem.date }}">{{ dateFormatted }}</time></dd>
+        </div>
+        <div class="metadata-table-row">
+          <dt>File size:</dt>
+          <dd>{{ modelItem.width }} &times; {{ modelItem.height }} ({{ fileSize }})</dd>
+        </div>
+        <div class="metadata-table-row">
+          <dt>Palette:</dt>
+          <dd>
+            {{#each modelItem.palette}}
+            <span class="palette-color" style="background-color: {{this}};"><span class="sr-only">{{this}}</span></span>
+            {{/each}}
+          </dd>
+        </div>
+      </dl>
       <h3 class="sr-only">Tags</h3>
       <ul class="inline-list">
         {{#each modelItem.tags}}
@@ -88,6 +105,13 @@
   const sourceSet = resizeSet.map(entry => `../media/art/${entry.name}/${modelItem.fileNamePublic} ${entry.size}w`);
   sourceSet.push(`../media/art/${modelItem.fileNamePublic} 1920w`);
 
+  const fileSize = simplifyBytes(modelItem?.fileSize);
+  const dateFormatted = new Date(modelItem?.date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
   export default {
     layout: "default",
     type: "dynamic",
@@ -97,8 +121,10 @@
     pageTitle: modelItem.title + " \u2013 Krank",
     metaImage: "art/960p/" + modelItem.fileNamePublic,
     metaTitle: modelItem.title + " \u2013 Krank Art",
-    metaSubtitle: `View this ${modelItem?.width} \u00d7 ${modelItem?.height}, ${simplifyBytes(modelItem?.fileSize)} image. `,
+    metaSubtitle: `View this ${modelItem?.width} \u00d7 ${modelItem?.height}, ${fileSize} image. `,
     metaAlt: modelItem.imageAlt,
-    metaColor: modelItem?.vibrantColors?.darkMuted
+    metaColor: modelItem?.vibrantColors?.darkMuted,
+    dateFormatted: dateFormatted,
+    fileSize: fileSize,
   };
 </script>

@@ -3402,7 +3402,16 @@
       "town"
     ],
     "imageAlt": "Deer Town",
-    "palette": []
+    "palette": [
+      "#2d2d2d",
+      "#513723",
+      "#aa5b32",
+      "#c68118",
+      "#c1966e",
+      "#b3b3b3",
+      "#24908f",
+      "#7fdcdb"
+    ]
   },
   {
     "active": true,

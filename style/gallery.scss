@@ -18,6 +18,18 @@ $gallery-nav-width: 20%;
   margin: 0;
   height: 100%;
   width: 100%;
+
+  hr {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid #555;
+  }
+
+  h3 {
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #555;
+  }
 }
 
 .gallery-main {
@@ -266,6 +278,40 @@ $gallery-nav-width: 20%;
 
   .gallery-info {
     display: block;
+  }
+}
+
+.palette-color {
+  position: relative;
+  bottom: -0.25em;
+  display: inline-block;
+  border: 0.15em solid white;
+  height: 1em;
+  width: 1.4em;
+  border-radius: 0.2em;
+}
+
+.metadata-table {
+  display: table;
+
+  .metadata-table-row {
+    display: table-row;
+  }
+
+  dt, 
+  dd {
+    display: table-cell;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+
+    &:not(:first-child) {
+      padding-left: 1em;
+    }
+  }
+
+  dt {
+    font-weight: bold;
+    text-align: right;
   }
 }
 
