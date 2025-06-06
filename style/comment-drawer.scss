@@ -16,20 +16,23 @@
 
 #comment-drawer {
   position: relative;
-  display: inline-flex;
-  flex-flow: column nowrap;
   background-color: rgba(0, 0, 0, 0.05);
   border-radius: 1rem;
-  padding: 1rem;
   margin: 1rem auto;
-
-  &>*:not(:last-child) {
-    margin-bottom: 0.5em;
-  }
 }
 
 #comment-board {
   display: flex;
+}
+
+.comment-drawer-inner {
+  display: inline-flex;
+  flex-flow: column nowrap;
+  height: 15em;
+
+  &>*:not(:last-child) {
+    margin-bottom: 0.5em;
+  }
 }
 
 .row-button-group {
@@ -144,8 +147,8 @@
   display: inline-block;
 }
 
-@for $i from 1 through 5 {
-  .bi-scale-#{$i} {
+@for $i from 1 through 10 {
+  [data-scale="#{$i}"] {
     font-size: 1rem * $i;
 
     .row-button-icon {
