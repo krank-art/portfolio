@@ -7,31 +7,43 @@
   &>*:not(:last-child) {
     margin-right: 0.25em;
   }
+
+  & + & {
+    margin-top: -0.25em;
+  }
 }
 
 .comment-canvas {
   /* TODO: Add small padding around canvas, so you can actually fill in pixels at the corners and edges */
   padding: 0rem;
+  box-shadow: 0 0 0 0.1em black;
 }
 
 #comment-drawer {
   position: relative;
   background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 1rem;
   margin: 1rem auto;
+  background-color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
 }
 
-#comment-board {
-  display: flex;
+[data-control-id=comment-board] {
+  display: flex; // Removes whitespace from underneath canvas
 }
 
 .comment-drawer-inner {
   display: inline-flex;
   flex-flow: column nowrap;
-  height: 15em;
+  width: 20em;
+  height: 14.5em;
 
   &>*:not(:last-child) {
-    margin-bottom: 0.5em;
+    margin-bottom: 0.6em;
   }
 }
 
@@ -53,7 +65,7 @@
 
   .row-multi-button:not(:last-child) .row-button-label,
   .row-button:not(:last-child) {
-    border-right: none;
+    border-right-color: #333;
   }
 }
 
@@ -64,10 +76,18 @@
 .row-button,
 .row-button-label {
   display: inline-flex;
-  padding: 0.4em 0.6em;
-  border: 1px solid black;
-  background-color: rgba(0, 0, 0, 0.05);
+  align-items: center;
+  justify-content: center;
+  width: 2.4em;
+  height: 1.75em;
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  border-right: 0.05em solid transparent;
+  background-color: #444;
   user-select: none;
+  font-size: inherit; // Important for <button>
+  box-sizing: border-box;
 
   &:hover:not([disabled]) {
     background-color: white;
