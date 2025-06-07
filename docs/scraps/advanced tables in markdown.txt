@@ -1,0 +1,31 @@
+
+## Simple Table
+
+| Left columns       | Right columns    |
+| ------------------ |:----------------:|
+| This is kinda lame | * Eggs<br>* Milk |
+| Inline code works  | `right bar`      |
+| but no code blocks | :(               |
+
+## Advanced Table
+
+<table><tbody><tr><th>
+Definition
+</th><th>
+Description
+</th></tr><tr><td>
+Look ma!
+</td><td>
+
+* Tables in Markdown with rich content!
+* Neat, what else do you got?
+</td></tr><tr><td>
+
+You can write any block elements here.
+</td><td>
+
+```js
+const greeting = "Hello World!";
+console.log(greeting);
+```
+</td></tr></tbody></table>
