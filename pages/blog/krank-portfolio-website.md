@@ -384,6 +384,19 @@ This is valid markup and causes the layout engine to crash
 * Components ( called "partials") `&#123;&#123;> page-header&#125;&#125;`
 -->
 
+
+many of these templating languages seem to be very similar. usually they have these features:
+* layouts
+* `&#123;% blocks %&#125;`
+* `&#123;# include file.abc #&#125;`
+* `&#123;&#123; interpolation &#125;&#125;` (escaped)
+* `&#123;&#123; interpolation &#125;&#125;` (raw)
+* `&#123;# if ... &#125;` (flow control)
+* `&#123;# each ...&#125;` (iterators)
+* `&#123;&#123; value | uppercase | kebab &#125;&#125;` (filters)
+* `&#123;&#123; myHelper(value) &#125;&#125;` (helpers)
+
+
  what is missing
 
 * Blocks ( named regions that can be replaced when inheriting a component)
