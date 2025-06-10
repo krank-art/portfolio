@@ -1,3 +1,4 @@
+import assert from "assert";
 import { arrayBufferToReadable } from "../lib/buffer.js";
 import { encodeCommentHistory, decodeCommentHistory } from "../lib/comment-file.js";
 import { parseJsonFile } from '../lib/filesystem.js';
@@ -22,4 +23,5 @@ const testHistory = parseJsonFile(inputPath);
 const encodedHistory = encodeCommentHistory(testHistory);
 const decodedHistory = decodeCommentHistory(encodedHistory);
 const encodedHistoryReadable = arrayBufferToReadable(encodedHistory);
-console.log("lol");
+assert.deepStrictEqual(decodedHistory, testHistory);
+console.log("Yay, successfully encoded and decoded!");
