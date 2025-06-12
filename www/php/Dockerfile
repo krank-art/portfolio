@@ -13,6 +13,13 @@ RUN apt-get update && apt-get install -y \
         --with-jpeg \
     && docker-php-ext-install gd
 
+# Install xdebug for debugging
+RUN pecl install xdebug \
+ && docker-php-ext-enable xdebug
+
+# Add xdebug config to conf.d
+COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
 # Use the default development configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 

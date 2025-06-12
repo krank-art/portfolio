@@ -95,6 +95,15 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\test\\comment-history-encoding-test.js"
+        },
+        {
+            "name": "Listen for Xdebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9003, // Default for Xdebug 3.x
+            "pathMappings": {
+                "/var/www/html": "${workspaceFolder}\\www\\php" // adjust based on your Docker setup
+            }
         }
     ]
 }
