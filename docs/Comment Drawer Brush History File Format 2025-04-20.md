@@ -151,3 +151,24 @@ encoding capacity per nibble
 000 000 000       2^9    -256 to 255
 000 000 000 000   2^12  -2048 to 2047
 ```
+
+## More ideas
+
+
+* php custom file format checker. truncate data that is not specified
+* minified json so no binary data has to be parsed by client
+* encode coords in 16 bits, then encode payload as base64 and send as json string (eugh)
+
+```
+ width -- 1 1111 1111 -- 9 bit -- 0-511
+ height -- 111 1111 -- 7 bit -- 0-127
+
+ canvas width: 320
+ canvas height: 120
+
+ 2^16 = 65.536
+ 64^x = 65536
+ x = log(64) 65536 = log(10) 65536 / log(10) 64
+ x = 8/3
+```
+  
