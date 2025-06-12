@@ -15,10 +15,15 @@ if ($_POST['secret'] !== $validSecret) {
     exit('Unauthorized');
 }
 
-// Validate image data
-if (!isset($_POST['image']) || !isset($_POST['username']) || !isset($_POST['target'])) {
+// Check if required arguments are set
+$requiredArguments = ["secret", "target", "username", "image", /* "history" */];
+$missingArguments = [];
+foreach ($requiredArguments as $argument)
+    if (!isset($_POST[$argument]) || strlen($_POST[$argument]) < 1)
+        array_push($missingArguments, $argument);
+if (count($missingArguments) > 0) {
     http_response_code(400);
-    exit('Invalid input');
+    exit('Missing arguments: ' . implode(", ", $missingArguments));
 }
 
 // Decode image
