@@ -1,5 +1,10 @@
 <?php
 require __DIR__ . '/../../database.php';
+require __DIR__ . '/../../comment-decoder.php';
+
+use function KrankWeb\CommentDecoder\decodeCommentFile;
+
+error_log($_SERVER['CONTENT_TYPE']);
 
 // Configuration
 $validSecret = 'mySecret';
@@ -9,7 +14,7 @@ $errorDir = normalizePath(__DIR__ .  "/../../uploads_failed/");
 $rawPagePath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $pathname = preg_replace('/\.[a-zA-Z0-9]+$/', '', $rawPagePath); // We want to strip file endings like '.html'
 
-// Validate secret
+// Authorization
 if ($_POST['secret'] !== $validSecret) {
     http_response_code(403);
     exit('Unauthorized');
@@ -63,6 +68,10 @@ imagedestroy($newImageData);
 //   but for simplicities sake we will refrain from using it for now.
 // TODO: As of now, any valid PNG will be accepted and copied without transparency.
 //   A more robust approach would be to rebuild the brush engine and replay the brush history.
+
+// Validate brush history
+$historyFile = $_FILES['history']['tmp_name'];
+$decodedCommentHistory = decodeCommentFile($historyFile);
 
 $tableName = $config['comments_table'];
 
