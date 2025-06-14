@@ -1,5 +1,11 @@
 <?php
+
 namespace KrankWeb\CommentDecoder;
+
+// INFO: Make sure to mirror all changes here in /lib/comment-file.js
+// This is the server side decoding and encoding. When we receive the comment history, we want to guarantee that the
+// received binary data is actually to the comment history file spec. It's a security risk to just accept arbitrary
+// binary data without proper authorization (users having to create accounts).
 
 function readUInt(string $data, int $bits, bool $littleEndian = true): int
 {
@@ -53,7 +59,8 @@ function decodeCommentFile(string $file): array|false
         $width = readFileBytesAsUInt($handle, 16, true);
         $height = readFileBytesAsUInt($handle, 16, true);
         $strokeCount = readFileBytesAsUInt($handle, 32, true);
-
+        $crcValueFile = readFileBytesAsUInt($handle, 16, true); //TODO: verify CRC
+        
         // Sanity check on length (avoid memory issues)
         // Canvas dimensions are 320 x 120.
         // When user paints at each (x|y), thats 38,400 strokes. Each coordinate is a nibble, together a byte.
@@ -70,15 +77,109 @@ function decodeCommentFile(string $file): array|false
         // Step 4: Read Payload
         $currentOffset = ftell($handle);
         $remainingBytes = $fileSize - $currentOffset;
-        $payload = $remainingBytes > 0 ? fread($handle, $remainingBytes) : null; //TODO: decode brush strokes
+        //$payload = $remainingBytes > 0 ? fread($handle, $remainingBytes) : null; //TODO: decode brush strokes
+        $strokes = decodeStrokesFromHandle($handle);
         return [
             'version' => $version,
             'width' => $width,
             'height' => $height,
             'strokeCount' => $strokeCount,
-            'payload' => $payload,
+            'strokes' => $strokes,
         ];
     } finally {
         fclose($handle);
     }
+}
+
+$brushMap = ["undefined" => 0b00, "brush" => 0b01, "eraser" => 0b10, "clear" => 0b11];
+$patternMap = ["100%" => 0b00, "75%" => 0b01, "50%" => 0b10, "25%" => 0b11];
+$brushMapInverted = array_flip($brushMap); // Invert the arrays (value => key)
+$patternMapInverted = array_flip($patternMap);
+
+function decodeBrushInfo($byte)
+{
+    global $brushMapInverted, $patternMapInverted;
+    $brushType = ($byte >> 6) & 0b11;
+    $pattern = ($byte >> 4) & 0b11;
+    $size = $byte & 0b1111;
+    $brush = $brushMapInverted[$brushType];
+    if ($brush === "undefined")
+        trigger_error("Brush 'undefined' should not be set", E_USER_WARNING);
+    return [
+        'brush' => $brush,
+        'pattern' => $patternMapInverted[$pattern],
+        'size' => $size
+    ];
+}
+
+function decodeStrokesFromHandle($handle): array {
+    $strokes = [];
+
+    while (!feof($handle)) {
+        $brushInfoByte = fread($handle, 1);
+        if (strlen($brushInfoByte) < 1) break; // End of file
+        $brushInfo = ord($brushInfoByte);
+        ['brush' => $brush, 'pattern' => $pattern, 'size' => $size] = decodeBrushInfo($brushInfo);
+        $pointCount = readFileBytesAsUInt($handle, 16, true);
+        // We specifically do NOT want falsy values, rather check precisely for false
+        if ($pointCount === false) break;
+        $crcByte = readFileBytesAsUInt($handle, 8, true); // TODO: Validate CRC
+        if ($crcByte === false) break;
+        $nibbleCount = $pointCount * 2;
+        $nibbleLEBs = [];
+        $currentNibbleLEB = [];
+        while (count($nibbleLEBs) < $nibbleCount && !feof($handle)) {
+            $byte = fread($handle, 1);
+            if (strlen($byte) < 1) break;
+            $byteVal = ord($byte);
+            $nibbles = [($byteVal & 0xF0) >> 4, $byteVal & 0x0F];
+            foreach ($nibbles as $nibble) {
+                if (count($nibbleLEBs) >= $nibbleCount) break;
+                $isLeadingGroup = ($nibble & 0b1000) === 0b1000;
+                $currentNibbleLEB[] = $nibble;
+                if ($isLeadingGroup) continue;
+                $nibbleLEBs[] = $currentNibbleLEB;
+                $currentNibbleLEB = [];
+            }
+        }
+
+        // Decode deltas from LEB8
+        $path = [];
+        $prevX = 0;
+        $prevY = 0;
+        for ($i = 0; $i < count($nibbleLEBs); $i += 2) {
+            $dx = decodeSignedLEB8($nibbleLEBs[$i]);
+            $dy = decodeSignedLEB8($nibbleLEBs[$i + 1]);
+            $x = $prevX + $dx;
+            $y = $prevY + $dy;
+            $path[] = ['x' => $x, 'y' => $y];
+            $prevX = $x;
+            $prevY = $y;
+        }
+        $strokes[] = [
+            'brush' => $brush,
+            'pattern' => $pattern,
+            'size' => $size,
+            'path' => $path
+        ];
+    }
+
+    return $strokes;
+}
+
+function decodeSignedLEB8(array $nibbles): int {
+    $shift = 0;
+    $result = 0;
+    $value = 0;
+    foreach ($nibbles as $nibble) {
+        $value = $nibble & 0x7;
+        $result |= ($value << $shift);
+        $shift += 3;
+        if (($nibble & 0x8) === 0) break;
+    }
+    // Sign extension if bit 2 (0x4) is set in the final data nibble
+    $bitsPerInteger = PHP_INT_SIZE * 8; // 2^32 for 32bit machines and 2^64 for 64bit machines
+    if ($shift < $bitsPerInteger && ($value & 0x4))
+        $result |= (~0 << $shift);
+    return $result;
 }
