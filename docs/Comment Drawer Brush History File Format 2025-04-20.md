@@ -171,4 +171,82 @@ encoding capacity per nibble
  x = log(64) 65536 = log(10) 65536 / log(10) 64
  x = 8/3
 ```
+
+* parsing any binary data without constraints as brush history file
+  * that would actually be very fun to see 
+  * loading any files as brush history and seeing how the comment tool interprets it
+  * modern equivalent of putting a data cassette into an audio cassette player
+
+
+example png (annoying dog)
+```
+      00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
   
+000   89 50 4E 47 0D 0A 1A 0A 00 00 00 0D 49 48 44 52 
+010   00 00 00 14 00 00 00 13 04 03 00 00 00 62 A2 30 
+020   86 00 00 00 01 73 52 47 42 00 AE CE 1C E9 00 00 
+030   00 04 67 41 4D 41 00 00 B1 8F 0B FC 61 05 00 00 
+040   00 09 50 4C 54 45 C3 86 FF 00 00 00 FF FF FF 05 
+050   F5 36 32 00 00 00 09 70 48 59 73 00 00 0E C3 00 
+060   00 0E C3 01 C7 6F A8 64 00 00 00 18 74 45 58 74 
+070   53 6F 66 74 77 61 72 65 00 50 61 69 6E 74 2E 4E 
+080   45 54 20 35 2E 31 2E 38 1B 69 EA A8 00 00 00 B6 
+090   65 58 49 66 49 49 2A 00 08 00 00 00 05 00 1A 01 
+0A0   05 00 01 00 00 00 4A 00 00 00 1B 01 05 00 01 00 
+0b0   00 00 52 00 00 00 28 01 03 00 01 00 00 00 02 00 
+0c0   00 00 31 01 02 00 10 00 00 00 5A 00 00 00 69 87 
+0d0   04 00 01 00 00 00 6A 00 00 00 00 00 00 00 60 00 
+0e0   00 00 01 00 00 00 60 00 00 00 01 00 00 00 50 61 
+0f0   69 6E 74 2E 4E 45 54 20 35 2E 31 2E 38 00 03 00 
+100   00 90 07 00 04 00 00 00 30 32 33 30 01 A0 03 00 
+110   01 00 00 00 01 00 00 00 05 A0 04 00 01 00 00 00 
+120   94 00 00 00 00 00 00 00 02 00 01 00 02 00 04 00 
+130   00 00 52 39 38 00 02 00 07 00 04 00 00 00 30 31 
+140   30 30 00 00 00 00 AB 80 21 13 53 9E 38 28 00 00 
+150   00 50 49 44 41 54 18 D3 95 CE D1 09 00 31 08 03 
+160   50 BB 41 E2 06 66 FF 21 2F D5 16 EE B7 A1 C8 A3 
+170   04 34 02 E4 8A CE 2A 29 31 94 F3 63 19 88 2C A5 
+180   0A 2E 46 AA BF D1 64 9B 66 BA 32 FD 2C E6 A5 4E 
+190   5E 88 59 7C 49 D1 EF 10 6B 58 DE DE 63 1F 87 3D 
+1A0   10 1F C9 9E 11 2D 02 46 C9 6B 00 00 00 00 49 45 
+1b0   4E 44 AE 42 60 82 
+```
+
+
+| Field            | Size      | Type      | IS                                      | Expected                   |
+|------------------|-----------|-----------|-----------------------------------------|----------------------------|
+| Magic bytes      | 4 bytes   | char[4]   | "‰PNG"                                  | "BRSH"                     |
+| Version          | 2 bytes   | uint16    | 2573                                    | 1                          |
+| Canvas width     | 2 bytes   | uint16    | 2586                                    | 320                        |
+| Canvas height    | 2 bytes   | uint16    | 0                                       | 120                        |
+| Stroke count     | 4 bytes   | uint32    | 1212747008                              | valid, but bit extreme     |
+| CRC              | 2 bytes   | CRC16     | 0x4452                                  | mismatch                   |
+| ---------------  | --------- | --------- | ------------                            | -------------------------- |
+| Brush info       | 1 byte    | multi     | brush "undefined", pattern 100%, size 0 | invalid stroke block       |
+| Point count      | 2 bytes   | uint16    | 0                                       |                            |
+| CRC              | 1 byte    | CRC8      | 0x14                                    | mismatch                   |
+| Brush info       | 1 byte    | multi     | brush "undefined", pattern 100%, size 0 | invalid stroke block       |
+| Point count      | 2 bytes   | uint16    | 0                                       |                            |
+| CRC              | 1 byte    | CRC8      | 0x13                                    | mismatch                   |
+| invalid block 2x | ...       | ...       | ...                                     | ...                        |
+| Brush info       | 1 byte    | multi     | brush "clear", pattern 100%, size 6     | valid                      |
+| Point count      | 2 bytes   | uint16    | 0                                       |                            |
+| CRC              | 1 byte    | CRC8      | 0x00                                    | mismatch                   |
+| invalid block 1x | ...       | ...       | ...                                     | ...                        |
+| Brush info       | 1 byte    | multi     | brush "eraser", pattern 100%, size 2    | valid                      |
+| Point count      | 2 bytes   | uint16    | 44544                                   | 313                        |
+| CRC              | 1 byte    | CRC8      | 0xCE                                    | mismatch                   |
+
+validity of the single stroke record (313 points, 1-indexed)
+delta encoding transformed back into absolute coordinates
+```
+  1  {x:      1, y:   116}  valid
+  2  {x:      1, y:   116}  valid
+  3  {x:      1, y:   116}  valid
+ 10  {x:    -19, y:   163}  INVALID
+ 20  {x:   -724, y:   111}  INVALID
+ 30  {x: 261488, y:    91}  INVALID
+100  {x: 262996, y:  -972}  INVALID
+200  {x: 263030, y: -1059}  INVALID
+300  {x: 322460, y: 30305}  INVALID
+```
