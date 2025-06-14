@@ -24,6 +24,9 @@ services:
       - ./:/var/www/html
     depends_on:
       - mariadb
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 volumes:
   mariadb_data:
+
