@@ -4,7 +4,7 @@ require __DIR__ . '/../../comment-decoder.php';
 
 use function KrankWeb\CommentDecoder\decodeCommentFile;
 
-error_log($_SERVER['CONTENT_TYPE']);
+//error_log($_SERVER['CONTENT_TYPE']);
 
 // Configuration
 $validSecret = 'mySecret';
