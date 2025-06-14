@@ -1,0 +1,30 @@
+import { decodeStrokes } from "../lib/comment-file.js";
+
+function hexToArrayBuffer(hex) {
+  if (hex.startsWith("0x")) hex = hex.slice(2);
+  if (hex.length % 2 !== 0) throw new Error("Invalid hex string length");
+  const buffer = new ArrayBuffer(hex.length / 2);
+  const view = new Uint8Array(buffer);
+  for (let i = 0; i < hex.length; i += 2)
+    view[i / 2] = parseInt(hex.substr(i, 2), 16);
+  return buffer;
+}
+
+// We encode arbitrary data here (the PNG 'annoying-dog.png' actually, after reading in the 
+// header bytes and the first invalid brush strokes in the payload).
+
+const payload = `
+4200aece1ce90000000467414d410000b18f0bfc610500000009504c5445c386ff000000ffffff05
+f53632000000097048597300000ec300000ec301c76fa8640000001874455874536f667477617265
+005061696e742e4e455420352e312e381b69eaa8000000b66558496649492a000800000005001a01
+0500010000004a0000001b0105000100000052000000280103000100000002000000310102001000
+00005a00000069870400010000006a00000000000000600000000100000060000000010000005061
+696e742e4e455420352e312e3800030000900700040000003032333001a003000100000001000000
+05a00400010000009400000000000000020001000200040000005239380002000700040000003031
+303000000000ab802113539e3828000000504944415418d395ced1090031080350bb41e20666ff21
+2fd516eeb7a1c8a3043402e48ace2a293194f36319882ca50a2e46aabfd1649b66ba32fd2ce6a54e
+5e88597c49d1ef106b58dede631f873d101fc99e112d0246c96b0000000049454e44ae42608
+`;
+const buffer = hexToArrayBuffer(payload.trim());
+const strokes = decodeStrokes(buffer);
+console.log("lol");
