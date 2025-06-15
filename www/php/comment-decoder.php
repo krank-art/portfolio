@@ -83,7 +83,11 @@ function decodeCommentFile(string $file): array|false
             'version' => $version,
             'width' => $width,
             'height' => $height,
-            'strokeCount' => $strokeCount,
+            // Not sure about the stroke count yet. It would be helpful to be able to read the stroke count in the very header
+            // without having to parse the complete file for some specific cases. Currently I do not need any of those.
+            // So when parsing the stroke count, we will not actually return it bc this additional field removes parity with
+            // the input JSON (like the assert test for equality will fail).
+            //'strokeCount' => $strokeCount,
             'strokes' => $strokes,
         ];
     } finally {
