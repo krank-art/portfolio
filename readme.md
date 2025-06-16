@@ -141,6 +141,9 @@ To check the current MariaDB version:
 
 ## Deployment
 
+Current deployment target is Apache (PHP). 
+Copy all files from `dist/` to target (excluding `debug/`, `test/`, `docker-compose.yml`, `Dockerfile`, `info.php`, `php.ini` and `xdebug.ini`).
+
 1. Update version of project:
    1. Go to [pages/changelog.hbs] and write down the changes for the current version.
    2. Update the version in `package.json` and run `npm install`.
