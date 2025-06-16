@@ -42,15 +42,16 @@ function readFileBytesAsUInt($handle, int $bits, bool $littleEndian = true)
     return readUInt($data, $bits, $littleEndian);
 }
 
-function decodeCommentFile(string $file): array|false
+function decodeCommentFile(string $file, bool $forced = false): array|false
 {
+    // If forced to decode, some security measures are circumvented to be able to parse any arbitrary binary data.
     $handle = fopen($file, 'rb');
     if (!$handle)
         throw new \RuntimeException("Failed to open file.");
     try {
         // Step 1: Read Magic Number (4 bytes)
         $magic = fread($handle, 4);
-        if ($magic !== "BRSH") {
+        if (!$forced && $magic !== "BRSH") {
             fclose($handle);
             throw new \Exception("Unknown file type");
         }
@@ -60,7 +61,7 @@ function decodeCommentFile(string $file): array|false
         $height = readFileBytesAsUInt($handle, 16, true);
         $strokeCount = readFileBytesAsUInt($handle, 32, true);
         $crcValueFile = readFileBytesAsUInt($handle, 16, true); //TODO: verify CRC
-        
+
         // Sanity check on length (avoid memory issues)
         // Canvas dimensions are 320 x 120.
         // When user paints at each (x|y), thats 38,400 strokes. Each coordinate is a nibble, together a byte.
@@ -78,7 +79,7 @@ function decodeCommentFile(string $file): array|false
         $currentOffset = ftell($handle);
         $remainingBytes = $fileSize - $currentOffset;
         //$payload = $remainingBytes > 0 ? fread($handle, $remainingBytes) : null; //TODO: decode brush strokes
-        $strokes = decodeStrokesFromHandle($handle);
+        $strokes = decodeStrokesFromHandle($handle, $forced);
         return [
             'version' => $version,
             'width' => $width,
@@ -100,14 +101,14 @@ $patternMap = ["100%" => 0b00, "75%" => 0b01, "50%" => 0b10, "25%" => 0b11];
 $brushMapInverted = array_flip($brushMap); // Invert the arrays (value => key)
 $patternMapInverted = array_flip($patternMap);
 
-function decodeBrushInfo($byte)
+function decodeBrushInfo($byte, $forced = false)
 {
     global $brushMapInverted, $patternMapInverted;
     $brushType = ($byte >> 6) & 0b11;
     $pattern = ($byte >> 4) & 0b11;
     $size = $byte & 0b1111;
     $brush = $brushMapInverted[$brushType];
-    if ($brush === "undefined")
+    if (!$forced && $brush === "undefined")
         trigger_error("Brush 'undefined' should not be set", E_USER_WARNING);
     return [
         'brush' => $brush,
@@ -116,14 +117,15 @@ function decodeBrushInfo($byte)
     ];
 }
 
-function decodeStrokesFromHandle($handle): array {
+function decodeStrokesFromHandle($handle, $forced = false): array
+{
     $strokes = [];
 
     while (!feof($handle)) {
         $brushInfoByte = fread($handle, 1);
         if (strlen($brushInfoByte) < 1) break; // End of file
         $brushInfo = ord($brushInfoByte);
-        ['brush' => $brush, 'pattern' => $pattern, 'size' => $size] = decodeBrushInfo($brushInfo);
+        ['brush' => $brush, 'pattern' => $pattern, 'size' => $size] = decodeBrushInfo($brushInfo, $forced);
         $pointCount = readFileBytesAsUInt($handle, 16, true);
         // We specifically do NOT want falsy values, rather check precisely for false
         if ($pointCount === false) break;
@@ -152,8 +154,10 @@ function decodeStrokesFromHandle($handle): array {
         $prevX = 0;
         $prevY = 0;
         for ($i = 0; $i < count($nibbleLEBs); $i += 2) {
-            $dx = decodeSignedLEB8($nibbleLEBs[$i]);
-            $dy = decodeSignedLEB8($nibbleLEBs[$i + 1]);
+            $firstNibbleSegment = $nibbleLEBs[$i];
+            $secondNibbleSegment = $nibbleLEBs[$i + 1] ?? null;
+            $dx = $firstNibbleSegment ? decodeSignedLEB8($firstNibbleSegment) : 0;
+            $dy = $secondNibbleSegment ? decodeSignedLEB8($secondNibbleSegment) : 0;
             $x = $prevX + $dx;
             $y = $prevY + $dy;
             $path[] = ['x' => $x, 'y' => $y];
@@ -171,7 +175,8 @@ function decodeStrokesFromHandle($handle): array {
     return $strokes;
 }
 
-function decodeSignedLEB8(array $nibbles): int {
+function decodeSignedLEB8(array $nibbles): int
+{
     $shift = 0;
     $result = 0;
     $value = 0;
@@ -186,4 +191,63 @@ function decodeSignedLEB8(array $nibbles): int {
     if ($shift < $bitsPerInteger && ($value & 0x4))
         $result |= (~0 << $shift);
     return $result;
+}
+
+function validateFile($commentHistory, array $options): array|bool
+{
+    // Should the size of validation one day get out of hand, consider using a JSON schema validator written in PHP.
+    // TODO: There is no type validation for the individual properties. We are relying on the comment decoding function
+    //  to deliver all the proper types (e.g. 'size' is not checked if it is actually a number, greater-than and lower-
+    //  than operators are also able to be used on strings). We will not do so for now out of simplicities sake.
+    $maxWidth = $options['maxWidth'] ?? 100;
+    $maxHeight = $options['maxHeight'] ?? 100;
+    $minWidth = $options['minWidth'] ?? 0;
+    $minHeight = $options['minHeight'] ?? 0;
+    $targetVersion = $options['targetVersion'] ?? 1;
+    $strokeCount = $options['strokeCount'] ?? null;
+
+    $violations = [];
+
+    $version = $commentHistory['version'] ?? null;
+    $width = $commentHistory['width'] ?? null;
+    $height = $commentHistory['height'] ?? null;
+    $strokes = $commentHistory['strokes'] ?? [];
+
+    // String output is enclosed in '', number output is as-is
+    if ($version !== $targetVersion) $violations[] = "(FILE) Wrong version: actual '$version', expected '$targetVersion'";
+    if ($width < $minWidth) $violations[] = "(FILE) Width too small: $width < $minWidth";
+    if ($width > $maxWidth) $violations[] = "(FILE) Width too large: $width > $maxWidth";
+    if ($height < $minHeight) $violations[] = "(FILE) Height too small: $height < $minHeight";
+    if ($height > $maxHeight) $violations[] = "(FILE) Height too large: $height > $maxHeight";
+    $actualStrokeCount = count($strokes);
+    if ($strokeCount !== null && $actualStrokeCount !== $strokeCount)
+        $violations[] = "(FILE) Incorrect number of strokes: actual $actualStrokeCount, expected $strokeCount";
+
+    foreach ($strokes as $i => $stroke) {
+        $brush = $stroke['brush'];
+        $size = $stroke['size'];
+        $pattern = $stroke['pattern'];
+        $path = $stroke['path'];
+        $knownBrushes = ["brush", "eraser", "clear"];
+        if (!in_array($brush, $knownBrushes, true))
+            $violations[] = "(STROKE $i) Unknown brush type: actual '$brush', expected one of '" . implode("', '", $knownBrushes) . "'";
+        if ($size < 0)
+            $violations[] = "(STROKE $i) Negative brush size not allowed: $size";
+        if ($size > max($maxWidth, $maxHeight))
+            $violations[] = "(STROKE $i) Brush size too large: $size";
+        $knownPatterns = ["100%", "75%", "50%", "25"];
+        if (!in_array($pattern, $knownPatterns, true))
+            $violations[] = "(STROKE $i) Unknown pattern: actual '$pattern', expected one of '" . implode("', '", $knownPatterns) . "'";
+
+        foreach ($path as $j => $point) {
+            $x = $point['x'];
+            $y = $point['y'];
+            if ($x < $minWidth) $violations[] = "(STROKE $i POINT $j) X out of lower bounds: $x < $minWidth";
+            if ($x > $maxWidth) $violations[] = "(STROKE $i POINT $j) X out of upper bounds: $x > $maxWidth";
+            if ($y < $minHeight) $violations[] = "(STROKE $i POINT $j) Y out of lower bounds: $y < $minHeight";
+            if ($y > $maxHeight) $violations[] = "(STROKE $i POINT $j) Y out of upper bounds: $y > $maxHeight";
+        }
+    }
+
+    return count($violations) < 1 ? true : $violations;
 }
