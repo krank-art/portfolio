@@ -193,7 +193,7 @@ function decodeSignedLEB8(array $nibbles): int
     return $result;
 }
 
-function validateFile($commentHistory, array $options): array|bool
+function validateFile($commentHistory, array $options = []): array|bool
 {
     // Should the size of validation one day get out of hand, consider using a JSON schema validator written in PHP.
     // TODO: There is no type validation for the individual properties. We are relying on the comment decoding function
