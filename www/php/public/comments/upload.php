@@ -125,7 +125,8 @@ function getUniqueHash(callable $onError, $pdo, $tableName)
     return $hash;
 }
 
-function getHistory(callable $onError, array $constraints = []) {
+function getHistory(callable $onError, array $constraints = [])
+{
     $historyFile = $_FILES['history']['tmp_name'];
     $decodedCommentHistory = decodeCommentFile($historyFile);
     $validation = validateFile($decodedCommentHistory, [
@@ -184,7 +185,10 @@ function storeComment(callable $onError, array $storage, array $fields)
         return false;
     }
     try {
-        $stmt = $pdo->prepare("INSERT INTO $tableName (created, imagePath, target, approved, username, website, hash) VALUES (NOW(), ?, ?, NULL, ?, ?, ?)");
+        $stmt = $pdo->prepare(
+            "INSERT INTO $tableName (created, imagePath, target, approved, username, website, hash) " .
+                "VALUES (NOW(), ?, ?, NULL, ?, ?, ?)"
+        );
         $stmt->execute([$imagePath, $target, $username, $website ?? '', $hash]);
         echo 'Upload successful!';
     } catch (PDOException $e) {
@@ -198,6 +202,10 @@ function storeComment(callable $onError, array $storage, array $fields)
 
 function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $uploadDir, $errorDir)
 {
+    $minorErrors = []; // minor error = validation fails; major error = failure saving, parsing, etc.
+    $onMinorError = fn($code, $message, $internalMessage = null) => $minorErrors[] = [$code, $message, $internalMessage];
+    //$onMajorError = fn()
+    
     handleAuthorization('onError', $validSecret);
     checkMissingArguments('onError', ["secret", "target", "username", "image", "history"]);
     $image = getImage('onError');
@@ -206,9 +214,9 @@ function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $u
         'maxHeight' => $maxHeight,
     ]);
     $hash = getUniqueHash('onError', $pdo, $tableName);
-    $username = sanitizeText('onError', $_POST['username'], ['varName' => 'username']);
-    $website = sanitizeText('onError', $_POST['website'], ['varName' => 'website']);
-    $target = sanitizeText('onError', $_POST['target'], ['varName' => 'target']);
+    $username = sanitizeText($onMinorError, $_POST['username'], ['varName' => 'username']);
+    $website = sanitizeText($onMinorError, $_POST['website'], ['varName' => 'website']);
+    $target = sanitizeText($onMinorError, $_POST['target'], ['varName' => 'target']);
 
     if (!file_exists($uploadDir))
         mkdir($uploadDir, 0755, true);
@@ -235,7 +243,7 @@ function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $u
         'imagePath' => $imagePath,
         'historyPath' => $historyPath,
     ]);
-    
+
     echo 'Upload successful!';
 }
 
