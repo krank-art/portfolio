@@ -13,6 +13,11 @@ RUN apt-get update && apt-get install -y \
         --with-jpeg \
     && docker-php-ext-install gd
 
+# Install intl extension
+RUN apt-get update && apt-get install -y \
+    libicu-dev \
+    && docker-php-ext-install intl
+
 # Install xdebug for debugging
 RUN pecl install xdebug \
  && docker-php-ext-enable xdebug
@@ -28,3 +33,7 @@ RUN a2enmod rewrite
 
 # Set RewriteLog level via Apache config
 RUN echo "LogLevel alert rewrite:trace3" >> /etc/apache2/apache2.conf
+
+# Cleanup of package files
+RUN apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
