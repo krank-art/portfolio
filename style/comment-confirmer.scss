@@ -1,27 +1,24 @@
 .comment-confirmer::backdrop {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.75);
 }
 
 .comment-confirmer {
   border: none;
   border-radius: 8px;
-  padding: 20px;
+  padding: 0;
   max-width: 400px;
   width: 90%;
   font-family: sans-serif;
+  background-color: #333;
+  color: white;
+  box-shadow: 0 1rem 8rem rgba(255, 255, 255, 0.75);
+  border: 0.15rem solid #888;
 
   form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
   }
 
-  img {
-    max-width: 100%;
-    border-radius: 5px;
-  }
-
-  input,
   button {
     padding: 8px;
     font-size: 1em;
@@ -32,4 +29,92 @@
     justify-content: flex-end;
     gap: 10px;
   }
+}
+
+.comment-confirmer-target-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.comment-confirmer-body {
+  padding: 1rem;
+
+  &>*:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.comment-confirmer-target {
+  display: block;
+  width: 100%;
+  height: 12rem;
+  object-fit: contain;
+  background-color: #222;
+}
+
+.comment-confirmer-comment {
+  max-width: 100%;
+  width: 320px;
+  height: auto;
+  border: 0.1rem solid black;
+}
+
+.comment-confirmer-header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 2rem;
+  padding: 1rem;
+}
+
+.comment-confirmer-barcode {
+  margin-left: auto;
+  background-color: white;
+  border-radius: 0.25rem;
+}
+
+.comment-confirmer-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 1.2rem;
+}
+
+.comment-confirmer-input {
+  background-color: #111;
+  font-size: 1em;
+  padding: 0.5em 0.75em;
+  border: none;
+  border-radius: 0.5em;
+  color: white;
+}
+
+.comment-confirmer-input-row {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+
+  &.inputs>label {
+    flex: 0 0 6rem;
+  }
+
+  &>* {
+    flex: 1 1 0;
+  }
+
+  &>.comment-confirmer-checkbox {
+    flex: 0 0 2rem;
+    margin: 0 0.5rem 0 0;
+  }
+}
+
+.comment-confirmer-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  width: 2rem;
 }
