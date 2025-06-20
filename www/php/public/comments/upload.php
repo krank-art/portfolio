@@ -49,9 +49,23 @@ function checkMissingArguments(callable $onError, array $requiredArguments)
 {
     // Check if required arguments are set
     $missingArguments = [];
-    foreach ($requiredArguments as $argument)
-        if (!isset($_POST[$argument]) || strlen($_POST[$argument]) < 1)
-            array_push($missingArguments, $argument);
+    foreach ($requiredArguments as $argument) {
+        $isNestedArg = gettype($argument) === "array";
+        $argType = $isNestedArg ? ($argument["type"] ?? "post") : "post";
+        $argName = $isNestedArg ? $argument["name"] : $argument;
+        switch ($argType) {
+            case "post":
+                if (!isset($_POST[$argName]) || strlen($_POST[$argName]) < 1)
+                    array_push($missingArguments, $argName);
+                continue 2;
+            case "file":
+                if (!isset($_FILES[$argName]) || $_FILES[$argName]['error'] !== UPLOAD_ERR_OK)
+                    array_push($missingArguments, $argName);
+                continue 2;
+            default:
+                throw new Error("Unknown argument type '$argType'");
+        }
+    }
     if (count($missingArguments) > 0) {
         $onError(400, 'Missing arguments: ' . implode(", ", $missingArguments));
         return false;
