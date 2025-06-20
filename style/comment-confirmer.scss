@@ -18,17 +18,30 @@
     display: flex;
     flex-direction: column;
   }
+}
+.comment-confirmer-footer {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 2rem;
+  padding: 1rem;
 
-  button {
-    padding: 8px;
-    font-size: 1em;
+  & > *:not(:last-child) {
+    margin-right: 0.5rem;
   }
+}
 
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-  }
+.comment-confirmer-actions {
+  display: flex;
+  margin-left: auto;
+  gap: 0.5rem;
+}
+
+.comment-confirmer-note {
+  text-align: center;
+  background-color: #222;
+  padding: 0.5rem 1rem;
+  color: #888;
 }
 
 .comment-confirmer-target-box {
@@ -61,6 +74,7 @@
   width: 320px;
   height: auto;
   border: 0.1rem solid black;
+  background-color: white;
 }
 
 .comment-confirmer-header {
@@ -69,6 +83,14 @@
   align-items: center;
   height: 2rem;
   padding: 1rem;
+}
+
+.comment-confirmer-barcode-bg {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  /* fallback */
+  background-repeat: repeat-y;
+  background-position: right 20px top;
 }
 
 .comment-confirmer-barcode {
@@ -90,6 +112,11 @@
   border: none;
   border-radius: 0.5em;
   color: white;
+
+  &::placeholder {
+    color: #666;
+    font-style: italic;
+  }
 }
 
 .comment-confirmer-input-row {
@@ -99,6 +126,8 @@
 
   &.inputs>label {
     flex: 0 0 6rem;
+    text-align: right;
+    margin-right: 0.5rem;
   }
 
   &>* {
@@ -117,4 +146,14 @@
   justify-content: center;
   height: 2rem;
   width: 2rem;
+}
+
+.comment-confirmer-submission-label {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.comment-confirmer-nudge-y {
+  position: relative;
+  top: 0.25rem;
 }

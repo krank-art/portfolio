@@ -69,12 +69,47 @@ body {
   display: flex;
   flex-wrap: wrap;
 
-  & > *:not(:last-child) {
+  &>*:not(:last-child) {
     margin-right: 0.25em;
   }
 
-  &.spaced-items > *:not(:last-child) {
+  &.spaced-items>*:not(:last-child) {
     margin-right: 1em;
+  }
+}
+
+.button-primary,
+.button-secondary {
+  font-size: 0.9em;
+  border: none;
+  padding: 0.6em 1em;
+  border-radius: 0.5em;
+}
+
+.button-primary {
+  background-color: #19A7FF;
+  color: black;
+
+  &:hover {
+    background-color: #32CFFF;
+  }
+
+  &:active {
+    background-color: #0756AB;
+    color: white;
+  }
+}
+
+.button-secondary {
+  background-color: #222;
+  color: white;
+
+  &:hover {
+    background-color: #333;
+  }
+
+  &:active {
+    background-color: #111;
   }
 }
 
