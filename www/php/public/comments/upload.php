@@ -5,8 +5,6 @@ require __DIR__ . '/../../comment-decoder.php';
 use function KrankWeb\CommentDecoder\decodeCommentFile;
 use function KrankWeb\CommentDecoder\validateFile;
 
-use \Normalizer;
-
 //error_log($_SERVER['CONTENT_TYPE']);
 
 function handleAuthorization(callable $onError, string $validSecret)
@@ -87,7 +85,7 @@ function sanitizeText(callable $onError, string $text, array $options = [])
     $sanitizedText = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
     // Normalization is important, bc otherwise some strings look the same but have different lengths.
     // We use the encoding utf8mb4 for our database, which is the default of PHP 'UTF-8'.
-    $normalizedText = Normalizer::normalize($sanitizedText, Normalizer::FORM_C); // requires 'intl' extension
+    $normalizedText = \Normalizer::normalize($sanitizedText, \Normalizer::FORM_C); // requires 'intl' extension
     $length = mb_strlen($normalizedText, 'UTF-8'); // multibyte characters are counted as 1
     if ($length < $minLength) {
         $onError(400, "$varName is not long enough (min $minLength)");
