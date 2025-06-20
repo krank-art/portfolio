@@ -96,6 +96,17 @@ function sanitizeText(callable $onError, string $text, array $options = [])
     $minLength = $options['minLength'] ?? 0;
     $maxLength = $options['maxLength'] ?? 255;
     $varName = $options['varName'] ?? 'variable';
+    $format = $options['format'] ?? 'all';
+    switch ($format) {
+        case "all":
+            break; // Do nothing
+        case "number":
+            if (!ctype_digit($text));
+            $onError(400, "$varName has to be all digits");
+            return null;
+        default:
+            throw new \InvalidArgumentException("Unknown string format: $format");
+    }
     $sanitizedText = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
     // Normalization is important, bc otherwise some strings look the same but have different lengths.
     // We use the encoding utf8mb4 for our database, which is the default of PHP 'UTF-8'.
@@ -185,6 +196,7 @@ function storeComment(callable $onError, array $storage, array $fields)
     $history = $fields['history'];
     $imagePath = $fields['imagePath'];
     $historyPath = $fields['historyPath'];
+    $submissionId = $fields['sub$submissionId'];
 
     // Persisting data (1. image, 2. history, 3. DB record)
     if (file_put_contents($imagePath, $image) === false) {
@@ -198,10 +210,10 @@ function storeComment(callable $onError, array $storage, array $fields)
     }
     try {
         $stmt = $pdo->prepare(
-            "INSERT INTO $tableName (created, imagePath, target, approved, username, website, hash) " .
-                "VALUES (NOW(), ?, ?, NULL, ?, ?, ?)"
+            "INSERT INTO $tableName (created, imagePath, target, approved, username, website, hash, submissionId) " .
+                "VALUES (NOW(), ?, ?, NULL, ?, ?, ?, ?)"
         );
-        $stmt->execute([$imagePath, $target, $username, $website ?? '', $hash]);
+        $stmt->execute([$imagePath, $target, $username, $website ?? '', $hash, $submissionId]);
         echo 'Upload successful!';
     } catch (PDOException $e) {
         unlink($imagePath);
@@ -217,9 +229,16 @@ function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $u
     $minorErrors = []; // minor error = validation fails; major error = failure saving, parsing, etc.
     $onMinorError = fn($code, $message, $internalMessage = null) => $minorErrors[] = [$code, $message, $internalMessage];
     //$onMajorError = fn()
-    
+
     handleAuthorization('onError', $validSecret);
-    checkMissingArguments('onError', ["secret", "target", "username", "image", "history"]);
+    checkMissingArguments('onError', [
+        "secret", 
+        "target", 
+        "username", 
+        "image", 
+        "submissionId", 
+        ["name" => "history", "type" => "file"],
+    ]);
     $image = getImage('onError');
     $history = getHistory('onError', [
         'maxWidth' => $maxWidth,
@@ -229,6 +248,11 @@ function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $u
     $username = sanitizeText($onMinorError, $_POST['username'], ['varName' => 'username']);
     $website = sanitizeText($onMinorError, $_POST['website'], ['varName' => 'website']);
     $target = sanitizeText($onMinorError, $_POST['target'], ['varName' => 'target']);
+    $submissionId = sanitizeText($onMinorError, $_POST['submissionId'], [
+        'varName' => 'submissionId',
+        'minLength' => 10,
+        'maxLength' => 10,
+    ]);
 
     if (!file_exists($uploadDir))
         mkdir($uploadDir, 0755, true);
@@ -254,6 +278,7 @@ function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $u
         'history' => $history,
         'imagePath' => $imagePath,
         'historyPath' => $historyPath,
+        'submissionId' => $submissionId,
     ]);
 
     echo 'Upload successful!';
