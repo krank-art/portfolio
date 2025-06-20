@@ -116,7 +116,7 @@ function sanitizeText(callable $onError, string $text, array $options = [])
         $onError(400, "$varName is not long enough (min $minLength)");
         return null;
     }
-    if ($length > $minLength) {
+    if ($length > $maxLength) {
         $onError(400, "$varName is too long (max $maxLength)");
         return null;
     }
@@ -196,7 +196,7 @@ function storeComment(callable $onError, array $storage, array $fields)
     $history = $fields['history'];
     $imagePath = $fields['imagePath'];
     $historyPath = $fields['historyPath'];
-    $submissionId = $fields['sub$submissionId'];
+    $submissionId = $fields['submissionId'];
 
     // Persisting data (1. image, 2. history, 3. DB record)
     if (file_put_contents($imagePath, $image) === false) {
@@ -210,11 +210,10 @@ function storeComment(callable $onError, array $storage, array $fields)
     }
     try {
         $stmt = $pdo->prepare(
-            "INSERT INTO $tableName (created, imagePath, target, approved, username, website, hash, submissionId) " .
-                "VALUES (NOW(), ?, ?, NULL, ?, ?, ?, ?)"
+            "INSERT INTO $tableName (created, imagePath, historyPath, target, approved, username, website, hash, submissionId) " .
+                "VALUES (NOW(), ?, ?, ?, NULL, ?, ?, ?, ?)"
         );
-        $stmt->execute([$imagePath, $target, $username, $website ?? '', $hash, $submissionId]);
-        echo 'Upload successful!';
+        $stmt->execute([$imagePath, $historyPath, $target, $username, $website ?? '', $hash, $submissionId]);
     } catch (PDOException $e) {
         unlink($imagePath);
         unlink($historyPath);
@@ -245,7 +244,10 @@ function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $u
         'maxHeight' => $maxHeight,
     ]);
     $hash = getUniqueHash('onError', $pdo, $tableName);
-    $username = sanitizeText($onMinorError, $_POST['username'], ['varName' => 'username']);
+    $username = sanitizeText($onMinorError, $_POST['username'], [
+        'varName' => 'username',
+        'maxLength' => 100,
+    ]);
     $website = sanitizeText($onMinorError, $_POST['website'], ['varName' => 'website']);
     $target = sanitizeText($onMinorError, $_POST['target'], ['varName' => 'target']);
     $submissionId = sanitizeText($onMinorError, $_POST['submissionId'], [
