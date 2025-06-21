@@ -203,7 +203,7 @@ function storeComment(callable $onError, array $storage, array $fields)
         $onError(500, 'Could not save image on server', error_get_last());
         return false;
     }
-    if (file_put_contents($historyPath, $history) === false) {
+    if (move_uploaded_file($history, $historyPath) === false) {
         $onError(500, 'Could not save history on server', error_get_last());
         unlink($imagePath); // Rewind upload because we were not successful; ironically we will not handle unlink failing
         return false;
