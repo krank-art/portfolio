@@ -10,12 +10,67 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
 
 require __DIR__ . '/../../database.php';
 
+function getPageFromReferrer()
+{
+    if (empty($_SERVER['HTTP_REFERER']))
+        return null;
+    $refUrl = parse_url($_SERVER['HTTP_REFERER']);
+    if (!isset($refUrl['scheme']) || !isset($refUrl['host']))
+        return null;
+    $currentScheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $currentHost = $_SERVER['HTTP_HOST']; // includes port if non-standard
+    $currentOrigin = "$currentScheme://$currentHost";
+    $refPort = isset($refUrl['port']) ? ':' . $refUrl['port'] : '';
+    $refOrigin = $refUrl['scheme'] . '://' . $refUrl['host'] . $refPort;
+    if ($currentOrigin !== $refOrigin)
+        return null;
+    if (!isset($refUrl['query']))
+        return null;
+    parse_str($refUrl['query'], $refQueryParams);
+    if (!isset($refQueryParams['page']))
+        return null;
+    return intval($refQueryParams['page']);
+}
+
+function deleteComment(array $options) {
+    $pdo = $options['pdo'];
+    $tableName = $options['tableName'];
+    $commentId = $options['commentId'];
+    $pageFromReferrer = $options['pageFromReferrer'] ?? null;
+    // Delete the entry
+    $stmt = $pdo->prepare("DELETE FROM $tableName WHERE id = :id");
+    $stmt->bindValue(':id', $commentId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    // Keep all existing query params except 'delete'
+    $query = $_GET;
+    unset($query['delete']);
+    $query['deleted'] = 1;
+    if (!isset($query['page']) && isset($pageFromReferrer))
+        $query['page'] = $pageFromReferrer;
+
+    // Build redirect URL
+    $redirectUrl = strtok($_SERVER["REQUEST_URI"], '?') . '?' . http_build_query($query);
+    header("Location: $redirectUrl");
+    exit;
+}
+
 $tableName = $config['comments_table'];
-$perPage = 20;
+$perPage = 10;
 
 // Get current page from query string
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $offset = ($page - 1) * $perPage;
+
+$pageFromReferrer = getPageFromReferrer();
+
+if (isset($_GET['delete']))
+    deleteComment([
+        'pdo' => $pdo,
+        'tableName' => $tableName,
+        'commentId' => intval($_GET['delete']),
+        'pageFromReferrer' => $pageFromReferrer,
+    ]);
 
 try {
     // Get total number of entries
@@ -75,12 +130,20 @@ try {
             border: 0.1rem solid black;
         }
 
-        .null {
+        .null,
+        .null-optional {
             display: inline-block;
             border-radius: 0.25em;
             padding-left: 1em;
             padding-right: 1em;
+        }
+
+        .null {
             background-color: rgba(255, 0, 0, 0.2);
+        }
+
+        .null-optional {
+            background-color: rgba(255, 136, 0, 0.2);
         }
 
         .faulty td {
@@ -113,6 +176,7 @@ try {
                     <?php
                     $getValue = fn($field) => $row[$field] ? htmlspecialchars($row[$field]) : null;
                     $nullValue = '<span class="null" title="NULL">🚫</span>';
+                    $nullValueOptional = '<span class="null-optional" title="NULL (optional)">🚫</span>';
                     $id = $getValue('id');
                     $created = $getValue('created');
                     $approved = $getValue('approved');
@@ -131,7 +195,7 @@ try {
                         $approved,
                         $target,
                         $username,
-                        $website,
+                        //$website, //Not required, optional field
                         $imagePath,
                         $historyPath,
                         $hash,
@@ -144,9 +208,9 @@ try {
                         <td><?= $id ?? $nullValue ?></td>
                         <td><?= $created ?? $nullValue ?></td>
                         <td><?= $approved ?? $nullValue ?></td>
-                        <td><?= $target ?? $nullValue ?></td>
+                        <td><a href="<?= $target ?>"><?= $target ?? $nullValue ?></a></td>
                         <td><?= $username ?? $nullValue ?></td>
-                        <td><?= $website ?? $nullValue ?></td>
+                        <td><?= $website ?? $nullValueOptional ?></td>
                         <td>
                             <img src="<?= $imagePathSrc ?>" width="320" height="120" alt="Image"><br>
                             <b>Internal:</b> <?= $imagePath ?? $nullValue ?><br>
@@ -158,7 +222,7 @@ try {
                         </td>
                         <td><?= $hash ?? $nullValue ?></td>
                         <td><?= $submissionId ?? $nullValue ?></td>
-                        <td>TODO</to>
+                        <td><a class="" href="?delete=<?= $id ?>">Delete</a></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
