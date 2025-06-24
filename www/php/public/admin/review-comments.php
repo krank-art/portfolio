@@ -83,6 +83,7 @@ try {
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
     $entries = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $commentIds = array_column($entries, 'id');
 } catch (PDOException $e) {
     die("Database error: " . $e->getMessage());
 }
@@ -172,7 +173,7 @@ try {
                 <th>Actions</th>
             </thead>
             <tbody>
-                <?php foreach ($entries as $row): ?>
+                <?php foreach ($entries as $index => $row): ?>
                     <?php
                     $getValue = fn($field) => $row[$field] ? htmlspecialchars($row[$field]) : null;
                     $nullValue = '<span class="null" title="NULL">🚫</span>';
@@ -203,8 +204,11 @@ try {
                         $imagePathSrc,
                         $historyPathSrc
                     ];
+                    $previousCommentIdIndex = $index === 0 ? 0 : $index - 1;
+                    $previousCommentId = $commentIds[$previousCommentIdIndex];
+                    $targetHash = "#comment-$previousCommentId"
                     ?>
-                    <tr class="entry<?= in_array(null, $fields, true) ? ' faulty' : '' ?>">
+                    <tr <?= $id ? 'id="comment-' . $id . '"' : '' ?>  class="entry<?= in_array(null, $fields, true) ? ' faulty' : '' ?>">
                         <td><?= $id ?? $nullValue ?></td>
                         <td><?= $created ?? $nullValue ?></td>
                         <td><?= $approved ?? $nullValue ?></td>
@@ -222,7 +226,7 @@ try {
                         </td>
                         <td><?= $hash ?? $nullValue ?></td>
                         <td><?= $submissionId ?? $nullValue ?></td>
-                        <td><a class="" href="?delete=<?= $id ?>">Delete</a></td>
+                        <td><a class="" href="?delete=<?= $id . $targetHash ?>">Delete</a></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
