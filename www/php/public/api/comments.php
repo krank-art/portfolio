@@ -37,7 +37,7 @@ $tableName = $config['comments_table'];
 try {
     // Query the data
     $stmt = $pdo->prepare("
-        SELECT created, approved, imagePath, username, website, target, hash
+        SELECT created, approved, imagePath, historyPath, username, website, target, hash
         FROM $tableName 
         WHERE target = ? AND trashed IS NULL
         ORDER BY created DESC
@@ -46,6 +46,7 @@ try {
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $formattedResults = array_map(function ($record) {
         $record['imagePath'] = str_replace($_SERVER["DOCUMENT_ROOT"], '', $record['imagePath']);
+        $record['historyPath'] = str_replace($_SERVER["DOCUMENT_ROOT"], '', $record['historyPath']);
         $record['created'] = formatDate(new DateTime($record['created']));
         return $record;
     }, $results);
