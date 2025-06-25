@@ -20,6 +20,7 @@ try {
             id           INT          AUTO_INCREMENT PRIMARY KEY,
             created      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
             approved     TIMESTAMP    DEFAULT NULL,
+            trashed      TIMESTAMP    DEFAULT NULL,
             target       VARCHAR(255) NOT NULL,
             imagePath    VARCHAR(255) NOT NULL,
             historyPath  VARCHAR(255) NOT NULL,

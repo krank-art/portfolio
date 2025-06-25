@@ -39,7 +39,7 @@ try {
     $stmt = $pdo->prepare("
         SELECT created, approved, imagePath, username, website, target, hash
         FROM $tableName 
-        WHERE target = ? 
+        WHERE target = ? AND trashed IS NULL
         ORDER BY created DESC
     ");
     $stmt->execute([$target]);
