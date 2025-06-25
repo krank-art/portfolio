@@ -235,7 +235,7 @@ function validateFile($commentHistory, array $options = []): array|bool
             $violations[] = "(STROKE $i) Negative brush size not allowed: $size";
         if ($size > max($maxWidth, $maxHeight))
             $violations[] = "(STROKE $i) Brush size too large: $size";
-        $knownPatterns = ["100%", "75%", "50%", "25"];
+        $knownPatterns = ["100%", "75%", "50%", "25%"];
         if (!in_array($pattern, $knownPatterns, true))
             $violations[] = "(STROKE $i) Unknown pattern: actual '$pattern', expected one of '" . implode("', '", $knownPatterns) . "'";
 
