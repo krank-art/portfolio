@@ -321,11 +321,15 @@ try {
                         <td><?= $username ?? $nullValue ?></td>
                         <td><?= $website ?? $nullValueOptional ?></td>
                         <td>
-                            <img src="<?= $imagePathSrc ?>" width="320" height="120" alt="Image"><br>
+                            <div class="comment-replayable" data-history-src="<?= $historyPathSrc ?>">
+                                <img src="<?= $imagePathSrc ?>" width="320" height="120" alt="Image">
+                            </div>
                             <b>Internal:</b> <?= $imagePath ?? $nullValue ?><br>
                             <b>Public:</b> <a href="<?= $imagePathSrc ?>"><?= $imagePathSrc ?? $nullValue ?></a>
                         </td>
                         <td>
+                            <div class="comment-replayable" data-history-src="<?= $historyPathSrc ?>">
+                            </div>
                             <b>Internal:</b> <?= $historyPath ?? $nullValue ?><br>
                             <b>Public:</b> <a href="<?= $historyPathSrc ?>"><?= $historyPathSrc ?? $nullValue ?></a>
                         </td>
@@ -362,6 +366,7 @@ try {
         <?php endfor; ?>
     </div>
 
+    <script type="text/javascript" src="/bundle.js"></script>
 </body>
 
 </html>
