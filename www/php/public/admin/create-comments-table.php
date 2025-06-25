@@ -27,9 +27,9 @@ try {
             username     VARCHAR(100) NOT NULL,
             website      VARCHAR(255) DEFAULT NULL,
             hash         CHAR(11)     NOT NULL UNIQUE,
-            submissionId CHAR(10)     NOT NULL,
+            submissionId CHAR(10)     NOT NULL
         );
-    ");
+    "); // Important: no trailing comma in SQL statement
     echo "✅ Table '$tableName' created successfully (if already exists, nothing happened).";
 } catch (PDOException $e) {
     echo "❌ Error: " . $e->getMessage();
