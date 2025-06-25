@@ -215,7 +215,8 @@ try {
             padding: 0.5rem 1rem;
         }
 
-        td>img {
+        td>img,
+        td>.comment-replayable {
             border: 0.1rem solid black;
         }
 
@@ -245,6 +246,7 @@ try {
             margin-bottom: 0.5rem;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="/bundle.css">
 </head>
 
 <body>
@@ -321,9 +323,7 @@ try {
                         <td><?= $username ?? $nullValue ?></td>
                         <td><?= $website ?? $nullValueOptional ?></td>
                         <td>
-                            <div class="comment-replayable" data-history-src="<?= $historyPathSrc ?>">
-                                <img src="<?= $imagePathSrc ?>" width="320" height="120" alt="Image">
-                            </div>
+                            <img src="<?= $imagePathSrc ?>" width="320" height="120" alt="Image">
                             <b>Internal:</b> <?= $imagePath ?? $nullValue ?><br>
                             <b>Public:</b> <a href="<?= $imagePathSrc ?>"><?= $imagePathSrc ?? $nullValue ?></a>
                         </td>
