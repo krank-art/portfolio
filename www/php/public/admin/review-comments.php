@@ -328,7 +328,7 @@ try {
                             <b>Public:</b> <a href="<?= $imagePathSrc ?>"><?= $imagePathSrc ?? $nullValue ?></a>
                         </td>
                         <td>
-                            <div class="comment-replayable" data-history-src="<?= $historyPathSrc ?>">
+                            <div class="comment-replayable" data-history-src="<?= $historyPathSrc ?>" data-playback-repeat="2000">
                             </div>
                             <b>Internal:</b> <?= $historyPath ?? $nullValue ?><br>
                             <b>Public:</b> <a href="<?= $historyPathSrc ?>"><?= $historyPathSrc ?? $nullValue ?></a>
