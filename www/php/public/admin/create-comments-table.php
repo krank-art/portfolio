@@ -14,6 +14,13 @@ $tableName = $config['comments_table'];
 // The HASH encodes values from 0 to 2^64 - 1. If we want to encode this with base64, we get 2^64 = 64^x.
 // Then if we solve it, we get x = 32/3 (10.667) which is close enough for 11.
 
+?>
+
+<h1>Create Comments table</h1>
+<p><a href="./">Go back to overview</a></p>
+
+<?php
+
 try {
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS $tableName (

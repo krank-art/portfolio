@@ -211,7 +211,7 @@ try {
         td {
             text-align: start;
             border-bottom: 0.1rem solid #888;
-            border-right: 0.1rem solid rgba(0,0,0,0.08);
+            border-right: 0.1rem solid rgba(0, 0, 0, 0.08);
             padding: 0.5rem 1rem;
         }
 
@@ -252,6 +252,7 @@ try {
         <?= $inTrashBin ? "Trash Bin" : "Comments" ?>
         <span class="page-label">(Page <?= $page ?> of <?= $totalPages ?>)</span>
     </h1>
+    <p><a href="./">Go back to overview</a></p>
 
     <?php if ($inTrashBin): ?>
         <a href="?bucket=comments">Show comments</a>
