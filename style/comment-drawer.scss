@@ -236,3 +236,14 @@ $sprites: (
   $height: nth($sprite, 5);
   @include sprite-class($name, $x, $y, $width, $height);
 }
+
+.comment-replayable {
+  width: 320px;
+  height: 120px;
+  position: relative;
+  display: inline-block;
+
+  canvas {
+    display: inline-block;
+  }
+}
