@@ -29,7 +29,7 @@ After installing Ubuntu 24, I was left with a reasonably powerful mini PC.
 With this machine I want to utilize existing APIs  and if none are available, automate the UI with [puppeteer](https://pptr.dev/).
 The final workflow would be to 1) prepare posts in advance  on the local machine, 2) run a cron job  daily to post on the various social media sites, 3) push  a notification on my phone if everything went all right.
 
-As of right now, my website has [512 art posts](./art).
+As of right now, my website has [512 art posts](/art).
 It is more of a personal archive than really a portfolio to show of my works.
 The artworks are also annotated with tags, description and metadata.
 All this data can be reused to post on social media.
