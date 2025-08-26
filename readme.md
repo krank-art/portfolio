@@ -5,14 +5,18 @@ This is a static side generator used to create the furry art portfolio by [@Kran
 
 ## Installation
 
-1. Make sure to have [NodeJS](https://nodejs.org/) installed.
+1. Make sure to have [NodeJS](https://nodejs.org/) installed (you specifically need Node v20).
 2. Clone or download this repository.
 3. Run `npm install`.
 4. Copy your art files into `static/art/`.
 5. Run `npm run cli import:art`.
 6. Run `npm run cli sort:art` (new entries get appended, we have to sort then).
 7. Run `npm run cli build`.
-8. Run `npm run serve-python` (make sure you have Python 3+ installed).
+   > If you want to build without the art files folder, run `npm run cli build:assets` and then `npm run cli build:html` instead.
+8. Go to `www/php` and run `docker compose up -d --build` (make sure to have Docker installed).
+9. Once Docker is built and PHP server has started, go to `http://localhost:8080/admin/`.
+10. Log in with password `supersecret1234` (development only).
+11. Click on `Create comments table`.
 
 
 ## CLI Usage
@@ -82,6 +86,13 @@ Basic usage: `npm run cli <command> <args?>`.
 
 Run `npm run serve-python` to start a `localhost:8000` webserver at `dist/` (make sure you have Python 3+ installed).
 
+
+### Windows with WSL
+
+> **Note:**
+> These installation instructions are deprecated because the output at the end is served via Python.
+> The current deployment target is for PHP and you need to launch Docker to access all features.
+
 On Windows, its a good idea to run the dev servers on WSL (Windows Subsystem for Linux). 
 I ran into problems where the Python server could not be shutdown properly and restarting was very buggy.
 To run Python on Windows 10 & 11, follow these steps:
@@ -133,7 +144,7 @@ To check the current MariaDB version:
 3. Install Docker.
 4. If you have a Windows Distro still running at WSL v1, first list with `wsl -l -v` and then update with `wsl --set-version <DISTRO_NAME> 2`.
    This takes a few minutes.
-5. Open terminal and move into `www/php`. Run `docker-compose up -d --build`.
+5. Open terminal and move into `www/php`. Run `docker compose up -d --build` (you might need to run with `sudo`).
 6. Go to `http://localhost:8080/`. It should display the current time of the database (in UTC+0).
 7. To connect to the MariaDB instance, run `docker exec -it mariadb mysql -u exampleuser -p` and then type in the password `examplepass`.
 8. If you want to run Xdebug, install the vscode plugin *PHP Debug* and launch the debug config "Listen for Xdebug".
