@@ -1,14 +1,24 @@
 # Hosting NSFW images
 Written on 11 January 2025
 
-I've drawn a lot of things over the years, including NSFW artwork (ehem, *pornography* 💅).
-I've hidden artworks deep in folder structures, on encrypted drives and niche social media accounts.
-Being sneaky is fun and it also gives you security in this very sensitive area.
+**I've drawn lots of things over the years, including NSFW artwork (ehem, *pornography* 💅).**
+Spicy artwork, hidden deep in folder structures, on encrypted drives and niche social media accounts.
+Being sneaky is fun and **security through obscurity** is one strategy to handle these files.
 
-> Just think if you had a breach in a social domain, like coworkers finding out about your fruity side. Oof, no thanks.
+It's just not very reliable or convenient.
 
-Still, being sneaky makes it quite annoying to share  distinguished artwork with distinguished people.
-It also makes it annoying for myself, I want to have a catalogue of all the art I created over the years.
+Sharing my art with distinguished people usually happens by sending the file directly.
+People have no reliable way to link back to my work.
+It also makes it annoying for myself, I want to have a catalogue of all the art I created over the years at a moment's notice.
+
+A far better approach is **security by design**.
+
+That way I can be secure and convenient with my spicy art.
+And it solves all the requirements I have for hosting nsfw artwork:
+
+* Access is restricted (only whitelisted people get access).
+* Access is restricted (only people of age get access).
+* Access is restricted to my hosting provider
 
 For a while now I've been thinking on how to best restrict access to it.
 There is legal ramifications about hosting adult content, you need to ensure that the viewer is over 18 years old.
