@@ -7,6 +7,18 @@ Being sneaky is fun and **security through obscurity** is one strategy to handle
 
 It's just not very reliable or convenient.
 
+> **Table of Content**:
+> - [Whitelist](#whitelist)
+> - [Legality](#legality)
+> - [Encryption](#encryption)
+> - [Components](#components)
+>   - [Custom File Type](#custom-file-type)
+>   - [Source set](#source-set)
+>   - [Path](#path)
+>   - [Post data](#post-data)
+> - [Failed approach: Steganography](#failed-approach-steganography)
+
+
 Sharing my art with distinguished people usually happens by sending the file directly.
 People have no reliable way to link back to my work.
 It also makes it annoying for myself, I want to have a catalogue of all the art I created over the years at a moment's notice.
@@ -15,8 +27,9 @@ A far better approach is **security by design**.
 
 ![](./media/image-encryption-v1.png)
 
-That way I can be secure and convenient with my spicy art.
-And it solves all the requirements I have for hosting nsfw artwork:
+## Requirements
+
+Besides being secure *and* convenient, with encryption I can solve all the requirements I have for hosting nsfw artwork:
 
 * Access is restricted to  people of my  choosing **(whitelist)**.
 * Access is restricted to adult people **(legality)**.
@@ -24,14 +37,16 @@ And it solves all the requirements I have for hosting nsfw artwork:
 * Access can be revoked by updating the key **(shared secret revocation)**.
 
 
-## Whitelist
+### Whitelist
 
 The way I want to implement it is with a shared secret that I hand out to people.
 This **shared secret simply is a password** that grants access to specific images encrypted with the password.
 Depending on the category, I can encrypt images with different passwords, so people only gain access to a specific images.
 
+To revoke access to certain parts of my images, we can simply rotate the password for the set **(shared secret revocation)**.
 
-## Legality
+
+### Legality
 
 In my country, when hosting adult content, you need to ensure that the viewer is over 18 years old.
 I'm not going to ask visitors to show me their ID, that goes against the strong data privacy aspect of interacting online with people.
@@ -41,7 +56,8 @@ The content should not be available to the general public, including random visi
 Furthermore I don't want to host the images unencrypted on my webserver.
 If I mess up the configuration, things could leak without verification.
 
-## Encryption
+
+### Encryption
 
 In development, we encrypt the images with a specific password.
 Then we store the images on the web server,  which functions as a dumb vault.
@@ -56,7 +72,7 @@ People can just download the files and start brute-forcing the password.
 We just need to make it annoying enough, so that in practical term it is not crackable.
 
 
-## Components
+## Implementation
 
 The minimum viable product is to just encrypt the images and put them onto my server.
 Then people can go to a special site (e.g. https://krank.love/naughty) and then simply type in passwords into an input field.
@@ -168,6 +184,26 @@ But it has to be vague enough so no unsavory details can be deduced.
 Art posts have a path, title, description, and a lot of meta data (image creation date, dimensions, palette, tags).
 I cannot display them in plain text, because a viewer could deduce a lot of information about the content.
 We will encrypt the metadata too  and restore them if the correct password is provided.
+
+
+## Version control
+
+It would be awkward to spend so much energy on encryption, but then visitors can just go to my Github and read all the information in plaintext.
+We will also need to be sneaky on how to **1) preserve data history**, **2) be private**, and **3) integrate well in current git repository**.
+
+To generate all the encrypted naughty images, we need three things:
+
+1) NSFW images.
+2) Post data (compare to `/data/media.json` for SFW artworks)
+3) Sets and their passwords.
+
+We will store these in a local git submodule, create bundles with and store them on a separate drive only I (the author) have access to.
+I can then sync up the repository if necessary.
+It needs the following commands to work:
+
+* `git bundle create portfolio.bundle --all` -- Bundles up the repository
+* `git clone portfolio.bundle portfolio` -- Clones repository from bundle
+* `git fetch portfolio.bundle` -- Fetches changes from bundle without applying them yet
 
 
 ## Failed approach: Steganography
