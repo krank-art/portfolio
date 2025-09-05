@@ -8,24 +8,28 @@ Being sneaky is fun and **security through obscurity** is one strategy to handle
 It's just not very reliable or convenient.
 
 > **Table of Content**:
-> - [Whitelist](#whitelist)
-> - [Legality](#legality)
-> - [Encryption](#encryption)
-> - [Components](#components)
->   - [Custom File Type](#custom-file-type)
->   - [Source set](#source-set)
->   - [Path](#path)
->   - [Post data](#post-data)
-> - [Failed approach: Steganography](#failed-approach-steganography)
+- [Requirements](#requirements)
+  - [Whitelist](#whitelist)
+  - [Legality](#legality)
+  - [Encryption](#encryption)
+  - [Password](#password)
+- [Implementation](#implementation)
+  - [Custom File Type](#custom-file-type)
+  - [Source set](#source-set)
+  - [Path](#path)
+  - [Post data](#post-data)
+- [Version control](#version-control)
+- [Failed approach: Steganography](#failed-approach-steganography)
 
 
 Sharing my art with distinguished people usually happens by sending the file directly.
-People have no reliable way to link back to my work.
+People have no reliable way to link back to my work tho.
 It also makes it annoying for myself, I want to have a catalogue of all the art I created over the years at a moment's notice.
 
 A far better approach is **security by design**.
 
-![](./media/image-encryption-v1.png)
+![Illustration showing how files are encrypted, stored on the server and then decrypted by the client.](./media/image-encryption-v1.png)
+
 
 ## Requirements
 
@@ -34,7 +38,7 @@ Besides being secure *and* convenient, with encryption I can solve all the requi
 * Access is restricted to  people of my  choosing **(whitelist)**.
 * Access is restricted to adult people **(legality)**.
 * Files are saved encrypted and only decrypted for viewing **(encryption)**.
-* Access can be revoked by updating the key **(shared secret revocation)**.
+* Password should be easy to remember and secure **(password)**.
 
 
 ### Whitelist
@@ -64,12 +68,43 @@ Then we store the images on the web server,  which functions as a dumb vault.
 On the client side, people can provide a password which forms the key to the encrypted files.
 This is **end-to-end encryption (E2EE)** by the way.
 
-
 We will **encrypt our images with [AES-128-GCM](https://en.wikipedia.org/wiki/Galois/Counter_Mode) and for the key generation we will use `pbkdf2`**, because it is available natively in the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Pbkdf2Params). `argon2` would be more secure but that would require additional libraries for the client.
 
 This approach is *not incredibly* secure, because the decryption happens on the client.
 People can just download the files and start brute-forcing the password.
 We just need to make it annoying enough, so that in practical term it is not crackable.
+
+
+### Password
+
+We will use [Diceware](https://theworld.com/~reinhold/diceware.html) (developed by Arnold G. Reinhold) to come up with passwords that have high entropy but still are easy to use.
+Reinhold recommends using 6 words, so an example would be `turtle aspirin galaxy river muffin engine`.
+That is way cleaner and easier to remember than `wEr42?38=bmpw23GGRs§`.
+
+Passwords should have a sufficiently high entropy rating to be secure.
+Diceware has 7776 words in it's table  at the author recommends using 6 picked at random.
+This gives us about 78 bits of entropy (80 is very high and 128 is insanely good):
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mtable>
+    <tr><td>
+      <mi>E</mi><mo>=</mo>
+      <msub><mi>log</mi><mn>2</mn></msub>
+      <mrow><msup><mi>R</mi><mi>L</mi></msup></mrow>
+    </td></tr>
+    <tr><td>
+      <mi>E</mi><mo>=</mo>
+      <msub><mi>log</mi><mn>2</mn></msub>
+      <mrow><msup><mn>7776</mn><mn>6</mn></msup></mrow>
+      <mo>≈</mo>
+      <mrow><mn>77.59</mn><mo>&#x2009;</mo><mtext>bits of entropy</mtext></mrow>
+    </td></tr>
+  </mtable>
+</math>
+
+> **Goofy Idea:**\
+> Create custom word list for Diceware from  slang terms defined on https://www.urbandictionary.com/.
+> Who wouldn't want to type in a password like this: `rizz bussin gyatt wisenheimer brotox clanker`
 
 
 ## Implementation
@@ -101,24 +136,72 @@ Storing these components individually is possible but it makes much more sense t
 
 That's why I'm proposing this file format:
 
-{WIP}
+|      | Field           |     Size | Type     | Description              |
+| ---: | --------------- | -------: | -------- | ------------------------ |
+|  *0* | Magic bytes     |  4 bytes | char[4]  | `KENC` (Krank encrypted) |
+|  *4* | Version         |   1 byte | uint8    | Format version, is 1     |
+|  *5* | Encryption date |  8 bytes | char[8]  | `YYYYMMDD` in UTC+0      |
+| *13* | Author          | 19 bytes | char[44] | `https://krank.love/`    |
+| *32* | Payload length  |  8 bytes | uint64   | Length of payload data   |
+| *40* | Salt            | 16 bytes | bin[16]  | Salt for key derivation  |
+| *56* | Nonce (IV)      | 12 bytes | bin[12]  | GCM nonce (iv)           |
+| *68* | Auth tag        | 16 bytes | bin[16]  | GCM authentification tag |
+| *84* | Payload         | variable | bin[N]   | Arbitrary binary data    |
+
+
+
+Byte order is **Big Endian**. 
+In the crypto world that is more common than Little Endian.
+
+`author` \
+This field tracks the original creator of the file.
+In this case it links back to my own website.
+Should I ever lose the current domain, I need to update this file spec because then also the size of the author field increases.
+There are of course multiple places to reach out to me:
+
+| Bytes | URL                                            |
+| ----: | ---------------------------------------------- |
+|    46 | https://www.furaffinity.net/user/krankthebear/ |
+|    42 | https://bsky.app/profile/krank.bsky.social     |
+|    19 | https://krank.love/ **(current)**              |
+
+
+`encryption date` \
+We need the *encryption date* because passwords  can be rotated to revoke access to sets of files.
+I will keep track when a new password is used and store it in a history file (inaccessible to public).
+Given the encryption date and the history of passwords, I can decrypt a file manually if need be.
+
+Using Unix time (millis since epoch) would be more space efficient  and also a well known standard.
+But I want to avoid the [Year 2038 problem](https://en.wikipedia.org/wiki/Year_2038_problem) (as of writing this blog post there are **only 13 years left**).
+Unix time is encoded as int32,  so it takes up 4 bytes of space.
+We can avoid the Y38 problem by increasing the bit size to 48 or 64.
+But that would be 6/8 bytes.
+Let's just represent the date with `YYYYMMDD`, that way we can read the date at a glance in a hex editor in 8 bytes of space.
+
+`nonce` (IV) \
+The [specification NIST 800-38D](https://csrc.nist.gov/pubs/sp/800/38/d/final) recommends either using a random nonce or deterministically deriving it.
+Having a unique nonce is very important, because if a nonce is reused, it causes a catastrophic failure of the encryption (two messages can be diffed with XOR).
+
+We must use a unique nonce *per key*, where each key is derived from the password in combination with the salt.
+Since we generate a new salt each time the encryption cycle is started, we do not need to worry if the nonces repeat between different batches of encryption.
+
+To construct the 96 bit nonces, we will follow the specs with a 32 bit  **fixed field** (device identification) and a 64 bit **invocation field** (simple counter).
+Since we only have a single device, we will just generate a 32 bit random number.
+This is also useful to use as common identifier for the different runs.
+
+Upon encrypting a batch of files, we will generate the IVs for each one of them and then shuffle the IVs.
+Otherwise it is very obvious in which order the files have been encrypted and an attacker could compare different runs of batches by comparing the counter number.
+This is not a big deal, but it just feels a little bit more safe.
 
 
 ### Source set
 
-A single decryption attempt for an 1 MB PNG file should take about 100ms on average hardware. 
+When the user submits a password, it is used in combination with the salt to generate an AES-128 key.
 
-This is a bit inefficient in terms of website traffic.
-The final bundle of encrypted images will consist of multiple sets that each have a unique password.
-Typing in one password grants access *to part* of all the files.
-If I clearly mark which files are in which set, people can deduce the set size which I don't want.
-
-Let's say that we have 20 images that take up 20 MB of space.
- every time we have a page visited they would need to cash all 20 MB to iterate all over them and attempt decryption.
-We can fix this by creating a **source-set for the encrypted images**.
-
-That means we should configure the decryption algorithm, so a single decryption attempt takes 100ms for a 60 KB file on average.
-If the user successfully decrypts the image,  we can then make the  thumbnail image + subpage link appear.
+The images hosted are **grouped into Sets &rarr; Posts &rarr; Files**.
+We get a new password per set and a new salt per post.
+A post has multiple files with the same key, only the nonce changes per file.
+In practical terms, we need to derive a **new key for each post** (artwork).
 
 To give an overview of the encrypted files and their components involved:
 
@@ -167,6 +250,24 @@ To give an overview of the encrypted files and their components involved:
 +  auth: Y5z9T9kYHyJzMDgM9nMoat==
    ...
 ```
+
+We want to fine-tune the KDF (key derivation function) so **each attempt is ~100ms** on average hardware.
+It's purposefully slow, so that bruteforce attacks are not viable.
+It also must not be too slow, since we try to decrypt *all* images.
+
+> Imagine going into a room full of locked boxes, where each box has a dial and lever.
+> You get unlocking instructions ("turn 90° to left, then 30° to right, then turn lever"), but you don't know on which boxes it works.
+> It could work on none, a single one or even multiple boxes.
+> So for better or worse, you have to **try all with considerable effort**.
+
+and have no control on how capable the hardware of a website visitor is.
+
+Once we derived the correct key, actual decryption is very fast.
+Most modern CPUs have hardware acceleration (AES NI instructions), actual physical gates in the silicone so it just takes a single cycle.
+**Decryption has succeeded** if the provided authentication tag matches the  newly calculated authentication tag.
+
+We should **cache** the AES key in local storage when decryption has succeeded.
+This way images in the overview are quickly loaded and also individual posts are decrypted almost instantaneously.
 
 
 ### Path
