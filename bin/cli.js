@@ -10,7 +10,7 @@ import { inspectMediaTable } from './inspect-media.js';
 import sortMedia from './sort-media.js';
 import readTags from './read-tags.js';
 import { getTagDefinitionsFromMedia } from '../lib/tag-util.js';
-import { createTestPNG, embedTextInImage } from '../lib/crypto.js';
+//import { createTestPNG, embedTextInImage } from '../lib/encrypto.js';
 
 const pathing = Object.freeze({
   //dist: path.resolve('dist'),
@@ -174,13 +174,14 @@ export async function handleCommand(command, ...args) {
         iv: "Alligator 2019-11-05 Raw.png",
       });
       */
-     const nsfwTarget = path.resolve("dist/media/nsfw", "Alligator 2019-11-05 Raw encrypted.png");
-     ensureDirExists(nsfwTarget);
-      embedTextInImage({
-        inputFile: path.resolve("static/nsfw", "Alligator 2019-11-05 Raw.png"),
-        outputFile: nsfwTarget,
-        text: "This is a super secret message.",
-      });
+      //const nsfwTarget = path.resolve("dist/media/nsfw", "Alligator 2019-11-05 Raw encrypted.png");
+      //ensureDirExists(nsfwTarget);
+      //embedTextInImage({
+      //  inputFile: path.resolve("static/nsfw", "Alligator 2019-11-05 Raw.png"),
+      //  outputFile: nsfwTarget,
+      //  text: "This is a super secret message.",
+      //});
+      console.log("removed feature")
       break;
       case "build:png":
         createTestPNG();
