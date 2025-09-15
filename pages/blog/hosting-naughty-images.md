@@ -19,6 +19,8 @@ It's just not very reliable or convenient.
   - [Path](#path)
   - [Post data](#post-data)
 - [Version control](#version-control)
+  - [Backup](#backup)
+  - [Restore](#restore)
 - [Failed approach: Steganography](#failed-approach-steganography)
 
 
@@ -302,13 +304,42 @@ To generate all the encrypted naughty images, we need three things:
 2) Post data (compare to `/data/media.json` for SFW artworks)
 3) Sets and their passwords.
 
-We will store these in a local git submodule, create bundles with and store them on a separate drive only I (the author) have access to.
+We will store these in a **local git submodule**, create bundles with and store them on a separate drive only I (the author) have access to.
 I can then sync up the repository if necessary.
 It needs the following commands to work:
 
 * `git bundle create portfolio.bundle --all` -- Bundles up the repository
 * `git clone portfolio.bundle portfolio` -- Clones repository from bundle
 * `git fetch portfolio.bundle` -- Fetches changes from bundle without applying them yet
+
+The images themselves are added via Git LFS.
+That way we can reliably store a reference to all images without slowing down the git repository with large binary files.
+Git LFS is an extension to Git so make sure it is installed by running `git lfs`.
+Make sure when you stage images and before you commit that `git diff --staged` gives you output similar to this:
+
+```diff
++version https://git-lfs.github.com/spec/v1
++oid sha256:7593a34539b17e2793498202955f6d7a325e5436f87e987fca225962d5697129
++size 1470698
+```
+
+So to share the nsfw images and data between Git repositories:
+
+
+### Backup
+
+1. Create a bundle of the git submodule at `nsfw/` with `git bundle create portfolio-nsfw.bundle --all` (Git LFS files are excluded).
+2. Move `portfolio-nsfw.bundle` into a temp folder.
+3. Copy `nsfw/.git/lfs/objects` into a new folder `media` inside the temp folder.
+4. Zip temp folder contents (or move as-is, zipping binary files does not compress much).
+
+
+### Restore
+
+1. Copy the backup folder or zip onto the device and unpack.
+2. Navigate into `nsfw/` and fetch changes from bundle with `git fetch path/to/portfolio-nsfw.bundle`.
+3. Pull changes after review with `git pull path/to/portfolio-nsfw.bundle`.
+4. Copy Git LFS objects into `nsfw/.git/lfs/objects`.
 
 
 ## Failed approach: Steganography
