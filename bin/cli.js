@@ -10,7 +10,7 @@ import { inspectMediaTable } from './inspect-media.js';
 import sortMedia from './sort-media.js';
 import readTags from './read-tags.js';
 import { getTagDefinitionsFromMedia } from '../lib/tag-util.js';
-//import { createTestPNG, embedTextInImage } from '../lib/encrypto.js';
+import buildNsfw from './build-nsfw.js';
 
 const pathing = Object.freeze({
   //dist: path.resolve('dist'),
@@ -26,6 +26,8 @@ const pathing = Object.freeze({
   artTags: path.resolve('data/art-tags.json'),
   artImport: path.resolve("static/art"),
   artProcessed: path.resolve("dist/media/art"),
+  nsfwInput: path.resolve("nsfw"),
+  nsfwOutput: path.resolve("dist/media/nsfw"),
 });
 
 const resizeSet = [
@@ -166,26 +168,15 @@ export async function handleCommand(command, ...args) {
       await readTags(pathing.artData, pathing.artTags, "/art/");
       break;
     case "build:nsfw":
-      /*
-      await encryptImageWithKey({
-        inputFilePath: path.resolve("static", "art", "Alligator 2019-11-05 Raw.png"),
-        outputFilePath: path.resolve("Alligator 2019-11-05 Raw encrypted.png"),
-        key: "my secret",
-        iv: "Alligator 2019-11-05 Raw.png",
+      await buildNsfw({
+        nsfwDir: pathing.nsfwInput,
+        outputDir: pathing.nsfwOutput,
+        resizeSet: null,
       });
-      */
-      //const nsfwTarget = path.resolve("dist/media/nsfw", "Alligator 2019-11-05 Raw encrypted.png");
-      //ensureDirExists(nsfwTarget);
-      //embedTextInImage({
-      //  inputFile: path.resolve("static/nsfw", "Alligator 2019-11-05 Raw.png"),
-      //  outputFile: nsfwTarget,
-      //  text: "This is a super secret message.",
-      //});
-      console.log("removed feature")
       break;
-      case "build:png":
-        createTestPNG();
-        break;
+    case "build:png":
+      createTestPNG();
+      break;
     case "dev:copy:php":
       const phpDevServerTarget = path.resolve("www/php/public");
       ensureDirExists(phpDevServerTarget);
