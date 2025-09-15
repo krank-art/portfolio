@@ -34,6 +34,8 @@ RUN a2enmod rewrite
 # Set RewriteLog level via Apache config
 RUN echo "LogLevel alert rewrite:trace3" >> /etc/apache2/apache2.conf
 
-# Cleanup of package files
-RUN apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# This causes a re-download every time the container is built; that makes dev quite slow but production containers huge
+# Since the current pipeline does not involve hosting docker containers, rather mirroring production, we will keep the cache
+# # Cleanup of package files
+# RUN apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
