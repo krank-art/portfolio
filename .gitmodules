@@ -1,0 +1,3 @@
+[submodule "nsfw"]
+	path = nsfw
+	url = ./nsfw
