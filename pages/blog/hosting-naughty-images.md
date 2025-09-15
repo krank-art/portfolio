@@ -68,7 +68,8 @@ Then we store the images on the web server,  which functions as a dumb vault.
 On the client side, people can provide a password which forms the key to the encrypted files.
 This is **end-to-end encryption (E2EE)** by the way.
 
-We will **encrypt our images with [AES-128-GCM](https://en.wikipedia.org/wiki/Galois/Counter_Mode) and for the key generation we will use `pbkdf2`**, because it is available natively in the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Pbkdf2Params). `argon2` would be more secure but that would require additional libraries for the client.
+We will **encrypt our images with [AES-128-GCM](https://en.wikipedia.org/wiki/Galois/Counter_Mode) and for the key generation we will use `pbkdf2`**, because it is available natively in the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Pbkdf2Params).
+`argon2` would be more secure but that would require additional libraries for the client.
 
 This approach is *not incredibly* secure, because the decryption happens on the client.
 People can just download the files and start brute-forcing the password.
@@ -141,14 +142,12 @@ That's why I'm proposing this file format:
 |  *0* | Magic bytes     |  4 bytes | char[4]  | `KENC` (Krank encrypted) |
 |  *4* | Version         |   1 byte | uint8    | Format version, is 1     |
 |  *5* | Encryption date |  8 bytes | char[8]  | `YYYYMMDD` in UTC+0      |
-| *13* | Author          | 19 bytes | char[44] | `https://krank.love/`    |
-| *32* | Payload length  |  8 bytes | uint64   | Length of payload data   |
-| *40* | Salt            | 16 bytes | bin[16]  | Salt for key derivation  |
-| *56* | Nonce (IV)      | 12 bytes | bin[12]  | GCM nonce (iv)           |
-| *68* | Auth tag        | 16 bytes | bin[16]  | GCM authentification tag |
-| *84* | Payload         | variable | bin[N]   | Arbitrary binary data    |
-
-
+| *13* | Author          | 19 bytes | char[19] | `https://krank.love/`    |
+| *32* | Payload length  |  4 bytes | uint32   | Length of payload data   |
+| *36* | Salt            | 16 bytes | bin[16]  | Salt for key derivation  |
+| *52* | Nonce (IV)      | 12 bytes | bin[12]  | GCM nonce (iv)           |
+| *64* | Auth tag        | 16 bytes | bin[16]  | GCM authentification tag |
+| *80* | Payload         | variable | bin[N]   | Arbitrary binary data    |
 
 Byte order is **Big Endian**. 
 In the crypto world that is more common than Little Endian.
@@ -165,6 +164,12 @@ There are of course multiple places to reach out to me:
 |    42 | https://bsky.app/profile/krank.bsky.social     |
 |    19 | https://krank.love/ **(current)**              |
 
+`payload length` \
+AES-GCM internally uses a 32-bit block counter, maximum number of blocks is 2^32 - 2.
+Each block has a size of 16 bytes, so max plaintext size is 2^32 * 16 bytes = ~64 GiB.
+When using 64-bit Node.js, we can stream file sizes of arbitrary size.
+With uint32 for the payload length, we can represent 2^32 = 4 GiB maximum with the encrypted file container.
+This should be more than enough for a file hosted on a **web**server, for any larger files I'd need to come up with a different solution.
 
 `encryption date` \
 We need the *encryption date* because passwords  can be rotated to revoke access to sets of files.
@@ -187,11 +192,12 @@ Since we generate a new salt each time the encryption cycle is started, we do no
 
 To construct the 96 bit nonces, we will follow the specs with a 32 bit  **fixed field** (device identification) and a 64 bit **invocation field** (simple counter).
 Since we only have a single device, we will just generate a 32 bit random number.
-This is also useful to use as common identifier for the different runs.
+This is also useful to use as common identifier for the different batches.
 
-Upon encrypting a batch of files, we will generate the IVs for each one of them and then shuffle the IVs.
-Otherwise it is very obvious in which order the files have been encrypted and an attacker could compare different runs of batches by comparing the counter number.
-This is not a big deal, but it just feels a little bit more safe.
+> Shuffling the IVs between different encryption batches is unnecessary.
+> Each time the encryption batch is run, a new salt is randomly generated and a new key is derived.
+> By shuffling the IVs we could obfuscate the order in which key is used for each payload.
+> In practical terms, this doesn't matter though because an attacker can just look at the `payload length` as unique identifier for each file.
 
 
 ### Source set
@@ -259,8 +265,6 @@ It also must not be too slow, since we try to decrypt *all* images.
 > You get unlocking instructions ("turn 90° to left, then 30° to right, then turn lever"), but you don't know on which boxes it works.
 > It could work on none, a single one or even multiple boxes.
 > So for better or worse, you have to **try all with considerable effort**.
-
-and have no control on how capable the hardware of a website visitor is.
 
 Once we derived the correct key, actual decryption is very fast.
 Most modern CPUs have hardware acceleration (AES NI instructions), actual physical gates in the silicone so it just takes a single cycle.
