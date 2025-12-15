@@ -93,6 +93,7 @@ export async function handleCommand(command, ...args) {
             { link: "/about", title: "About" },
             { link: "/changelog", title: "Changelog" },
             { link: "/sitemap", title: "Sitemap" },
+            { link: "/admin/", title: "Admin" },
           ],
           resizeSet: resizeSet,
           currentYear: new Date().getFullYear(),
