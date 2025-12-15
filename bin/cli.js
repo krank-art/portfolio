@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import buildMedia from './build-media.js';
 import { copyRecursive, deleteDirRecursive, ensureDirExists, parseJsonFile } from '../lib/filesystem.js';
@@ -28,6 +29,7 @@ const pathing = Object.freeze({
   artProcessed: path.resolve("dist/media/art"),
   nsfwInput: path.resolve("nsfw"),
   nsfwOutput: path.resolve("dist/media/nsfw"),
+  nsfwData: path.resolve("nsfw/media-nsfw.json"),
 });
 
 const resizeSet = [
@@ -63,6 +65,8 @@ export async function handleCommand(command, ...args) {
       const mediaArtBuildHtml = parseJsonFile(pathing.artData);
       const mediaArtByPath = {};
       mediaArtBuildHtml.forEach(entry => mediaArtByPath[entry.path] = entry);
+      const mediaNsfw = fs.existsSync(pathing.nsfwData) ? parseJsonFile(pathing.nsfwData) : null;
+      if (mediaNsfw === null ) console.warn('Could not read data for NSFW entries. Check if submodule exists. ');
       await buildHtml({
         inputDir: pathing.pages,
         outputDir: pathing.dist,
@@ -73,6 +77,7 @@ export async function handleCommand(command, ...args) {
           title: 'Handlebars Example',
           name: 'John Doe',
           mediaArt: mediaArtBuildHtml,
+          mediaNsfw: mediaNsfw,
           mediaArtByPath,
           tagsArt: getTagDefinitionsFromMedia(mediaArtBuildHtml, 1),
           headerLinks: [
