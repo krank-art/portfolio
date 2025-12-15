@@ -60,6 +60,14 @@ function getTargetsBySourcesFromMedia(inputDir, outputDir, media) {
 
 async function processMediaList({ inputDir, outputDir, media, resizeSet = [], transformer = null }) {
   const targetsBySources = getTargetsBySourcesFromMedia(inputDir, outputDir, media);
+  // Check if the specified files are actually available
+  const internalFilePaths = Array.from(targetsBySources.keys());
+  const filesInInputDir = fs.readdirSync(inputDir).map(filepath => path.join(inputDir, filepath));
+  const missingFiles = internalFilePaths.filter(filepath => !filesInInputDir.includes(filepath));
+  if (missingFiles.length > 0)
+    console.warn(Color.Yellow + `Media list is missing art files: ${missingFiles.length} \n` + 
+      `  ${missingFiles.join(", ")}` + Color.Reset);
+  // Process media list
   let skipCount = 0, processCount = 0;
   for (const [sourcePath, targetPath] of targetsBySources)
     await handleFileIfNewerAsync({
