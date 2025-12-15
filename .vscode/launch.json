@@ -58,7 +58,8 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\bin\\cli.js",
+            // Not sure if the '/' will cause problems, but VS Code supposedly already allows '/' instead of '\\' on Windows
+            "program": "${workspaceFolder}/bin/cli.js",
             "args": [
                 "build:nsfw"
             ],
