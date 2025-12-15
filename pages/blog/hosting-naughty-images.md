@@ -330,7 +330,9 @@ So to share the nsfw images and data between Git repositories:
 
 1. Create a bundle of the git submodule at `nsfw/` with `git bundle create portfolio-nsfw.bundle --all` (Git LFS files are excluded).
 2. Move `portfolio-nsfw.bundle` into a temp folder.
-3. Copy `nsfw/.git/lfs/objects` into a new folder `media` inside the temp folder.
+3. Copy `nsfw/static/` into a new folder `media` inside the temp folder.
+   > You need to manually copy the files.
+   > Git LFS in this case is useful to track what files there are and if any of them have changed.
 4. Zip temp folder contents (or move as-is, zipping binary files does not compress much).
 
 
@@ -339,7 +341,7 @@ So to share the nsfw images and data between Git repositories:
 1. Copy the backup folder or zip onto the device and unpack.
 2. Navigate into `nsfw/` and fetch changes from bundle with `git fetch path/to/portfolio-nsfw.bundle`.
 3. Pull changes after review with `git pull path/to/portfolio-nsfw.bundle`.
-4. Copy Git LFS objects into `nsfw/.git/lfs/objects`.
+4. Copy Git LFS objects into `nsfw/static/`.
 
 
 ## Failed approach: Steganography
