@@ -1,0 +1,62 @@
+.admin-panel-heading {
+  text-align: center;
+}
+
+.admin-panel-body {
+  font-family: sans-serif;
+  margin-top: 1em;
+  padding: 1em;
+  border: 0.1em solid #888;
+  border-radius: 1em;
+
+  &>*:first-child {
+    margin-top: 0;
+  }
+}
+
+.admin-panel-wrapper {
+  margin: 2em auto;
+  max-width: 25em;
+}
+
+.admin-action-list {
+  list-style-type: none;
+  padding: 0;
+
+  &>li {
+    padding: 0.6em 1em 0.6em 2em;
+    border-radius: 1em;
+
+    &:hover,
+    &:focus-within {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  &>*:not(:last-child) {
+    //margin-bottom: 1em;
+  }
+
+  &>li:hover {
+  }
+}
+
+.admin-panel-aside {
+  margin: 0 auto;
+}
+
+.admin-panel-error {
+  color: red;
+}
+
+.admin-panel-warning {
+  color: orange;
+}
+
+.admin-panel-header.admin-panel-header {
+  margin: -1em -1em 1em;
+  padding: 0.6em 1em;
+  display: flex;
+  flex-flow: row nowrap;
+  border-bottom: 0.1em solid #888;
+}

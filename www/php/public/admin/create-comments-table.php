@@ -16,28 +16,46 @@ $tableName = $config['comments_table'];
 
 ?>
 
-<h1>Create Comments table</h1>
-<p><a href="./">Go back to overview</a></p>
+<!DOCTYPE html>
+<html>
 
-<?php
+<head>
+    <title>Create Comments table</title>
+    <link rel="stylesheet" type="text/css" href="/bundle.css">
+</head>
 
-try {
-    $pdo->exec("
-        CREATE TABLE IF NOT EXISTS $tableName (
-            id           INT          AUTO_INCREMENT PRIMARY KEY,
-            created      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            approved     TIMESTAMP    DEFAULT NULL,
-            trashed      TIMESTAMP    DEFAULT NULL,
-            target       VARCHAR(255) NOT NULL,
-            imagePath    VARCHAR(255) NOT NULL,
-            historyPath  VARCHAR(255) NOT NULL,
-            username     VARCHAR(100) NOT NULL,
-            website      VARCHAR(255) DEFAULT NULL,
-            hash         CHAR(11)     NOT NULL UNIQUE,
-            submissionId CHAR(10)     NOT NULL
-        );
-    "); // Important: no trailing comma in SQL statement
-    echo "✅ Table '$tableName' created successfully (if already exists, nothing happened).";
-} catch (PDOException $e) {
-    echo "❌ Error: " . $e->getMessage();
-}
+<body>
+    <div class="admin-panel-wrapper">
+        <h1 class="admin-panel-heading">Create Comments table</h2>
+        <div class="admin-panel-body">
+        <header class="admin-panel-header">
+            <a class="button-secondary" href="./">&larr; Go back to overview</a>
+        </header>
+        <?php
+        try {
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS $tableName (
+                    id           INT          AUTO_INCREMENT PRIMARY KEY,
+                    created      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    approved     TIMESTAMP    DEFAULT NULL,
+                    trashed      TIMESTAMP    DEFAULT NULL,
+                    target       VARCHAR(255) NOT NULL,
+                    imagePath    VARCHAR(255) NOT NULL,
+                    historyPath  VARCHAR(255) NOT NULL,
+                    username     VARCHAR(100) NOT NULL,
+                    website      VARCHAR(255) DEFAULT NULL,
+                    hash         CHAR(11)     NOT NULL UNIQUE,
+                    submissionId CHAR(10)     NOT NULL
+                );
+            "); // Important: no trailing comma in SQL statement
+            echo "✅ Table '$tableName' created successfully (if already exists, nothing happened).";
+        } catch (PDOException $e) {
+            echo "❌ Error: " . $e->getMessage();
+        }
+        ?>
+        </div>
+    </div>
+
+</body>
+
+</html>

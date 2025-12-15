@@ -9,6 +9,26 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
 
 require __DIR__ . '/../../database.php';
 
+?>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Send newsletter</title>
+    <link rel="stylesheet" type="text/css" href="/bundle.css">
+</head>
+
+<body>
+    <div class="admin-panel-wrapper">
+        <h1 class="admin-panel-heading">Send newsletter</h2>
+        <div class="admin-panel-body">
+        <header class="admin-panel-header">
+            <a class="button-secondary" href="./">&larr; Go back to overview</a>
+        </header>
+
+<?php
+
 $stmt = $pdo->query("SELECT email,validated,`secret` FROM " . $config['newsletter_table']);
 $emails = $stmt->fetchAll();
 
@@ -63,3 +83,12 @@ foreach ($emails as $row) {
 }
 
 echo "✅ Sent: $sent\n❌ Failed: $failed";
+
+?>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
