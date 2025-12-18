@@ -35,9 +35,12 @@ if (isset($_GET['logout'])) {
         <?php if (!isset($_SESSION['is_admin'])): ?>
             <form method="POST">
                 <div class="admin-panel-body">
-                    <label>Enter Admin Password:</label><br>
-                    <input type="password" name="password" required>
-                    <button type="submit">Login</button>
+                    <header class="admin-panel-header">
+                        <a class="button-secondary" href="/">&larr; Go back to main page</a>
+                    </header>
+                    <label class="label" for="admin-password">Enter Admin Password:</label><br>
+                    <input id="admin-password" class="input <?= !empty($error) ? 'error' : '' ?>" type="password" name="password" required>
+                    <button class="button-primary" type="submit">Login</button>
                     <?php if (!empty($error)) echo "<p class='admin-panel-error'>$error</p>"; ?>
                 </div>
             </form>

@@ -113,6 +113,32 @@ body {
   }
 }
 
+.input {
+  background-color: #222;
+  color: white;
+  font-size: 0.9em;
+  border: 0.1em solid #888;
+  padding: 0.6em 1em;
+  border-radius: 0.5em;
+
+  &.error {
+    border-bottom-width: 0.2em;
+    border-bottom-color: red;
+    padding-bottom: 0.5em;
+  }
+  
+  &:valid {
+    border-bottom-width: 0.2em;
+    border-bottom-color: #19A7FF;
+    padding-bottom: 0.5em;
+  }
+}
+
+.label {
+  display: inline-block;
+  margin-bottom: 0.4em;
+}
+
 @media (min-width: 720px) {
   .container-newspaper {
     max-width: 40rem;
