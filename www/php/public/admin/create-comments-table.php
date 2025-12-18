@@ -26,7 +26,7 @@ $tableName = $config['comments_table'];
 
 <body>
     <div class="admin-panel-wrapper">
-        <h1 class="admin-panel-heading">Create Comments table</h2>
+        <h1 class="admin-panel-heading">Create Comments table</h1>
         <div class="admin-panel-body">
         <header class="admin-panel-header">
             <a class="button-secondary" href="./">&larr; Go back to overview</a>

@@ -21,7 +21,7 @@ require __DIR__ . '/../../database.php';
 
 <body>
     <div class="admin-panel-wrapper">
-        <h1 class="admin-panel-heading">Test database connection</h2>
+        <h1 class="admin-panel-heading">Test database connection</h1>
         <div class="admin-panel-body">
         <header class="admin-panel-header">
             <a class="button-secondary" href="./">&larr; Go back to overview</a>

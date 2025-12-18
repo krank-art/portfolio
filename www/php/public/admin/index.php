@@ -31,7 +31,7 @@ if (isset($_GET['logout'])) {
 
 <body>
     <div class="admin-panel-wrapper">
-        <h1 class="admin-panel-heading">🐻 Admin Panel</h2>
+        <h1 class="admin-panel-heading">🐻 Admin Panel</h1>
         <?php if (!isset($_SESSION['is_admin'])): ?>
             <form method="POST">
                 <div class="admin-panel-body">
