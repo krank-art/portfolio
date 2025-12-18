@@ -58,3 +58,29 @@ here is the yield with iron gears excluded:
 
 If you research scrap recycling enough, there actually comes a point where transporting scrap becomes viable again.
 Still, it is handy to outsource part of the scrap processing mechanism, it's crowded enough already.
+
+
+## Foundations to build longer trains
+
+2 engines and 8 cargo wagons = total length of 10
+
+on an average scrap island, we can fit about 5 train carts
+
+for the next 5 ones we need foundations + elevated rails startup
+
+Foundation blocks per tracks
+Foundation blocks = Trainsegments * ((Train length + separator) * Tiles width of track)
+E = 5 * ((6 + 1) * 2) = 5 * (7 * 2) = 80 blocks
+
+Foundation blocks for inserters, belts, train station and elevated rails
+Blocks = Trainsegments * (Inserters per cart + Underground belts + Power pole) + Train stop + elevated rails start
+F = 5 * (6 + 2 + 1) + 8 + 16 = 5 * 9 + 24 = 69 blocks
+
+80 + 69 = 149 (50 per stack)
+
+So we need about 3 stacks of foundations to extend a mining island
+
+What we can also do is do two train stops behind each other
+
+so the first 4 wagons get loaded, and then the second 4 wagons
+
