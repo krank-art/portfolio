@@ -79,11 +79,15 @@ body {
 }
 
 .button-primary,
-.button-secondary {
+.button-secondary,
+.button-danger,
+.button-like {
   font-size: 0.9em;
   border: none;
   padding: 0.6em 1em;
   border-radius: 0.5em;
+  display: inline-block;
+  text-align: center;
 }
 
 .button-primary {
@@ -101,16 +105,34 @@ body {
 }
 
 .button-secondary {
-  background-color: #222;
+  background-color: #191919;
   color: white;
 
   &:hover {
-    background-color: #333;
+    background-color: #111111;
   }
 
   &:active {
     background-color: #111;
   }
+}
+
+.button-danger {
+  background-color: #cc2f2f;
+  color: white;
+
+  &:hover {
+    background-color: #e25327;
+  }
+
+  &:active {
+    background-color: #9a1e2b;
+    color: white;
+  }
+}
+
+.button-like {
+  border-color: transparent;
 }
 
 .input {
@@ -126,7 +148,7 @@ body {
     border-bottom-color: red;
     padding-bottom: 0.5em;
   }
-  
+
   &:valid {
     border-bottom-width: 0.2em;
     border-bottom-color: #19A7FF;
@@ -137,6 +159,86 @@ body {
 .label {
   display: inline-block;
   margin-bottom: 0.4em;
+}
+
+.pagination {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 0;
+  align-items: center;
+  text-decoration: none;
+
+  strong {
+    margin: 0 5px;
+  }
+}
+
+
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+
+  &.flush {
+    max-width: calc(100% + 2em);
+    margin: -1em;
+  }
+}
+
+.table-striped {
+  border-collapse: separate;
+  border-spacing: 0;
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background-color: #111;
+    border-right: 0.1rem solid #888;
+  }
+
+  th,
+  td {
+    text-align: start;
+    border-bottom: 0.1rem solid #888;
+    border-right: 0.2rem dotted #333;
+    padding: 0.5rem 1rem;
+  }
+
+  td>img,
+  td>.comment-replayable {
+    border: 0.1rem solid black;
+  }
+
+  .entry {
+    margin-bottom: 2em;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1em;
+  }
+
+  .null,
+  .null-optional {
+    display: inline-block;
+    border-radius: 0.25em;
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+
+  .null {
+    background-color: rgba(255, 0, 0, 0.2);
+  }
+
+  .null-optional {
+    background-color: rgba(255, 136, 0, 0.2);
+  }
+
+  .faulty td {
+    background-color: rgba(255, 0, 0, 0.1);
+  }
+
+  .actions-cell a {
+    display: inline-block;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
 }
 
 @media (min-width: 720px) {

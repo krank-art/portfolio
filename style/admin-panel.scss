@@ -19,6 +19,24 @@
   max-width: 25em;
 }
 
+.admin-panel-wrapper-xxl {
+  width: 100%;
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+.admin-panel-toolbar {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 1em;
+  padding: 1em 0;
+}
+
+.flex-end {
+  margin-left: auto;
+}
+
 .admin-action-list {
   list-style-type: none;
   padding: 0;
@@ -58,5 +76,6 @@
   padding: 0.6em 1em;
   display: flex;
   flex-flow: row nowrap;
+  gap: 0.5em;
   border-bottom: 0.1em solid #888;
 }
