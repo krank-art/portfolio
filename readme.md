@@ -9,6 +9,11 @@ This is a static side generator used to create the furry art portfolio by [@Kran
 2. Clone or download this repository.
 3. Run `npm install`.
 4. Copy your art files into `static/art/`.
+   > For Krank art files, use `krank-portfolio-art-2023-12-31.zip`.
+   > Unzip the contents into `static/art/`.
+   > Remove files `wolf-smashing` and `deer-mush` (both are MP4 files and currently not supported).
+   > Skip running `import:art`, the `media-art.json` will update the `fileChanged` field which is wrong.
+   > You also need to rename `Font Krank 2023-12-31 Release.png` into `Font Krank 2023-12-21 Release.png` (31 to 21).
 5. Run `npm run cli import:art`.
 6. Run `npm run cli sort:art` (new entries get appended, we have to sort then).
 7. Run `npm run cli build`.
