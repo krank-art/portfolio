@@ -16,6 +16,7 @@
 .comment-canvas {
   /* TODO: Add small padding around canvas, so you can actually fill in pixels at the corners and edges */
   padding: 0rem;
+  image-rendering: pixelated;
   
   &.comment-drawer {
     box-shadow: 0 0 0 0.1em black;
