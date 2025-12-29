@@ -35,11 +35,13 @@ require __DIR__ . '/../../database.php';
 $tableName = $config['comments_table'];
 
 try {
+    // Env variables are always string
+    $extraFilter = getenv("COMMENTS_SHOW_UNVERIFIED") === "true" ? "" : "AND approved IS NOT NULL";
     // Query the data
-    $stmt = $pdo->prepare("
+        $stmt = $pdo->prepare("
         SELECT created, approved, imagePath, historyPath, username, website, target, hash
         FROM $tableName 
-        WHERE target = ? AND trashed IS NULL
+        WHERE target = ? AND trashed IS NULL $extraFilter
         ORDER BY created DESC
     ");
     $stmt->execute([$target]);
