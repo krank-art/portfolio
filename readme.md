@@ -155,6 +155,35 @@ To check the current MariaDB version:
 8. If you want to run Xdebug, install the vscode plugin *PHP Debug* and launch the debug config "Listen for Xdebug".
 
 
+### Rebuild PHP container
+
+* `sudo docker compose build php` -- rebuild PHP container (use with `--no-cache` to do clean rebuild)
+* `sudo docker compose up -d php` -- restart PHP container
+* `sudo docker ps -a` -- list all Docker containers (including inactive ones)
+
+
+### Check if Xdebug in container got loaded
+
+* `sudo docker ps -a` -- lists all containers
+* `sudo docker exec -it phpserver bash` -- connects via bash to container `phpserver`
+* `php -v` -- lists php version info. should contain "with Xdebug v3.4.5" or similar
+* `exit` -- to leave the bash session
+
+
+### Using xdebug on Ubuntu
+
+When xdebug encounters a breakpoint, it will send a request to port 9003 on your local machine.
+Docker containers are treated as external hosts in the same network, so you need to allow incoming requests in the local network.
+Docker creates a default bridge network called `docker0`, where the default IP often is `172.17.0.1`.
+Since this IP can change slightly on config, we need to open an address *range* in the firewall that is reserved for local networks.
+RFC 1918 specifies that `172.16.0.0/12` (`172.16.0.0` – `172.31.255.255`) is for medium private networks, which the
+docker standard gateway and containers also fall into.
+
+* `sudo ufw status` -- list current firewall rules (should not have a rule about tcp 9003)
+* `sudo ufw allow from 172.16.0.0/12 to any port 9003 proto tcp` -- allow incoming requests
+* `sudo ufw delete N` -- deletes rule at line N (start at 1)
+
+
 ## Deployment
 
 Current deployment target is Apache (PHP). 

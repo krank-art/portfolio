@@ -15,6 +15,7 @@ services:
     ports:
       - "3306:3306"
 
+  # If you run on Linux, make sure to open port 9003 in the firewall for xdebug, see readme for "Using xdebug on Ubuntu"
   php:
     build: .
     container_name: phpserver
