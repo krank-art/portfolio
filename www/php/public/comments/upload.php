@@ -299,7 +299,7 @@ function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $u
         'message' => null,
     ], $webhookOpts);
     if (isset($webhookOpts['id']) && isset($webhookOpts['token'])) {
-        $notificationMessage = sprintf($webhookOpts['message'], $target);
+        $notificationMessage = sprintf($webhookOpts['message'], $target, $hash);
         sendMessageToDiscordWebhook($webhookOpts['id'], $webhookOpts['token'], $webhookOpts['username'], $notificationMessage);
     }
 }
@@ -319,6 +319,6 @@ handleRequest($pdo, $tableName, $validSecret, 320, 120, $uploadDir, $errorDir, w
     'id' => getenv("COMMENTS_DISCORD_WEBHOOK_ID"),
     'token' => getenv("COMMENTS_DISCORD_WEBHOOK_TOKEN"),
     'username' => "Krankobot",
-    'message' => "*🔔 A new comment was made on https://krank.love%s !*",
+    'message' => '*🔔 A new comment was made on [krank.love%1$s](https://krank.love%1$s#comment-%2$s) !*',
 ]);
 echo 'Upload successful!';
