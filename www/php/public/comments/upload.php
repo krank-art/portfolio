@@ -1,9 +1,11 @@
 <?php
 require __DIR__ . '/../../database.php';
 require __DIR__ . '/../../comment-decoder.php';
+require __DIR__ . '/../../notifications.php';
 
 use function KrankWeb\CommentDecoder\decodeCommentFile;
 use function KrankWeb\CommentDecoder\validateFile;
+use function KrankWeb\Notifications\sendMessageToDiscordWebhook;
 
 //error_log($_SERVER['CONTENT_TYPE']);
 
@@ -223,7 +225,11 @@ function storeComment(callable $onError, array $storage, array $fields)
     return true;
 }
 
-function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $uploadDir, $errorDir)
+function mpreg(string $url) {
+    return preg_replace('/[^a-z0-9\/-]/', '', $url);
+}
+
+function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $uploadDir, $errorDir, array $webhookOpts = [])
 {
     $minorErrors = []; // minor error = validation fails; major error = failure saving, parsing, etc.
     $onMinorError = fn($code, $message, $internalMessage = null) => $minorErrors[] = [$code, $message, $internalMessage];
@@ -250,6 +256,9 @@ function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $u
     ]);
     $website = sanitizeText($onMinorError, $_POST['website'], ['varName' => 'website']);
     $target = sanitizeText($onMinorError, $_POST['target'], ['varName' => 'target']);
+    // Since $target will actually be sent out as a notification via a Discord webhook, we will need to do some extra
+    // sanitation so no malicious URL can be sent out in the Discord message.
+    $target = mpreg($target);
     $submissionId = sanitizeText($onMinorError, $_POST['submissionId'], [
         'varName' => 'submissionId',
         'minLength' => 10,
@@ -283,7 +292,16 @@ function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $u
         'submissionId' => $submissionId,
     ]);
 
-    echo 'Upload successful!';
+    $webhookOpts = array_merge([
+        'id' => null,
+        'token' => null,
+        'username' => null,
+        'message' => null,
+    ], $webhookOpts);
+    if (isset($webhookOpts['id']) && isset($webhookOpts['token'])) {
+        $notificationMessage = sprintf($webhookOpts['message'], $target);
+        sendMessageToDiscordWebhook($webhookOpts['id'], $webhookOpts['token'], $webhookOpts['username'], $notificationMessage);
+    }
 }
 
 // Configuration
@@ -297,4 +315,10 @@ $tableName = $config['comments_table'];
 // TIMESTAMP in MariaDB is always stored as date UTC+0, so we need to set the server timezone before adding to DB
 date_default_timezone_set('UTC');
 
-handleRequest($pdo, $tableName, $validSecret, 320, 120, $uploadDir, $errorDir);
+handleRequest($pdo, $tableName, $validSecret, 320, 120, $uploadDir, $errorDir, webhookOpts: [
+    'id' => getenv("COMMENTS_DISCORD_WEBHOOK_ID"),
+    'token' => getenv("COMMENTS_DISCORD_WEBHOOK_TOKEN"),
+    'username' => "Krankobot",
+    'message' => "*🔔 A new comment was made on https://krank.love%s !*",
+]);
+echo 'Upload successful!';
