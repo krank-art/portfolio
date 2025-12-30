@@ -9,7 +9,9 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
 
 require __DIR__ . '/../../database.php';
 
-$tableName = $config['comments_table'];
+$commentsTableName = $config['comments_table'];
+$rateLimitTableName = $config['comments_rate_limit_table'];
+$settingsTableName = $config['comments_settings_table'];
 
 // The HASH encodes values from 0 to 2^64 - 1. If we want to encode this with base64, we get 2^64 = 64^x.
 // Then if we solve it, we get x = 32/3 (10.667) which is close enough for 11.
@@ -34,7 +36,7 @@ $tableName = $config['comments_table'];
         <?php
         try {
             $pdo->exec("
-                CREATE TABLE IF NOT EXISTS $tableName (
+                CREATE TABLE IF NOT EXISTS $commentsTableName (
                     id           INT          AUTO_INCREMENT PRIMARY KEY,
                     created      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     approved     TIMESTAMP    DEFAULT NULL,
@@ -48,7 +50,41 @@ $tableName = $config['comments_table'];
                     submissionId CHAR(10)     NOT NULL
                 );
             "); // Important: no trailing comma in SQL statement
-            echo "✅ Table '$tableName' created successfully (if already exists, nothing happened).";
+            echo "✅ Table '$commentsTableName' created successfully (if already exists, nothing happened).";
+        } catch (PDOException $e) {
+            echo "❌ Error: " . $e->getMessage();
+        }
+        try {
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS $rateLimitTableName (
+                    key_hash         CHAR(64) PRIMARY KEY,
+                    burst_count      INT      NOT NULL DEFAULT 0,
+                    mid_count        INT      NOT NULL DEFAULT 0,
+                    long_count       INT      NOT NULL DEFAULT 0,
+                    burst_expires_at DATETIME NOT NULL,
+                    mid_expires_at   DATETIME NOT NULL,
+                    long_expires_at  DATETIME NOT NULL,
+                    last_seen        DATETIME NOT NULL
+                );
+            "); // Important: no trailing comma in SQL statement
+            echo "✅ Table '$rateLimitTableName' created successfully (if already exists, nothing happened).";
+        } catch (PDOException $e) {
+            echo "❌ Error: " . $e->getMessage();
+        }
+        try {
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS $settingsTableName (
+                    key_hash         CHAR(64) PRIMARY KEY,
+                    burst_count      INT      NOT NULL DEFAULT 0,
+                    mid_count        INT      NOT NULL DEFAULT 0,
+                    long_count       INT      NOT NULL DEFAULT 0,
+                    burst_expires_at DATETIME NOT NULL,
+                    mid_expires_at   DATETIME NOT NULL,
+                    long_expires_at  DATETIME NOT NULL,
+                    last_seen        DATETIME NOT NULL
+                );
+            "); // Important: no trailing comma in SQL statement
+            echo "✅ Table '$settingsTableName' created successfully (if already exists, nothing happened).";
         } catch (PDOException $e) {
             echo "❌ Error: " . $e->getMessage();
         }

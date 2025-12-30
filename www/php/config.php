@@ -19,4 +19,6 @@ loadEnv(__DIR__ . (isProduction() ? '/.htpasswd.env.prod' : '/.htpasswd.env.dev'
 return [
     'newsletter_table' => 'krank_subscribers',
     'comments_table' => 'krank_comments',
+    'comments_rate_limit_table' => 'krank_comments_rate_limit',
+    'comments_settings_table' => 'krank_comments_settings',
 ];
