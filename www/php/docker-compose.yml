@@ -19,6 +19,12 @@ services:
   php:
     build: .
     container_name: phpserver
+    # The whole permissions thing is confusing. We need to map the user to host, otherwise Ubuntu will not create dirs.
+    # And if we use the regular www-data (ID:33) user to create the mounted /uploads dir with 0755, we cannot write files
+    # in it on Windows (since www-data counts as 'other', so Windows does not allow it to create files there).
+    # In production we would never want the www-data user to have admin privileges (the php server could be compromised),
+    # but this is the config for a purely development-side Docker container and switching between Ubuntu and Windows
+    # as dev environment has been annoying enough.
     user: "1000:1000" # container user ID == host user ID; Fixes PHP not being allowed to create new dir on Ubuntu
     ports:
       - "8080:80"
@@ -31,4 +37,3 @@ services:
 
 volumes:
   mariadb_data:
-

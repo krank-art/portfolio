@@ -155,6 +155,12 @@ To check the current MariaDB version:
 8. If you want to run Xdebug, install the vscode plugin *PHP Debug* and launch the debug config "Listen for Xdebug".
 
 
+### Folder or comment files do not get created
+
+It could be that you created the `/uploads` directory with the wrong permissons.
+Try renaming the current ones to `/uploads_old` and see if a new dir with correct uploading gets created.
+
+
 ### Rebuild PHP container
 
 * `sudo docker compose build php` -- rebuild PHP container (use with `--no-cache` to do clean rebuild)
