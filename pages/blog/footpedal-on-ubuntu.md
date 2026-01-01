@@ -22,3 +22,5 @@ Instructions to get your footpedal to work:
 9. This allows me to Alt + Tab by holding down on the left pedal and shortly tapping on the middle pedal.
 10. And it also allows me to Ctrl + Tab by holding the right pedal and shortly tapping on the middle pedal.
 
+A nice side effect is that ElfKey is an Electron app coming in at a whopping 105 MB.
+The github library should be like 2 MB in comparison lol.
