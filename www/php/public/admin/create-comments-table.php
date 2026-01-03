@@ -34,6 +34,7 @@ $settingsTableName = $config['comments_settings_table'];
             <a class="button-secondary" href="./">&larr; Go back to overview</a>
         </header>
         <?php
+        // We intentionally use TIMESTAMP and not DATETIME. See readme.md under "Known Issues" for reasoning.
         try {
             $pdo->exec("
                 CREATE TABLE IF NOT EXISTS $commentsTableName (
@@ -50,43 +51,49 @@ $settingsTableName = $config['comments_settings_table'];
                     submissionId CHAR(10)     NOT NULL
                 );
             "); // Important: no trailing comma in SQL statement
-            echo "✅ Table '$commentsTableName' created successfully (if already exists, nothing happened).";
+            echo "<p>✅ Table '$commentsTableName' created successfully (if already exists, nothing happened).</p>";
         } catch (PDOException $e) {
-            echo "❌ Error: " . $e->getMessage();
+            echo "<p>❌ Error: " . $e->getMessage() . "</p>";
         }
         try {
             $pdo->exec("
                 CREATE TABLE IF NOT EXISTS $rateLimitTableName (
-                    key_hash         CHAR(64) PRIMARY KEY,
-                    burst_count      INT      NOT NULL DEFAULT 0,
-                    mid_count        INT      NOT NULL DEFAULT 0,
-                    long_count       INT      NOT NULL DEFAULT 0,
-                    burst_expires_at DATETIME NOT NULL,
-                    mid_expires_at   DATETIME NOT NULL,
-                    long_expires_at  DATETIME NOT NULL,
-                    last_seen        DATETIME NOT NULL
+                    key_hash         CHAR(64)  PRIMARY KEY,
+                    burst_count      INT       NOT NULL DEFAULT 0,
+                    mid_count        INT       NOT NULL DEFAULT 0,
+                    long_count       INT       NOT NULL DEFAULT 0,
+                    burst_expires_at TIMESTAMP NOT NULL,
+                    mid_expires_at   TIMESTAMP NOT NULL,
+                    long_expires_at  TIMESTAMP NOT NULL,
+                    last_seen        TIMESTAMP NOT NULL
                 );
             "); // Important: no trailing comma in SQL statement
-            echo "✅ Table '$rateLimitTableName' created successfully (if already exists, nothing happened).";
+            echo "<p>✅ Table '$rateLimitTableName' created successfully (if already exists, nothing happened).</p>";
         } catch (PDOException $e) {
-            echo "❌ Error: " . $e->getMessage();
+            echo "<p>❌ Error: " . $e->getMessage() . "</p>";
         }
         try {
             $pdo->exec("
                 CREATE TABLE IF NOT EXISTS $settingsTableName (
-                    key_hash         CHAR(64) PRIMARY KEY,
-                    burst_count      INT      NOT NULL DEFAULT 0,
-                    mid_count        INT      NOT NULL DEFAULT 0,
-                    long_count       INT      NOT NULL DEFAULT 0,
-                    burst_expires_at DATETIME NOT NULL,
-                    mid_expires_at   DATETIME NOT NULL,
-                    long_expires_at  DATETIME NOT NULL,
-                    last_seen        DATETIME NOT NULL
+                    id                               TINYINT   NOT NULL PRIMARY KEY CHECK (id = 1),
+                    comment_attempt_count            INT       NOT NULL DEFAULT 0,
+                    comment_attempt_limit_expires_at TIMESTAMP DEFAULT NULL,
+                    last_comment_attempt_at          TIMESTAMP DEFAULT NULL
                 );
             "); // Important: no trailing comma in SQL statement
-            echo "✅ Table '$settingsTableName' created successfully (if already exists, nothing happened).";
+            echo "<p>✅ Table '$settingsTableName' created successfully (if already exists, nothing happened).</p>";
         } catch (PDOException $e) {
-            echo "❌ Error: " . $e->getMessage();
+            echo "<p>❌ Error: " . $e->getMessage() . "</p>";
+        }
+        try {
+            $pdo->exec("
+                INSERT INTO $settingsTableName (id, comment_limit_count, comment_limit_expires_at) 
+                SELECT 1, 0, UTC_DATE() + INTERVAL 1 DAY FROM DUAL
+                WHERE NOT EXISTS (SELECT 1 FROM $settingsTableName);
+            ");
+            echo "<p>✅ Added default settings into table '$settingsTableName' (if already exists, nothing happened).</p>";
+        } catch (PDOException $e) {
+            echo "<p>❌ Error: " . $e->getMessage() . "</p>";
         }
         ?>
         </div>

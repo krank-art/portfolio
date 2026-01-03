@@ -138,7 +138,7 @@ You need to install `nvm` (Node version manager), and use it to install at least
 6. Run `nvm use 16` to switch Node version to v16.
 
 
-## Run PHP dev environemnt
+## Run PHP dev environment
 
 The current target platform uses PHP with a MariaDB database.
 To check the current MariaDB version:
@@ -189,6 +189,30 @@ docker standard gateway and containers also fall into.
 * `sudo ufw allow from 172.16.0.0/12 to any port 9003 proto tcp` -- allow incoming requests
 * `sudo ufw delete N` -- deletes rule at line N (start at 1)
 
+If it still doesn't work, take a look at the networks that Docker initialized:
+
+* `sudo docker network ls` -- list all networks created by Docker
+* `sudo docker network inspect <network>` -- inspect a specific network; it will also list the PHP and MariaDB container with their IPv4 address
+
+
+## Connecting to database
+
+> **Note:** Make sure to install the MariaDB or MySQL client (CLI tool) first.
+
+* Connect to remote: `mysql -D <database> -u <username> -h <serverurl> -p`, then type in password.
+* Connect to local: 
+  * Check if database is running `docker ps -a`.
+  * If not, navigate into `www/php/` and run `docker compose up -d`.
+  * Connect to local database: `docker exec -it mariadb mysql -u exampleuser -pexamplepass`.
+* MySQL commands:
+  * `show databases;` -- shows available databases
+  * `use <database>;` -- use database
+  * `show tables;` -- show available tables in current database
+  * `describe <table>` -- describes columns in table
+  * `select * from <table>;` -- list all data in table
+  * `select * from <table> \G;` -- list all data in table in vertical (line by line) format
+  * `exit;` -- exit connection with database instance
+
 
 ## Deployment
 
@@ -220,6 +244,27 @@ Copy all files from `dist/` to target (excluding `debug/`, `test/`, `docker-comp
 * Add missing art pieces from 2019-2023.
 * Add category for gifts and prepare files.
 * Add comment feature with MiiVerse-like comment drawing.
+
+
+## Known issues
+
+The database uses `TIMESTAMP` instead of `DATETIME` to store timestamps.
+`TIMESTAMP` can only represent dates from 1970-01-01 00:00:00 UTC to 2038-01-19 03:14:07 UTC.
+As of writing this note, it is 2026-01-01, so in about 12 years the timestamp format does not work anymore.
+`TIMESTAMP` natively is UTC+0 whereas `DATETIME` is saved as local timezone in MariaDB.
+
+`DATETIME` could represent dates up to the year 9999, but usually is used for future events and specific days in history.
+If I use it, I need to add another step verifying when storing and reading a `DATETIME` that it is in the correct timezone.
+I need to ensure this programmatically (setting PHP server timezone) and also in the database with a column comment "in UTC+0".
+This adds new points of failure for 1) adding dates, 2) storing dates and 3) reading dates.
+
+In my eyes, it's not the developers fault that the implementation of a datatype like `TIMESTAMP` does have this quirky
+behaviour.
+I'm just gonna bank on the fact that the MariaDB group will release an update in time, that will turn it from 4 bytes
+to 8 bytes (so dates beyond the year 2038 can be stored).
+For now, `TIMESTAMP` will be the date type of choice.
+
+It is unclear if and when such an update would come, so I guess see you again in 12 years \(:
 
 
 ## See also

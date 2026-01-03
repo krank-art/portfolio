@@ -65,8 +65,8 @@ if (isset($_GET['logout'])) {
                         </small>
                     </li>
                     <li>
-                        <a href="./create-comments-table">💬➕ Create comments table</a><br>
-                        <small>Creates database table for drawn comments. If the table already exists, nothing happens.</small>
+                        <a href="./create-comments-table">💬➕ Create comments tables</a><br>
+                        <small>Creates database tables for drawn comments and rate limiting. If the tables already exists, nothing happens.</small>
                     </li>
                     <li>
                         <a href="./review-comments">💬📋 Review comments</a><br>

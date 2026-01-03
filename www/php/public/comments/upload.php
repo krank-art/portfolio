@@ -185,7 +185,7 @@ function storeFailedUpload($logFile, array $options)
         throw new Exception("Failed on fallback (saving image) " . $text);
 }
 
-function storeComment(callable $onError, array $storage, array $fields)
+function storeComment(callable $onError, array $storage, array $fields, array $rateLimitOptions)
 {
     $pdo = $storage['pdo'];
     $tableName = $storage['tableName'];
@@ -210,6 +210,7 @@ function storeComment(callable $onError, array $storage, array $fields)
         unlink($imagePath); // Rewind upload because we were not successful; ironically we will not handle unlink failing
         return false;
     }
+
     try {
         $stmt = $pdo->prepare(
             "INSERT INTO $tableName (created, imagePath, historyPath, target, approved, username, website, hash, submissionId) " .
@@ -229,12 +230,142 @@ function mpreg(string $url) {
     return preg_replace('/[^a-z0-9\/-]/', '', $url);
 }
 
-function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $uploadDir, $errorDir, array $webhookOpts = [])
+function checkRateLimitingGlobal(callable $onError, $pdo, array $rateLimitOptions) {
+    $requestTime = $rateLimitOptions['requestTime'];
+    $settingsTableName = $rateLimitOptions['settingsTableName'];
+    $globalLimit = $rateLimitOptions['globalLimit'];
+    $globalInterval = $rateLimitOptions['globalInterval'];
+    
+    $timestampFormat = 'Y-m-d H:i:s';
+    $globalExpiresAt = (clone $requestTime)->add($globalInterval)->format($timestampFormat);
+
+    try {
+        $stmt = $pdo->prepare("
+        INSERT INTO $settingsTableName (
+            id,
+            comment_attempt_count,
+            comment_attempt_limit_expires_at,
+            last_comment_attempt_at
+        )
+        VALUES (
+            1, 1, :comment_attempt_limit_expires_at, :now
+        )
+        ON DUPLICATE KEY UPDATE
+            comment_attempt_count = 
+                CASE WHEN comment_attempt_limit_expires_at < :now 
+                THEN 1 
+                ELSE comment_attempt_count + 1 END,
+            comment_attempt_limit_expires_at = 
+                CASE WHEN comment_attempt_limit_expires_at < :now 
+                THEN :comment_attempt_limit_expires_at 
+                ELSE comment_attempt_limit_expires_at END,
+            last_comment_attempt_at = :now
+
+        RETURNING
+            comment_attempt_count
+        ;");
+        $stmt->execute([
+            ':comment_attempt_limit_expires_at' => $globalExpiresAt,
+            ':now' => $requestTime->format($timestampFormat),
+        ]);
+        $results = $stmt->fetch(PDO::FETCH_ASSOC);
+        $globalCount = (int) $results['comment_attempt_count'];
+        if ($globalCount > $globalLimit) {
+            onError(429, "Too many comment requests (global)", "Comment rate limit globally exceeded");
+            return false;
+        }
+        return true;
+    } catch (PDOException $e) {
+        $onError(500, 'Database error', $e->getMessage());
+        return false;
+    }
+}
+
+function checkRateLimitingPerIP(callable $onError, $pdo, array $rateLimitOptions) {
+    $requestKey = $rateLimitOptions['requestKey'];
+    $requestTime = $rateLimitOptions['requestTime'];
+    $rateLimitTableName = $rateLimitOptions['rateLimitTableName'];
+    $burstLimit = $rateLimitOptions['burstLimit'];
+    $burstInterval = $rateLimitOptions['burstInterval'];
+    $midLimit = $rateLimitOptions['midLimit'];
+    $midInterval = $rateLimitOptions['midInterval'];
+    $longLimit = $rateLimitOptions['longLimit'];
+    $longInterval = $rateLimitOptions['longInterval'];
+
+    $timestampFormat = 'Y-m-d H:i:s';
+    $burstExpiresAt = (clone $requestTime)->add($burstInterval)->format($timestampFormat);
+    $midExpiresAt = (clone $requestTime)->add($midInterval)->format($timestampFormat);
+    $longExpiresAt = (clone $requestTime)->add($longInterval)->format($timestampFormat);
+
+    // if no record:
+    //   create record, set counters to 1, set expiration fields, set limits
+    // if record:
+    //   if any expiration fields have expired:
+    //     set according expired counters to 1
+    //     set according expiration fields to now + interval
+    //   if none expiration fields have expired:
+    //     increment counters
+    //     if any counter is larger than their according limit
+    //       reject
+
+    try {
+        $stmt = $pdo->prepare("
+        INSERT INTO $rateLimitTableName (
+            key_hash,
+            burst_count, burst_expires_at,
+            mid_count,   mid_expires_at,
+            long_count,  long_expires_at,
+            last_seen
+        )
+        VALUES (
+            :key_hash,
+            1, :burst_expires_at,
+            1, :mid_expires_at,
+            1, :long_expires_at,
+            :now
+        )
+        ON DUPLICATE KEY UPDATE
+            burst_count      = CASE WHEN burst_expires_at < :now THEN 1                 ELSE burst_count + 1  END,
+            burst_expires_at = CASE WHEN burst_expires_at < :now THEN :burst_expires_at ELSE burst_expires_at END,
+            mid_count        = CASE WHEN mid_expires_at < :now   THEN 1                 ELSE mid_count + 1    END,
+            mid_expires_at   = CASE WHEN mid_expires_at < :now   THEN :mid_expires_at   ELSE mid_expires_at   END,
+            long_count       = CASE WHEN long_expires_at < :now  THEN 1                 ELSE long_count + 1   END,
+            long_expires_at  = CASE WHEN long_expires_at < :now  THEN :long_expires_at  ELSE long_expires_at  END,
+            last_seen = :now
+    
+        RETURNING
+            burst_count, mid_count, long_count
+        ;");
+        $stmt->execute([
+            ':key_hash' => $requestKey,
+            ':burst_expires_at' => $burstExpiresAt,
+            ':mid_expires_at' => $midExpiresAt,
+            ':long_expires_at' => $longExpiresAt,
+            ':now' => $requestTime->format($timestampFormat),
+        ]);
+        $results = $stmt->fetch(PDO::FETCH_ASSOC);
+        $burstCount = (int) $results['burst_count'];
+        $midCount = (int) $results['mid_count'];
+        $longCount = (int) $results['long_count'];
+        if ($burstCount > $burstLimit || $midCount > $midLimit || $longCount > $longLimit) {
+            onError(429, "Too many comment requests", "Comment rate limit per IP exceeded");
+            return false;
+        }
+        return true;
+    } catch (PDOException $e) {
+        $onError(500, 'Database error', $e->getMessage());
+        return false;
+    }
+}
+
+function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $uploadDir, $errorDir, array $rateLimitOptions, array $webhookOpts = [])
 {
     $minorErrors = []; // minor error = validation fails; major error = failure saving, parsing, etc.
     $onMinorError = fn($code, $message, $internalMessage = null) => $minorErrors[] = [$code, $message, $internalMessage];
     //$onMajorError = fn()
 
+    // The request can be rejected on pretty much any step by calling onError
+    checkRateLimitingPerIP('onError', $pdo, $rateLimitOptions);
     handleAuthorization('onError', $validSecret);
     checkMissingArguments('onError', [
         "secret", 
@@ -277,6 +408,7 @@ function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $u
     $imagePathError = $errorDir . $imageName;
     $historyPathError = $errorDir . $historyName;
 
+    checkRateLimitingGlobal('onError', $pdo, $rateLimitOptions);
     storeComment('onError', [
         'pdo' => $pdo,
         'tableName' => $tableName,
@@ -290,7 +422,7 @@ function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $u
         'imagePath' => $imagePath,
         'historyPath' => $historyPath,
         'submissionId' => $submissionId,
-    ]);
+    ], $rateLimitOptions);
 
     $webhookOpts = array_merge([
         'id' => null,
@@ -314,8 +446,23 @@ $tableName = $config['comments_table'];
 
 // TIMESTAMP in MariaDB is always stored as date UTC+0, so we need to set the server timezone before adding to DB
 date_default_timezone_set('UTC');
-
-handleRequest($pdo, $tableName, $validSecret, 320, 120, $uploadDir, $errorDir, webhookOpts: [
+$rateLimitSecret = getEnv("COMMENTS_RATE_LIMIT_SECRET");
+$requestIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+$requestKey = hash_hmac('sha256', $requestIp, $rateLimitSecret, true);
+handleRequest($pdo, $tableName, $validSecret, 320, 120, $uploadDir, $errorDir, rateLimitOptions: [
+    'requestKey' => base64_encode($requestKey),
+    'requestTime' => new DateTime('now'),
+    'rateLimitTableName' => $config['comments_rate_limit_table'],
+    'settingsTableName' => $config['comments_settings_table'],
+    'burstLimit' => $config['comments_rate_limit_burst_count'],
+    'burstInterval' => $config['comments_rate_limit_burst_window'],
+    'midLimit' => $config['comments_rate_limit_mid_count'],
+    'midInterval' => $config['comments_rate_limit_mid_window'],
+    'longLimit' => $config['comments_rate_limit_long_count'],
+    'longInterval' => $config['comments_rate_limit_long_window'],
+    'globalLimit' => $config['comments_rate_limit_global_count'],
+    'globalInterval' => $config['comments_rate_limit_global_window'],
+], webhookOpts: [
     'id' => getenv("COMMENTS_DISCORD_WEBHOOK_ID"),
     'token' => getenv("COMMENTS_DISCORD_WEBHOOK_TOKEN"),
     'username' => "Krankobot",

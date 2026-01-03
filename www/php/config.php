@@ -21,4 +21,13 @@ return [
     'comments_table' => 'krank_comments',
     'comments_rate_limit_table' => 'krank_comments_rate_limit',
     'comments_settings_table' => 'krank_comments_settings',
+
+    'comments_rate_limit_burst_count' => 3,
+    'comments_rate_limit_burst_window' => new DateInterval('PT30S'),
+    'comments_rate_limit_mid_count' => 10,
+    'comments_rate_limit_mid_window' => new DateInterval('PT10M'),
+    'comments_rate_limit_long_count' => 30,
+    'comments_rate_limit_long_window' => new DateInterval('PT24H'),
+    'comments_rate_limit_global_count' => 120,
+    'comments_rate_limit_global_window' => new DateInterval('PT24H'),
 ];
