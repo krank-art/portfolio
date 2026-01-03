@@ -230,7 +230,7 @@ function mpreg(string $url) {
     return preg_replace('/[^a-z0-9\/-]/', '', $url);
 }
 
-function checkRateLimitingGlobal(callable $onError, $pdo, array $rateLimitOptions) {
+function checkRateLimitingGlobal(callable $onError, $pdo, array $rateLimitOptions, array $adminWebhookOpts = []) {
     $requestTime = $rateLimitOptions['requestTime'];
     $settingsTableName = $rateLimitOptions['settingsTableName'];
     $globalLimit = $rateLimitOptions['globalLimit'];
@@ -274,6 +274,14 @@ function checkRateLimitingGlobal(callable $onError, $pdo, array $rateLimitOption
         if ($globalCount <= $globalLimit) 
             return true;
         $remainingTimeAsString = formatTimeDistance($globalExpiresAt->getTimestamp());
+
+        // Send an alert to a special maintenance Discord channel
+        $webhookId = $adminWebhookOpts['id'] ?? null;
+        $webhookToken = $adminWebhookOpts['token'] ?? null;
+        $webhookUsername = $adminWebhookOpts['username'] ?? null;
+        $webhookMessage = $adminWebhookOpts['message'] ?? null;
+        if (isset($webhookId) && isset($webhookToken))
+            sendMessageToDiscordWebhook($webhookId, $webhookToken, $webhookUsername, $webhookMessage);
         
         onError(429, "Too many comment requests on site, please wait $remainingTimeAsString.", 
             "Comment rate limit globally exceeded");
@@ -411,8 +419,10 @@ function checkRateLimitingPerIP(callable $onError, $pdo, array $rateLimitOptions
     }
 }
 
-function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $uploadDir, $errorDir, array $rateLimitOptions, array $webhookOpts = [])
-{
+function handleRequest(
+    $pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $uploadDir, $errorDir, 
+    array $rateLimitOptions, array $pingWebhookOpts = [], array $adminWebhookOpts = []
+) {
     $minorErrors = []; // minor error = validation fails; major error = failure saving, parsing, etc.
     $onMinorError = fn($code, $message, $internalMessage = null) => $minorErrors[] = [$code, $message, $internalMessage];
     //$onMajorError = fn()
@@ -484,15 +494,15 @@ function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $u
     ], $rateLimitOptions);
     cleanupRateLimitTableByChance('onError', $pdo, $rateLimitOptions['rateLimitTableName'], 0.01);
 
-    $webhookOpts = array_merge([
+    $pingWebhookOpts = array_merge([
         'id' => null,
         'token' => null,
         'username' => null,
         'message' => null,
-    ], $webhookOpts);
-    if (isset($webhookOpts['id']) && isset($webhookOpts['token'])) {
-        $notificationMessage = sprintf($webhookOpts['message'], $target, $hash);
-        sendMessageToDiscordWebhook($webhookOpts['id'], $webhookOpts['token'], $webhookOpts['username'], $notificationMessage);
+    ], $pingWebhookOpts);
+    if (isset($pingWebhookOpts['id']) && isset($pingWebhookOpts['token'])) {
+        $notificationMessage = sprintf($pingWebhookOpts['message'], $target, $hash);
+        sendMessageToDiscordWebhook($pingWebhookOpts['id'], $pingWebhookOpts['token'], $pingWebhookOpts['username'], $notificationMessage);
     }
 }
 
@@ -522,10 +532,15 @@ handleRequest($pdo, $tableName, $validSecret, 320, 120, $uploadDir, $errorDir, r
     'longInterval' => $config['comments_rate_limit_long_window'],
     'globalLimit' => $config['comments_rate_limit_global_count'],
     'globalInterval' => $config['comments_rate_limit_global_window'],
-], webhookOpts: [
+], pingWebhookOpts: [
     'id' => getenv("COMMENTS_DISCORD_WEBHOOK_ID"),
     'token' => getenv("COMMENTS_DISCORD_WEBHOOK_TOKEN"),
     'username' => "Krankobot",
     'message' => '*🔔 A new comment was made on [krank.love%1$s](https://krank.love%1$s#comment-%2$s) !*',
+], adminWebhookOpts: [
+    'id' => getenv("ADMIN_DISCORD_WEBHOOK_ID"),
+    'token' => getenv("ADMIN_DISCORD_WEBHOOK_TOKEN"),
+    'username' => "Krankobot (Admin)",
+    'message' => '*⚠️ Global comment rate limit on the site has been exceeded*',
 ]);
 echo 'Upload successful!';
