@@ -262,7 +262,7 @@ function checkRateLimitingGlobal(callable $onError, $pdo, array $rateLimitOption
             last_comment_attempt_at = :now
 
         RETURNING
-            comment_attempt_count
+            comment_attempt_count, comment_attempt_limit_expires_at
         ;");
         $stmt->execute([
             ':comment_attempt_limit_expires_at' => $globalExpiresAt,
@@ -270,15 +270,59 @@ function checkRateLimitingGlobal(callable $onError, $pdo, array $rateLimitOption
         ]);
         $results = $stmt->fetch(PDO::FETCH_ASSOC);
         $globalCount = (int) $results['comment_attempt_count'];
-        if ($globalCount > $globalLimit) {
-            onError(429, "Too many comment requests (global)", "Comment rate limit globally exceeded");
-            return false;
-        }
-        return true;
+        $globalExpiresAt = getUTCFromSQLTimestamp($results['comment_attempt_limit_expires_at']);
+        if ($globalCount <= $globalLimit) 
+            return true;
+        $remainingTimeAsString = formatTimeDistance($globalExpiresAt->getTimestamp());
+        
+        onError(429, "Too many comment requests on site, please wait $remainingTimeAsString.", 
+            "Comment rate limit globally exceeded");
+        return false;
     } catch (PDOException $e) {
         $onError(500, 'Database error', $e->getMessage());
         return false;
     }
+}
+
+function cleanupRateLimitTableByChance(callable $onError, $pdo, $tableName, $probabilityPerRequest) {
+    $reciprocalProbability = (int) round(1 / $probabilityPerRequest);
+    $statementLimit = $reciprocalProbability * 2;
+    if (random_int(1, $reciprocalProbability) !== 1)
+        return;
+    try {
+        /* 
+        * This is a little imprecise. The burst, mid and long timers expire separately from each other. 
+        * It could happen that the burst and mid timers are still in action (e.g. the client has to wait
+        * 30 seconds or 10 minutes when the long timer has already expired (rollover from last day). 
+        * So we shouldn't delete the rate limit in that case. But since this is not that common to occur
+        * and we gain faster cleanup in this sneaky randomized request, we will simply ignore those cases
+        * in favor of faster execution speed.
+        */
+        $pdo->exec("
+            DELETE FROM $tableName
+            WHERE long_expires_at < NOW()
+            LIMIT $statementLimit;
+        ");
+    } catch (PDOException $e) {
+        $onError(500, 'Database error', $e->getMessage());
+    }
+}
+
+function getUTCFromSQLTimestamp($dateString): DateTime {
+    return DateTime::createFromFormat('Y-m-d H:i:s', $dateString, new DateTimeZone('UTC'));
+}
+
+function formatTimeDistance(int $ts): string {
+    $diff = max(0, $ts - time());
+    $hours = intdiv($diff, 3600);
+    $minutes = intdiv($diff % 3600, 60);
+    $seconds = $diff % 60;
+    $hUnit = $hours === 1 ? 'hour' : 'hours';
+    $mUnit = $minutes === 1 ? 'minute' : 'minutes';
+    $sUnit = $seconds === 1 ? 'second' : 'seconds';
+    if ($diff >= 3600) return sprintf('%d %s %d %s', $hours, $hUnit, $minutes, $mUnit);
+    if ($diff >= 60) return sprintf('%d %s %d %s', $minutes, $mUnit, $seconds, $sUnit);
+    return sprintf('%d %s', $seconds, $sUnit);
 }
 
 function checkRateLimitingPerIP(callable $onError, $pdo, array $rateLimitOptions) {
@@ -334,7 +378,8 @@ function checkRateLimitingPerIP(callable $onError, $pdo, array $rateLimitOptions
             last_seen = :now
     
         RETURNING
-            burst_count, mid_count, long_count
+            burst_count,      mid_count,      long_count,
+            burst_expires_at, mid_expires_at, long_expires_at
         ;");
         $stmt->execute([
             ':key_hash' => $requestKey,
@@ -347,11 +392,19 @@ function checkRateLimitingPerIP(callable $onError, $pdo, array $rateLimitOptions
         $burstCount = (int) $results['burst_count'];
         $midCount = (int) $results['mid_count'];
         $longCount = (int) $results['long_count'];
-        if ($burstCount > $burstLimit || $midCount > $midLimit || $longCount > $longLimit) {
-            onError(429, "Too many comment requests", "Comment rate limit per IP exceeded");
-            return false;
-        }
-        return true;
+        $burstExpiresAt = getUTCFromSQLTimestamp($results['burst_expires_at']);
+        $midExpiresAt = getUTCFromSQLTimestamp($results['mid_expires_at']);
+        $longExpiresAt = getUTCFromSQLTimestamp($results['long_expires_at']);
+        $relevantTimers = [];
+        if ($longCount > $longLimit)   array_push($relevantTimers, $longExpiresAt->getTimestamp());
+        if ($midCount > $midLimit)     array_push($relevantTimers, $midExpiresAt->getTimestamp());
+        if ($burstCount > $burstLimit) array_push($relevantTimers, $burstExpiresAt->getTimestamp());
+        if (count($relevantTimers) <= 0)
+            return true;
+        $biggestTimer = max($relevantTimers);
+        $remainingTimeAsString = formatTimeDistance($biggestTimer);
+        onError(429, "Too many comment requests, please wait $remainingTimeAsString.", "Comment rate limit per IP exceeded");
+        return false;
     } catch (PDOException $e) {
         $onError(500, 'Database error', $e->getMessage());
         return false;
@@ -408,7 +461,13 @@ function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $u
     $imagePathError = $errorDir . $imageName;
     $historyPathError = $errorDir . $historyName;
 
-    checkRateLimitingGlobal('onError', $pdo, $rateLimitOptions);
+    /*
+     * The global count works a bit different in that only successfully submitted comments are counted.
+     * While the rate limiting per IP counts any successful + failed request, the global site limit is per actual
+     * comments that *WOULD BE* saved in the database. This is to at least *limit* spam should it occur on this site. 
+     * ... Boy I really hope that this simple rate limiter will work as intended.
+     */
+    checkRateLimitingGlobal('onError', $pdo, $rateLimitOptions, $adminWebhookOpts);
     storeComment('onError', [
         'pdo' => $pdo,
         'tableName' => $tableName,
@@ -423,6 +482,7 @@ function handleRequest($pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $u
         'historyPath' => $historyPath,
         'submissionId' => $submissionId,
     ], $rateLimitOptions);
+    cleanupRateLimitTableByChance('onError', $pdo, $rateLimitOptions['rateLimitTableName'], 0.01);
 
     $webhookOpts = array_merge([
         'id' => null,
