@@ -60,15 +60,12 @@
 }
 
 .comment-aside {
-  margin-bottom: 0.25em;
+  margin-top: 0.25em;
 }
 
 .comment-referral {
-  position: relative;
-  bottom: 0.2em;
   display: block;
-  margin: 0 0.5em;
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
 
 .comment-date {
@@ -88,6 +85,7 @@
 .comment-image {
   max-width: 320px;
   height: auto;
+  image-rendering: pixelated;
 }
 
 .comment-approved {
