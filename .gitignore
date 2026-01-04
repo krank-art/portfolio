@@ -13,6 +13,7 @@ data/*-tags.json
 # Static files in PHP dev folder
 www/php/uploads/
 www/php/uploads_failed/
+www/php/uploads_deleted/
 www/php/public/*
 !www/php/public/newsletter/
 !www/php/public/newsletter/**

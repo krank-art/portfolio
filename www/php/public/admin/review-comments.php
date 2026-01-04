@@ -75,7 +75,27 @@ $offset = ($page - 1) * $perPage;
 
 $referrerData = getDataFromReferrer();
 
-if (isset($_GET['delete']))
+if (isset($_GET['delete'])) {
+    $hash = $_GET['hash'];
+    if (!isset($hash))
+        throw new InvalidArgumentException('Missing hash to delete');
+    $imageName = "comment_$hash.png";
+    $historyName = "comment_$hash.brsh";
+    $uploadDir = normalizePath(__DIR__ . '/../../uploads/');
+    $deletedDir = normalizePath(__DIR__ . '/../../uploads_deleted/');
+    if (!file_exists($deletedDir))
+        mkdir($deletedDir, 0755, true);
+    /*
+     * Note: Should there already be a file with the same name, then the target gets overwritten.
+     * It is rather rare that some randomly generated comments have the same hash, but it can happen.
+     * But since this is already the trash, we don't really care if it gets overwritten. We move the files instead
+     * of deleting them, because that is a very dangerous operation and I'd rather delete the trash via FTP occasionally.
+     */
+    if (!rename($uploadDir . $imageName, $deletedDir . $imageName))
+        throw new RuntimeException('Failed to move file: ' . $imageName);
+    if (!rename($uploadDir . $historyName, $deletedDir . $historyName))
+        throw new RuntimeException('Failed to move file: ' . $historyName);
+
     runActionAndRedirect([
         'pdo' => $pdo,
         'tableName' => $tableName,
@@ -88,6 +108,7 @@ if (isset($_GET['delete']))
             $stmt->execute();
         },
     ]);
+}
 
 if (isset($_GET['trash']))
     runActionAndRedirect([
@@ -182,122 +203,122 @@ try {
         <h1 class="admin-panel-heading"><?= $inTrashBin ? "Trash Bin" : "Comments" ?></h1>
         <?php /* <span class="page-label">(Page <?= $page ?> of <?= $totalPages ?>)</span> */ ?>
         <div class="admin-panel-body">
-        <header class="admin-panel-header">
-            <a class="button-secondary" href="./">&larr; Go back to overview</a>
-            <?php if ($inTrashBin): ?>
-                <a class="button-secondary" href="?bucket=comments">🗨️ Show comments</a>
-            <?php else: ?>
-                <a class="button-secondary" href="?bucket=trash">🗑️ Show trash bin</a>
-            <?php endif; ?>
-            <?php if ($totalPages > 1): ?>
-            <div class="pagination flex-end">
-                <span>page:</span>
-                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                    <?php if ($i == $page): ?>
-                        <strong class="button-like"><?= $i ?></strong>
-                    <?php else: ?>
-                        <a class="button-secondary" href="?page=<?= $i ?>"><?= $i ?></a>
-                    <?php endif; ?>
-                <?php endfor; ?>
-            </div>
-            <?php endif; ?>
-        </header>
-        <div class="table-container flush">
-            <?php if ($entries): ?>
-                <table class="table-striped">
-                    <thead>
-                        <th>ID</th>
-                        <th>Created</th>
-                        <th>Approved</th>
-                        <th>Trashed</th>
-                        <th>Target</th>
-                        <th>Username</th>
-                        <th>Website</th>
-                        <th>Image Path</th>
-                        <th>History Path</th>
-                        <th>Hash</th>
-                        <th>Submission ID</th>
-                        <th>Actions</th>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($entries as $index => $row): ?>
-                            <?php
-                            $getValue = fn($field) => $row[$field] ? htmlspecialchars($row[$field]) : null;
-                            $nullValue = '<span class="null" title="NULL">🚫</span>';
-                            $nullValueOptional = '<span class="null-optional" title="NULL (optional)">🚫</span>';
-                            $id = $getValue('id');
-                            $created = $getValue('created');
-                            $approved = $getValue('approved');
-                            $trashed = $getValue('trashed'); // Not required, optional field
-                            $target = $getValue('target');
-                            $username = $getValue('username');
-                            $website = $getValue('website'); // Not required, optional field
-                            $imagePath = $getValue('imagePath');
-                            $historyPath = $getValue('historyPath');
-                            $hash = $getValue('hash');
-                            $submissionId = $getValue('submissionId');
-                            $imagePathSrc = $imagePath ? str_replace($_SERVER["DOCUMENT_ROOT"], '', $imagePath) : null;
-                            $historyPathSrc = $historyPath ? str_replace($_SERVER["DOCUMENT_ROOT"], '', $historyPath) : null;
-                            $fields = [
-                                $id,
-                                $created,
-                                $approved,
-                                $target,
-                                $username,
-                                $imagePath,
-                                $historyPath,
-                                $hash,
-                                $submissionId,
-                                $imagePathSrc,
-                                $historyPathSrc
-                            ];
-                            $previousCommentIdIndex = $index === 0 ? 0 : $index - 1;
-                            $previousCommentId = $commentIds[$previousCommentIdIndex];
-                            $targetHash = "#comment-$previousCommentId"
-                            ?>
-                            <tr <?= $id ? 'id="comment-' . $id . '"' : '' ?> class="entry<?= in_array(null, $fields, true) ? ' faulty' : '' ?>">
-                                <td><?= $id ?? $nullValue ?></td>
-                                <td><?= $created ?? $nullValue ?></td>
-                                <td><?= $approved ?? $nullValue ?></td>
-                                <td><?= $trashed ?? $nullValueOptional ?></td>
-                                <td><a href="<?= $target ?>"><?= $target ?? $nullValue ?></a></td>
-                                <td><?= $username ?? $nullValue ?></td>
-                                <td><?= $website ?? $nullValueOptional ?></td>
-                                <td>
-                                    <img src="<?= $imagePathSrc ?>" width="320" height="120" alt="Image">
-                                    <b>Internal:</b> <?= $imagePath ?? $nullValue ?><br>
-                                    <b>Public:</b> <a href="<?= $imagePathSrc ?>"><?= $imagePathSrc ?? $nullValue ?></a>
-                                </td>
-                                <td>
-                                    <div class="comment-replayable" data-history-src="<?= $historyPathSrc ?>" data-playback-repeat="2000">
-                                    </div>
-                                    <b>Internal:</b> <?= $historyPath ?? $nullValue ?><br>
-                                    <b>Public:</b> <a href="<?= $historyPathSrc ?>"><?= $historyPathSrc ?? $nullValue ?></a>
-                                </td>
-                                <td><?= $hash ?? $nullValue ?></td>
-                                <td><?= $submissionId ?? $nullValue ?></td>
-                                <td class="actions-cell">
-                                    <?php if ($inTrashBin): ?>
-                                        <a class="button-danger" href="?delete=<?= $id . $targetHash ?>">Delete permanently</a>
-                                        <a class="button-primary" href="?restore=<?= $id . $targetHash ?>">Restore</a>
-                                    <?php else: ?>
-                                        <a class="button-primary" href="?trash=<?= $id . $targetHash ?>">Move to trash</a>
-                                        <?php if ($approved): ?>
-                                            <a class="button-primary" href="?disapprove=<?= $id . $targetHash ?>">Disapprove</a>
+            <header class="admin-panel-header">
+                <a class="button-secondary" href="./">&larr; Go back to overview</a>
+                <?php if ($inTrashBin): ?>
+                    <a class="button-secondary" href="?bucket=comments">🗨️ Show comments</a>
+                <?php else: ?>
+                    <a class="button-secondary" href="?bucket=trash">🗑️ Show trash bin</a>
+                <?php endif; ?>
+                <?php if ($totalPages > 1): ?>
+                    <div class="pagination flex-end">
+                        <span>page:</span>
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <?php if ($i == $page): ?>
+                                <strong class="button-like"><?= $i ?></strong>
+                            <?php else: ?>
+                                <a class="button-secondary" href="?bucket=<?= $bucket ?>&page=<?= $i ?>"><?= $i ?></a>
+                            <?php endif; ?>
+                        <?php endfor; ?>
+                    </div>
+                <?php endif; ?>
+            </header>
+            <div class="table-container flush">
+                <?php if ($entries): ?>
+                    <table class="table-striped">
+                        <thead>
+                            <th>ID</th>
+                            <th>Created</th>
+                            <th>Approved</th>
+                            <th>Trashed</th>
+                            <th>Target</th>
+                            <th>Username</th>
+                            <th>Website</th>
+                            <th>Image Path</th>
+                            <th>History Path</th>
+                            <th>Hash</th>
+                            <th>Submission ID</th>
+                            <th>Actions</th>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($entries as $index => $row): ?>
+                                <?php
+                                $getValue = fn($field) => $row[$field] ? htmlspecialchars($row[$field]) : null;
+                                $nullValue = '<span class="null" title="NULL">🚫</span>';
+                                $nullValueOptional = '<span class="null-optional" title="NULL (optional)">🚫</span>';
+                                $id = $getValue('id');
+                                $created = $getValue('created');
+                                $approved = $getValue('approved');
+                                $trashed = $getValue('trashed'); // Not required, optional field
+                                $target = $getValue('target');
+                                $username = $getValue('username');
+                                $website = $getValue('website'); // Not required, optional field
+                                $imagePath = $getValue('imagePath');
+                                $historyPath = $getValue('historyPath');
+                                $hash = $getValue('hash');
+                                $submissionId = $getValue('submissionId');
+                                $imagePathSrc = $imagePath ? str_replace($_SERVER["DOCUMENT_ROOT"], '', $imagePath) : null;
+                                $historyPathSrc = $historyPath ? str_replace($_SERVER["DOCUMENT_ROOT"], '', $historyPath) : null;
+                                $fields = [
+                                    $id,
+                                    $created,
+                                    $approved,
+                                    $target,
+                                    $username,
+                                    $imagePath,
+                                    $historyPath,
+                                    $hash,
+                                    $submissionId,
+                                    $imagePathSrc,
+                                    $historyPathSrc
+                                ];
+                                $previousCommentIdIndex = $index === 0 ? 0 : $index - 1;
+                                $previousCommentId = $commentIds[$previousCommentIdIndex];
+                                $targetHash = "#comment-$previousCommentId"
+                                ?>
+                                <tr <?= $id ? 'id="comment-' . $id . '"' : '' ?> class="entry<?= in_array(null, $fields, true) ? ' faulty' : '' ?>">
+                                    <td><?= $id ?? $nullValue ?></td>
+                                    <td><?= $created ?? $nullValue ?></td>
+                                    <td><?= $approved ?? $nullValue ?></td>
+                                    <td><?= $trashed ?? $nullValueOptional ?></td>
+                                    <td><a href="<?= $target ?>"><?= $target ?? $nullValue ?></a></td>
+                                    <td><?= $username ?? $nullValue ?></td>
+                                    <td><?= $website ?? $nullValueOptional ?></td>
+                                    <td>
+                                        <img src="<?= $imagePathSrc ?>" width="320" height="120" alt="Image">
+                                        <b>Internal:</b> <?= $imagePath ?? $nullValue ?><br>
+                                        <b>Public:</b> <a href="<?= $imagePathSrc ?>"><?= $imagePathSrc ?? $nullValue ?></a>
+                                    </td>
+                                    <td>
+                                        <div class="comment-replayable" data-history-src="<?= $historyPathSrc ?>" data-playback-repeat="2000">
+                                        </div>
+                                        <b>Internal:</b> <?= $historyPath ?? $nullValue ?><br>
+                                        <b>Public:</b> <a href="<?= $historyPathSrc ?>"><?= $historyPathSrc ?? $nullValue ?></a>
+                                    </td>
+                                    <td><?= $hash ?? $nullValue ?></td>
+                                    <td><?= $submissionId ?? $nullValue ?></td>
+                                    <td class="actions-cell">
+                                        <?php if ($inTrashBin): ?>
+                                            <a class="button-danger" href="?delete=<?= $id ?>&hash=<?= $hash . $targetHash ?>">Delete permanently</a>
+                                            <a class="button-primary" href="?restore=<?= $id . $targetHash ?>">Restore</a>
                                         <?php else: ?>
-                                            <a class="button-primary" href="?approve=<?= $id . $targetHash ?>">Approve</a>
+                                            <a class="button-primary" href="?trash=<?= $id . $targetHash ?>">Move to trash</a>
+                                            <?php if ($approved): ?>
+                                                <a class="button-primary" href="?disapprove=<?= $id . $targetHash ?>">Disapprove</a>
+                                            <?php else: ?>
+                                                <a class="button-primary" href="?approve=<?= $id . $targetHash ?>">Approve</a>
+                                            <?php endif; ?>
                                         <?php endif; ?>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php else: ?>
-                <p>No entries found.</p>
-            <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <p>No entries found.</p>
+                <?php endif; ?>
+            </div>
         </div>
-    </div>
     </div>
 
     <script type="text/javascript" src="/bundle.js"></script>
