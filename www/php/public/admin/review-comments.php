@@ -79,10 +79,10 @@ if (isset($_GET['delete'])) {
     $hash = $_GET['hash'];
     if (!isset($hash))
         throw new InvalidArgumentException('Missing hash to delete');
-    $imageName = "comment_$hash.png";
-    $historyName = "comment_$hash.brsh";
-    $uploadDir = normalizePath(__DIR__ . '/../../uploads/');
-    $deletedDir = normalizePath(__DIR__ . '/../../uploads_deleted/');
+    $imageName = sprintf($config['commentsImageName'], $hash);
+    $historyName = sprintf($config['commentsHistoryName'], $hash);
+    $uploadDir = $config['commentsUploadDir'];
+    $deletedDir = $config['commentsDeletedDir'];
     if (!file_exists($deletedDir))
         mkdir($deletedDir, 0755, true);
     /*
@@ -285,7 +285,7 @@ try {
                                     <td><?= $username ?? $nullValue ?></td>
                                     <td><?= $website ?? $nullValueOptional ?></td>
                                     <td>
-                                        <img src="<?= $imagePathSrc ?>" width="320" height="120" alt="Image">
+                                        <img class="comment-image" src="<?= $imagePathSrc ?>" width="320" height="120" alt="Image">
                                         <b>Internal:</b> <?= $imagePath ?? $nullValue ?><br>
                                         <b>Public:</b> <a href="<?= $imagePathSrc ?>"><?= $imagePathSrc ?? $nullValue ?></a>
                                     </td>

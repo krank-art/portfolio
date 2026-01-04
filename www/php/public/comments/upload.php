@@ -423,6 +423,7 @@ function handleRequest(
     $pdo, $tableName, $validSecret, $maxWidth, $maxHeight, $uploadDir, $errorDir, 
     array $rateLimitOptions, array $pingWebhookOpts = [], array $adminWebhookOpts = []
 ) {
+    global $config;
     $minorErrors = []; // minor error = validation fails; major error = failure saving, parsing, etc.
     $onMinorError = fn($code, $message, $internalMessage = null) => $minorErrors[] = [$code, $message, $internalMessage];
     //$onMajorError = fn()
@@ -464,8 +465,8 @@ function handleRequest(
     if (!file_exists($errorDir))
         mkdir($errorDir, 0755, true);
 
-    $imageName = "comment_$hash.png";
-    $historyName = "comment_$hash.brsh"; // ".brsh" = brush history
+    $imageName = sprintf($config['commentsImageName'], $hash);
+    $historyName = sprintf($config['commentsHistoryName'], $hash);
     $imagePath = $uploadDir . $imageName;
     $historyPath = $uploadDir . $historyName;
     $imagePathError = $errorDir . $imageName;
@@ -508,8 +509,8 @@ function handleRequest(
 
 // Configuration
 $validSecret = 'mySecret';
-$uploadDir = normalizePath(__DIR__ . '/../../uploads/');
-$errorDir = normalizePath(__DIR__ .  "/../../uploads_failed/");
+$uploadDir = $config['commentsUploadDir'];
+$errorDir = $config['commentsErrorDir'];
 $rawPagePath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $pathname = preg_replace('/\.[a-zA-Z0-9]+$/', '', $rawPagePath); // We want to strip file endings like '.html'
 $tableName = $config['comments_table'];
