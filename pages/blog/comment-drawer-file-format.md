@@ -1,3 +1,7 @@
+# Comment Drawer Brush History File Format
+
+> Written on 2025-04-20
+
 1st byte -- stroke info
 0000 0000
 ^ ^     ^
