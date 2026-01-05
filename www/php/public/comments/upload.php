@@ -508,6 +508,12 @@ function handleRequest(
 }
 
 // Configuration
+/* The secret is hard-coded and can simply be read from the developer tools. 
+ * There is no point in issuing a token, because there is no authentification and no user system.
+ * People can submit whatever they want and adding token issuing just adds one extra step of curling the
+ * token before sending in the form. But still, the 'secret' might provide a tiny amount of value by blocking
+ * out the laziest of automated spam requests that don't even bother to look up the secret.
+ */
 $validSecret = 'mySecret';
 $uploadDir = $config['commentsUploadDir'];
 $errorDir = $config['commentsErrorDir'];
