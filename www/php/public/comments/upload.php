@@ -132,6 +132,10 @@ function onError($code, $message, $internalMessage = null)
     //  We do not want to backup files tho if authorization failed, otherwise webcrawlers and others might spam the log; or check for GET
     error_log("$code $message" . $internalMessage ? " $internalMessage" : "");
     http_response_code($code);
+    if (getenv("APP_ENV") !== "dev") {
+        exit("Error " . $code);
+        return;
+    }
     exit($message);
 }
 
