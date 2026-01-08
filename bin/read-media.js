@@ -1,11 +1,14 @@
 import fs from 'fs';
 import path from 'path';
+import { createHash } from "node:crypto";
+import { createReadStream } from "node:fs";
 import sharp from 'sharp';
 import { getVibrantColorsInImage } from '../lib/image.js';
 import { getPathSafeName, replaceUmlauts, toKebabCase } from '../lib/string.js';
 import { parseJsonFile, writeObjectToFile } from '../lib/filesystem.js';
 import { Color } from '../lib/terminal.js';
 import { simplifyFraction } from '../lib/maths.js';
+
 
 class UniquePathing {
   constructor() {
@@ -55,7 +58,17 @@ function normalizeTime(time, resolution = 1000) {
   return new Date(normalizedTime);
 }
 
-async function processMediaFile({ filePath, fileType, fileName, extension, fileSize, fileModified }) {
+async function hashFile(path) {
+  return new Promise((resolve, reject) => {
+    const hash = createHash("sha256");
+    const stream = createReadStream(path);
+    stream.on("data", chunk => hash.update(chunk));
+    stream.on("end", () => resolve(hash.digest("base64url")));
+    stream.on("error", reject);
+  });
+}
+
+async function processMediaFile({ filePath, fileType, fileName, extension, fileSize, fileHash }) {
   if (fileType !== 'file') return;
   console.log(`${Color.Gray}Processing file '${Color.Reset + fileName + Color.Gray}' (${filePath}).${Color.Reset}`);
   // For file names like 'Bear Conductor 2021-05-09 Release.png'.
@@ -84,9 +97,10 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
     fileNameInternal: fileName,
     fileType: fileExtension,
     fileSize: fileSize,
-    // For some reason, the time code is not exactly the same when the files get copied via OneDrive.
-    // So we ignore all the milliseconds and only save full seconds.
-    fileModified: normalizeTime(fileModified),
+    // We used to have fileModified (mtime) here, but it is unreliable. Copy and pasting the file to a new repository
+    // also updates the mtime and it's impossible to sync up the different mtimes. Hash should be a lot more robust
+    // detecting if a file has changed (it's also more expensive to compute, but this doesn't happen often).
+    fileHash: fileHash,
     width: metadata.width,
     height: metadata.height,
     aspectRatio: aspectRatioInfo?.aspectRatio ?? null,
@@ -110,7 +124,8 @@ async function readMediaItem(filePath) {
   const extension = path.extname(filePath);
   const fileType = stats.isDirectory() ? 'dir' : 'file';
   const fileSize = stats.size;
-  return Promise.resolve({ filePath, fileType, fileName, extension, fileSize, fileModified: stats.mtime });
+  const fileHash = await hashFile(filePath);
+  return Promise.resolve({ filePath, fileType, fileName, extension, fileSize, fileHash });
 }
 
 async function readMediaInDir(dirPath, fileInfoByName = undefined) {
@@ -119,17 +134,22 @@ async function readMediaInDir(dirPath, fileInfoByName = undefined) {
   const files = await fs.promises.readdir(dirPath);
   for (const file of files) {
     const filePath = path.resolve(dirPath, file);
+    // Optimization to skip unchanged files
     if (fileInfoByName && fileInfoByName.has(file)) {
-      // Optimization to skip unchanged files
       const targetStats = fs.statSync(filePath);
-      const { size: targetSize, mtime: targetModified } = targetStats;
+      const { size: targetSize } = targetStats;
+      // It is very inefficient that we need to read the whole binary file. But otherwise I see no easy and reliable
+      // method to detect if the file has changed. mtime changes if files are copied, fingerprinting (reading first
+      // 64 KB and last 64 KB for the hash) only works *MOST* of the time, reading the headers + CRC of each chunk
+      // in the raw image files is finicky and error-prone (also needs external libraries to read custom formats).
+      // Usually importing art is only done a couple of times, since the two years this project has going on I've
+      // only done it about 10 times. So in that case it is fine to have heavy disk I/O.
+      const targetHash = await hashFile(filePath);
       const fileInfo = fileInfoByName.get(file);
-      const { size: sourceSize, modified: sourceModified } = fileInfo;
+      const { size: sourceSize, fileHash: sourceHash } = fileInfo;
       const sameSize = targetSize === sourceSize;
-      //const targetModifiedFloored = Math.floor(targetModified); // returns weird fractional millis
-      //const sameModified = sourceModified === targetModifiedFloored;
-      const sameModified = sourceModified === normalizeTime(targetModified).getTime();
-      if (sameSize && sameModified) continue;
+      const sameHash = targetHash === sourceHash;
+      if (sameSize && sameHash) continue;
     }
     if (file === "firefox_2020-03-17_23-56-08.png")
       1 + 1 // TODO: For some reason, the optimization does not work with this particular file. Gets read every time.
@@ -203,7 +223,7 @@ export default async function readMedia({ dirPath, outputFileName, skipUnchanged
     for (const oldMediaItem of oldMedia)
       oldMediaInfoByName.set(oldMediaItem.fileNameInternal, {
         size: oldMediaItem.fileSize,
-        modified: new Date(oldMediaItem.fileModified).getTime(),
+        fileHash: oldMediaItem.fileHash,
       });
   }
   const rereadMedia = await readMediaInDir(filePath, oldMediaInfoByName);
