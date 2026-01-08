@@ -246,6 +246,13 @@ function validateFile($commentHistory, array $options = []): array|bool
             if ($x > $maxWidth) $violations[] = "(STROKE $i POINT $j) X out of upper bounds: $x > $maxWidth";
             if ($y < $minHeight) $violations[] = "(STROKE $i POINT $j) Y out of lower bounds: $y < $minHeight";
             if ($y > $maxHeight) $violations[] = "(STROKE $i POINT $j) Y out of upper bounds: $y > $maxHeight";
+            // There is cases when the brush can actually move outside the canvas.
+            // Town has shown me, this happens when using a drawing pen, you can continue to draw outside the canvas.
+            // This should actually be fine, because brush stroke coordinates are delta encoded and as long as the 
+            // first point is inside the canvas, we can assume that all the other strokes also make sense.
+            // My guess is this is how the PointerEvent API behaves a little different than Touch and Mouse events.
+            // Observed on Microsoft Edge when using the Windows drawing pen.
+            break;
         }
     }
 
