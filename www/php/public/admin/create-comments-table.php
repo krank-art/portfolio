@@ -85,16 +85,6 @@ $settingsTableName = $config['comments_settings_table'];
         } catch (PDOException $e) {
             echo "<p>❌ Error: " . $e->getMessage() . "</p>";
         }
-        try {
-            $pdo->exec("
-                INSERT INTO $settingsTableName (id, comment_limit_count, comment_limit_expires_at) 
-                SELECT 1, 0, UTC_DATE() + INTERVAL 1 DAY FROM DUAL
-                WHERE NOT EXISTS (SELECT 1 FROM $settingsTableName);
-            ");
-            echo "<p>✅ Added default settings into table '$settingsTableName' (if already exists, nothing happened).</p>";
-        } catch (PDOException $e) {
-            echo "<p>❌ Error: " . $e->getMessage() . "</p>";
-        }
         ?>
         </div>
     </div>
