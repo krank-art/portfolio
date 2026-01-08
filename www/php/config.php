@@ -18,6 +18,8 @@ require_once __DIR__ . '/util.php';
 loadEnv(__DIR__ . (isProduction() ? '/.htpasswd.env.prod' : '/.htpasswd.env.dev'));
 
 return [
+    'errorLogFile'   => __DIR__ . '/errors.log', // normalizePaths() always adds trailing '/'
+
     'newsletter_table' => 'krank_subscribers',
     'comments_table' => 'krank_comments',
     'comments_rate_limit_table' => 'krank_comments_rate_limit',
