@@ -33,8 +33,9 @@ Basic usage: `npm run cli <command> <args?>`.
 
 * `clean`
   * Removes all files from `dist/` and `.cache/` (including the folders themselves).
-* `import:art`
+* `import:art <force?>`
   * Reads all files from `static/art/` and updates `data/media-art.json` accordingly.
+  * Unchanged files are skipped unless you add `forced` as argument (forces all entries to update).
   * If there is no `media-art.json` file, it gets created.
   * **Important:** Normal properties get overwritten, while **manual** properties are kept once created:
     * `title`: Displayed title of the art piece.
