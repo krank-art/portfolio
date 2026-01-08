@@ -127,15 +127,16 @@ function sanitizeText(callable $onError, string $text, array $options = [])
 
 function onError($code, $message, $internalMessage = null)
 {
+    global $errorLogPath;
     // TODO: Save failed request in log, so data could be retrieved
     //  It would be sad if someone spends considerable time drawing, only for the upload to fail and their data just being lost.
     //  We do not want to backup files tho if authorization failed, otherwise webcrawlers and others might spam the log; or check for GET
-    error_log("$code $message" . $internalMessage ? " $internalMessage" : "");
+    // WARNING: Do treat $message as public and $internalMessage as private. 
+    // We do not want to leak database details or PHP script details on an internal error.
+    $errorMessage = "$code $message" . ($internalMessage ? " $internalMessage" : "");
+    writeErrorLog($errorLogPath, $errorMessage);
+    error_log($errorMessage);
     http_response_code($code);
-    if (getenv("APP_ENV") !== "dev") {
-        exit("Error " . $code);
-        return;
-    }
     exit($message);
 }
 
@@ -524,6 +525,7 @@ $errorDir = $config['commentsErrorDir'];
 $rawPagePath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $pathname = preg_replace('/\.[a-zA-Z0-9]+$/', '', $rawPagePath); // We want to strip file endings like '.html'
 $tableName = $config['comments_table'];
+$errorLogPath = $config['errorLogFile'];
 
 // TIMESTAMP in MariaDB is always stored as date UTC+0, so we need to set the server timezone before adding to DB
 date_default_timezone_set('UTC');
