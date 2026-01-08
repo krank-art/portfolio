@@ -4,7 +4,6 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
             "type": "node",
             "request": "launch",
@@ -30,6 +29,21 @@
             "program": "${workspaceFolder}\\bin\\cli.js",
             "args": [
                 "build:art"
+            ],
+            "runtimeArgs": [
+                "--experimental-vm-modules"
+            ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Run art import",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/bin/cli.js",
+            "args": [
+                "import:art"
             ],
             "runtimeArgs": [
                 "--experimental-vm-modules"
@@ -103,7 +117,7 @@
             "request": "launch",
             "port": 9003, // Default for Xdebug 3.x
             "pathMappings": {
-                "/var/www/html": "${workspaceFolder}\\www\\php" // adjust based on your Docker setup
+                "/var/www/html": "${workspaceFolder}/www/php",
             }
         }
     ]
