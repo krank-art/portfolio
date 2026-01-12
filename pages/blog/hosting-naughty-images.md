@@ -8,20 +8,22 @@ Being sneaky is fun and **security through obscurity** is one strategy to handle
 It's just not very reliable or convenient.
 
 > **Table of Content**:
-- [Requirements](#requirements)
-  - [Whitelist](#whitelist)
-  - [Legality](#legality)
-  - [Encryption](#encryption)
-  - [Password](#password)
-- [Implementation](#implementation)
-  - [Custom File Type](#custom-file-type)
-  - [Source set](#source-set)
-  - [Path](#path)
-  - [Post data](#post-data)
-- [Version control](#version-control)
-  - [Backup](#backup)
-  - [Restore](#restore)
-- [Failed approach: Steganography](#failed-approach-steganography)
+- [Hosting NSFW images](#hosting-nsfw-images)
+  - [Requirements](#requirements)
+    - [Whitelist](#whitelist)
+    - [Legality](#legality)
+    - [Encryption](#encryption)
+    - [Password](#password)
+  - [Implementation](#implementation)
+    - [Custom File Type](#custom-file-type)
+    - [Source set](#source-set)
+    - [Path](#path)
+    - [Post data](#post-data)
+  - [Version control](#version-control)
+    - [Backup](#backup)
+    - [Restore](#restore)
+  - [User Experience](#user-experience)
+  - [Failed approach: Steganography](#failed-approach-steganography)
 
 
 Sharing my art with distinguished people usually happens by sending the file directly.
@@ -342,6 +344,97 @@ So to share the nsfw images and data between Git repositories:
 2. Navigate into `nsfw/` and fetch changes from bundle with `git fetch path/to/portfolio-nsfw.bundle`.
 3. Pull changes after review with `git pull path/to/portfolio-nsfw.bundle`.
 4. Copy Git LFS objects into `nsfw/static/`.
+
+
+## User Experience
+
+When the user provides a password in the nsfw overview page, it is not clear what post can be unlocked with it.
+Instead the browser will start generating an AES-128 key for each thumbnail and try decrypting it.
+Kinda like you get handed a big keychain and then you try to see on which locks the key works on.
+
+This is a lengthy process by design, the key derivation is what provides the security with AES-128-GCM.
+So if a post could successfully be unlocked, we wanna save it in a key cache in localStorage``.
+Saving the derived key instead of the password lets us skip the lengthy derivation the next time and also guarantees 
+that no password is being saved as clear text.
+
+Problem is, that we need to derive all keys at once and cannot queue them in a pipeline (even though thats the time-intense step).
+That means on the overview page, we need to implement a progress bar and/or status feedback, so the user knows that the decryption
+is still ongoing.
+
+This key cache is then saved in local storage, so on repeated loads the content gets decrypted almost immediately.
+The key cache would be a Map, so values are sorted by key, value (URL, base64 encoded AES-128 hash).
+Here is the example structure in JSON:
+
+```json
+{
+  "version": 1,
+  "lastAccessed": 1768235276970,
+  "cache": {
+    // The original media file. If the user visists on desktop, most likely this 
+    // will get transferred and decrypted.
+    "/media/nsfw/bun-fun.png.enc": "C7C7Ye8j6rCXzqhpGqf0ng==",
+    
+    // We use source sets as bandwidth optimization. This also means that we need 
+    // to derive a new key for each variant. We actually need to implement custom 
+    // source set loading, since the binary files are not natively handled.
+    // Only one of these will be loaded if the screen width is smaller than 1920p 
+    // and unless the viewport resizes a lot.
+    "/media/nsfw/120p/bun-fun.png.enc": "lqjkjRtpUcREuQ+RDUpmLg==",
+    "/media/nsfw/240p/bun-fun.png.enc": "yb2reK34MErqhnnE+Zbv6g==",
+    "/media/nsfw/480p/bun-fun.png.enc": "vnCR8egHxVUGRILY5LPgEg==",
+    "/media/nsfw/960p/bun-fun.png.enc": "TBKX4CBSKIZn4FQh/PUxBA==",
+    "/media/nsfw/1440p/bun-fun.png.enc": "4uubhL7G6ytLKyuJ+iq/wg==",
+    "/media/nsfw/s160p/bun-fun.png.enc": "TNEvB1Em04A61vzNuQ5Qvw==",
+
+    // This represents all the post information like title, description, image 
+    // dimensions, palette, tags, etc. Since this meta data describes the contents 
+    // of the media item, we need to encrypt it too
+    "/data/nsfw/bun-fun.json.enc": "VDu6VYpOAHwk5cxg04VBMw==",
+
+    // JSON data to build the comment list. We dont want to expose who commented on 
+    // naughty art, this needs to be encrypted too. Since the target parameter 
+    // includes "nsfw", we will return a .JSON.ENC file from the PHP endpoint.
+    "/api/comments?target=/nsfw/bun-fun": "KXKNMI79aGggCbe2PtXQ0w==",
+
+    // Binary files for each individual comment, these get loaded via a custom 
+    // encryption serving script. We will need to adapt `.htaccess`, so raw 
+    // unencrypted files are not served, and only .ENC types.
+    // The amount of sent files scales with the amount of comments.
+    "/uploads_nsfw/comment_LGa6DJFZOww.png.enc": "uvNvI5M38HXEI92Qum3gKg==",
+    "/uploads_nsfw/comment_LGa6DJFZOww.brsh.enc": "pdpGCAaTxxrI4g5gV6Qb0Q=="
+  }
+}
+```
+
+So when requesting an encrypted post, you'll end up with these HTTP calls for example:
+
+| URL                                          | Description        |
+| -------------------------------------------- | ------------------ |
+| `/media/nsfw/bun-fun.png.enc`                | Image file         |
+| `/data/nsfw/bun-fun.json.enc`                | Image data         |
+| `/api/comments?target=/nsfw/bun-fun`         | Comment data       |
+| `/uploads_nsfw/comment_LGa6DJFZOww.png.enc`  | Comment #1 image   |
+| `/uploads_nsfw/comment_LGa6DJFZOww.brsh.enc` | Comment #1 history |
+| `/uploads_nsfw/comment_HfMegZ6A46R.png.enc`  | Comment #2 image   |
+| `/uploads_nsfw/comment_HfMegZ6A46R.brsh.enc` | Comment #2 history |
+
+We need to keep in mind that localStorage has a size limit of about 2-5 MB per origin.
+I did a rough size test with a 100 posts in the cache, all source sets variants loaded and a single comment each.
+It came out at 136 KB (localStorage is UTF16 encoded sadly), so with a safety margin we can assume that 100 posts take up 200 KB in the local storage.
+That means the pratical maximum for the key cache would be 1 MB (500 posts).
+For now that should be sufficient, but that limit is definitely reachable (as of now, there are 512 SFW art posts).
+
+Ok I just learned about IndexedDB and I wanna try using it since this seems a lot more sensible approach to store this amount of data
+instead of in local storage that seems to be intended more like settings, bookmarks and other utility functions.
+
+I particularly like that you can use compound keys for the key-value pairs to build up hierarchy, e.g.
+
+```js
+["post", "bun-fun", "image", "original"]
+["post", "bun-fun", "image", "120"]
+["post", "bun-fun", "meta"]
+["post", "bun-fun", "comment", commentId]
+```
 
 
 ## Failed approach: Steganography
