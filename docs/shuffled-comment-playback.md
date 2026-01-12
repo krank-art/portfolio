@@ -1,5 +1,14 @@
-Shuffled comment playback
- written on 2025-06-26
+# Shuffled comment playback
+Written on 2025-06-26
+
+> **WIP:** 
+> I need to rethink this, so the orchestrator has a pool of animation players at hand.
+> If the orchestrator dump the FPS speed too much, they should reduce the pool size dynamically.
+> For that we can calculate the rolling FPS (last 10 frames).
+> 
+> **WIP2:**
+> I have implemented this but in a simplified form now. In currently visible comments, take one
+> at random and play animation. Try to avoid last played comment.
 
  we have list of elements that  are in an animation pool.
  only one item gets animated at a time.
