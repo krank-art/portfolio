@@ -352,6 +352,10 @@ When the user provides a password in the nsfw overview page, it is not clear wha
 Instead the browser will start generating an AES-128 key for each thumbnail and try decrypting it.
 Kinda like you get handed a big keychain and then you try to see on which locks the key works on.
 
+With our current design, each post gets a unique salt.
+That means, all subrequests for a post have the same derived key from password + salt.
+The nonce guarantees that each cipher encryption is unique and the authentification tag proves that the cipher has not been tempered with.
+
 This is a lengthy process by design, the key derivation is what provides the security with AES-128-GCM.
 So if a post could successfully be unlocked, we wanna save it in a key cache in localStorage``.
 Saving the derived key instead of the password lets us skip the lengthy derivation the next time and also guarantees 
@@ -361,9 +365,31 @@ Problem is, that we need to derive all keys at once and cannot queue them in a p
 That means on the overview page, we need to implement a progress bar and/or status feedback, so the user knows that the decryption
 is still ongoing.
 
-This key cache is then saved in local storage, so on repeated loads the content gets decrypted almost immediately.
+This key cache is then saved in IndexedDB, so on repeated loads the content gets decrypted almost immediately 
+(decrypting a cipher with the key is super fast on current hardware).
 The key cache would be a Map, so values are sorted by key, value (URL, base64 encoded AES-128 hash).
-Here is the example structure in JSON:
+Here is the proposed structure in JSON:
+
+```js
+// Key
+["post", "nsfw", "bun-fun"];
+
+// Value
+{
+  url: string;            // primary key (post or resource URL)
+  key: ArrayBuffer;       // raw AES key bytes (16 bytes)
+  lastUsed: number;       // unix timestamp (ms)
+  version: number;        // cache schema version
+}
+```
+
+16^4 (hex, 4 digits) = 65536
+
+https://krank.love/nsfw/P4XS
+
+C4WPN7LA
+T5GMH2EV
+Z6KQP4XS
 
 ```json
 {
