@@ -19,6 +19,7 @@ It's just not very reliable or convenient.
     - [Source set](#source-set)
     - [Path](#path)
     - [Post data](#post-data)
+  - [Folder structure](#folder-structure)
   - [Version control](#version-control)
     - [Backup](#backup)
     - [Restore](#restore)
@@ -295,6 +296,76 @@ I cannot display them in plain text, because a viewer could deduce a lot of info
 We will encrypt the metadata too  and restore them if the correct password is provided.
 
 
+## Folder structure
+
+```ini
+static/               # Folder for binary media files
+  240p/               # Includes subfolders for resizesets
+  480p/
+  bun-fun.png
+temp/                 # Intermediary step; We need to rename files + prepare
+encryption-sets.json  # Defines which password unlocks which post
+media-nsfw.json       # Title, meta data, manually written description, etc.
+```
+
+`encryption-sets.json`:
+```js
+[{ password: "supersecret123",
+   title: "General naughty art",
+   posts: [ "bun-fun", "sticky-situation", "foxy-after-dark" ]},
+{ password: "bananabread42",
+  title: "Experimental",
+  posts: [
+    [ "nsfw/240p/crazy-art.webm", "nsfw/crazy-art.png", "nsfw/data/crazy-art.json"],
+  ]}];
+```
+
+Posts have the same structure as posts in `data/media-art.json`.
+Additionally they have two more fields:
+
+* `pathHash` since the actual `path` is considered private too.
+* `fileNameEncrypted` to hide the pathname + date.
+
+`media-nsfw.json`:
+```js
+[{ active: true,
+   path: "bun-fun",
+   pathHash: "P4XS",
+   date: "2023-12-30",
+   fileNamePublic: "bun-fun_2023-12-30.png",
+   fileNameInternal: "Bun Fun 2023-12-30 Release.png",
+   fileNameEncrypted: "P4XS.png.enc",
+   fileType: "png",
+   fileSize: 1470698,
+   fileHash: "dZOjRTmxfieTSYIClV9tejJeVDb4fph_yiJZYtVpcSk",
+   width: 2400,
+   height: 2400,
+   aspectRatio: "1:1",
+   orientation: "square",
+   ratioFactor: 1,
+   vibrantColors: {
+     vibrant: "#d0b44c",
+     darkVibrant: "#594728",
+     lightVibrant: "#a6d0de",
+     muted: "#5f90a1",
+     darkMuted: "#6b5930",
+     lightMuted: "#cdb3ac"
+   },
+   title: "Kageki Creampie",
+   description: [
+     "Here is a very cool description of the nsfw art post ",
+     "It's actually an array of strings to make semantic formatting easier."
+   ],
+   tags: [
+     "cheeseCake", "cocky", "colored", "digitalArt", "food", "gift",
+     "krita", "pokemon", "purple", "sableye", "smiling", "yellow"
+   ],
+   imageAlt: "Cute buns having fun!",
+   palette: [] }]
+```
+
+
+
 ## Version control
 
 It would be awkward to spend so much energy on encryption, but then visitors can just go to my Github and read all the information in plaintext.
@@ -376,12 +447,52 @@ Here is the proposed structure in JSON:
 
 // Value
 {
-  url: string;            // primary key (post or resource URL)
-  key: ArrayBuffer;       // raw AES key bytes (16 bytes)
-  lastUsed: number;       // unix timestamp (ms)
-  version: number;        // cache schema version
+  pathHash: string;  // Unique Base32 hash (primary key)
+  key: ArrayBuffer;  // raw AES key bytes (16 bytes)
+  created: number;   // unix timestamp (ms); first successful decryption
+  lastUsed: number;  // unix timestamp (ms); last successful decryption
+  version: number;   // cache schema version (should be 1; useful for migrations)
+  title: string;     // readable title so navigation shows meaningful name
+  pathName: string;  // readable pathname (the actual internal ID)
+  tags: string[];    // gets aggregated on overview page with all known tags
 }
 ```
+
+Example key-value in IndexedDB store:
+```js
+["post", "nsfw", "bun-fun"];
+{
+  pathHash: "P4XS",
+  key: CryptoKey,
+  created: 1768492360270,
+  lastUsed: 1768492360270,
+  version: 1,
+  title: "Bun Fun",
+  pathName: "bun fun",
+  tags: [
+    "cheeseCake", "cocky", "colored", "digitalArt", "food", "gift",
+    "krita", "pokemon", "purple", "sableye", "smiling", "yellow"
+  ],
+}
+```
+
+For the actual decryption process on the overview page, we will not actually decrypt the thumbnail images.
+Rather we will attempt to decrypt `media/nsfw/HASH.json.enc`, since we will get some helpful information in the process 
+which we can use to make the posts in the overview page and in the navigation readable.
+Once we have proven that the current key works to decrypt the current post, we can easily store it in the IndexedDB
+and then decrypt the thumbnail image, so the user can actually see what they have just unlocked (:
+
+The tags are also super helpful because we can aggregate them to build the familiar tag filtering list.
+Each unlocked post actually updates the current tag list and makes the post sortable.
+Sweet!
+
+Keep in mind that on the user side there will be no information left what the underlying encryption sets are.
+They simply have a list of unlocked posts and they don't know which encryption list they belong to internally.
+That also means there is only one password input field and the passwords are immediately forgotten after trying all posts with it.
+
+Cycling through all posts also takes considerable time due to the pbkdf2, so just spamming passwords will not allow users
+to unlock posts at random (lol, good luck poor interested fellas).
+We will also store
 
 16^4 (hex, 4 digits) = 65536
 
@@ -390,6 +501,17 @@ https://krank.love/nsfw/P4XS
 C4WPN7LA
 T5GMH2EV
 Z6KQP4XS
+
+Since the path name also reveals information about the contents (e.g. `/art/krystal-sandwich`), we need a non-descript ID.
+We could use the sequential upload number, but I actually prefer using a four digit base32 random number.
+It should always be displayed in uppercase, in URL, HTML file name and on the site preview when link shows embed.
+There is a few special rules, like I need to make sure the hashes do not accidentally form reserved filenames 
+(e.g. `COM2`, `LPT5` on [Windows](https://learn.microsoft.com/en-US/windows/win32/fileio/naming-a-file#file-and-directory-names)),
+special names like `NULL` might have [unforseen consequences](https://arstechnica.com/cars/2019/08/wiseguy-changes-license-plate-to-null-gets-12k-in-parking-tickets/))
+and *theoretically* I could have a profanity filter for words like `DICK`, `C0CK`, `T1TS`, etc.
+Landing any of these is quite rare with a hash range from 1 to 32^4 (1,048,576), but it's actually not that unlikely 
+there is at least 1 match in any of these categories.
+
 
 ```json
 {
