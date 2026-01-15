@@ -27,6 +27,7 @@ const pathing = Object.freeze({
   artTags: path.resolve('data/art-tags.json'),
   artImport: path.resolve("static/art"),
   artProcessed: path.resolve("dist/media/art"),
+  nsfwImport: path.resolve("nsfw/static"),
   nsfwInput: path.resolve("nsfw"),
   nsfwOutput: path.resolve("dist/media/nsfw"),
   nsfwData: path.resolve("nsfw/media-nsfw.json"),
@@ -106,9 +107,18 @@ export async function handleCommand(command, ...args) {
     case "import:art":
       const updateAllMediaImport = args[0] && args[0] === "force";
       await readMedia({
-        dirPath: pathing.artImport,
-        outputFileName: "media-art",
+        mediaDir: pathing.artImport,
+        dataPath: pathing.artData,
         skipUnchanged: !updateAllMediaImport,
+      });
+      break;
+    case "import:nsfw":
+      const updateAllNsfwImport = args[0] && args[0] === "force";
+      await readMedia({
+        mediaDir: pathing.nsfwImport,
+        dataPath: pathing.nsfwData,
+        skipUnchanged: !updateAllNsfwImport,
+        isEncrypted: true,
       });
       break;
     case "watch":

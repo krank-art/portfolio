@@ -4,13 +4,16 @@ import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
 import sharp from 'sharp';
 import { getVibrantColorsInImage } from '../lib/image.js';
-import { getPathSafeName, replaceUmlauts, toKebabCase } from '../lib/string.js';
+import { getPathSafeName, toBase32 } from '../lib/string.js';
 import { parseJsonFile, writeObjectToFile } from '../lib/filesystem.js';
 import { Color } from '../lib/terminal.js';
 import { simplifyFraction } from '../lib/maths.js';
 
 
+
 class UniquePathing {
+  // Uhm, this actually can't be preloaded with hashes already present in the file.
+  // I suppose this is fine, since the media item paths are deterministic, so there is no need to remember previous paths.
   constructor() {
     this.paths = new Set();
   }
@@ -92,9 +95,11 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
   return Promise.resolve({
     active: imageTypeIsSupported,
     path: mediaName,
+    pathHash: undefined,
     date: mediaDate,
     fileNamePublic: fileNamePublic,
     fileNameInternal: fileName,
+    fileNameEncrypted: undefined,
     fileType: fileExtension,
     fileSize: fileSize,
     // We used to have fileModified (mtime) here, but it is unreliable. Copy and pasting the file to a new repository
@@ -128,14 +133,20 @@ async function readMediaItem(filePath) {
   return Promise.resolve({ filePath, fileType, fileName, extension, fileSize, fileHash });
 }
 
-async function readMediaInDir(dirPath, fileInfoByName = undefined) {
+async function readMediaInDir({ dirPath, fileInfoByName = undefined, isEncrypted = false, skipUnchanged = false }) {
   const media = [];
   const pathing = new UniquePathing();
+  const knownHashes = new Set();
+  if (fileInfoByName) fileInfoByName.forEach(fileInfo => {
+    const { pathHash } = fileInfo;
+    if (!pathHash) return;
+    knownHashes.add(pathHash);
+  });
   const files = await fs.promises.readdir(dirPath);
   for (const file of files) {
     const filePath = path.resolve(dirPath, file);
     // Optimization to skip unchanged files
-    if (fileInfoByName && fileInfoByName.has(file)) {
+    if (skipUnchanged && fileInfoByName && fileInfoByName.has(file)) {
       const targetStats = fs.statSync(filePath);
       const { size: targetSize } = targetStats;
       // It is very inefficient that we need to read the whole binary file. But otherwise I see no easy and reliable
@@ -159,10 +170,26 @@ async function readMediaInDir(dirPath, fileInfoByName = undefined) {
     const uniqueFileName = mediaItem.fileNamePublic.replace(mediaItem.path, uniquePath);
     mediaItem.fileNamePublic = uniqueFileName;
     mediaItem.path = uniquePath;
+    // Add extra fields if media is intended for encryption
+    if (isEncrypted) {
+      const uniqueHash = getMediaItemHash(knownHashes, mediaItem, fileInfoByName);
+      knownHashes.add(uniqueHash);
+      mediaItem.pathHash = uniqueHash;
+      mediaItem.fileNameEncrypted = `${uniqueHash}.${mediaItem.fileType}.enc`;
+    }
     // Add to media list
     media.push(mediaItem);
   }
   return media;
+}
+
+function getMediaItemHash(knownHashes, mediaItem, fileInfoByName) {
+  if (!fileInfoByName) return getPathHash(knownHashes);
+  const fileInfo = fileInfoByName.get(mediaItem.fileNameInternal);
+  if (!fileInfo) return getPathHash(knownHashes);
+  const { pathHash } = fileInfo;
+  if (!pathHash) return getPathHash(knownHashes);
+  return pathHash;
 }
 
 function mergeMediaItems(oldMediaItem, newMediaItem, preservedProps) {
@@ -194,47 +221,74 @@ function mergeMedia(oldMedia, newMedia, preservedProps) {
   return Array.from(mergedMediaByPath.values());
 }
 
-export default async function readMedia({ dirPath, outputFileName, skipUnchanged = false }) {
+function getPathHash(knownCodes = new Set()) {
+  // Based on the blacklisted words in Minecraft Bedrock Edition
+  const profaneHashes = new Set([
+    "4ID5", "4IDS", "5TD5", "5TDS", "88AD", "88HH", "8HH8", "AD88",
+    "AID5", "AIDS", "BAMF", "D4GO", "DAGO", "DYKE", "GOOK", "H88H",
+    "HH88", "HITL", "JOTO", "KIK3", "KIKE", "M3TH", "METH", "MONG",
+    "N4ZI", "N4ZL", "N66R", "N6GR", "NAZI", "NAZL", "NG6R", "NGGR",
+    "NI66", "NI6G", "NIG6", "NIGG", "P3DO", "P4KI", "PAKI", "PEDO",
+    "R4IP", "R4P3", "R4PE", "RAIP", "RAP3", "RAPE", "STD5", "STDS",
+  ]);
+  // https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file#file-and-directory-names
+  const reservedHashes = new Set([
+    "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+    "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
+    "NULL",
+  ]);
+  const digits = 4;
+  for (let attempt = 0; attempt < 10; attempt++) {
+    let hash = "";
+    const randomNumber = Math.floor(Math.random() * (32 ** digits));
+    hash = toBase32(randomNumber).padStart(digits, "A");
+    if (knownCodes.has(hash)) continue;
+    if (reservedHashes.has(hash)) continue;
+    if (profaneHashes.has(hash)) continue;
+    return hash;
+  }
+  throw new Error(`Exceeded max tries to generate a ${digits} digit Base32 hash. `);
+}
+
+export default async function readMedia({ mediaDir, dataPath, skipUnchanged = false, isEncrypted = false }) {
   // Step 1 -- Check parameters and setup source + target
-  if (!dirPath) {
+  if (!mediaDir) {
     console.error(`No directory for media files specified. Aborting. `);
     return;
   }
-  if (!fs.existsSync(dirPath)) {
-    console.log(`Directory '${dirPath}' does not exist. Aborting. `);
+  if (!fs.existsSync(mediaDir)) {
+    console.log(`Directory '${mediaDir}' does not exist. Aborting. `);
     return;
   }
-  const filePath = path.resolve(dirPath);
-  const targetFile = path.resolve(process.cwd(), "data", outputFileName + '.json');
+  const filePath = path.resolve(mediaDir);
   const mediaSorter = (a, b) => b.path < a.path;
 
   // Step 2 -- Read in all files if no media
-  if (!fs.existsSync(targetFile)) {
-    const media = await readMediaInDir(filePath);
-    console.log(Color.Green + `Creating media file '${targetFile}'. ` + Color.Reset);
-    writeObjectToFile(targetFile, media.sort(mediaSorter), true);
+  if (!fs.existsSync(dataPath)) {
+    const media = await readMediaInDir({ dirPath: filePath, isEncrypted });
+    console.log(Color.Green + `Creating media file '${dataPath}'. ` + Color.Reset);
+    writeObjectToFile(dataPath, media.sort(mediaSorter), true);
     return;
   }
 
   // Step 3 -- Read in changed or new files and exit if nothing new
-  const oldMedia = parseJsonFile(targetFile);
+  const oldMedia = parseJsonFile(dataPath);
   const oldMediaInfoByName = new Map();
-  if (skipUnchanged) {
-    for (const oldMediaItem of oldMedia)
-      oldMediaInfoByName.set(oldMediaItem.fileNameInternal, {
-        size: oldMediaItem.fileSize,
-        fileHash: oldMediaItem.fileHash,
-      });
-  }
-  const rereadMedia = await readMediaInDir(filePath, oldMediaInfoByName);
+  for (const oldMediaItem of oldMedia)
+    oldMediaInfoByName.set(oldMediaItem.fileNameInternal, {
+      size: oldMediaItem.fileSize,
+      fileHash: oldMediaItem.fileHash,
+      pathHash: oldMediaItem.pathHash ?? undefined,
+    });
+  const rereadMedia = await readMediaInDir({ dirPath: filePath, fileInfoByName: oldMediaInfoByName, isEncrypted, skipUnchanged });
   if (rereadMedia.length === 0) {
-    console.log(Color.Gray + `No new media found. Unchanged '${targetFile}'. ` + Color.Reset);
+    console.log(Color.Gray + `No new media found. Unchanged '${dataPath}'. ` + Color.Reset);
     return;
   }
 
   // Step 4 - Merge with manual edits if media already exists
   const manualProps = ["description", "imageAlt", "palette", "tags", "title"];
   const mergedMedia = mergeMedia(oldMedia, rereadMedia, manualProps);
-  console.log(Color.Blue + `Updating media file '${targetFile}'. ` + Color.Reset);
-  writeObjectToFile(targetFile, mergedMedia.sort(mediaSorter), true);
+  console.log(Color.Blue + `Updating media file '${dataPath}'. ` + Color.Reset);
+  writeObjectToFile(dataPath, mergedMedia.sort(mediaSorter), true);
 }
