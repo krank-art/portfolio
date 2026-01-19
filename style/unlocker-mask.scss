@@ -1,0 +1,141 @@
+@use "sass:math";
+
+.unlocker {
+  background-color: #333;
+  border-radius: 1em;
+  padding: 1em;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.unlocker-icon {
+  transform-style: preserve-3d;
+  animation: flip-key 2s linear infinite;
+}
+
+.unlocker-main {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.unlocker-label {}
+
+.unlocker-password {}
+
+.unlocker-button {}
+
+.unlocker-aside {
+  display: block;
+  width: 100%;
+}
+
+.unlocker-status {
+  display: block;
+  text-align: center;
+  font-size: 0.8em;
+}
+
+.unlocker-progress {
+  $hlw: 160px; // hlw = highlight width
+
+  width: 100%;
+  display: block;
+  appearance: none;
+
+  height: 0.5em;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #0b1b34;
+  border: none;
+
+  &::-webkit-progress-bar {
+    background: #0b1b34;
+    appearance: none;
+  }
+
+  //&::-webkit-progress-value {
+  //  background:
+  //    radial-gradient(80px 100% at left center,
+  //      #60a5fa 0%,
+  //      #3b82f6 35%,
+  //      rgba(59, 130, 246, 0) 65%),
+  //    linear-gradient(#1e40af, #1e40af);
+  //  background-repeat: no-repeat;
+  //  background-size: 80px 100%, 100% 100%;
+  //  animation: glow-move 1.6s linear infinite;
+  //  border-radius: 999px;
+  //}
+  @mixin progress-glow {
+    background: radial-gradient(#{$hlw} 100% at #{$hlw} center,
+      #32CFFF 0%,
+      #19A7FF #{$hlw * 0.4},
+      #0756AB #{$hlw}),
+    linear-gradient(#0756AB, #0756AB);
+    background-repeat: no-repeat;
+    background-size: #{$hlw * 2} 100%,
+    100% 100%;
+    animation: glow-move 1.2s linear infinite;
+    border-radius: 999px;
+  }
+
+  @mixin glow-move-frames {
+    from {
+      background-position: #{$hlw * -2} 0,
+      0 0;
+    }
+
+    to {
+      background-position: calc(100% + #{$hlw * 2}) 0,
+      0 0;
+    }
+  }
+
+  &::-webkit-progress-value {
+    @include progress-glow;
+    -webkit-animation: glow-move-chrome 1.2s linear infinite;
+  }
+
+  &::-moz-progress-bar {
+    @include progress-glow;
+  }
+
+  @keyframes glow-move {
+    @include glow-move-frames();
+  }
+
+  @-webkit-keyframes glow-move-chrome {
+    @include glow-move-frames();
+  }
+
+
+  //&::-webkit-progress-bar {
+  //  background-color: #111;
+  //  border-radius: 0.2em;
+  //}
+  //
+  //&::-webkit-progress-value {
+  //  //background: linear-gradient(90deg, #4ade80, #22c55e);
+  //  border-radius: 0.2em;
+  //}
+  //
+  //&::-moz-progress-bar {
+  //  //background: linear-gradient(90deg, #4ade80, #22c55e);
+  //  border-radius: 0.2em;
+  //}
+
+
+}
+
+
+@keyframes flip-key {
+  from {
+    transform: rotateZ(45deg) rotateX(0deg);
+  }
+
+  to {
+    transform: rotateZ(45deg) rotateX(360deg);
+  }
+}

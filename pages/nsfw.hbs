@@ -1,16 +1,5 @@
 <template>
   <template for="aside">
-    <div class="unlocker">
-      <div class="unlocker-main">
-        <label class="unlocker-label" for="nsfw-password">Password</label>
-        <input class="unlocker-password input" type="text" name="nsfw-password">
-        <button class="unlocker-button button-primary" type="button">Unlock</button>
-      </div>
-      <label class="unlocker-aside">
-        <span class="unlocker-status">Uploading Document:</span>
-        <progress class="unlocker-progress" value="70" max="100">70 %</progress>
-      </label>
-    </div>
     {{> multi-button label="Test" listId="nsfw-view" buttons=listViewButtons
     attributes="data-switcher-for='nsfw-list'" }}
     {{> multi-button label="Test" listId="nsfw-sort" buttons=listSortButtons }}
@@ -26,6 +15,7 @@
   </template>
   <template for="main">
     <h1 class="sr-only">Art overview</h1>
+    {{> unlocker-mask }}
     <ul class="media-list show-as-thumbnails" data-tag-list-for="nsfw-list" data-switcher-id="nsfw-list">
       {{#each mediaNsfw}}
       <li>
