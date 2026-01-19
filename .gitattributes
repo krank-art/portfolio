@@ -3,3 +3,6 @@ static/blog/*.jpg filter=lfs diff=lfs merge=lfs -text
 static/favicon/*.png filter=lfs diff=lfs merge=lfs -text
 static/favicon/*.jpg filter=lfs diff=lfs merge=lfs -text
 static/favicon/*.ico filter=lfs diff=lfs merge=lfs -text
+static/tools/*.png filter=lfs diff=lfs merge=lfs -text
+static/tools/*.jpg filter=lfs diff=lfs merge=lfs -text
+static/tools/*.svg filter=lfs diff=lfs merge=lfs -text
