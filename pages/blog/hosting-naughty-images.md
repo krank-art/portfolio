@@ -325,6 +325,9 @@ Additionally they have two more fields:
 
 * `pathHash` since the actual `path` is considered private too.
 * `fileNameEncrypted` to hide the pathname + date.
+* `hashColors` are used to create the image placeholders, the colors are derived from the path hash.
+  > We actually use the OKLCH color space here, so colors have the same perceived lightness, this is 
+  > quite helpful so visually the colors mix better: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/oklch
 
 `media-nsfw.json`:
 ```js
@@ -351,7 +354,12 @@ Additionally they have two more fields:
      darkMuted: "#6b5930",
      lightMuted: "#cdb3ac"
    },
-   title: "Kageki Creampie",
+   hashColors: [
+     "oklch(65.1% 0.182 194.8)",
+     "oklch(59.1% 0.202 205.8)",
+     "oklch(64.1% 0.132 163.3)"
+   ],
+   title: "Bun fun",
    description: [
      "Here is a very cool description of the nsfw art post ",
      "It's actually an array of strings to make semantic formatting easier."

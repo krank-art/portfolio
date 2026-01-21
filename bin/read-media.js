@@ -4,10 +4,10 @@ import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
 import sharp from 'sharp';
 import { getVibrantColorsInImage } from '../lib/image.js';
-import { getPathSafeName, toBase32 } from '../lib/string.js';
+import { getPathSafeName, toBase32, base32ToInt } from '../lib/string.js';
 import { parseJsonFile, writeObjectToFile } from '../lib/filesystem.js';
 import { Color } from '../lib/terminal.js';
-import { simplifyFraction } from '../lib/maths.js';
+import { clamp, simplifyFraction, wrapHue } from '../lib/maths.js';
 
 
 
@@ -112,6 +112,7 @@ async function processMediaFile({ filePath, fileType, fileName, extension, fileS
     orientation: aspectRatioInfo?.orientation ?? null,
     ratioFactor: aspectRatioInfo?.ratioFactor ?? null,
     vibrantColors: vibrantColors,
+    hashColors: undefined,
     // The following props are intended to be extended manually.
     title: title,
     description: [title], // supposed to be Markdown
@@ -176,6 +177,7 @@ async function readMediaInDir({ dirPath, fileInfoByName = undefined, isEncrypted
       knownHashes.add(uniqueHash);
       mediaItem.pathHash = uniqueHash;
       mediaItem.fileNameEncrypted = `${uniqueHash}.${mediaItem.fileType}.enc`;
+      mediaItem.hashColors = hashToOKLCH(uniqueHash);
     }
     // Add to media list
     media.push(mediaItem);
@@ -249,6 +251,51 @@ function getPathHash(knownCodes = new Set()) {
   }
   throw new Error(`Exceeded max tries to generate a ${digits} digit Base32 hash. `);
 }
+
+function hashToOKLCH(base32hash) {
+  if (base32hash.length !== 4) {
+    throw new Error("Hash must be exactly 4 base32 characters");
+  }
+
+  const n = base32ToInt(base32hash); // 20 bits
+
+  // Split bits deterministically
+  const hueBase     =  n        & 0x1FF; // 9 bits → 0–511
+  const hueDelta1   = (n >> 9)  & 0x3F;  // 6 bits → 0–63
+  const hueDelta2   = (n >> 15) & 0x1F;  // 5 bits → 0–31
+
+  const chromaBits  = (n >> 4)  & 0x3F;  // reused entropy
+  const lightBits   = (n >> 10) & 0x3F;
+
+  // Base values (chosen for good UI contrast)
+  const baseHue = wrapHue((hueBase / 512) * 360);
+
+  const baseC = 0.10 + (chromaBits / 63) * 0.08;  // 0.10 – 0.18
+  const baseL = 0.55 + (lightBits  / 63) * 0.15;  // 0.55 – 0.70
+
+  const colors = [
+    {
+      l: clamp(baseL + 0.02, 0, 1),
+      c: clamp(baseC + 0.02, 0, 0.4),
+      h: wrapHue(baseHue),
+    },
+    {
+      l: clamp(baseL - 0.04, 0, 1),
+      c: clamp(baseC + 0.04, 0, 0.4),
+      h: wrapHue(baseHue + hueDelta1 * 2.2),
+    },
+    {
+      l: clamp(baseL + 0.01, 0, 1),
+      c: clamp(baseC - 0.03, 0, 0.4),
+      h: wrapHue(baseHue - hueDelta2 * 3.5),
+    },
+  ];
+
+  return colors.map(
+    c => `oklch(${(c.l * 100).toFixed(1)}% ${c.c.toFixed(3)} ${c.h.toFixed(1)})`
+  );
+}
+
 
 export default async function readMedia({ mediaDir, dataPath, skipUnchanged = false, isEncrypted = false }) {
   // Step 1 -- Check parameters and setup source + target
