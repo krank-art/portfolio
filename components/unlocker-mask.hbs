@@ -2,14 +2,15 @@
   <div class="unlocker">
     <div class="unlocker-main">
       <label class="unlocker-label" for="nsfw-password">
-        <img class="unlocker-icon" src="/media/tools/bear-key.svg" alt="Enter password">
+        <img class="unlocker-icon" src="/media/tools/bear-key.svg" alt="Enter a key">
       </label>
-      <input class="unlocker-password input" type="password" name="nsfw-password">
+      <input class="unlocker-password input" type="password" name="nsfw-password" placeholder="">
       <button class="unlocker-button button-primary" type="button">Unlock</button>
     </div>
     <label class="unlocker-aside">
-      <span class="unlocker-status">Unlocking posts...</span>
-      <progress class="unlocker-progress" value="70" max="100">70 %</progress>
+      <span class="unlocker-status">Enter a key to unlock posts</span>
+      <progress class="unlocker-progress-dummy sr-only" value="70" max="100">70 %</progress>
+      <span class="unlocker-progress-bar"><span class="unlocker-progress-value" style="display:none;"></span></span>
     </label>
   </div>
 </template>

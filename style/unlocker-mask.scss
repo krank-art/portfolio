@@ -4,6 +4,7 @@
   background-color: #333;
   border-radius: 1em;
   padding: 1em;
+  margin-bottom: 1em;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -11,7 +12,15 @@
 
 .unlocker-icon {
   transform-style: preserve-3d;
-  animation: flip-key 2s linear infinite;
+  transform: rotateZ(45deg) rotateX(0deg);
+  // Visual balance bc key base is larger than key teeth
+  position: relative;
+  top: 0.3em;
+  left: 0.3em;
+
+  &.working {
+    animation: flip-key 2s linear infinite;
+  }
 }
 
 .unlocker-main {
@@ -19,11 +28,15 @@
   flex-flow: row nowrap;
   align-items: center;
   gap: 0.5em;
+  max-width: 100%;
 }
 
 .unlocker-label {}
 
-.unlocker-password {}
+.unlocker-password {
+  min-width: 6em;
+  flex-shrink: 1;
+}
 
 .unlocker-button {}
 
@@ -36,39 +49,26 @@
   display: block;
   text-align: center;
   font-size: 0.8em;
+  margin: 0.3em 0;
 }
 
-.unlocker-progress {
+.unlocker-progress-bar {
   $hlw: 160px; // hlw = highlight width
 
   width: 100%;
-  display: block;
-  appearance: none;
-
+  display: flex;
+  align-items: flex-start;
   height: 0.5em;
   border-radius: 999px;
   overflow: hidden;
   background: #0b1b34;
   border: none;
 
-  &::-webkit-progress-bar {
-    background: #0b1b34;
-    appearance: none;
-  }
-
-  //&::-webkit-progress-value {
-  //  background:
-  //    radial-gradient(80px 100% at left center,
-  //      #60a5fa 0%,
-  //      #3b82f6 35%,
-  //      rgba(59, 130, 246, 0) 65%),
-  //    linear-gradient(#1e40af, #1e40af);
-  //  background-repeat: no-repeat;
-  //  background-size: 80px 100%, 100% 100%;
-  //  animation: glow-move 1.6s linear infinite;
-  //  border-radius: 999px;
-  //}
-  @mixin progress-glow {
+  .unlocker-progress-value {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    height: 100%;
     background: radial-gradient(#{$hlw} 100% at #{$hlw} center,
       #32CFFF 0%,
       #19A7FF #{$hlw * 0.4},
@@ -81,7 +81,7 @@
     border-radius: 999px;
   }
 
-  @mixin glow-move-frames {
+  @keyframes glow-move {
     from {
       background-position: #{$hlw * -2} 0,
       0 0;
@@ -92,41 +92,6 @@
       0 0;
     }
   }
-
-  &::-webkit-progress-value {
-    @include progress-glow;
-    -webkit-animation: glow-move-chrome 1.2s linear infinite;
-  }
-
-  &::-moz-progress-bar {
-    @include progress-glow;
-  }
-
-  @keyframes glow-move {
-    @include glow-move-frames();
-  }
-
-  @-webkit-keyframes glow-move-chrome {
-    @include glow-move-frames();
-  }
-
-
-  //&::-webkit-progress-bar {
-  //  background-color: #111;
-  //  border-radius: 0.2em;
-  //}
-  //
-  //&::-webkit-progress-value {
-  //  //background: linear-gradient(90deg, #4ade80, #22c55e);
-  //  border-radius: 0.2em;
-  //}
-  //
-  //&::-moz-progress-bar {
-  //  //background: linear-gradient(90deg, #4ade80, #22c55e);
-  //  border-radius: 0.2em;
-  //}
-
-
 }
 
 
