@@ -20,26 +20,27 @@
       {{#each mediaNsfw}}
       <li>
         <div class="media-list-item" data-tags="" data-date="">
-          <a class="media-list-link" href="{{path.relative}}art/{{this.path}}">
+          <a class="media-list-link" href="{{path.relative}}nsfw/{{this.pathHash}}">
             <div class="media-list-item-figure">
-              <img class="media-list-item-image" src="media/art/120p/{{this.fileNamePublic}}" alt=""
-                style="background-color: {{ this.vibrantColors.darkMuted }}" loading="lazy">
-              <img class="media-list-item-image-big" src="media/art/s160p/{{this.fileNamePublic}}" alt=""
-                style="background-color: {{ this.vibrantColors.darkMuted }}" loading="lazy">
+              <span class="media-list-item-placeholder" style="background: 
+                  linear-gradient(to bottom, transparent, {{ this.hashColors.[2] }}), 
+                  linear-gradient(to left, transparent, {{ this.hashColors.[1] }}), 
+                  {{ this.hashColors.[0] }}"><span 
+                  class="media-list-item-placeholder-icon">🔒</span>{{ this.pathHash }}</span>
             </div>
-            <div class="media-list-item-title">{{this.path}}</div>
+            <div class="media-list-item-title">{{this.pathHash}}</div>
             <div class="media-list-item-aside">
               <span class="media-list-item-extra">
                 <span class="sr-only">Date</span>
-                {{fallback this.date "unknown"}}
+                <span class="locked-value">Locked</span>
               </span>
               <span class="media-list-item-extra">
                 <span class="sr-only">Dimensions</span>
-                {{this.width}} &times; {{this.height}}
+                <span class="locked-value">Locked</span>
               </span>
               <span class="media-list-item-extra">
                 <span class="sr-only">File size</span>
-                {{filesize this.fileSize}}
+                <span class="locked-value">Locked</span>
               </span>
             </div>
           </a>
