@@ -25,6 +25,7 @@ It's just not very reliable or convenient.
     - [Restore](#restore)
   - [User Experience](#user-experience)
   - [Failed approach: Steganography](#failed-approach-steganography)
+    - [Cancelled: Container format](#cancelled-container-format)
 
 
 Sharing my art with distinguished people usually happens by sending the file directly.
@@ -203,6 +204,8 @@ This is also useful to use as common identifier for the different batches.
 > Each time the encryption batch is run, a new salt is randomly generated and a new key is derived.
 > By shuffling the IVs we could obfuscate the order in which key is used for each payload.
 > In practical terms, this doesn't matter though because an attacker can just look at the `payload length` as unique identifier for each file.
+
+
 
 
 ### Source set
@@ -615,3 +618,27 @@ For me this fell flat for multiple reasons:
    Adding all the noise because of the 2 LSBs also screws up efficient compression for the vessel PNG.
 
 Really it's just easier *and* safer to [extract the prominent colors](https://github.com/Vibrant-Colors/node-vibrant) and create a blurry gradient.
+
+
+### Cancelled: Container format
+
+For decryption we need to actually get the binary files.
+We will use the encrypted post data because they are tiny files (~ 2KB each).
+Problem is, I do not want to send a hundred requests.
+A single request with a 100KB file would make much more sense (and cache that file).
+
+> **2025-JAN-21:**
+> We will simply send the hundred requests.
+> Its identical with how on the art overview page, each thumbnail gets sent in a request.
+> This is not very network friendly, nor efficient, but it's easy and established (and less error-prone).
+> Should the performance penalty be too severe (or another need for binary packing arise), I will revisit this idea.
+
+|      | Field           |     Size | Type     | Description                                   |
+| ---: | --------------- | -------: | -------- | --------------------------------------------- |
+|  *0* | Magic bytes     |  4 bytes | char[4]  | `KBIN` (Krank binary container)               |
+|  *4* | Version         |   1 byte | uint8    | Format version, is 1                          |
+|  *5* | Packing date    |  8 bytes | char[8]  | `YYYYMMDD` in UTC+0                           |
+| *13* | Author          | 19 bytes | char[19] | `https://krank.love/`                         |
+| *32* | Number of files |  4 bytes | uint32   | Number of files                               |
+| *36* | File Length N   |  4 bytes | uint32   | Length of file N (repeats for each file)      |
+|    M | Payload N       | variable | bin[N]   | Arbitrary binary data (repeats for each file) |
