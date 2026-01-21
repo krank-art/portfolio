@@ -70,6 +70,10 @@ Basic usage: `npm run cli <command> <args?>`.
     * Reading, processing, copying and generating files  are quite expensive operations.
     * For this reason, art files only get processed if their file size has changed OR if the "file modified" value has changed.
     * In the past, "file modified" values behaved inconsistently across different devices, so we only look at seconds as smallest time value.
+* `build:nsfw`
+  * This operation requires that you have the `nsfw` submodule in your toplevel dir.
+    See [Hosting naughty images](/pages/blog/hosting-naughty-images) on how to clone the bundle or create a new one.
+  * Output is encrypted NSFW media posts with their respective hash, e.g. `P4WQ.png.enc` and `P4WQ.json.enc`.
 * `sort:art`
   * Sorts `data/media-art.json` entries by using a sorting function (defaults to `'name'`).
   * Use argument `name` to sort by **path** name (from A-Z), is default.

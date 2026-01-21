@@ -13,8 +13,10 @@ export default async function buildNsfw({ nsfwDir, outputDir, resizeSet = null }
   const nsfwSets = parseJsonFile(path.join(nsfwDir, "encryption-sets.json"));
   const postQueue = getEncryptionQueue(nsfwData, nsfwSets);
   const nsfwTempDir = path.join(nsfwDir, "temp");
-  if ((await access(nsfwTempDir, constants.F_OK)) !== undefined)
-    await mkdir(nsfwTempDir); // This will be the starting point for all file encryptions
+  // I hope this is fine to use without checking if the dir exists, but multiple sources said that
+  // checking for dir synchronously is super slow and the async access either returns undefined or
+  // throws an exception if the path cannot be reached.
+  await mkdir(nsfwTempDir, { recursive: true}); // This will be the starting point for all file encryptions
   const postQueueByPath = new Map();
   for (const post of postQueue)
     postQueueByPath.set(post.path, post);
@@ -22,11 +24,11 @@ export default async function buildNsfw({ nsfwDir, outputDir, resizeSet = null }
     const { password, title, posts } = nsfwSet;
     const encryptionTasks = await Promise.all(posts.map(async (postPath) => {
       const post = postQueueByPath.get(postPath);
-      const postDataPath = path.join(nsfwTempDir, `${postPath}.json`);
+      const { pathHash, fileNameEncrypted, fileNameInternal } = post;
+      const postDataPath = path.join(nsfwTempDir, `${pathHash}.json`);
       await writeFile(postDataPath, JSON.stringify(post));
-      const { fileNamePublic, fileNameInternal } = post;
       const fileInput = path.join(nsfwDir, "static", fileNameInternal);
-      const fileOutput = path.join(nsfwTempDir, fileNamePublic);
+      const fileOutput = path.join(nsfwTempDir, fileNameEncrypted);
       await copyFile(fileInput, fileOutput);
       // TODO: Implement resize set
       return [
