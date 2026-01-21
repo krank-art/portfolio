@@ -54,8 +54,10 @@ Basic usage: `npm run cli <command> <args?>`.
   * Builds the styles from `style/` to `dist/bundle.css`.
   * Builds the scripts from `lib/main.js` to `dist/bundle.js`.
   * Copies the favicon files from `static/favicon/` to `dist/`.
-* `build:html`
+* `build:html <args>`
   * Builds the HTML files from `pages/` to `dist/`.
+  * `argument: +<pageA>,<pageB>,...<pageN>`: Only build HTML files in the page list
+  * `argument: -<pageA>,<pageB>,...<pageN>`: Exclude HTML files from build
   * Optimization:
     * Depending on the project size, hundreds of HTML files are generated on each minor edit.
     * To minimize the number of file written to disk, HTML files are only saved if the content has changed  or if the file doesn't exist yet.

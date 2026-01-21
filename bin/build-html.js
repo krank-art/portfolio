@@ -4,7 +4,7 @@ import TemplateWriter from '../lib/template-writer.js';
 import { addAbsolutePathsToDirTree, flattenDirTree, loadDirAsTree } from '../lib/dir-tree.js';
 
 export default async function buildHtml({ inputDir, outputDir, data, partialsDir,
-  cacheFile = null, ignoredFiles = [], profiling = true }) {
+  cacheFile = null, ignoredFiles = [], includedFiles = [], profiling = true }) {
   const startTime = Date.now();
   const templating = new TemplateWriter({ partialsDir });
   await templating.load();
@@ -13,6 +13,7 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
     input: inputDir,
     models: data,
     ignoredFiles: ignoredFiles.map(filePath => path.join(inputDir, filePath)),
+    includedFiles: includedFiles.map(filePath => path.join(inputDir, filePath)),
   });
   const dirTree = addAbsolutePathsToDirTree(dirTreeRaw);
   const queue = flattenDirTree(dirTree);

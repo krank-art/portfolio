@@ -62,7 +62,10 @@ export async function handleCommand(command, ...args) {
       });
       break;
     case "build:html":
-      const skippedHtmlFiles = args[0] ? args[0].split(",") : [];
+      const skippedHtmlArgument = args.find(arg => arg.startsWith("-"));
+      const includedHtmlArgument = args.find(arg => arg.startsWith("+"));
+      const skippedHtmlFiles = skippedHtmlArgument ? skippedHtmlArgument.substring(1).split(",") : [];
+      const includedHtmlFiles = includedHtmlArgument ? includedHtmlArgument.substring(1).split(",") : [];
       const mediaArtBuildHtml = parseJsonFile(pathing.artData);
       const mediaArtByPath = {};
       mediaArtBuildHtml.forEach(entry => mediaArtByPath[entry.path] = entry);
@@ -74,6 +77,7 @@ export async function handleCommand(command, ...args) {
         partialsDir: pathing.components,
         cacheFile: pathing.pagesCache,
         ignoredFiles: skippedHtmlFiles,
+        includedFiles: includedHtmlFiles,
         data: {
           title: 'Handlebars Example',
           name: 'John Doe',
