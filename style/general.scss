@@ -143,15 +143,15 @@ body {
   padding: 0.6em 1em;
   border-radius: 0.5em;
 
-  &.error {
+  &:not(:placeholder-shown) {
     border-bottom-width: 0.2em;
-    border-bottom-color: red;
+    border-bottom-color: #19A7FF;
     padding-bottom: 0.5em;
   }
 
-  &:valid {
+  &.error {
     border-bottom-width: 0.2em;
-    border-bottom-color: #19A7FF;
+    border-bottom-color: red;
     padding-bottom: 0.5em;
   }
 }
