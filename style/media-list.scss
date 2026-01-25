@@ -35,7 +35,7 @@
       display: none;
     }
 
-    .media-list-item-image-big {
+    .media-list-item-image-big:not([hidden]) {
       // The cropped images are about 40% larger, so we only use 'em when necessary.
       // Amounts to about 11 MB of total page load on the art page, compared to 7 MB if small.
       display: unset;

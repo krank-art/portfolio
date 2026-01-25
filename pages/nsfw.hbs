@@ -16,31 +16,33 @@
   <template for="main">
     <h1 class="sr-only">Art overview</h1>
     {{> unlocker-mask }}
-    <ul class="media-list show-as-thumbnails" data-tag-list-for="nsfw-list" data-switcher-id="nsfw-list">
+    <ul class="media-list show-as-thumbnails" data-tag-list-for="nsfw-list" data-switcher-id="nsfw-list" data-encryption-list="nsfw-list">
       {{#each mediaNsfw}}
       <li>
-        <div class="media-list-item" data-tags="" data-date="">
+        <div class="media-list-item" data-tags="" data-date="" data-encryption-item="{{this.pathHash}}">
           <a class="media-list-link" href="{{path.relative}}nsfw/{{this.pathHash}}">
             <div class="media-list-item-figure">
               <span class="media-list-item-placeholder" style="background: 
                   linear-gradient(to bottom, transparent, {{ this.hashColors.[2] }}), 
                   linear-gradient(to left, transparent, {{ this.hashColors.[1] }}), 
                   {{ this.hashColors.[0] }}"><span 
-                  class="media-list-item-placeholder-icon">🔒</span>{{ this.pathHash }}</span>
+                  class="media-list-item-placeholder-icon" data-enc-tag="placeholder">🔒</span>{{ this.pathHash }}</span>
+              <img class="media-list-item-image" data-enc-tag="image-small" loading="lazy" hidden>
+              <img class="media-list-item-image-big" data-enc-tag="image-thumb" loading="lazy" hidden>
             </div>
-            <div class="media-list-item-title">{{this.pathHash}}</div>
+            <div class="media-list-item-title" data-enc-tag="title">{{this.pathHash}}</div>
             <div class="media-list-item-aside">
               <span class="media-list-item-extra">
                 <span class="sr-only">Date</span>
-                <span class="locked-value">Locked</span>
+                <span data-enc-tag="date">Locked</span>
               </span>
               <span class="media-list-item-extra">
                 <span class="sr-only">Dimensions</span>
-                <span class="locked-value">Locked</span>
+                <span data-enc-tag="dimensions">Locked</span>
               </span>
               <span class="media-list-item-extra">
                 <span class="sr-only">File size</span>
-                <span class="locked-value">Locked</span>
+                <span data-enc-tag="file-size">Locked</span>
               </span>
             </div>
           </a>
