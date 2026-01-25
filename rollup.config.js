@@ -2,6 +2,9 @@ import copy from 'rollup-plugin-copy';
 import sass from 'rollup-plugin-sass';
 import config from './config/config.dev.js';
 import { getCompressedTagsFromMedia } from './lib/tag-util.js';
+import crypto from "node:crypto";
+
+const buildId = crypto.createHash("sha256").update(Date.now().toString()).digest("hex").slice(0, 8);
 
 export default ({ outputDir }) => {
   return {
@@ -11,6 +14,17 @@ export default ({ outputDir }) => {
       format: 'iife',
     },
     plugins: [
+      {
+        name: "build-id",
+        resolveId(id) {
+          if (id === "virtual:build-id") return id;
+        },
+        load(id) {
+          if (id === "virtual:build-id") {
+            return `export default "${buildId}";`;
+          }
+        },
+      },
       copy({
         targets: [
           { src: 'static/favicon/*', dest: outputDir },
