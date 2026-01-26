@@ -34,8 +34,8 @@ It also makes it annoying for myself, I want to have a catalogue of all the art 
 
 A far better approach is **security by design**.
 
-![Illustration showing how files are encrypted, stored on the server and then decrypted by the client.](./media/image-encryption-v1.png)
-
+![Illustration showing how files are encrypted, stored on the server and then decrypted by the client.](/media/blog/image-encryption-v1.png)
+bla bla
 
 ## Requirements
 
