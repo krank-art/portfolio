@@ -78,6 +78,7 @@ export async function handleCommand(command, ...args) {
         cacheFile: pathing.pagesCache,
         ignoredFiles: skippedHtmlFiles,
         includedFiles: includedHtmlFiles,
+        profiling: false,
         data: {
           title: 'Handlebars Example',
           name: 'John Doe',

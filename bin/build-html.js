@@ -2,11 +2,14 @@ import path from 'path';
 import config from '../config/config.dev.js';
 import TemplateWriter from '../lib/template-writer.js';
 import { addAbsolutePathsToDirTree, flattenDirTree, loadDirAsTree } from '../lib/dir-tree.js';
+import { SimpleProfiler } from '../lib/profiling.js';
 
 export default async function buildHtml({ inputDir, outputDir, data, partialsDir,
   cacheFile = null, ignoredFiles = [], includedFiles = [], profiling = true }) {
-  const startTime = Date.now();
-  const templating = new TemplateWriter({ partialsDir });
+  const profiler = profiling ? new SimpleProfiler() : null;
+  profiler?.start("build HTML");
+  profiler?.start("landmarking");
+  const templating = new TemplateWriter({ partialsDir, profiler: profiler });
   await templating.load();
   // Step 1 -- Landmarking
   const dirTreeRaw = loadDirAsTree({
@@ -46,8 +49,10 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
       console.warn(`The model '${modelName}' is not supported so far. `);
     }
     // Add page title
+    profiler?.start("executeFile()");
     const module = await templating.executeFile(source, chunk);
     page.title = module.title ?? page.path;
+    profiler?.stop("executeFile()");
   }
   const pageEntries = queue.filter(entry => entry.page.type === "page");
   for (let i = 0; i < pageEntries.length; i++) {
@@ -66,14 +71,14 @@ export default async function buildHtml({ inputDir, outputDir, data, partialsDir
     if (previousSibling && previousSibling.depth === page.depth)
       navPath.previous = { path: previousSibling.path, title: previousSibling.title };
   }
-  const midTime = Date.now();
-  if (profiling) console.log(`HTML landmarking took ${(midTime - startTime) / 1000} sec.`);
+  profiler?.stop("landmarking", (duration) => console.log(`HTML landmarking took ${(duration) / 1000} sec.`));
   await templating.readAndWriteQueue({
     queue: queue,
     output: outputDir,
     cachePath: cacheFile,
     silent: false,
+    profiler,
   });
-  const endTime = Date.now();
-  if (profiling) console.log(`HTML build took ${(endTime - startTime) / 1000} sec.`);
+  profiler?.stop("build HTML", (duration) => console.log(`HTML build took ${(duration) / 1000} sec. \n`));
+  profiler?.dump();
 }
