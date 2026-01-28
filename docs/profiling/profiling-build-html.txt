@@ -1,0 +1,64 @@
+profiling 'build:html' REV II
+
+2026-01-28 --vm-modules
+  landmarking:  4.907 sec    4.943 sec    4.899 sec
+  building:    31.782 sec   26.891 sec   26.388 sec
+               (init build) (w/ cache)
+
+adding simple handlebars compiled cache to template engine
+  landmarking:  4.905 sec
+  building:    24.904 sec
+               (w/ cache)
+
+removing "page title" vm evaluation from landmarking
+  landmarking:  0.094 sec    0.089 sec    0.088 sec  <-- holy moly
+  building:    18.737 sec   19.575 sec   19.642 sec
+               (init build) (w/ cache)
+
+removing VM and using `new Function()` (page title back in)
+  landmarking:  4.252 sec    4.365 sec    4.490 sec
+  building:    23.206 sec   18.014 sec   18.589 sec
+               (init build) (w/ cache)
+
+adding Function Cache
+  landmarking:  4.122 sec    4.094 sec    4.163 sec
+  building:    17.646 sec   17.542 sec   17.853 sec
+               (w/ cache)
+
+Memoization instead of Function Cache
+  landmarking:  6.805 sec    7.083 sec    7.354 sec
+  building:    26.197 sec   26.147 sec   27.053 sec
+               (w/ cache)
+
+the `executeModule` function gets called 1612 times per run for ~540 pages.
+
+HTML landmarking took 5.755 sec.
+HTML build took 24.665 sec. 
+
+build HTML: 24.665 sec
+landmarking: 5.755 sec
+executeFile(): 5.643 sec
+  executeModule: 0.451 sec
+dataChunk duplication 2: 15.723 sec
+compileEntry(): 18.81 sec
+dataChunk duplication: 5.379 sec
+  compileSfc(): 12.104 sec
+  compileMarkdown(): 1.321 sec
+
+After removing deep copying of dataChunks
+  landmarking:  0.385 sec    0.421 sec    0.819 sec
+  building:     5.459 sec    3.148 sec    5.578 sec
+               (w/ cache)
+
+  build HTML: 5.459 sec
+  landmarking: 0.385 sec
+  executeFile(): 0.266 sec
+  executeModule: 0.793 sec
+  dataChunk duplication 2: 0.045 sec
+  compileEntry(): 4.13 sec
+  dataChunk duplication: 0.031 sec
+    compileSfc(): 3.362 sec
+    compileMarkdown(): 0.731 sec
+
+From 36 sec down to 6 sec
+From 31 sec down to 3 sec (warmped up)

@@ -1,0 +1,746 @@
+Statistical profiling result from isolate-0x1ad48000-56588-v8.log, (20968 ticks, 48 unaccounted, 0 excluded).
+
+ [Shared libraries]:
+   ticks  total  nonlib   name
+  16840   80.3%          /home/krank/.nvm/versions/node/v22.18.0/bin/node
+   1795    8.6%          /usr/lib/x86_64-linux-gnu/libc.so.6
+     12    0.1%          /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33
+      3    0.0%          /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+      1    0.0%          [vdso]
+
+ [JavaScript]:
+   ticks  total  nonlib   name
+    109    0.5%    4.7%  Builtin: LoadIC
+    107    0.5%    4.6%  Builtin: KeyedLoadIC_Megamorphic
+     43    0.2%    1.9%  Builtin: BaselineOutOfLinePrologue
+     38    0.2%    1.6%  Builtin: LoadIC_Megamorphic
+     35    0.2%    1.5%  JS: *following /home/krank/dev/portfolio/node_modules/symbol-tree/lib/SymbolTree.js:220:18
+     30    0.1%    1.3%  Builtin: KeyedStoreIC_Megamorphic
+     24    0.1%    1.0%  Builtin: CallFunction_ReceiverIsNotNullOrUndefined
+     19    0.1%    0.8%  Builtin: StoreIC
+     19    0.1%    0.8%  Builtin: FastNewClosure
+     19    0.1%    0.8%  Builtin: CallFunction_ReceiverIsNullOrUndefined
+     18    0.1%    0.8%  Builtin: StringAdd_CheckNone
+     18    0.1%    0.8%  Builtin: CallFunction_ReceiverIsAny
+     16    0.1%    0.7%  Builtin: StoreIC_Megamorphic
+     15    0.1%    0.6%  Builtin: LoadICTrampoline_Megamorphic
+     13    0.1%    0.6%  JS: *_callState /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:558:15
+     13    0.1%    0.6%  Builtin: KeyedStoreIC
+     13    0.1%    0.6%  Builtin: KeyedLoadIC
+     12    0.1%    0.5%  JS: *_node /home/krank/dev/portfolio/node_modules/symbol-tree/lib/SymbolTree.js:49:14
+     12    0.1%    0.5%  Builtin: InterpreterEntryTrampoline
+     12    0.1%    0.5%  Builtin: DefineNamedOwnIC
+     12    0.1%    0.5%  Builtin: CreateShallowObjectLiteral
+     12    0.1%    0.5%  Builtin: Call_ReceiverIsNullOrUndefined
+     11    0.1%    0.5%  Builtin: StrictEqual_Baseline
+     11    0.1%    0.5%  Builtin: RegExpPrototypeExec
+     11    0.1%    0.5%  Builtin: Call_ReceiverIsNotNullOrUndefined
+     10    0.0%    0.4%  JS: *queueMutationRecord /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/helpers/mutation-observers.js:33:29
+     10    0.0%    0.4%  Builtin: LoadICBaseline
+      8    0.0%    0.3%  Builtin: BaselineLeaveFrame
+      7    0.0%    0.3%  RegExp: ^<style>([\s\S]*)^<\/style>
+      7    0.0%    0.3%  JS: *_insert /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:764:10
+      7    0.0%    0.3%  JS: *_detach /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Element-impl.js:101:10
+      7    0.0%    0.3%  JS: *<anonymous> file:///home/krank/dev/portfolio/lib/object.js:52:25
+      7    0.0%    0.3%  Builtin: LoadGlobalIC
+      7    0.0%    0.3%  Builtin: KeyedLoadICTrampoline_Megamorphic
+      7    0.0%    0.3%  Builtin: KeyedHasIC_Megamorphic
+      6    0.0%    0.3%  RegExp: ^([`~]+|[^`~])(?:(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|https?:\/\/|ftp:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)))
+      6    0.0%    0.3%  RegExp: ^(?:[^\x00]*?(?=(\{\{)))
+      6    0.0%    0.3%  JS: *next /home/krank/dev/portfolio/node_modules/symbol-tree/lib/TreeIterator.js:16:13
+      6    0.0%    0.3%  JS: *_runParsingLoop /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:218:20
+      6    0.0%    0.3%  Builtin: ToBooleanForBaselineJump
+      6    0.0%    0.3%  Builtin: StringSubstring
+      6    0.0%    0.3%  Builtin: RecordWriteSaveFP
+      6    0.0%    0.3%  Builtin: ObjectPrototypeHasOwnProperty
+      6    0.0%    0.3%  Builtin: KeyedLoadIC_PolymorphicName
+      6    0.0%    0.3%  Builtin: ArrayMap
+      6    0.0%    0.3%  Builtin: ArrayIteratorPrototypeNext
+      5    0.0%    0.2%  RegExp: ^<template>([\s\S]*)^<\/template>
+      5    0.0%    0.2%  RegExp: <(?:slot|template)[^>]*>
+      5    0.0%    0.2%  JS: ^flatten file:///home/krank/dev/portfolio/lib/data-chunk.js:56:10
+      5    0.0%    0.2%  JS: ^<anonymous> :1:20
+      5    0.0%    0.2%  JS: *inlineTokens file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:1460:17
+      5    0.0%    0.2%  JS: *exports.getAttributeByNameNS /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/attributes.js:181:41
+      5    0.0%    0.2%  JS: *childrenToArray /home/krank/dev/portfolio/node_modules/symbol-tree/lib/SymbolTree.js:265:24
+      5    0.0%    0.2%  JS: *_remove /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:1072:10
+      5    0.0%    0.2%  Builtin: ResumeGeneratorTrampoline
+      5    0.0%    0.2%  Builtin: ProxyGetProperty
+      5    0.0%    0.2%  Builtin: LoadIC_FunctionPrototype
+      5    0.0%    0.2%  Builtin: FindOrderedHashMapEntry
+      5    0.0%    0.2%  Builtin: Add_Baseline
+      4    0.0%    0.2%  RegExp: [a-z]
+      4    0.0%    0.2%  JS: ^startTagInBody /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:1856:24
+      4    0.0%    0.2%  JS: *getAttributeNS /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Element-impl.js:219:17
+      4    0.0%    0.2%  JS: *blockTokens file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:1273:16
+      4    0.0%    0.2%  JS: *_stateTagName /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:1068:18
+      4    0.0%    0.2%  JS: *_reconstructActiveFormattingElements /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:428:41
+      4    0.0%    0.2%  JS: *_descendantAdded /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:251:19
+      4    0.0%    0.2%  Builtin: ToString
+      4    0.0%    0.2%  Builtin: StoreIC_NoFeedback
+      4    0.0%    0.2%  Builtin: RegExpReplace
+      4    0.0%    0.2%  Builtin: RegExpPrototypeTest
+      4    0.0%    0.2%  Builtin: RegExpMatchFast
+      4    0.0%    0.2%  Builtin: LoadIC_NoFeedback
+      4    0.0%    0.2%  Builtin: JSConstructStubGeneric
+      4    0.0%    0.2%  Builtin: JSBuiltinsConstructStub
+      4    0.0%    0.2%  Builtin: GetProperty
+      4    0.0%    0.2%  Builtin: CreateShallowArrayLiteral
+      4    0.0%    0.2%  Builtin: CreateEmptyLiteralObject
+      4    0.0%    0.2%  Builtin: Construct {1}
+      4    0.0%    0.2%  Builtin: CompileLazy
+      4    0.0%    0.2%  Builtin: Call_ReceiverIsNotNullOrUndefined_Baseline_Compact
+      4    0.0%    0.2%  Builtin: CEntry_Return1_ArgvOnStack_BuiltinExit
+      4    0.0%    0.2%  Builtin: ArrayPrototypePush
+      3    0.0%    0.1%  RegExp: ^<script>([\s\S]*)^<\/script>
+      3    0.0%    0.1%  RegExp: ^(?:[^\x00]*?(?=(\{\{))) {1}
+      3    0.0%    0.1%  RegExp: ^( *)(\t+)
+      3    0.0%    0.1%  RegExp: <template[^>]*>
+      3    0.0%    0.1%  JS: ~getTemplatesFromHtml file:///home/krank/dev/portfolio/lib/template-engine.js:190:30
+      3    0.0%    0.1%  JS: ^hashTemplate file:///home/krank/dev/portfolio/lib/template-engine.js:116:15
+      3    0.0%    0.1%  JS: *startTagInBody /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:1856:24
+      3    0.0%    0.1%  JS: *returnTrue /home/krank/dev/portfolio/node_modules/symbol-tree/lib/SymbolTree.js:12:20
+      3    0.0%    0.1%  JS: *ret /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/runtime.js:188:15
+      3    0.0%    0.1%  JS: *resolve node:path:1210:10
+      3    0.0%    0.1%  JS: *normalizeString node:path:90:25
+      3    0.0%    0.1%  JS: *get isConnected /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:182:18
+      3    0.0%    0.1%  JS: *_preInsertValidity /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:614:21
+      3    0.0%    0.1%  JS: *_detach /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:268:10
+      3    0.0%    0.1%  Builtin: StringIndexOf
+      3    0.0%    0.1%  Builtin: StringEqual
+      3    0.0%    0.1%  Builtin: StoreICTrampoline_Megamorphic
+      3    0.0%    0.1%  Builtin: SetIteratorPrototypeNext
+      3    0.0%    0.1%  Builtin: SetConstructor
+      3    0.0%    0.1%  Builtin: MapPrototypeGet
+      3    0.0%    0.1%  Builtin: MapConstructor
+      3    0.0%    0.1%  Builtin: GrowFastSmiOrObjectElements
+      3    0.0%    0.1%  Builtin: GetPropertyWithReceiver
+      3    0.0%    0.1%  Builtin: FulfillPromise
+      3    0.0%    0.1%  Builtin: FindOrderedHashSetEntry
+      3    0.0%    0.1%  Builtin: EnqueueMicrotask
+      3    0.0%    0.1%  Builtin: CreateDataProperty
+      3    0.0%    0.1%  Builtin: CloneObjectIC
+      3    0.0%    0.1%  Builtin: Call_ReceiverIsNullOrUndefined_Baseline_Compact
+      3    0.0%    0.1%  Builtin: Call_ReceiverIsAny
+      3    0.0%    0.1%  Builtin: CEntry_Return1_ArgvOnStack_NoBuiltinExit
+      2    0.0%    0.1%  RegExp: ^(?!(?:[*+-]|\d{1,9}[.)]) )((?:.|\n(?!\s*?\n|(?:[*+-]|\d{1,9}[.)]) ))+?)\n {0,3}(=+|-+) *(?:\n+|$) {1}
+      2    0.0%    0.1%  RegExp: ^ {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$) {1}
+      2    0.0%    0.1%  RegExp: (?:\r\n?|\n).* {1}
+      2    0.0%    0.1%  JS: ~BlockStatement /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/compiler.js:130:42
+      2    0.0%    0.1%  JS: ^prepareSfc file:///home/krank/dev/portfolio/lib/template-engine.js:163:26
+      2    0.0%    0.1%  JS: ^isPendingDeprecation node:internal/util:133:30
+      2    0.0%    0.1%  JS: ^inlineTokens file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:1460:17
+      2    0.0%    0.1%  JS: ^getTemplatesFromHtml file:///home/krank/dev/portfolio/lib/template-engine.js:190:30
+      2    0.0%    0.1%  JS: ^endTagInBody /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:2171:22
+      2    0.0%    0.1%  JS: ^emStrong file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:737:13
+      2    0.0%    0.1%  JS: ^compileSfc file:///home/krank/dev/portfolio/lib/template-writer.js:71:19
+      2    0.0%    0.1%  JS: ^_remove /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:1072:10
+      2    0.0%    0.1%  JS: ^_callState /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:558:15
+      2    0.0%    0.1%  JS: *wrapper /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/internal/wrapHelper.js:12:33
+      2    0.0%    0.1%  JS: *wrappedFn node:internal/errors:535:21
+      2    0.0%    0.1%  JS: *serializeNode /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/serializer/index.js:104:23
+      2    0.0%    0.1%  JS: *program /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/runtime.js:155:30
+      2    0.0%    0.1%  JS: *inline file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:1453:11
+      2    0.0%    0.1%  JS: *implForWrapper /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/utils.js:82:24
+      2    0.0%    0.1%  JS: *exports.setup /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/DOMStringMap.js:60:17
+      2    0.0%    0.1%  JS: *exports.isTextNode /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/domparsing/parse5-adapter-serialization.js:46:22
+      2    0.0%    0.1%  JS: *exports.getChildNodes /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/domparsing/parse5-adapter-serialization.js:9:25
+      2    0.0%    0.1%  JS: *exports._internalSetup /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/HTMLElement.js:53:26
+      2    0.0%    0.1%  JS: *dirname node:path:1406:10
+      2    0.0%    0.1%  JS: *_attrModified /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/HTMLElement-impl.js:121:16
+      2    0.0%    0.1%  JS: *_attach /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:258:10
+      2    0.0%    0.1%  JS: *SymbolTreeNode /home/krank/dev/portfolio/node_modules/symbol-tree/lib/SymbolTreeNode.js:4:20
+      2    0.0%    0.1%  JS: *<anonymous> node:internal/modules/cjs/loader:838:37
+      2    0.0%    0.1%  JS: *<anonymous> file:///home/krank/dev/portfolio/lib/data-chunk.js:73:23
+      2    0.0%    0.1%  JS: *<anonymous> :1:20
+      2    0.0%    0.1%  JS: *<anonymous> :14:35
+      2    0.0%    0.1%  Builtin: SuspendGeneratorBaseline
+      2    0.0%    0.1%  Builtin: SubString
+      2    0.0%    0.1%  Builtin: StringPrototypeSlice
+      2    0.0%    0.1%  Builtin: StringPrototypeReplace
+      2    0.0%    0.1%  Builtin: StrictEqual
+      2    0.0%    0.1%  Builtin: StoreFastElementIC_InBounds
+      2    0.0%    0.1%  Builtin: RecordWriteIgnoreFP
+      2    0.0%    0.1%  Builtin: OrdinaryGetOwnPropertyDescriptor
+      2    0.0%    0.1%  Builtin: IterableToListWithSymbolLookup
+      2    0.0%    0.1%  Builtin: ForInFilter
+      2    0.0%    0.1%  Builtin: FastNewObject
+      2    0.0%    0.1%  Builtin: FastNewFunctionContextFunction
+      2    0.0%    0.1%  Builtin: DefineNamedOwnIC_NoFeedback
+      2    0.0%    0.1%  Builtin: DefineNamedOwnICBaseline
+      2    0.0%    0.1%  Builtin: CreateEmptyArrayLiteral
+      2    0.0%    0.1%  Builtin: ConstructFunction
+      2    0.0%    0.1%  Builtin: CallWithArrayLike
+      2    0.0%    0.1%  Builtin: CallApiCallbackGeneric
+      2    0.0%    0.1%  Builtin: BooleanConstructor
+      2    0.0%    0.1%  Builtin: AsyncFunctionEnter
+      2    0.0%    0.1%  Builtin: ArrayPrototypeFind
+      1    0.0%    0.0%  RegExp: ^[^\n]+
+      1    0.0%    0.0%  RegExp: ^<!--(?!-?>)[\s\S]*?-->|^<\/[a-zA-Z][\w:-]*\s*>|^<[a-zA-Z][\w-]*(?:\s+[a-zA-Z:_][\w.:-]*(?:\s*=\s*"[^"]*"|\s*=\s*'[^']*'|\s*=\s*[^\s"'=<>`]+)?)*?\s*\/?>|^<\?[\s\S]*?\?>|^<![a-zA-Z]+\s[\s\S]*?>|^<!\[CDATA\[[\s\S]*?\]\]>
+      1    0.0%    0.0%  RegExp: ^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)
+      1    0.0%    0.0%  RegExp: ^([`~]+|[^`~])(?:(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|https?:\/\/|ftp:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@))) {1}
+      1    0.0%    0.0%  RegExp: ^([^\n]+(?:\n(?! {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)| {0,3}#{1,6} | {0,3}>| {0,3}(?:`{3,}(?=[^`\n]*\n)|~{3,})[^\n]*\n| {0,3}(?:[*+-]|1[.)]) |<\/?(?:address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option|p|param|section|source|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)(?: +|\n|\/?>)|<(?:script|pre|style|textarea|!--)| *([^\n ].*)\n {0,3}((?:\| *)?:?-+:? *(?:\| *:?-+:? *)*(?:\| *)?)(?:\n((?:(?! *\n| {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)| {0,3}#{1,6} | {0,3}>| {4}[^\n]| {0,3}(?:`{3,}(?=[^`\n]*\n)|~{3,})[^\n]*\n| {0,3}(?:[*+-]|1[.)]) |<\/?(?:address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option|p|param|section|source|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)(?: +|\n|\/?>)|<(?:script|pre|style|textarea|!--)).*(?:\n|$))*)\n*|$)| +\n)[^\n]+)*)
+      1    0.0%    0.0%  RegExp: ^(?:[^\x00]+)
+      1    0.0%    0.0%  RegExp: ^(?:$)
+      1    0.0%    0.0%  RegExp: ^(?!(?:[*+-]|\d{1,9}[.)]) )((?:.|\n(?!\s*?\n|(?:[*+-]|\d{1,9}[.)]) ))+?)\n {0,3}(=+|-+) *(?:\n+|$)
+      1    0.0%    0.0%  RegExp: ^( {2,}|\\)\n(?!\s*$)
+      1    0.0%    0.0%  RegExp: ^( {0,3}> ?(([^\n]+(?:\n(?! {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)| {0,3}#{1,6} | {0,3}>| {0,3}(?:`{3,}(?=[^`\n]*\n)|~{3,})[^\n]*\n| {0,3}(?:[*+-]|1[.)]) |<\/?(?:address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option|p|param|section|source|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)(?: +|\n|\/?>)|<(?:script|pre|style|textarea|!--)| +\n)[^\n]+)*)|[^\n]*)(?:\n|$))+
+      1    0.0%    0.0%  RegExp: ^( *)(\t+) {1}
+      1    0.0%    0.0%  RegExp: ^ {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)
+      1    0.0%    0.0%  RegExp: ^ {0,1}#
+      1    0.0%    0.0%  RegExp: \r\n|\r
+      1    0.0%    0.0%  RegExp: \r?\n\s*?$
+      1    0.0%    0.0%  RegExp: \\[\p{P}$+<=>`|~]
+      1    0.0%    0.0%  RegExp: [<>"']|&(?!(#\d{1,7}|#[Xx][a-fA-F0-9]{1,6}|\w+);) {1}
+      1    0.0%    0.0%  RegExp: [<>"']|&(?!(#\d{1,7}|#[Xx][a-fA-F0-9]{1,6}|\w+);)
+      1    0.0%    0.0%  RegExp: [&<>"'`=]
+      1    0.0%    0.0%  RegExp: ["&\u00A0]
+      1    0.0%    0.0%  RegExp: <(?:slot|template)[^>]*> {1}
+      1    0.0%    0.0%  RegExp: (?:\r\n?|\n).*
+      1    0.0%    0.0%  JS: ~set /home/krank/dev/portfolio/node_modules/cssstyle/lib/CSSStyleDeclaration.js:187:19
+      1    0.0%    0.0%  JS: ~resume /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/resources/resource-queue.js:128:9
+      1    0.0%    0.0%  JS: ~packageResolve node:internal/modules/esm/resolve:761:24
+      1    0.0%    0.0%  JS: ~module.exports /home/krank/dev/portfolio/node_modules/whatwg-mimetype/lib/parser.js:12:18
+      1    0.0%    0.0%  JS: ~makeTable /home/krank/dev/portfolio/node_modules/pako/lib/zlib/crc32.js:27:19
+      1    0.0%    0.0%  JS: ~inheritMany /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:205:23
+      1    0.0%    0.0%  JS: ~inherit /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:192:19
+      1    0.0%    0.0%  JS: ~flatten file:///home/krank/dev/portfolio/lib/data-chunk.js:56:10
+      1    0.0%    0.0%  JS: ~exports.install /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/HTMLAreaElement.js:89:19
+      1    0.0%    0.0%  JS: ~dashedToCamelCase /home/krank/dev/portfolio/node_modules/cssstyle/lib/parsers.js:452:34
+      1    0.0%    0.0%  JS: ~dartProgram /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:154:22
+      1    0.0%    0.0%  JS: ~_remove /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:1072:10
+      1    0.0%    0.0%  JS: ~_querySelectorAll /home/krank/dev/portfolio/node_modules/nwsapi/src/nwsapi.js:1419:31
+      1    0.0%    0.0%  JS: ~_err /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:130:9
+      1    0.0%    0.0%  JS: ~_ensureNoahArkCondition /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/formatting-element-list.js:43:28
+      1    0.0%    0.0%  JS: ~Converter.convert /home/krank/dev/portfolio/node_modules/any-base/src/converter.js:25:39
+      1    0.0%    0.0%  JS: ~<anonymous> /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/helpers/helper-missing.js:13:53
+      1    0.0%    0.0%  JS: ~<anonymous> /home/krank/dev/portfolio/node_modules/entities/lib/generated/decode-data-html.js:8:19
+      1    0.0%    0.0%  JS: ~<anonymous> /home/krank/dev/portfolio/node_modules/@jimp/png/node_modules/pngjs/lib/parser-async.js:1:1
+      1    0.0%    0.0%  JS: ^update node:internal/crypto/hash:132:40
+      1    0.0%    0.0%  JS: ^trySelfParentPath node:internal/modules/cjs/loader:575:27
+      1    0.0%    0.0%  JS: ^setupWindow /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/Window.js:102:21
+      1    0.0%    0.0%  JS: ^serializeTextNode /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/serializer/index.js:156:27
+      1    0.0%    0.0%  JS: ^ret._setup /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/runtime.js:217:25
+      1    0.0%    0.0%  JS: ^resolveForCJSWithHooks node:internal/modules/cjs/loader:1002:32
+      1    0.0%    0.0%  JS: ^resolve node:path:1210:10
+      1    0.0%    0.0%  JS: ^realpathSync node:fs:2710:22
+      1    0.0%    0.0%  JS: ^readLineBreak file:///home/krank/dev/portfolio/node_modules/js-yaml/dist/js-yaml.mjs:1468:23
+      1    0.0%    0.0%  JS: ^push /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/open-element-stack.js:71:9
+      1    0.0%    0.0%  JS: ^parse /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/parser.js:269:30
+      1    0.0%    0.0%  JS: ^paragraph file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:605:14
+      1    0.0%    0.0%  JS: ^onItemPush /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:147:15
+      1    0.0%    0.0%  JS: ^onCharacter /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:576:16
+      1    0.0%    0.0%  JS: ^normalize node:path:1258:12
+      1    0.0%    0.0%  JS: ^mergeIfNeeded /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/runtime.js:172:42
+      1    0.0%    0.0%  JS: ^marked file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:2323:16
+      1    0.0%    0.0%  JS: ^makeWrapper /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/HTMLSpanElement.js:26:21
+      1    0.0%    0.0%  JS: ^makeWrapper /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/Event.js:25:21
+      1    0.0%    0.0%  JS: ^makeWrapper /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/DOMStringMap.js:26:21
+      1    0.0%    0.0%  JS: ^makeKey file:///home/krank/dev/portfolio/lib/virtual-machine.js:36:10
+      1    0.0%    0.0%  JS: ^link file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:665:9
+      1    0.0%    0.0%  JS: ^isURL node:internal/url:777:15
+      1    0.0%    0.0%  JS: ^isEncoding node:buffer:572:40
+      1    0.0%    0.0%  JS: ^getUnforgeables /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/Location.js:47:25
+      1    0.0%    0.0%  JS: ^getCurrentLocation /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:205:23
+      1    0.0%    0.0%  JS: ^get hasSubscribers node:diagnostics_channel:208:21
+      1    0.0%    0.0%  JS: ^get /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/NodeList.js:165:6
+      1    0.0%    0.0%  JS: ^get /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/DOMStringMap.js:127:6
+      1    0.0%    0.0%  JS: ^genericEndTagInBody /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:2153:29
+      1    0.0%    0.0%  JS: ^exports.setup /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/NamedNodeMap.js:61:17
+      1    0.0%    0.0%  JS: ^exports.setup /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/HTMLAnchorElement.js:55:17
+      1    0.0%    0.0%  JS: ^exports.install /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/HTMLAnchorElement.js:89:19
+      1    0.0%    0.0%  JS: ^exports.install /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/CloseEvent.js:87:19
+      1    0.0%    0.0%  JS: ^exports.createImpl /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/Event.js:43:22
+      1    0.0%    0.0%  JS: ^exports.create /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/Screen.js:37:18
+      1    0.0%    0.0%  JS: ^exports.create /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/HTMLLIElement.js:42:18
+      1    0.0%    0.0%  JS: ^executeEntry file:///home/krank/dev/portfolio/lib/template-writer.js:50:21
+      1    0.0%    0.0%  JS: ^encode node:internal/encoding:351:9
+      1    0.0%    0.0%  JS: ^duplicate file:///home/krank/dev/portfolio/lib/data-chunk.js:71:12
+      1    0.0%    0.0%  JS: ^createProtoAccessControl /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/internal/proto-access.js:19:34
+      1    0.0%    0.0%  JS: ^createAnEvent /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/helpers/events.js:6:23
+      1    0.0%    0.0%  JS: ^br file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:812:7
+      1    0.0%    0.0%  JS: ^adoptAttributes /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/parser/html.js:161:18
+      1    0.0%    0.0%  JS: ^_stateTagOpen /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:1000:18
+      1    0.0%    0.0%  JS: ^_stateBeforeAttributeName /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:1541:30
+      1    0.0%    0.0%  JS: ^_startTagOutsideForeignContent /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:796:35
+      1    0.0%    0.0%  JS: ^_preInsertValidity /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:614:21
+      1    0.0%    0.0%  JS: ^_insert /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:764:10
+      1    0.0%    0.0%  JS: ^_detach /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:268:10
+      1    0.0%    0.0%  JS: ^_detach /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Element-impl.js:101:10
+      1    0.0%    0.0%  JS: ^_createStartTagToken /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:298:25
+      1    0.0%    0.0%  JS: ^_clearMemoizedQueries /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:236:24
+      1    0.0%    0.0%  JS: ^Window /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/Window.js:236:16
+      1    0.0%    0.0%  JS: ^State$1 file:///home/krank/dev/portfolio/node_modules/js-yaml/dist/js-yaml.mjs:1221:17
+      1    0.0%    0.0%  JS: ^JSDOM /home/krank/dev/portfolio/node_modules/jsdom/lib/api.js:30:14
+      1    0.0%    0.0%  JS: ^<anonymous> node:internal/validators:407:42
+      1    0.0%    0.0%  JS: ^<anonymous> node:internal/modules/cjs/loader:665:28
+      1    0.0%    0.0%  JS: ^<anonymous> node:internal/modules/cjs/loader:1437:36
+      1    0.0%    0.0%  JS: ^<anonymous> node:internal/modules/cjs/loader:1414:33
+      1    0.0%    0.0%  JS: ^<anonymous> file:///home/krank/dev/portfolio/lib/template-engine.js:45:54
+      1    0.0%    0.0%  JS: ^<anonymous> file:///home/krank/dev/portfolio/lib/object.js:52:25
+      1    0.0%    0.0%  JS: ^<anonymous> file:///home/krank/dev/portfolio/lib/data-chunk.js:49:29
+      1    0.0%    0.0%  JS: ^<anonymous> /home/krank/dev/portfolio/node_modules/source-map/lib/source-node.js:174:29
+      1    0.0%    0.0%  JS: ^<anonymous> /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/Storage.js:97:25
+      1    0.0%    0.0%  JS: ^<anonymous> /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/HTMLTableRowElement.js:90:25
+      1    0.0%    0.0%  JS: ^<anonymous> /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/CDATASection.js:87:25
+      1    0.0%    0.0%  JS: *treeToArray /home/krank/dev/portfolio/node_modules/symbol-tree/lib/SymbolTree.js:338:20
+      1    0.0%    0.0%  JS: *shadowIncludingInclusiveDescendantsIterator /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/helpers/shadow-dom.js:238:54
+      1    0.0%    0.0%  JS: *serializeChildNodes /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/serializer/index.js:88:29
+      1    0.0%    0.0%  JS: *realpathSync node:fs:2710:22
+      1    0.0%    0.0%  JS: *queueTreeMutationRecord /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/helpers/mutation-observers.js:95:33
+      1    0.0%    0.0%  JS: *nodeRoot /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/helpers/node.js:23:18
+      1    0.0%    0.0%  JS: *mergeObjects file:///home/krank/dev/portfolio/lib/object.js:51:29
+      1    0.0%    0.0%  JS: *lookupProperty /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/runtime.js:118:44
+      1    0.0%    0.0%  JS: *link file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:665:9
+      1    0.0%    0.0%  JS: *isVoidElement /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/serializer/index.js:28:23
+      1    0.0%    0.0%  JS: *isURL node:internal/url:777:15
+      1    0.0%    0.0%  JS: *isObject /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/utils.js:4:18
+      1    0.0%    0.0%  JS: *isNamedPropertyElement /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/named-properties-window.js:9:32
+      1    0.0%    0.0%  JS: *isHostInclusiveAncestor /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:103:33
+      1    0.0%    0.0%  JS: *get tagName /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Element-impl.js:142:14
+      1    0.0%    0.0%  JS: *get nodeName /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:150:15
+      1    0.0%    0.0%  JS: *get lastChild /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:191:16
+      1    0.0%    0.0%  JS: *exports.nodeDetachedFromDocument /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/named-properties-window.js:126:45
+      1    0.0%    0.0%  JS: *exports.nodeAttachedToDocument /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/named-properties-window.js:109:43
+      1    0.0%    0.0%  JS: *exports.getInterfaceWrapper /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/interfaces.js:223:31
+      1    0.0%    0.0%  JS: *execIteration /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/helpers/each.js:39:27
+      1    0.0%    0.0%  JS: *escapeExpression /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/utils.js:77:26
+      1    0.0%    0.0%  JS: *del file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:821:8
+      1    0.0%    0.0%  JS: *contains /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/open-element-stack.js:187:13
+      1    0.0%    0.0%  JS: *childrenIterator /home/krank/dev/portfolio/node_modules/symbol-tree/lib/SymbolTree.js:367:25
+      1    0.0%    0.0%  JS: *assignSlotableForTree /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/helpers/shadow-dom.js:146:31
+      1    0.0%    0.0%  JS: *appendChild /home/krank/dev/portfolio/node_modules/symbol-tree/lib/SymbolTree.js:815:20
+      1    0.0%    0.0%  JS: *ancestorsIterator /home/krank/dev/portfolio/node_modules/symbol-tree/lib/SymbolTree.js:427:26
+      1    0.0%    0.0%  JS: *_stateBeforeAttributeValue /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:1646:31
+      1    0.0%    0.0%  JS: *_stateAttributeName /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:1572:24
+      1    0.0%    0.0%  JS: *_startTagOutsideForeignContent /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:796:35
+      1    0.0%    0.0%  JS: *_ownerDocument /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/parser/html.js:33:17
+      1    0.0%    0.0%  JS: *_modified /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:216:12
+      1    0.0%    0.0%  JS: *_isInTemplate /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/open-element-stack.js:63:18
+      1    0.0%    0.0%  JS: *_emitCurrentCharacterToken /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:416:31
+      1    0.0%    0.0%  JS: *_attachElementToTree /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:249:25
+      1    0.0%    0.0%  JS: *_attach /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Element-impl.js:86:10
+      1    0.0%    0.0%  JS: *_append /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:863:10
+      1    0.0%    0.0%  JS: *HTMLElementImpl /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/HTMLElement-impl.js:14:14
+      1    0.0%    0.0%  JS: *AttrImpl /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/attributes/Attr-impl.js:8:14
+      1    0.0%    0.0%  JS: *<anonymous> file:///home/krank/dev/portfolio/lib/dir-tree.js:132:41
+      1    0.0%    0.0%  JS: *<anonymous> file:///home/krank/dev/portfolio/lib/data-chunk.js:49:29
+      1    0.0%    0.0%  JS: *<anonymous> /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/helpers/strings.js:14:30
+      1    0.0%    0.0%  Builtin: WeakMapGet
+      1    0.0%    0.0%  Builtin: WeakCollectionSet
+      1    0.0%    0.0%  Builtin: TypedArrayPrototypeValues
+      1    0.0%    0.0%  Builtin: SubtractSmi_Baseline
+      1    0.0%    0.0%  Builtin: StringToList
+      1    0.0%    0.0%  Builtin: StringPrototypeTrim
+      1    0.0%    0.0%  Builtin: StringPrototypeSubstring
+      1    0.0%    0.0%  Builtin: StringPrototypeSubstr
+      1    0.0%    0.0%  Builtin: StringPrototypeIncludes
+      1    0.0%    0.0%  Builtin: StringPrototypeCodePointAt
+      1    0.0%    0.0%  Builtin: StringPrototypeCharCodeAt
+      1    0.0%    0.0%  Builtin: StringPrototypeCharAt
+      1    0.0%    0.0%  Builtin: StringConstructor
+      1    0.0%    0.0%  Builtin: StoreInArrayLiteralIC
+      1    0.0%    0.0%  Builtin: SetProperty
+      1    0.0%    0.0%  Builtin: SetDataProperties
+      1    0.0%    0.0%  Builtin: RunMicrotasks
+      1    0.0%    0.0%  Builtin: ResolvePromise
+      1    0.0%    0.0%  Builtin: ReflectGet
+      1    0.0%    0.0%  Builtin: ObjectDefineProperty
+      1    0.0%    0.0%  Builtin: ObjectDefineProperties
+      1    0.0%    0.0%  Builtin: ObjectCreate
+      1    0.0%    0.0%  Builtin: LoadSuperIC
+      1    0.0%    0.0%  Builtin: LoadJoinElement_FastSmiOrObjectElements_0
+      1    0.0%    0.0%  Builtin: LoadIC_StringLength
+      1    0.0%    0.0%  Builtin: LessThan_Baseline
+      1    0.0%    0.0%  Builtin: KeyedStoreICTrampoline_Megamorphic
+      1    0.0%    0.0%  Builtin: HandleApiCallOrConstruct
+      1    0.0%    0.0%  Builtin: FunctionPrototypeHasInstance
+      1    0.0%    0.0%  Builtin: FunctionConstructor
+      1    0.0%    0.0%  Builtin: ElementsTransitionAndStore_InBounds
+      1    0.0%    0.0%  Builtin: Decrement_Baseline
+      1    0.0%    0.0%  Builtin: DatePrototypeToLocaleDateString
+      1    0.0%    0.0%  Builtin: CreateRegExpLiteral
+      1    0.0%    0.0%  Builtin: CreateObjectWithoutProperties
+      1    0.0%    0.0%  Builtin: CreateIterResultObject
+      1    0.0%    0.0%  Builtin: CreateGeneratorObject
+      1    0.0%    0.0%  Builtin: CopyDataProperties
+      1    0.0%    0.0%  Builtin: Construct_Baseline
+      1    0.0%    0.0%  Builtin: CallVarargs
+      1    0.0%    0.0%  Builtin: CallFunctionTemplate_Generic
+      1    0.0%    0.0%  Builtin: ArrayPrototypeSlice
+      1    0.0%    0.0%  Builtin: ArrayPrototypeReverse
+      1    0.0%    0.0%  Builtin: ArrayPrototypeJoin
+      1    0.0%    0.0%  Builtin: ArrayIsArray
+      1    0.0%    0.0%  Builtin: ArrayIndexOfSmiOrObject
+      1    0.0%    0.0%  Builtin: ArrayIncludesSmiOrObject
+      1    0.0%    0.0%  Builtin: Add
+
+ [C++]:
+   ticks  total  nonlib   name
+    287    1.4%   12.4%  fwrite@@GLIBC_2.2.5
+    122    0.6%    5.3%  __write@@GLIBC_2.2.5
+     95    0.5%    4.1%  __munmap@@GLIBC_PRIVATE
+     65    0.3%    2.8%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
+     52    0.2%    2.2%  _IO_file_xsputn@@GLIBC_2.2.5
+     41    0.2%    1.8%  __open@@GLIBC_2.2.5
+     41    0.2%    1.8%  __libc_malloc@@GLIBC_2.2.5
+     36    0.2%    1.6%  __mmap@@GLIBC_PRIVATE
+     31    0.1%    1.3%  std::ostream::sentry::sentry(std::ostream&)@@GLIBCXX_3.4
+     18    0.1%    0.8%  syscall@@GLIBC_2.2.5
+     14    0.1%    0.6%  cfree@GLIBC_2.2.5
+     13    0.1%    0.6%  pthread_cond_signal@@GLIBC_2.3.2
+     12    0.1%    0.5%  __madvise@@GLIBC_PRIVATE
+     11    0.1%    0.5%  operator new(unsigned long)@@GLIBCXX_3.4
+     11    0.1%    0.5%  isprint@@GLIBC_2.2.5
+     10    0.0%    0.4%  __read@@GLIBC_2.2.5
+      9    0.0%    0.4%  __mprotect@@GLIBC_PRIVATE
+      8    0.0%    0.3%  __pthread_mutex_lock@GLIBC_2.2.5
+      6    0.0%    0.3%  std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const@@GLIBCXX_3.4
+      6    0.0%    0.3%  std::_Rb_tree_insert_and_rebalance(bool, std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)@@GLIBCXX_3.4
+      4    0.0%    0.2%  operator delete(void*, unsigned long)@@CXXABI_1.3.9
+      4    0.0%    0.2%  __pthread_mutex_unlock@GLIBC_2.2.5
+      3    0.0%    0.1%  std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::do_put(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, unsigned long) const@@GLIBCXX_3.4
+      3    0.0%    0.1%  operator new[](unsigned long)@@GLIBCXX_3.4
+      3    0.0%    0.1%  __pthread_rwlock_wrlock@GLIBC_2.2.5
+      2    0.0%    0.1%  std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<unsigned long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, unsigned long) const@@GLIBCXX_3.4
+      2    0.0%    0.1%  access@@GLIBC_2.2.5
+      2    0.0%    0.1%  __pthread_rwlock_unlock@GLIBC_2.2.5
+      2    0.0%    0.1%  __pthread_rwlock_rdlock@GLIBC_2.2.5
+      2    0.0%    0.1%  __clock_gettime@@GLIBC_PRIVATE
+      1    0.0%    0.0%  std::ostream& std::ostream::_M_insert<long>(long)@@GLIBCXX_3.4.9
+      1    0.0%    0.0%  std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::do_put(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const@@GLIBCXX_3.4
+      1    0.0%    0.0%  std::locale::id::_M_id() const@@GLIBCXX_3.4
+      1    0.0%    0.0%  std::ios_base::_M_init()@@GLIBCXX_3.4
+      1    0.0%    0.0%  std::basic_ios<char, std::char_traits<char> >::init(std::basic_streambuf<char, std::char_traits<char> >*)@@GLIBCXX_3.4
+      1    0.0%    0.0%  std::__cxx11::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >::underflow()@@GLIBCXX_3.4.21
+      1    0.0%    0.0%  std::_Hash_bytes(void const*, unsigned long, unsigned long)@@CXXABI_1.3.5
+      1    0.0%    0.0%  pthread_cond_destroy@@GLIBC_2.3.2
+      1    0.0%    0.0%  posix_memalign@@GLIBC_2.2.5
+      1    0.0%    0.0%  operator delete[](void*)@@GLIBCXX_3.4
+      1    0.0%    0.0%  fputc@@GLIBC_2.2.5
+      1    0.0%    0.0%  fflush@@GLIBC_2.2.5
+      1    0.0%    0.0%  __pthread_rwlock_trywrlock@GLIBC_2.2.5
+      1    0.0%    0.0%  __pthread_mutex_init@GLIBC_2.2.5
+      1    0.0%    0.0%  __libc_realloc@@GLIBC_2.2.5
+      1    0.0%    0.0%  _IO_do_write@@GLIBC_2.2.5
+
+ [Summary]:
+   ticks  total  nonlib   name
+   1338    6.4%   57.7%  JavaScript
+    931    4.4%   40.2%  C++
+    461    2.2%   19.9%  GC
+  18651   88.9%          Shared libraries
+     48    0.2%          Unaccounted
+
+ [C++ entry points]:
+   ticks    cpp   total   name
+    284   36.0%    1.4%  fwrite@@GLIBC_2.2.5
+     96   12.2%    0.5%  __write@@GLIBC_2.2.5
+     64    8.1%    0.3%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
+     51    6.5%    0.2%  _IO_file_xsputn@@GLIBC_2.2.5
+     41    5.2%    0.2%  __open@@GLIBC_2.2.5
+     39    4.9%    0.2%  __libc_malloc@@GLIBC_2.2.5
+     30    3.8%    0.1%  std::ostream::sentry::sentry(std::ostream&)@@GLIBCXX_3.4
+     29    3.7%    0.1%  __mmap@@GLIBC_PRIVATE
+     18    2.3%    0.1%  syscall@@GLIBC_2.2.5
+     14    1.8%    0.1%  cfree@GLIBC_2.2.5
+     13    1.6%    0.1%  __munmap@@GLIBC_PRIVATE
+     11    1.4%    0.1%  operator new(unsigned long)@@GLIBCXX_3.4
+     11    1.4%    0.1%  isprint@@GLIBC_2.2.5
+     11    1.4%    0.1%  __madvise@@GLIBC_PRIVATE
+     10    1.3%    0.0%  __read@@GLIBC_2.2.5
+      9    1.1%    0.0%  __mprotect@@GLIBC_PRIVATE
+      7    0.9%    0.0%  __pthread_mutex_lock@GLIBC_2.2.5
+      6    0.8%    0.0%  std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const@@GLIBCXX_3.4
+      6    0.8%    0.0%  std::_Rb_tree_insert_and_rebalance(bool, std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)@@GLIBCXX_3.4
+      4    0.5%    0.0%  pthread_cond_signal@@GLIBC_2.3.2
+      4    0.5%    0.0%  operator delete(void*, unsigned long)@@CXXABI_1.3.9
+      4    0.5%    0.0%  __pthread_mutex_unlock@GLIBC_2.2.5
+      3    0.4%    0.0%  operator new[](unsigned long)@@GLIBCXX_3.4
+      2    0.3%    0.0%  std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<unsigned long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, unsigned long) const@@GLIBCXX_3.4
+      2    0.3%    0.0%  std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::do_put(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, unsigned long) const@@GLIBCXX_3.4
+      2    0.3%    0.0%  access@@GLIBC_2.2.5
+      2    0.3%    0.0%  __pthread_rwlock_wrlock@GLIBC_2.2.5
+      2    0.3%    0.0%  __pthread_rwlock_rdlock@GLIBC_2.2.5
+      2    0.3%    0.0%  __clock_gettime@@GLIBC_PRIVATE
+      1    0.1%    0.0%  std::ostream& std::ostream::_M_insert<long>(long)@@GLIBCXX_3.4.9
+      1    0.1%    0.0%  std::locale::id::_M_id() const@@GLIBCXX_3.4
+      1    0.1%    0.0%  std::ios_base::_M_init()@@GLIBCXX_3.4
+      1    0.1%    0.0%  std::basic_ios<char, std::char_traits<char> >::init(std::basic_streambuf<char, std::char_traits<char> >*)@@GLIBCXX_3.4
+      1    0.1%    0.0%  std::__cxx11::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >::underflow()@@GLIBCXX_3.4.21
+      1    0.1%    0.0%  std::_Hash_bytes(void const*, unsigned long, unsigned long)@@CXXABI_1.3.5
+      1    0.1%    0.0%  posix_memalign@@GLIBC_2.2.5
+      1    0.1%    0.0%  operator delete[](void*)@@GLIBCXX_3.4
+      1    0.1%    0.0%  __pthread_rwlock_trywrlock@GLIBC_2.2.5
+      1    0.1%    0.0%  __pthread_mutex_init@GLIBC_2.2.5
+      1    0.1%    0.0%  __libc_realloc@@GLIBC_2.2.5
+      1    0.1%    0.0%  _IO_do_write@@GLIBC_2.2.5
+
+ [Bottom up (heavy) profile]:
+  Note: percentage shows a share of a particular caller in the total
+  amount of its parent calls.
+  Callers occupying less than 1.0% are not shown.
+
+   ticks parent  name
+  16840   80.3%  /home/krank/.nvm/versions/node/v22.18.0/bin/node
+  16169   96.0%    /home/krank/.nvm/versions/node/v22.18.0/bin/node
+  10125   62.6%      JS: *<anonymous> file:///home/krank/dev/portfolio/lib/data-chunk.js:73:23
+  10125  100.0%        Builtin: ArrayMap
+  10125  100.0%          JS: ^duplicate file:///home/krank/dev/portfolio/lib/data-chunk.js:71:12
+   6482   64.0%            JS: ^prepareSfc file:///home/krank/dev/portfolio/lib/template-engine.js:163:26
+   3418   33.8%            JS: ^compileEntry file:///home/krank/dev/portfolio/lib/template-writer.js:213:21
+    160    1.6%            JS: ^compileMarkdown file:///home/krank/dev/portfolio/lib/template-writer.js:106:24
+   4925   30.5%      JS: ^flattenObject file:///home/krank/dev/portfolio/lib/object.js:16:30
+   4925  100.0%        JS: ^duplicate file:///home/krank/dev/portfolio/lib/data-chunk.js:99:12
+   4925  100.0%          JS: ^<anonymous> file:///home/krank/dev/portfolio/lib/data-chunk.js:73:23
+   4925  100.0%            Builtin: ArrayMap
+    277    1.6%    JS: ^wrapSafe node:internal/modules/cjs/loader:1578:18
+    277  100.0%      JS: ^<anonymous> node:internal/modules/cjs/loader:1638:37
+    277  100.0%        JS: ^<anonymous> node:internal/modules/cjs/loader:1785:37
+    277  100.0%          JS: ^<anonymous> node:internal/modules/cjs/loader:1414:33
+    277  100.0%            JS: ^<anonymous> node:internal/modules/cjs/loader:1152:24
+
+   1795    8.6%  /usr/lib/x86_64-linux-gnu/libc.so.6
+   1599   89.1%    /home/krank/.nvm/versions/node/v22.18.0/bin/node
+   1027   64.2%      JS: *<anonymous> file:///home/krank/dev/portfolio/lib/data-chunk.js:73:23
+   1027  100.0%        Builtin: ArrayMap
+   1027  100.0%          JS: ^duplicate file:///home/krank/dev/portfolio/lib/data-chunk.js:71:12
+    664   64.7%            JS: ^prepareSfc file:///home/krank/dev/portfolio/lib/template-engine.js:163:26
+    348   33.9%            JS: ^compileEntry file:///home/krank/dev/portfolio/lib/template-writer.js:213:21
+     11    1.1%            JS: ^compileMarkdown file:///home/krank/dev/portfolio/lib/template-writer.js:106:24
+    487   30.5%      JS: ^flattenObject file:///home/krank/dev/portfolio/lib/object.js:16:30
+    487  100.0%        JS: ^duplicate file:///home/krank/dev/portfolio/lib/data-chunk.js:99:12
+    487  100.0%          JS: ^<anonymous> file:///home/krank/dev/portfolio/lib/data-chunk.js:73:23
+    487  100.0%            Builtin: ArrayMap
+     41    2.6%      JS: ^<anonymous> :1:20
+     41  100.0%        JS: ^executeModule file:///home/krank/dev/portfolio/lib/virtual-machine.js:61:36
+     41  100.0%          JS: ^prepareSfc file:///home/krank/dev/portfolio/lib/template-engine.js:163:26
+     22   53.7%            JS: ^executeEntry file:///home/krank/dev/portfolio/lib/template-writer.js:50:21
+     19   46.3%            JS: ^compileSfc file:///home/krank/dev/portfolio/lib/template-writer.js:71:19
+     29    1.6%    JS: ^wrapSafe node:internal/modules/cjs/loader:1578:18
+     29  100.0%      JS: ^<anonymous> node:internal/modules/cjs/loader:1638:37
+     29  100.0%        JS: ^<anonymous> node:internal/modules/cjs/loader:1785:37
+     28   96.6%          JS: ^<anonymous> node:internal/modules/cjs/loader:1414:33
+     28  100.0%            JS: ^<anonymous> node:internal/modules/cjs/loader:1152:24
+      1    3.4%          JS: ^<anonymous> node:internal/modules/cjs/loader:1152:24
+      1  100.0%            JS: ^traceSync node:diagnostics_channel:320:12
+
+    287    1.4%  fwrite@@GLIBC_2.2.5
+    180   62.7%    JS: ^wrapSafe node:internal/modules/cjs/loader:1578:18
+    180  100.0%      JS: ^<anonymous> node:internal/modules/cjs/loader:1638:37
+    180  100.0%        JS: ^<anonymous> node:internal/modules/cjs/loader:1785:37
+    180  100.0%          JS: ^<anonymous> node:internal/modules/cjs/loader:1414:33
+    180  100.0%            JS: ^<anonymous> node:internal/modules/cjs/loader:1152:24
+     79   27.5%    /home/krank/.nvm/versions/node/v22.18.0/bin/node
+     35   44.3%      JS: ^createFunctionContext /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/javascript-compiler.js:216:56
+     35  100.0%        JS: ^compile /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/javascript-compiler.js:73:28
+     34   97.1%          JS: ^compileInput /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/compiler.js:507:24
+     29   85.3%            JS: ^ret /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/compiler.js:515:15
+      5   14.7%            JS: *ret /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/compiler.js:515:15
+      1    2.9%          JS: ^compileChildren /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/javascript-compiler.js:805:44
+      1  100.0%            JS: ^compile /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/javascript-compiler.js:73:28
+      2    2.5%      JS: ~finalizeResolution node:internal/modules/esm/resolve:228:28
+      2  100.0%        JS: ~moduleResolve node:internal/modules/esm/resolve:826:23
+      2  100.0%          JS: ~defaultResolve node:internal/modules/esm/resolve:938:24
+      2  100.0%            JS: ~defaultResolve node:internal/modules/esm/loader:773:17
+      2    2.5%      JS: ~<anonymous> node:internal/main/run_main_module:1:1
+      2    2.5%      JS: ~<anonymous> /home/krank/dev/portfolio/node_modules/sass/sass.node.js:1:1
+      2  100.0%        JS: ^<anonymous> node:internal/modules/cjs/loader:1638:37
+      2  100.0%          JS: ^<anonymous> node:internal/modules/cjs/loader:1785:37
+      2  100.0%            JS: ^<anonymous> node:internal/modules/cjs/loader:1414:33
+      2    2.5%      JS: ^wrappedFn node:internal/errors:535:21
+      2  100.0%        JS: ^wrappedFn node:internal/errors:535:21
+      2  100.0%          JS: ~getSourceSync node:internal/modules/esm/load:36:23
+      2  100.0%            JS: ^defaultLoad node:internal/modules/esm/load:62:21
+      1    1.3%      Script: ~<anonymous> file:///home/krank/dev/portfolio/rollup.config.js:1:1
+      1  100.0%        Builtin: GeneratorPrototypeNext
+      1  100.0%          Builtin: CallApiCallbackGeneric
+      1  100.0%            JS: ~run node:internal/modules/esm/module_job:334:12
+      1    1.3%      JS: ~setupWindow /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/Window.js:102:21
+      1  100.0%        JS: ~Window /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/Window.js:236:16
+      1  100.0%          JS: ~exports.createWindow /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/Window.js:95:33
+      1  100.0%            JS: ~JSDOM /home/krank/dev/portfolio/node_modules/jsdom/lib/api.js:30:14
+      1    1.3%      JS: ~set node:internal/streams/writable:132:8
+      1  100.0%        Builtin: CEntry_Return1_ArgvOnStack_NoBuiltinExit
+      1  100.0%          JS: ~undestroy node:internal/streams/destroy:173:19
+      1  100.0%            JS: ~initSocketHandle node:net:318:26
+      1    1.3%      JS: ~quotedString /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/javascript-compiler.js:998:38
+      1  100.0%        JS: ~setupParams /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/javascript-compiler.js:1034:36
+      1  100.0%          JS: ~invokePartial /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/javascript-compiler.js:725:40
+      1  100.0%            JS: ~compile /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/javascript-compiler.js:73:28
+      1    1.3%      JS: ~parseSource node:internal/deps/cjs-module-lexer/lexer:85:22
+      1  100.0%        JS: ~parseCJS node:internal/deps/cjs-module-lexer/lexer:40:19
+      1  100.0%          JS: ~cjsPreparseModuleExports node:internal/modules/esm/translators:287:34
+      1  100.0%            JS: ~createCJSModuleWrap node:internal/modules/esm/translators:182:29
+      1    1.3%      JS: ~parse /home/krank/dev/portfolio/node_modules/cssstyle/lib/properties.js:95:53
+      1  100.0%        JS: ~set /home/krank/dev/portfolio/node_modules/cssstyle/lib/properties.js:114:17
+      1  100.0%          Builtin: CEntry_Return1_ArgvOnStack_NoBuiltinExit
+      1  100.0%            JS: ~setProperty /home/krank/dev/portfolio/node_modules/cssstyle/lib/CSSStyleDeclaration.js:51:25
+      1    1.3%      JS: ~moduleStrategy node:internal/modules/esm/translators:101:50
+      1  100.0%        JS: ~#translate node:internal/modules/esm/loader:528:13
+      1  100.0%          JS: ~loadAndTranslate node:internal/modules/esm/loader:581:25
+      1  100.0%            Builtin: AsyncFunctionAwaitResolveClosure
+      1    1.3%      JS: ~makeFunction file:///home/krank/dev/portfolio/lib/virtual-machine.js:18:15
+      1  100.0%        JS: ^get file:///home/krank/dev/portfolio/lib/virtual-machine.js:9:6
+      1  100.0%          JS: ^executeModule file:///home/krank/dev/portfolio/lib/virtual-machine.js:61:36
+      1  100.0%            JS: ~prepareSfc file:///home/krank/dev/portfolio/lib/template-engine.js:163:26
+      1    1.3%      JS: ~listItemStartTagInBody /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:1656:32
+      1  100.0%        JS: ^startTagInBody /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:1856:24
+      1  100.0%          JS: ^_startTagOutsideForeignContent /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:796:35
+      1  100.0%            JS: ^_processStartTag /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:788:21
+      1    1.3%      JS: ~exports.setup /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/Selection.js:53:17
+      1  100.0%        JS: ~exports.create /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/Selection.js:41:18
+      1  100.0%          JS: ~exports.createImpl /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/Selection.js:46:22
+      1  100.0%            JS: ~Window /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/Window.js:236:16
+      1    1.3%      JS: ~exports.setup /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/HTMLCollection.js:58:17
+      1  100.0%        JS: ~exports.create /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/HTMLCollection.js:46:18
+      1  100.0%          JS: ~exports.createImpl /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/HTMLCollection.js:51:22
+      1  100.0%            JS: ~exports.listOfElementsWithQualifiedName /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/node.js:130:43
+      1    1.3%      JS: ~exports.installInterfaces /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/interfaces.js:207:29
+      1  100.0%        JS: ^setupWindow /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/Window.js:102:21
+      1  100.0%          JS: ~Window /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/Window.js:236:16
+      1  100.0%            JS: ~exports.createWindow /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/Window.js:95:33
+      1    1.3%      JS: ~exports.create /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/HTMLSlotElement.js:42:18
+      1  100.0%        JS: ~exports.createImpl /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/HTMLSlotElement.js:47:22
+      1  100.0%          JS: ^createElement /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/helpers/create-element.js:168:23
+      1  100.0%            JS: ^createElement /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/parser/html.js:60:16
+      1    1.3%      JS: ~exports.create /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/CustomElementRegistry.js:42:18
+      1  100.0%        JS: ~Window /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/Window.js:236:16
+      1  100.0%          JS: ~exports.createWindow /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/Window.js:95:33
+      1  100.0%            JS: ~JSDOM /home/krank/dev/portfolio/node_modules/jsdom/lib/api.js:30:14
+      1    1.3%      JS: ~defaultResolve node:internal/modules/esm/resolve:938:24
+      1  100.0%        JS: ~defaultResolve node:internal/modules/esm/loader:773:17
+      1  100.0%          JS: ~#cachedDefaultResolve node:internal/modules/esm/loader:701:24
+      1  100.0%            JS: ~resolve node:internal/modules/esm/loader:681:10
+      1    1.3%      JS: ~createFunctionContext /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/javascript-compiler.js:216:56
+      1  100.0%        JS: ^compile /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/javascript-compiler.js:73:28
+      1  100.0%          JS: ~compileInput /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/compiler.js:507:24
+      1  100.0%            JS: ~ret /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/compiler.js:515:15
+      1    1.3%      JS: ~create /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars.runtime.js:40:16
+      1  100.0%        JS: ~<anonymous> /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars.runtime.js:1:1
+      1  100.0%          JS: ^<anonymous> node:internal/modules/cjs/loader:1638:37
+      1  100.0%            JS: ^<anonymous> node:internal/modules/cjs/loader:1785:37
+      1    1.3%      JS: ~constants /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:113311:22
+      1  100.0%        JS: ~dartProgram /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:154:22
+      1  100.0%          JS: ~_cliPkgExports.load /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:12:31
+      1  100.0%            JS: ~<anonymous> /home/krank/dev/portfolio/node_modules/sass/sass.node.js:1:1
+      1    1.3%      JS: ~compile /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/javascript-compiler.js:73:28
+      1  100.0%        JS: ~compileInput /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/compiler.js:507:24
+      1  100.0%          JS: ~ret /home/krank/dev/portfolio/node_modules/handlebars/dist/cjs/handlebars/compiler/compiler.js:515:15
+      1  100.0%            JS: ~process file:///home/krank/dev/portfolio/lib/template-engine.js:110:10
+      1    1.3%      JS: ~call$0 /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:86885:11
+      1  100.0%        JS: ~<anonymous> /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:114142:68
+      1  100.0%          JS: ^holder.<computed> /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:257:34
+      1  100.0%            JS: ~main /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:22699:9
+      1    1.3%      JS: ~aStartTagInBody /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:1695:25
+      1  100.0%        JS: ~startTagInBody /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:1856:24
+      1  100.0%          JS: ^_startTagOutsideForeignContent /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:796:35
+      1  100.0%            JS: ^_processStartTag /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:788:21
+      1    1.3%      JS: ~_remove /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:1072:10
+      1  100.0%        JS: ~remove /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/ChildNode-impl.js:6:9
+      1  100.0%          JS: ~remove /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/Element.js:978:11
+      1  100.0%            JS: ~processSlots file:///home/krank/dev/portfolio/lib/template-engine.js:78:15
+      1    1.3%      JS: ~_processStartTag /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:788:21
+      1  100.0%        JS: ~onStartTag /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/parser/index.js:770:15
+      1  100.0%          JS: ~emitCurrentTagToken /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:387:24
+      1  100.0%            JS: ~_stateAfterAttributeValueQuoted /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:1780:36
+      1    1.3%      JS: ~_convertDartFunctionFastCaptureThis /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:7229:40
+      1  100.0%        JS: ~allowInteropCaptureThis /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:7257:28
+      1  100.0%          JS: ~allowInteropCaptureThisNamed /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:25938:33
+      1  100.0%            JS: ~call$2 /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:102663:11
+      1    1.3%      JS: ~_Parser file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:1787:16
+      1  100.0%        JS: ~parse file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:1797:17
+      1  100.0%          JS: ~<anonymous> file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:2253:16
+      1  100.0%            JS: ~marked file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:2323:16
+      1    1.3%      JS: ~ConstantMap_ConstantMap$from /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:856:33
+      1  100.0%        JS: ~SassArgumentList$0 /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:17017:23
+      1  100.0%          JS: ~call$0 /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:76731:11
+      1  100.0%            JS: ~<anonymous> /home/krank/dev/portfolio/node_modules/sass/sass.dart.js:114139:66
+      1    1.3%      JS: ~<anonymous> node:_http_agent:1:1
+      1  100.0%        JS: ^compileForInternalLoader node:internal/bootstrap/realm:384:27
+      1  100.0%          JS: ^requireBuiltin node:internal/bootstrap/realm:421:24
+      1  100.0%            JS: ~<anonymous> node:http:1:1
+      1    1.3%      JS: ^makeFunction file:///home/krank/dev/portfolio/lib/virtual-machine.js:18:15
+      1  100.0%        JS: ^get file:///home/krank/dev/portfolio/lib/virtual-machine.js:9:6
+      1  100.0%          JS: ^executeModule file:///home/krank/dev/portfolio/lib/virtual-machine.js:61:36
+      1  100.0%            JS: ^prepareSfc file:///home/krank/dev/portfolio/lib/template-engine.js:163:26
+      1    1.3%      JS: ^<anonymous> /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/utils.js:83:19
+      1  100.0%        JS: ~getElementsByClassName /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/Document.js:209:27
+      1  100.0%          JS: ~byClass /home/krank/dev/portfolio/node_modules/nwsapi/src/nwsapi.js:399:13
+      1  100.0%            JS: ~<anonymous> /home/krank/dev/portfolio/node_modules/nwsapi/src/nwsapi.js:329:97
+      1    1.3%      JS: *emitCurrentTagToken /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:387:24
+      1  100.0%        JS: *_stateTagName /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:1068:18
+      1  100.0%          JS: *_callState /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:558:15
+      1  100.0%            JS: *_runParsingLoop /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:218:20
+      1    1.3%      JS: *_adoptNode /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Document-impl.js:817:13
+      1  100.0%        JS: ^_preInsert /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:748:13
+      1  100.0%          JS: ^_append /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/nodes/Node-impl.js:863:10
+      1  100.0%            JS: *_emitCurrentCharacterToken /home/krank/dev/portfolio/node_modules/parse5/dist/cjs/tokenizer/index.js:416:31
+      1    1.3%      JS: *<anonymous> file:///home/krank/dev/portfolio/lib/data-chunk.js:73:23
+      1  100.0%        Builtin: ArrayMap
+      1  100.0%          JS: ^duplicate file:///home/krank/dev/portfolio/lib/data-chunk.js:71:12
+      1  100.0%            JS: ^prepareSfc file:///home/krank/dev/portfolio/lib/template-engine.js:163:26
+      1    1.3%      Builtin: StringPrototypeMatch
+      1  100.0%        JS: ^code file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:1633:9
+      1  100.0%          JS: *parse file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:1811:10
+      1  100.0%            JS: ^parse file:///home/krank/dev/portfolio/node_modules/marked/lib/marked.esm.js:1797:17
+      1    1.3%      Builtin: ReflectGet
+      1  100.0%        JS: ^getOwn node:internal/bootstrap/realm:205:16
+      1  100.0%          JS: ^syncExports node:internal/bootstrap/realm:372:14
+      1  100.0%            Builtin: CallApiCallbackGeneric
+      1    1.3%      Builtin: ArraySome
+      1  100.0%        JS: ~exports.install /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/generated/HTMLDirectoryElement.js:89:19
+      1  100.0%          JS: ~exports.installInterfaces /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/living/interfaces.js:207:29
+      1  100.0%            JS: ^setupWindow /home/krank/dev/portfolio/node_modules/jsdom/lib/jsdom/browser/Window.js:102:21
+     24    8.4%    JS: ^compileForInternalLoader node:internal/bootstrap/realm:384:27
+     19   79.2%      JS: ^requireBuiltin node:internal/bootstrap/realm:421:24
+      3   15.8%        JS: ~<anonymous> node:crypto:1:1
+      3  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:384:27
+      3  100.0%            JS: ~builtinStrategy node:internal/modules/esm/translators:353:52
+      2   10.5%        JS: ~<anonymous> node:tls:1:1
+      2  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:384:27
+      2  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:421:24
+      2   10.5%        JS: ~<anonymous> node:internal/streams/duplex:1:1
+      2  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:384:27
+      2  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:421:24
+      1    5.3%        JS: ~newResolveCache node:internal/modules/esm/loader:75:25
+      1  100.0%          JS: ~ModuleLoader node:internal/modules/esm/loader:144:20
+      1  100.0%            JS: ~ModuleLoader node:internal/modules/esm/loader:184:14
+      1    5.3%        JS: ~initCJSParseSync node:internal/modules/esm/translators:79:26
+      1  100.0%          JS: ~commonjsStrategy node:internal/modules/esm/translators:258:54
+      1  100.0%            JS: ^#translate node:internal/modules/esm/loader:528:13
+      1    5.3%        JS: ~getTranslators node:internal/modules/esm/loader:93:24
+      1  100.0%          JS: ~ModuleLoader node:internal/modules/esm/loader:144:20
+      1  100.0%            JS: ~ModuleLoader node:internal/modules/esm/loader:184:14
+      1    5.3%        JS: ~defaultResolve node:internal/modules/esm/loader:773:17
+      1  100.0%          JS: ~#cachedDefaultResolve node:internal/modules/esm/loader:701:24
+      1  100.0%            JS: ~resolve node:internal/modules/esm/loader:681:10
+      1    5.3%        JS: ~<anonymous> node:stream:1:1
+      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:384:27
+      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:421:24
+      1    5.3%        JS: ~<anonymous> node:internal/perf/timerify:1:1
+      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:384:27
+      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:421:24
+      1    5.3%        JS: ~<anonymous> node:internal/modules/esm/resolve:1:1
+      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:384:27
+      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:421:24
+      1    5.3%        JS: ~<anonymous> node:internal/main/run_main_module:1:1
+      1    5.3%        JS: ~<anonymous> node:internal/fs/promises:1:1
+      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:384:27
+      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:421:24
+      1    5.3%        JS: ~<anonymous> node:internal/child_process:1:1
+      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:384:27
+      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:421:24
+      1    5.3%        JS: ~<anonymous> node:http:1:1
+      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:384:27
+      1  100.0%            JS: ^compileForPublicLoader node:internal/bootstrap/realm:332:25
+      1    5.3%        JS: ~<anonymous> node:_http_client:1:1
+      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:384:27
+      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:421:24
+      5   20.8%      JS: ^compileForPublicLoader node:internal/bootstrap/realm:332:25
+      5  100.0%        JS: ^loadBuiltinModule node:internal/modules/helpers:101:27
+      3   60.0%          JS: ^loadBuiltinWithHooks node:internal/modules/cjs/loader:1124:30
+      3  100.0%            JS: ^<anonymous> node:internal/modules/cjs/loader:1152:24
+      2   40.0%          JS: ~<anonymous> /home/krank/dev/portfolio/node_modules/sharp/lib/libvips.js:1:1
+      2  100.0%            JS: ~<anonymous> /home/krank/dev/portfolio/node_modules/sharp/lib/constructor.js:1:1
+
