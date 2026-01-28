@@ -16,7 +16,7 @@
                 "build:html"
             ],
             "runtimeArgs": [
-                "--experimental-vm-modules"
+                // "--experimental-vm-modules"
             ],
         },
         {
@@ -31,7 +31,7 @@
                 "build:art"
             ],
             "runtimeArgs": [
-                "--experimental-vm-modules"
+                // "--experimental-vm-modules"
             ],
         },
         {
@@ -46,7 +46,7 @@
                 "import:art"
             ],
             "runtimeArgs": [
-                "--experimental-vm-modules"
+                // "--experimental-vm-modules"
             ],
         },
         {
@@ -62,7 +62,7 @@
                 "date"
             ],
             "runtimeArgs": [
-                "--experimental-vm-modules"
+                // "--experimental-vm-modules"
             ],
         },
         {
@@ -78,7 +78,7 @@
                 "force"
             ],
             "runtimeArgs": [
-                "--experimental-vm-modules"
+                // "--experimental-vm-modules"
             ],
         },
         {
@@ -94,7 +94,7 @@
                 "build:nsfw"
             ],
             "runtimeArgs": [
-                "--experimental-vm-modules"
+                // "--experimental-vm-modules"
             ],
         },
         {
@@ -106,7 +106,7 @@
             ],
             "program": "${workspaceFolder}\\lib\\template-loader.js",
             "runtimeArgs": [
-                "--experimental-vm-modules"
+                // "--experimental-vm-modules"
             ],
         },
         {
