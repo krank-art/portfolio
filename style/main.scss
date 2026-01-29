@@ -24,3 +24,6 @@
 @use './simple-tag.scss';
 @use './tag-helper.scss';
 @use './unlocker-mask.scss';
+
+// External libraries come last
+@use "~highlight.js/scss/github-dark.scss";

@@ -1,5 +1,6 @@
 import copy from 'rollup-plugin-copy';
 import sass from 'rollup-plugin-sass';
+import nodeResolve from '@rollup/plugin-node-resolve';
 import config from './config/config.dev.js';
 import { getCompressedTagsFromMedia } from './lib/tag-util.js';
 import crypto from "node:crypto";
@@ -14,6 +15,7 @@ export default ({ outputDir }) => {
       format: 'iife',
     },
     plugins: [
+      nodeResolve(),
       {
         name: "build-id",
         resolveId(id) {
