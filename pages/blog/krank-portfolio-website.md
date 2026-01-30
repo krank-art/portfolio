@@ -1,54 +1,85 @@
 # Krank's Portfolio Website
 
-> Why do it the easy way, when you can do it the hard way?
+> Written 2025, revised 2026 January
 
-I'm a person with many hobbies. 
-Coincidentally most of them seem to map well onto digital presentation.
-This includes drawing, programming, web development, creating component-based systems, composing electronic music, and cooking. 
-Yes, this bear [cooks](./recipes/chocolate-cream-cake).
+***Why do it the easy way, when you can do it the hard way?***
 
-Every artist has that innate desire to be cherished, to have done good, to have made someone's day a little bit better.
-And you can only connect with people if you actually show your art to the world. <!-- 
-Artists upload their works onto various social media platforms and websites. -->
-A quite posh approach is to host your own website.
-Which I'm doing right now.
-Splendid!
+<aside class="toc marginalia" tabindex="0">
 
-<div class="toc">
+**Table of content**
 
-## Table of content
+- [Motivation](#motivation)
+- [Implementation](#implementation)
+  - [Website](#website)
+  - [Static site generator (SSG)](#static-site-generator-ssg)
+  - [Artworks and content](#artworks-and-content)
+- [Concepts](#concepts)
+  - [Single File Components](#single-file-components)
+- [Project Structure](#project-structure)
+- [Further thoughts](#further-thoughts)
+  - [Structured data is cool](#structured-data-is-cool)
+  - [Progressive enhancement](#progressive-enhancement)
+  - [Fear of the mundane](#fear-of-the-mundane)
+  - [Static through crawler](#static-through-crawler)
+  - [File size optimization](#file-size-optimization)
+- [Naughty art](#naughty-art)
+- [Tools](#tools)
+- [about the nature of publishing](#about-the-nature-of-publishing)
 
-- [Krank's Portfolio Website](#kranks-portfolio-website)
-  - [Table of content](#table-of-content)
-  - [Motivation](#motivation)
-  - [Implementation](#implementation)
-    - [Website](#website)
-    - [Static site generator (SSG)](#static-site-generator-ssg)
-    - [Artworks and content](#artworks-and-content)
-  - [Concepts](#concepts)
-    - [Single File Components](#single-file-components)
-  - [Project Structure](#project-structure)
-  - [Further thoughts](#further-thoughts)
-    - [Structured data is cool](#structured-data-is-cool)
-    - [Progressive enhancement](#progressive-enhancement)
-    - [Fear of the mundane](#fear-of-the-mundane)
-    - [Static through crawler](#static-through-crawler)
-    - [File size optimization](#file-size-optimization)
-  - [Naughty art](#naughty-art)
-  - [Tools](#tools)
-  - [about the nature of publishing](#about-the-nature-of-publishing)
+</aside>
 
-</div>
+In this article I want to go through the implementations and ideas that went into building this website.
+I am creative and I love web design, so I can achieve two things at the same time: 
+Have fun working on a website **and** showcase my other works!
+
+Looking at this article and the website itself, it should be apparent that I like **structure** in my work.
+You can see this especially with the **static site generator** that is the brains of this website.
+The actual art, the lovely comments by friends and the artistic intent are the **soul**.
+
+During my time working on the website, there often has been this feeling of it **not being good enough**, that most features are underdeveloped, the style is too boring or that I must upload more artworks.
+Like many of my projects it has become a neverending story, which I've fiddled with on and off for years now.
+But the cool thing about art is, that people from the outside cannot see the expectations the artist compares themselves to.
+They can enjoy the website as-is!
+
+I doubt that many people are going to read my ramblings, but if you have found your way here: Welcome!
+Welcome to City 17! <!-- Half Life 2 intro reference -->
+
 
 ## Motivation
 
-Why I created my own **website**:
+Why did I create my **own** website?
+Originally because I had planned a visit to a local furry meetup.
+My idea was that if I neatly present my art, I can connect with people there and find friends.
+I put in a lot of effort into the first build of this website and finally the day came when I went to the meetup.
 
-* **Catalogueing and presentation.** \
-  I've created a lot of art over the years and I want to proudly show it to the world.
-  It also helps me finding my own stuff from years ago.
-  Nothing more embarrassing than going: 
-  "Hey I drew a kangaroo before! Let me show you... hold on it's not here... just a little longer... uhh..." 🙄
+And... I did not get to show my website.
+The meetup went alright, I was very nervous.
+I did strike up some conversations with people, but in this instance it was difficult to talk with people (maybe furries are just plain bad at socializing 🤷).
+People were a lot more into fursuiting there than drawing.
+I did learn something cool about how protogen suits work by a fursuit maker, she was great!
+
+Ever since I worked on my website occasionally, mostly when I need a sink for my creative and problem solving energy.
+My day job can get a little bit stale at times, so it's fun to work on technical challenges as a balance.
+And would you look at that, it has been 2.5 years already!
+
+Of course there are other bonuses of having your own website, which I will go through here:
+
+<aside class="marginalia">
+
+I do realize that this itemized text looks like straight from ChatGPT.
+Don't worry, I'd rather have my own badly written *wordslob* (😂)
+</aside>
+
+* **Catalogueing.** \
+  My art folders has become a bit confusing over the last six years and I don't even know what's hidden in there.
+  There is a lot of value in preparing something nicely so it can be understood at a glance.
+  Lots of respect for curators, documentation writers and presenters!
+* **Presentation.** \
+  Do you know what the difference is between a villain and a **super**villain? 
+  Presentation! <!-- Megamind reference -->
+  I'd say that about 50% of the desired viewing experience comes from framing.
+  There are so many cool mediums you can use:
+  Social media, movies, zines, exhibitions, stickers... **personal websites**. 
 * **Technical challenges.** \
   I'm fascinated with how HTML components can be written and reused.
   I always wanted to write a templating engine that is made up of simple building blocks that together form a complex website.
@@ -106,8 +137,11 @@ These components can then be put together into anything, like a watch.
 Or an [electro-mechanical computer controlling nuclear bombs](http://www.righto.com/2024/08/minuteman-guidance-computer.html).
 Just this once tho, they create a furry art portfolio website.
 
-> By the way, "portfolio" is just saying "art folder" in a fancy way.
-> When applying to a design school or for an art job, you have to provide a portfolio with selected works showing that you know your shit.
+<aside class="marginalia">
+
+By the way, "portfolio" is just saying "art folder" in a fancy way.
+When applying to a design school or for an art job, you have to provide a portfolio with selected works showing that you know your shit.
+</aside>
 
 This portfolio website is made up of three parts:
 
@@ -150,9 +184,12 @@ I feel so fancy~ 💅✨
 
 <!--TODO: Insert image of windows explorer? -->
 
-> You will not find any art files on my [Github repository](https://github.com/krank-art/portfolio) because [Github has a soft limit of 1 GB and a hard limit of 5 GB per repository](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github#repository-size-limits).
-> My art files alone are at 253 MB, which is well below the limit, but these are binary files so any change gets saved in the git history.
-> Also no, [Git LFS](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage) is not a workaround, you only get [1 GB of storage](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-storage-and-bandwidth-usage) for free.
+<aside class="marginalia">
+
+You will not find any art files on my [Github repository](https://github.com/krank-art/portfolio) because [Github has a soft limit of 1 GB and a hard limit of 5 GB per repository](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github#repository-size-limits).
+My art files alone are at 253 MB, which is well below the limit, but these are binary files so any change gets saved in the git history.
+Also no, [Git LFS](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage) is not a workaround, you only get [1 GB of storage](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-storage-and-bandwidth-usage) for free.
+</aside>
 
 The very first step was **staging**.
 Here is my process for preparing the art files:
