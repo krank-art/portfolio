@@ -1,14 +1,24 @@
 $blog-nav-width: 30rem;
 $mobile-menu-height: 3.5rem;
+$blog-content-width: 50rem;
+
+@mixin toc-visible {
+  position: static;
+  left: unset;
+  top: unset;
+  width: unset;
+  height: unset;
+  overflow: visible;
+}
 
 .blog-text {
   line-height: 1.5;
 
   p,
   li {
-    max-width: 50rem;
+    max-width: $blog-content-width;
   }
-  
+
   img {
     max-width: 60rem;
   }
@@ -91,12 +101,14 @@ $mobile-menu-height: 3.5rem;
     }
   }
 
-  blockquote {
+  blockquote,
+  .marginalia {
     background-color: rgba(0, 0, 0, 0.2);
     border-left: 0.3em solid rgba(255, 255, 255, 0.3);
     margin: 1em 0;
     padding: 0.5em 1em 0.5em 1.5em;
     border-radius: 0.5em;
+    max-width: $blog-content-width;
 
     &>*:first-child {
       margin-top: 0;
@@ -158,6 +170,20 @@ $mobile-menu-height: 3.5rem;
     font-size: 1.25em;
     font-style: italic;
     line-height: 1.5;
+  }
+
+  .toc {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+
+    &:focus,
+    &:focus-within {
+      @include toc-visible;
+    }
   }
 }
 
@@ -400,8 +426,46 @@ $mobile-menu-height: 3.5rem;
   .blog-nav-backdrop {
     display: none;
   }
-  
+
   .blog-mobile-menu {
     display: none;
+  }
+}
+
+@media (min-width: 1720px) {
+  $column-width: 50rem;
+  $margin-gap: 3rem;
+
+  .blog-text {
+    position: relative;
+    padding-right: calc(100% - #{$column-width});
+
+    .toc {
+      // This class must come before .marginalia in the stylesheet so position attributes get overwritten.
+      @include toc-visible;
+    }
+
+    .marginalia {
+      // Before the breakpoint, marginalie look just like blockquotes. We need to unset this now.
+      background-color: unset;
+      margin: 0;
+      padding: 0 0 0 1em;
+      border-radius: unset;
+
+      position: absolute;
+      left: $column-width + $margin-gap;
+      max-width: 20rem;
+      font-size: 0.9em;
+      border-left: 0.1em solid #666;
+      padding-left: 1em;
+
+      &>*:first-child {
+        margin-top: 0;
+      }
+
+      &>*:last-child {
+        margin-bottom: 0;
+      }
+    }
   }
 }
