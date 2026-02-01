@@ -3,7 +3,6 @@ $mobile-menu-height: 3.5rem;
 $blog-content-width: 50rem;
 
 @mixin toc-visible {
-  position: static;
   left: unset;
   top: unset;
   width: unset;
@@ -11,16 +10,19 @@ $blog-content-width: 50rem;
   overflow: visible;
 }
 
-.blog-text {
-  line-height: 1.5;
+.markdown {
+  line-height: 1.6;
 
-  p,
-  li {
-    max-width: $blog-content-width;
+  // List items that start with a strong element get some extra spacing inbetween
+  li:first-child > strong:first-child {
+    display: inline-block;
+    margin-bottom: 0.15em
   }
 
-  img {
-    max-width: 60rem;
+  li:not(:first-child) > strong:first-child {
+    display: inline-block;
+    margin-top: 0.75em;
+    margin-bottom: 0.15em
   }
 
   p {
@@ -34,6 +36,7 @@ $blog-content-width: 50rem;
     padding: 0.2em 0.4em;
     border-radius: 0.5em;
   }
+
 
   pre {
     background-color: rgba(0, 0, 0, 0.3);
@@ -101,24 +104,6 @@ $blog-content-width: 50rem;
     }
   }
 
-  blockquote,
-  .marginalia {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-left: 0.3em solid rgba(255, 255, 255, 0.3);
-    margin: 1em 0;
-    padding: 0.5em 1em 0.5em 1.5em;
-    border-radius: 0.5em;
-    max-width: $blog-content-width;
-
-    &>*:first-child {
-      margin-top: 0;
-    }
-
-    &>*:last-child {
-      margin-bottom: 0;
-    }
-  }
-
   h1 {
     font-size: 2.75rem;
   }
@@ -153,6 +138,35 @@ $blog-content-width: 50rem;
     margin-bottom: 1rem;
     line-height: 1.2;
   }
+}
+
+.blog-text {
+  p,
+  li {
+    max-width: $blog-content-width;
+  }
+
+  img {
+    max-width: 60rem;
+  }
+
+  blockquote,
+  .marginalia {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-left: 0.3em solid rgba(255, 255, 255, 0.3);
+    margin: 1em 0;
+    padding: 0.5em 1em 0.5em 1.5em;
+    border-radius: 0.5em;
+    max-width: $blog-content-width;
+
+    &>*:first-child {
+      margin-top: 0;
+    }
+
+    &>*:last-child {
+      margin-bottom: 0;
+    }
+  }
 
   h2 {
     border-bottom: 0.1rem solid rgba(255, 255, 255, 0.1);
@@ -182,6 +196,7 @@ $blog-content-width: 50rem;
 
     &:focus,
     &:focus-within {
+      position: static;
       @include toc-visible;
     }
   }
@@ -440,12 +455,15 @@ $blog-content-width: 50rem;
     position: relative;
     padding-right: calc(100% - #{$column-width});
 
-    .toc {
+    .toc,
+    .toc:focus,
+    .toc:focus-within {
       // This class must come before .marginalia in the stylesheet so position attributes get overwritten.
+      position: unset;
       @include toc-visible;
     }
 
-    .marginalia {
+    .marginalia.marginalia {
       // Before the breakpoint, marginalie look just like blockquotes. We need to unset this now.
       background-color: unset;
       margin: 0;
@@ -456,7 +474,7 @@ $blog-content-width: 50rem;
       left: $column-width + $margin-gap;
       max-width: 20rem;
       font-size: 0.9em;
-      border-left: 0.1em solid #666;
+      border-left: 0.05em solid #666;
       padding-left: 1em;
 
       &>*:first-child {
