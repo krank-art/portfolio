@@ -28,6 +28,14 @@
 
 </aside>
 
+![Start page of Krank's portfolio website. ](/media/blog/krank-website_2026-02-01.jpg)
+
+This website is my personal archive of art I have created over the years.
+It's mostly [furry art](/art), but you can also find environmental studies or human portraits here.
+Just use the tagging system to filter through all entries.
+Users can navigate through the gallery, leave comments and read articles here in the blog section.
+The blog section itself is a mix of technical documentation, game concepts, cooking recipes and other scraps.
+
 In this article I want to go through the implementations and ideas that went into building this website.
 I am creative and I love web design, so I can achieve two things at the same time: 
 Have fun working on a website **and** showcase my other works!
@@ -70,84 +78,63 @@ I do realize that this itemized text looks like straight from ChatGPT.
 Don't worry, I'd rather have my own badly written *wordslob* (😂)
 </aside>
 
-* **Catalogueing.** \
+* 📁 **Catalogueing** \
   My art folders has become a bit confusing over the last six years and I don't even know what's hidden in there.
   There is a lot of value in preparing something nicely so it can be understood at a glance.
   Lots of respect for curators, documentation writers and presenters!
-* **Presentation.** \
+* 🖼️ **Presentation** \
   Do you know what the difference is between a villain and a **super**villain? 
   Presentation! <!-- Megamind reference -->
   I'd say that about 50% of the desired viewing experience comes from framing.
   There are so many cool mediums you can use:
   Social media, movies, zines, exhibitions, stickers... **personal websites**. 
-* **Technical challenges.** \
-  I'm fascinated with how HTML components can be written and reused.
-  I always wanted to write a templating engine that is made up of simple building blocks that together form a complex website.
-  Not to mention all the other aspects of web development!
-* **Artistic outlet.** \
-  Due to health reasons I cannot draw much anymore.
-  This made me *very* sad in the past, being with other artists and seeing them draw but just not being able to do it myself.<!--
-  There is actually an absurd amount of "competition" in the furry community when it comes to drawing.-->
+* ⚙️ **Technical challenge** \
+  I always wanted to write an HTML templating engine that is made up of simple building blocks that together form a complex website.
+  I've tried different systems so far and none of them matched *exactly* my expectations, so I built my own.
+  Also not to mention all the other cool aspects of web development!
+* 🖌️ **Artistic outlet** \
+  Due to shoulder issues I am limited in my drawing time.
+  If I could, I would draw 8 hours a day, 365 days a year!
   So me working on my website is an artistic outlet.
-  Also I can use all my past works as inertia for the little new stuff I create at a time.
-* **Alternative to social media.** \
+  Also I can use my past works as inertia while adding a few new drawings at a time.
+* **🏡 Alternative to social media** \
   Sharing your art is an integral part of being an artist.
-  The feeling of "Good job! Let's hang this onto the fridge" is what many of us strive for.
-  I try to spend only little time on social media, worrying about likes and posting artwork.
-  A few times in the past I wasn't drawing for myself, but rather in anticipation of what people might like.
-  And then those posts flopped.
-  That messed me up a lot.
-  So this website allows me to publish my artwork completely on my own terms.
-* **Finding friends.** \
-  This one is a little bit embarrassing.
-  The first version of my portfolio I published before attending my first furry meetup.
-  I was hoping that putting my art out there would impress people and that they want to my friends.
-  Through drawing I made quite a lot of online friends over the years!
+  It's nice to connect with like-minded people and to find works similar to your own.
+  But social media platforms have all kinds of social dynamics going on.
+  For me the quantization of likes and followers have a negative impact on my sense of community.
+  So this website is a bit of a walled garden where I can set my own rules *along* being active on other sites.
+  It gives a certain peace of mind to have a site that is fully yours and noone can take it from you.
 
-<!--
-bdb
+Finally, I've chosen to write this blog article to document what I've been working on for years.
+Websites are a lot of fun and I think they are one of the great achievements in humanity.
+Writing these articles is an attempt to better express myself with words.
+I might come across as boring, but I am a passion person (:
 
-*    how did I create the website
-*  lessons learned
--->
-
-And to be meta, here are the reasons why I'm writing this **blog post**:
-
-* **Pride.** \
-  I spent a lot of time, thought and energy on this project.
-  I am proud of all the technical solutions and artworks I've created over the years.
-  This is my very own place where I have full control on how I present my works.
-  So this blog post is some nice promotion.
-* **Documentation.** \
-  Explaining to myself and others how the actual website works.
-  Maybe someone can gain some wisdom on how to create their own.
-  And it also helps updating me the website in the future.
-* **Writing.** \
-  Writing in native language is very fun to me.
-  But I also always wanted to write something in English.
-  This topic is near and dear to my heart and a good choice to write about.
+If you also want to write your own website, there are many resources to [get started](https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Your_first_website/What_will_your_website_look_like).
+For free hosting I can recommend either [Github pages](https://github.com/collections/github-pages-examples) or [neocities](https://neocities.org/).
 
 
 ## Implementation
 
 There is something about coding that tickles my brain in a good way.
-It's a very rational process of splitting up a problem into smaller manageable chunks.
-When coding, you're essentially creating gears, sprockets, springs and frames.
+It's a very rational process of splitting up a problem into smaller chunks.
+When coding, you are essentially creating gears, sprockets, springs and frames.
 These components can then be put together into anything, like a watch.
-Or an [electro-mechanical computer controlling nuclear bombs](http://www.righto.com/2024/08/minuteman-guidance-computer.html).
-Just this once tho, they create a furry art portfolio website.
+Or a mechanical computer [controlling nukes](http://www.righto.com/2024/08/minuteman-guidance-computer.html).
+In this case tho, they create a furry art portfolio website.
 
 <aside class="marginalia">
 
 By the way, "portfolio" is just saying "art folder" in a fancy way.
-When applying to a design school or for an art job, you have to provide a portfolio with selected works showing that you know your shit.
+When applying to a design school or for an art job, you have to provide a portfolio with selected works showing 
+that you know your stuff.
 </aside>
 
 This portfolio website is made up of three parts:
 
-1. The website
-2. The static site generator
-3. The artworks and content
+1. Website framework
+2. Artworks and content
+3. Static site generator
 
 
 ### Website
@@ -167,12 +154,14 @@ All browsers actually only interpret HTML files for elements on a page.
 Usually the content is built dynamically on the server or (in recent years) on the client.
 A bog standard example would be a PHP webserver that queries a MySQL database for all posts and then sends the finished HTML to the page visitor.
 For a static site, this makes you very dependent on the specific server technology.
-(Also I really don't like PHP lol, but this horse has been beaten so much, only dust particles remain.)
 
-Well too bad though, my hosting provider only offers PHP as the backend technology. 
-Because I am too cheap to step up the pricing tier.
-PHP also keeps dominating the space of server-side programming languages with 75%, next come Ruby (6.2%), ASP.NET (5.4%) and Java (5.0%) (see [w3techs survey](https://w3techs.com/technologies/overview/programming_language/), last checked 2025-01-29).
+My hosting provider only offers PHP as the backend technology in my current pricing tier.
+PHP also keeps dominating the space of server-side programming languages with 72.2%, next come Ruby (6.6%), and then JavaScript (Node) (5.6%) and Java (5.0%) (see [w3techs survey](https://w3techs.com/technologies/overview/programming_language/), last checked 2026-01-31).
 So I will run into this problem again and again.
+
+Originally I wanted to skip out on using 
+I did have not so great experiences in the past with PHP due to language inconsistencies and inexperience, but PHP does it's job of 
+creating HTML sites really well!
 That's why the website must be built preemptively!
 
 ### Artworks and content
