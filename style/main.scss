@@ -1,5 +1,6 @@
 // Order is important
 @use './variables.scss';
+@use './font.scss';
 @use './general.scss';
 @use './text.scss';
 
@@ -24,6 +25,7 @@
 @use './simple-tag.scss';
 @use './tag-helper.scss';
 @use './unlocker-mask.scss';
+@use './version-list.scss';
 
 // External libraries come last
 @use "~highlight.js/scss/github-dark.scss";

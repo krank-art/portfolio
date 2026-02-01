@@ -30,6 +30,7 @@ export default ({ outputDir }) => {
       copy({
         targets: [
           { src: 'static/favicon/*', dest: outputDir },
+          { src: 'static/font/*', dest: outputDir + '/font' },
           { src: 'static/blog/*', dest: outputDir + '/media/blog' },
           { src: 'static/tools/*', dest: outputDir + '/media/tools' },
           {

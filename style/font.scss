@@ -1,0 +1,18 @@
+// Offline files provided by  https://gwfh.mranftl.com/fonts/inter?subsets=latin
+
+@mixin font-face($style, $weight, $file-name) {
+  @font-face {
+    font-display: swap;
+    font-family: 'Inter';
+    font-style: $style;
+    font-weight: $weight;
+    src: url('/font/#{$file-name}.woff2') format('woff2'),
+        url('/font/#{$file-name}.ttf') format('truetype');
+  }
+}
+
+@include font-face(normal, 200, "inter-v20-latin-200");
+@include font-face(normal, 400, "inter-v20-latin-regular");
+@include font-face(italic, 400, "inter-v20-latin-italic");
+@include font-face(normal, 700, "inter-v20-latin-700");
+@include font-face(italic, 700, "inter-v20-latin-700italic");
