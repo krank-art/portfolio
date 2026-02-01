@@ -1,9 +1,24 @@
 <template>
   <main class="container">
     {{> page-header}}
-    <div class="container-text">
+    <div class="container-deluxe">
       <h1 class="sr-only">Changelog</h1>
-      {{{markdown changelog }}}
+      <blockquote class="banner">
+        <strong>Note:</strong>
+        Clear your page cache for <a href="https://krank.love/">https://krank.love/</a> if the changes do not appear.
+        You can do this with <kbd>Ctrl</kbd> + <kbd>F5</kbd>.
+      </blockquote>
+      <div class="version-list">
+        {{#each changelog}}
+          <div class="version-list-row">
+            <div class="version-list-cell version-list-header">
+              <h2 class="version-list-title">{{ this.title }}</h2>
+              <p class="version-list-subtitle">{{ this.subtitle }}</p>
+            </div>
+            <div class="version-list-cell markdown">{{{markdown this.description}}}</div>
+          </div>
+        {{/each}}
+      </div>
       {{> page-footer}}
     </div>
   </main>
@@ -22,20 +37,20 @@
     metaSubtitle: "Version history of the online portfolio. ",
     metaAlt: siteThumbnailAlt,
     metaColor: siteColor,
-    changelog: `
-## v1.4.0
-
-5th January 2026
-
+    changelog: [
+      { 
+        title: "v1.4.0",
+        subtitle: "5th January 2026",
+        description: `
 * Add Comment feature
   * Go to any post under [art](/art), and you can look at and submit 
     your own drawn comments!
-
-
-## v1.3.0
-
-25th August 2024
-
+`,
+      },
+      { 
+        title: "v1.3.0",
+        subtitle: "25th August 2024",
+        description: `
 * Add page [Sitemap](/sitemap).
 * Add blog page [Mirror a Drive](/blog/mirror-a-drive).
 * Add blog page [Krank's Portfolio](/blog/krank-portfolio-website).
@@ -50,17 +65,12 @@
 * Rework page [Index](/) to have image carousels.
 * Rework page [Art](/art) to make art more explorable.
 * Rework blog to have sidebar.
-
-
-## v1.2.0
-
-31st December 2023
-
-> **Note:** 
-> * Clear your page cache for https://krank.love/ if your order of websites is messed up.
-> * For Firefox, go to *Preferences --> Privacy & Security --> Cookies & Data --> Manage Data ...*, select "krank.love" and delete all data.
-> * For Chrome, click on *settings icon in adress bar --> Site Settings --> Clear Data*.
-
+`,
+      },
+      { 
+        title: "v1.2.0",
+        subtitle: "31st December 2023",
+        description: `
 * Change art to be listed chronologically instead of by name.
 * Add markdown support as page type.
 * Add section [blog](/blog).
@@ -109,12 +119,12 @@
   * [Sheep Town](/art/sheep-town)
   * [Wolf Neon Green](/art/wolf-neon-green)
   * [Wolf Oof](/art/wolf-oof)
-
-
-## v1.1.0
-
-26th October 2023
-
+`,
+      },
+      { 
+        title: "v1.1.0",
+        subtitle: "26th October 2023",
+        description: `
 * Add page [art](./art) (art overview).
 * Add page [changelog](./changelog).
 * Add page [about](./about).
@@ -130,16 +140,18 @@
 * Clean up some of current artwork (contrast, artwork dimensions, artworking naming).
 * Rework site engine to have extensive CLI and reactivity to changes.
 * Publish source code for site: https://github.com/krank-art/portfolio.
-
-
-## v1.0.0
-
-10th September 2023
-
+`,
+      },
+      { 
+        title: "v1.0.0",
+        subtitle: "10th September 2023",
+        description: `
 * Initial Release.
 * Compiling current art into importable art files.
 * Creating the static site generation engine.
 * Registering domain and renting webserver.
-      `,
+`,
+      },
+    ],
   };
 </script>
