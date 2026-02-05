@@ -58,6 +58,10 @@ Basic usage: `npm run cli <command> <args?>`.
   * Builds the HTML files from `pages/` to `dist/`.
   * `argument: +<pageA>,<pageB>,...<pageN>`: Only build HTML files in the page list
   * `argument: -<pageA>,<pageB>,...<pageN>`: Exclude HTML files from build
+  * **Note:** 
+    Markdown documents are built and then HTML is injected afterwards so they don't get interpreted as Handlebars templates.
+    Becareful not to use `<div data-md-slot="20abc21f"></div>` elements tho, these are used as injection markers.
+    In the current setup, these only get created during Markdown compilation, just keep it in mind for layouts and templates.
   * Optimization:
     * Depending on the project size, hundreds of HTML files are generated on each minor edit.
     * To minimize the number of file written to disk, HTML files are only saved if the content has changed  or if the file doesn't exist yet.
