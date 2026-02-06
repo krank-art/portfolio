@@ -147,7 +147,7 @@ $blog-content-width: 50rem;
   }
 
   img {
-    max-width: 60rem;
+    //max-width: 60rem;
   }
 
   blockquote,
@@ -417,6 +417,10 @@ $blog-content-width: 50rem;
     p {
       line-height: 1.7;
     }
+
+    pre {
+      font-size: 1.1rem;
+    }
   }
 
   .blog-nav {
@@ -513,6 +517,14 @@ $blog-content-width: 50rem;
 
       &>*:last-child {
         margin-bottom: 0;
+      }
+
+      &.shift-up-6 {
+        margin-top: -6lh;
+      }
+
+      &.shift-up-12 {
+        margin-top: -12lh;
       }
     }
   }
