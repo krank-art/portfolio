@@ -1,7 +1,5 @@
 # Krank's Portfolio Website
 
-> Written 2025, revised 2026 January
-
 ***Why do it the easy way, when you can do it the hard way?***
 
 <aside class="toc marginalia" tabindex="0">
@@ -15,7 +13,6 @@
   - [Artworks and content](#artworks-and-content)
 - [Concepts](#concepts)
   - [Single File Components](#single-file-components)
-- [Project Structure](#project-structure)
 - [Further thoughts](#further-thoughts)
   - [Structured data is cool](#structured-data-is-cool)
   - [Progressive enhancement](#progressive-enhancement)
@@ -29,6 +26,8 @@
 </aside>
 
 ![Start page of Krank's portfolio website. ](/media/blog/krank-website_2026-02-01.jpg)
+
+> By Krank &ensp;//&ensp; Published 2025-JUN-7 &ensp;//&ensp; Revised 2026-FEB-2
 
 This website is my personal archive of art I have created over the years.
 It's mostly [furry art](/art), but you can also find environmental studies or human portraits here.
@@ -192,40 +191,43 @@ You need to make it... *presentable*.
 -->
 
 1. Go through my screenshots and find out what drawings I created on [Anondraw](https://www.anondraw.com/).
-   > In the early years of my digital art phase, I used this site exclusively.
-   > Drawing together on a giant collaborative artboard really resonated with me.
-   > The drawing tools are quite basic, like there are no layers or pressure sensitivity.
+   In the early years of my digital art phase (2019), I used this site because the collaborative drawing and simple tools.
 2. Extracted the drawings from Anondraw and create local folders. 
 3. If you used any other drawing software (like [Photoshop](https://www.adobe.com/products/photoshop.html), [Clip Studio Paint](https://www.clipstudio.net/), [Krita](https://krita.org/)), you can do final adjustments on the artwork before exporting a PNG.
 4. Upscale the images with [waifu2x](https://github.com/lltcggie/waifu2x-caffe/releases) if they are too small. 
-   > The model in this tool was specifically trained on stylized illustrations.
-   > It predates newer AI models and is unable to generate new images from scratch.
-   > This is purely for upscaling and denoising, can recommend!
+   The model in this tool was specifically trained on stylized illustrations and only for upscaling (no creation).
 5. Tweak the image to improve quality:
    1. Clean up drawings by removing unrelated content and messy lines.
    2. Optionally finish coloring/painting (not recommended because you will get stuck if you do this for everything).
    3. [Adjust curves](https://docs.krita.org/en/reference_manual/filters/adjust.html#color-adjustment-curves) so faint lineart drawings are readable.
    4. Give drawings uniform pixel dimensions, e.g. `711 x 1321` --> `720 x 1280`.
-      > Using *good numbers* for your image dimensions is good practice.
-      > I'm a big fan of [highly composite numbers](https://en.wikipedia.org/wiki/Highly_composite_number), like multiples of 120 (720, 960, 1080, 1200, ...) or of 2 (512, 1024, ...) or of screen dimensions (1080, 1280, 1920, 2160, 3840).
-      > They guarantee that you do not end up with weird pixel values when some transformation happens, like scaling down the image for a thumbnail.
+      Using *good numbers* for your image dimensions is good practice.
+      <aside class="marginalia shift-up-12">
+
+      I'm a big fan of [highly composite numbers](https://en.wikipedia.org/wiki/Highly_composite_number), like multiples of **120** (720, 960, 1080, 1200, ...), 2 (512, 1024, ...) or of screen dimensions (1280, 1920, 2160, 3840).
+      Otherwise you could get weird pixel values on transformations, like scaling down for a thumbnail.
+      </aside>
    5. Make sure that the image has a somewhat common aspect ratio like 1:1, 2:1, 2:3, 4:5, 3:5, or 16:9.
-      > Having uniform aspect ratios does help you.
-      > If you take a photo, those usually are 3:2.
-      > Most picture frames are 1:1, 3:2 or 4:3,  if you want to print and frame your artwork.
-      > Instagram only allows you to upload works in 1:1, 5:4 or 16:9.
+      <aside class="marginalia shift-up-6">
+
+      Having uniform aspect ratios does help you.
+      If you take a photo, those usually are 3:2.
+      Most picture frames are 1:1, 3:2 or 4:3,  if you want to print and frame your artwork.
+      Instagram only allows you to upload works in 1:1, 5:4 or 16:9.
+      </aside>
    6. Scale down the image or save as JPEG if the file size is bigger than 2 MB.
-      > We are creating a website after all. 
-      > If we send huge files to visitors, it takes ages to load and we use up a lot of internet traffic (this is a big deal on mobile).
-      > Furthermore it slows down the whole artwork pipeline when creating the website.
-      > I recommend using [paint.NET](https://www.getpaint.net/), the export window shows you the resulting file size nicely.
-      > 
-      > As a rule of thumb,  if you have more stylized images or graphic design, use PNG (lossless).
-      > If you have a lot of detail and noise use JPEG (lossy, recommended quality rate between 75-90%).
+      We are creating a website after all. 
+      <aside class="marginalia">
+
+      If we send huge files to visitors, it takes ages to load and we use up a lot of internet traffic (this is a big deal on mobile).
+      Furthermore it slows down the whole artwork pipeline when creating the website.
+      I recommend using [paint.NET](https://www.getpaint.net/), the export window shows you the resulting file size nicely.
+      
+      As a rule of thumb,  if you have more stylized images or graphic design, use PNG (lossless).
+      If you have a lot of detail and noise use JPEG (lossy, recommended quality rate between 75-90%).
+      </aside>
 6. Change the file name to follow the pattern of `<Title> Release YYYY-MM-DD.png`.
 7. Copy the file into `/static/art`  as preparation for importing.
-
-<!-- add megamind meme about presentation -->
 
 The next step is **importing**.
 Once you have a folder of all your art pieces, you can start extracting information from them.
@@ -254,57 +256,114 @@ he templating engine uses data churns
 
 ### Single File Components
 
-Pages are built up from components and text.
-Pages can have a layout which they inherit from.
+Pages are built up from components, template markup and plain HTML.
+Pages can also inherit from a layout.
+As templating engine I use the tried and true [Handlebars](https://handlebarsjs.com/).
+You can easily spot it by its double curly braces syntax: `{{ someVar }}`.
 
-![A chocolate cream cake sitting on a plate](/static/blog/page-structure.png)
+Let's look at an example to help you understand how a Single File Component (SFC) works:
+
+```hbs
+<!-- pages/index.hbs -->
+
+<template>
+  {{> header-square }}
+  <main id="main">
+    <div class="item-carousel row-small">
+      {{#each artRow1}}
+      <a class="item-carousel-link" href="art/{{this.path}}">
+        <img class="item-carousel-art" 
+          src="media/art/{{this.fileNamePublic}}" alt="{{this.title}}">
+      </a>
+      {{/each}}
+    </div>
+    {{! Truncated for readability }}
+  </main>
+</template>
+
+<style>
+</style>
+
+<script>
+  export default {
+    layout: "default",
+    title: "Krank",
+    pageTitle: "Krank",
+    metaImage: siteThumbnail,
+    metaAlt: siteThumbnailAlt,
+    artRow1: [
+      "alpaca-cute-pink",
+      "ancus-portrait",
+      "bunny-huh",
+      "deer-town",
+    ].map(path => mediaArtByPath[path]),
+    /* Truncated fields for readability */
+  };
+</script>
+```
+
+Notice the three top tags: `<template>` (HTML), `<style>` (CSS) and `<script>` (JavaScript).
+The magic from *Single File Components* comes from grouping HTML, style and JavaScript together.
+That means you have structure, styling and data bundled as one. 
+
+<aside class="marginalia">
+
+Note how HTML and CSS get included in the final website, whereas the script is evaluated and only exposes data for the HTML build.
+</aside>
+
+Each SFC must have a `<script>` segment, either empty or a script that ends with `export default { /* ... */ }`.
+This export is used as preamble for layouting tasks and also to expose variables for the HTML rendering of the whole page.
+First let's talk about these layouting tasks.
+
+```js
+export default {
+  layout: "default",
+  title: "Krank",
+  pageTitle: "Krank",
+  /* Truncated fields for readability */
+};
+```
+
+The field `layout` is used on pages and defines what layout to look up for the current page.
+These layouts are basically stencils for the actual pages and do a lot of the heavy lifting.
+This includes stylesheet linking, metadata and other pipework which really does not need to get repeated on each page.
+
+`title` is the title used for the page in the navigation.
+
+During the render step, a render stack is built for each page.
+
+
+Layouts, pages and components all use the format of SFCs.
+Layouts can also inherent from other layouts
 
 The most important layout file is `default.hbs`.
 It provides the boiler plate for the whole HTML pages.
-There are three special  interpolations here, `&#123;&#123;&#123;style&#125;&#125;&#125;`, `&#123;&#123;&#123;content&#125;&#125;&#125;`, and `&#123;&#123;&#123;script&#125;&#125;&#125;`.
+There are three special  interpolations here, `{{{style}}}`, `{{{content}}}`, and `{{{script}}}`.
 Style and script get inlined onto the page.
-The HTML string of a sub component gets evaluated and then inserted at `&#123;&#123;&#123;content&#125;&#125;&#125;`.
+The HTML string of a sub component gets evaluated and then inserted at `{{{content}}}`.
 It is a special interpolation when  a page inherits from a layout.
-
-
-```html
-<template>
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <!-- Meta tags omitted for brevity -->
-      <title>&#123;&#123; pageTitle &#125;&#125;</title>
-      <link rel="stylesheet" type="text/css" href="/bundle.css">
-      <style>&#123;&#123;&#123; style &#125;&#125;&#125;</style>
-    </head>
-    <body>
-      &#123;&#123;&#123; content &#125;&#125;&#125;
-      <script type="text/javascript" src="/bundle.js"></script>
-      <script>&#123;&#123;&#123; script &#125;&#125;&#125;</script>
-    </body>
-  </html>
-</template>
-<style></style>
-<script></script>
-```
 
  a layout can also inherit from a different layout.
  this is necessary because we do not want to  maintain the boilerplate like metate peached I'd learned including inline style for each individual layout.
- the special interpolation <!-- `&#123;&#123;&#123;content&#125;&#125;&#125;` --> gets evaluated for each layout step.
+ the special interpolation <!-- `{{{content}}}` --> gets evaluated for each layout step.
+
+
+Since Handlebars does not support arbitrary Javascript evaluation, I needed a way to do some data transformation.
+An approach would have been to add individual Handlebars helpers for each transformation, but this is *really* inflexible.
 
 <!--
 This is valid markup and causes the layout engine to crash
 ```html
 <template>
   <main>
-    &#123;&#123;> page-header&#125;&#125;
+    {{> page-header}}
     <div class="blog-nav-body">
       <slot name="aside">Sidebar</slot>
     </div>
     <div class="container-blog blog-main">
       <slot name="main">Main</slot>
-      &#123;&#123;&#123;content&#125;&#125;&#125;
-      &#123;&#123;> page-footer&#125;&#125;
+      {{{content}}}
+      {{> page-footer}}
     </div>
   </main>
 </template>
@@ -329,11 +388,11 @@ This is valid markup and causes the layout engine to crash
 ```html
 <template>
   <template for="aside">
-    &#123;&#123;> page-list items=blogPages&#125;&#125;
+    {{> page-list items=blogPages}}
   </template>
   <template for="main">
     <div class="blog-text">
-      &#123;&#123;&#123;content&#125;&#125;&#125;
+      {{{content}}}
     </div>
   </template>
 </template>
@@ -371,8 +430,8 @@ This is valid markup and causes the layout engine to crash
 ```html
 <template>
   <main class="container">
-    &#123;&#123;> page-header&#125;&#125;
-    <h1>Welcome to &#123;&#123; websiteTitle &#125;&#125;!</h1>
+    {{> page-header}}
+    <h1>Welcome to {{ websiteTitle }}!</h1>
   </main>
 </template>
 
@@ -401,27 +460,31 @@ Handlebars provides the following features:
 <!--
 This is valid markup and causes the layout engine to crash
 
-* Interpolations `&#123;&#123;myVariable&#125;&#125;`
-*  if else conditional flow `&#123;&#123;#if isActive&#125;&#125;...&#123;&#123;/if&#125;&#125;`
-*   looping `&#123;&#123;#each items&#125;&#125;...&#123;&#123;/each&#125;&#125;`
-*   Comments `&#123;&#123;! This comment will not show up in the output&#125;&#125;`
-* Helper functions `&#123;&#123;uppercase lastname&#125;&#125;`
-* HTML escaping `&#123;&#123;&#123;specialChars&#125;&#125;&#125;`
-* Components ( called "partials") `&#123;&#123;> page-header&#125;&#125;`
+* Interpolations `{{myVariable}}`
+*  if else conditional flow `{{#if isActive}}...{{/if}}`
+*   looping `{{#each items}}...{{/each}}`
+*   Comments `{{! This comment will not show up in the output}}`
+* Helper functions `{{uppercase lastname}}`
+* HTML escaping `{{{specialChars}}}`
+* Components ( called "partials") `{{> page-header}}`
 -->
 
+test
+
+\{\{ bla \}\}
+
+{% bla %}
 
 many of these templating languages seem to be very similar. usually they have these features:
 * layouts
-* `&#123;% blocks %&#125;`
-* `&#123;# include file.abc #&#125;`
-* `&#123;&#123; interpolation &#125;&#125;` (escaped)
-* `&#123;&#123; interpolation &#125;&#125;` (raw)
-* `&#123;# if ... &#125;` (flow control)
-* `&#123;# each ...&#125;` (iterators)
-* `&#123;&#123; value | uppercase | kebab &#125;&#125;` (filters)
-* `&#123;&#123; myHelper(value) &#125;&#125;` (helpers)
-
+* `{% blocks %}`
+* `{# include file.abc #}`
+* `{{ interpolation }}` (escaped)
+* `{{ interpolation }}` (raw)
+* `{# if ... }` (flow control)
+* `{# each ...}` (iterators)
+* `{{ value | uppercase | kebab }}` (filters)
+* `{{ myHelper(value) }}` (helpers)
 
  what is missing
 
@@ -490,6 +553,41 @@ Their multiple tools that allow this,  but none  are based on nodejs
 
 
 ## Project Structure
+
+```ini
+.
+├── .cache             # Cache for 'build:html' (skips unchanged pages)
+├── .vscode            # Debug config and other settings for VS Code
+├── bin                # CLI tools to build website
+├── components         # Handlebars components (HTML)
+├── config             # Global config (page URL, default color, etc.)
+├── data               # Data about art posts
+├── dist               # Exported files; has moved to www/php/public
+├── docs               # Technical docs for the project
+│   ├── history        # History of published art posts
+│   ├── profiling      # Notes and test results for profiling builds
+│   ├── scraps         # Quick ideas and other scraps
+├── layouts            # Handlebars layouts (HTML)
+├── lib                # JavaScript basis for CLI tools and client-side
+├── node_modules       # NPM dependencies
+├── nsfw               # Git submodule for nsfw posts (optional)
+├── package.json       # 
+├── package-lock.json  # 
+├── pages              # 
+├── readme.md          # 
+├── rollup.config.js   # 
+├── static             # 
+│   ├── art            # 
+│   ├── blog           # 
+│   ├── favicon        # 
+│   ├── font           # 
+│   └── tools          # 
+├── style              # 
+├── test               # 
+└── www                # 
+    ├── php            # 
+    └── python         # 
+```
 
  I'm a big fan of component based design, so a try to use a similar approach
  it probably gives a better insight to go through the individual project folders to explain the role:
