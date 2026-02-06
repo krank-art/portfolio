@@ -199,6 +199,36 @@ $blog-content-width: 50rem;
       position: static;
       @include toc-visible;
     }
+
+    ul {
+      counter-reset: item;
+      list-style: none;
+      padding-left: 0;
+      margin-left: 0;
+    }
+
+    li {
+      counter-increment: item;
+      position: relative;
+      padding-left: 3ch;
+      margin: 0.25em 0;
+    }
+
+    li::before {
+      content: counters(item, ".");
+      position: absolute;
+      left: 0;
+      width: 2ch;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    // Sublevel 2 and onward use a bear emoji (:
+    ul > li > ul > li::before {
+      content: "🐻";
+      font-size: 0.9em;
+      top: 0.1em;
+    }
   }
 }
 
